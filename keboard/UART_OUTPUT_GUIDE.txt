@@ -1,0 +1,197 @@
+/**
+ * ============================================================================
+ * 串口(UART2)输出配置说明
+ * ============================================================================
+ * 
+ * 已集成的功能:
+ * -----------
+ * 1. UART2 自动初始化 (115200 baud, 8N1)
+ * 2. printf 重定向到 UART2 (GCC)
+ * 3. 按键事件通过 UART 实时输出
+ * 4. 启动欢迎信息显示
+ * 
+ * 
+ * 硬件连接:
+ * --------
+ * PA3  → UART2_RX (接收，可选)
+ * PA2  → UART2_TX (发送)
+ * GND  → GND (共地)
+ * 
+ * 注意: 使用USB转UART模块或串口工具连接到PC
+ * 
+ * 
+ * 串口工具配置:
+ * -----------
+ * • 波特率: 115200
+ * • 数据位: 8
+ * • 停止位: 1
+ * • 奇偶校验: 无
+ * • 流控: 无
+ * 
+ * 推荐工具:
+ * - Windows: SecureCRT, HyperTerminal, 串口助手
+ * - Linux/Mac: minicom, screen, CoolTerm
+ * 
+ * 快速打开 (Linux):
+ *   sudo minicom -D /dev/ttyUSB0 -b 115200
+ *   或
+ *   screen /dev/ttyUSB0 115200
+ * 
+ * 
+ * 代码中的 printf 用法:
+ * -------------------
+ * 
+ * 所有 printf() 调用都会直接输出到 UART2，例如:
+ * 
+ *   printf("Hello, World!\\r\\n");
+ *   printf("Key pressed: %d\\r\\n", key_code);
+ *   printf("Temperature: %.2f°C\\r\\n", temp);
+ * 
+ * 工作原理:
+ * --------
+ * 
+ * main.c 中实现了 printf 重定向函数:
+ * 
+ *   PUTCHAR_PROTOTYPE
+ *   {
+ *       HAL_UART_Transmit(&huart2, (uint8_t *)&ch, 1, HAL_MAX_DELAY);
+ *       return ch;
+ *   }
+ * 
+ * • GCC 编译器会调用 __io_putchar() 发送每个字符
+ * • 字符通过 HAL_UART_Transmit() 发送到 UART2
+ * • 最后返回字符本身
+ * 
+ * 
+ * 输出示例:
+ * --------
+ * 
+ * 程序启动时:
+ * ===============================================
+ *    Matrix Keyboard Demo - STM32F407
+ *    UART2: 115200 baud
+ *    3x3 Matrix (9 keys)
+ * ===============================================
+ * Ready to scan keyboard...
+ * 
+ * 按键事件:
+ * [PRESSED]  Key-0
+ * [RELEASED] Key-0
+ * [PRESSED]  Key-4
+ * [RELEASED] Key-4
+ * 
+ * 
+ * 添加自定义输出:
+ * ---------------
+ * 
+ * 在任何地方添加 printf() 即可输出到串口:
+ * 
+ *   void Matrix_Key_Callback(uint8_t key_code, uint8_t pressed)
+ *   {
+ *       const char *key_names[] = {
+ *           \"0\", \"1\", \"2\",
+ *           \"3\", \"4\", \"5\",
+ *           \"6\", \"7\", \"8\"
+ *       };
+ *       
+ *       if (pressed) {
+ *           printf(\"Key %s pressed (code: %d)\\r\\n\", key_names[key_code], key_code);
+ *       } else {
+ *           printf(\"Key %s released\\r\\n\", key_names[key_code]);
+ *       }
+ *   }
+ * 
+ * 
+ * 调试技巧:
+ * --------
+ * 
+ * 1. 输出时间戳:
+ *    printf(\"[%05ld] Key pressed\\r\\n\", HAL_GetTick());
+ * 
+ * 2. 输出计数器:
+ *    static uint32_t count = 0;
+ *    printf(\"Count: %d\\r\\n\", count++);
+ * 
+ * 3. 输出浮点数:
+ *    float voltage = 3.3f;
+ *    printf(\"Voltage: %.2f V\\r\\n\", voltage);
+ * 
+ * 4. 输出十六进制:
+ *    printf(\"GPIO state: 0x%02X\\r\\n\", HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0));
+ * 
+ * 5. 条件调试:
+ *    #define DEBUG 1
+ *    #if DEBUG
+ *    printf(\"Debug: key_code = %d\\r\\n\", key_code);
+ *    #endif
+ * 
+ * 
+ * 性能考虑:
+ * --------
+ * 
+ * • printf() 速度: 约 100 字符/毫秒 @ 115200 波特率
+ * • HAL_UART_Transmit() 为阻塞函数, 会占用 CPU 时间
+ * • 避免在循环中频繁输出大量数据
+ * • 使用较短的消息以减少输出时间
+ * 
+ * 优化建议:
+ * • 在关键路径上使用最少输出
+ * • 将复杂的格式化操作放在初始化或处理阶段
+ * • 考虑实现环形缓冲 + DMA 以提高性能
+ * 
+ * 
+ * 故障排查:
+ * --------
+ * 
+ * 问题: 没有看到任何输出
+ * 解决:
+ *  1. 检查 UART2 GPIO 连接 (PA2, PA3)
+ *  2. 检查串口工具连接
+ *  3. 验证波特率设置 (应为 115200)
+ *  4. 检查 USB 驱动是否正确安装
+ *  5. 用万用表测量 TX/RX 引脚电压
+ * 
+ * 问题: 输出乱码
+ * 解决:
+ *  1. 确认波特率一致 (115200)
+ *  2. 检查 UART 初始化配置
+ *  3. 尝试其他数据位/停止位设置
+ *  4. 检查硬件连接质量
+ * 
+ * 问题: 输出缓慢或卡顿
+ * 解决:
+ *  1. 减少 printf() 的调用频率
+ *  2. 检查是否在中断中频繁调用 printf()
+ *  3. 考虑实现异步 UART 发送 (DMA/中断)
+ *  4. 检查系统时钟配置
+ * 
+ * 问题: 部分字符丢失
+ * 解决:
+ *  1. 这通常表示波特率不匹配
+ *  2. 检查系统时钟配置
+ *  3. 验证 APB1 分频器设置
+ *  4. 检查硬件连接和信号完整性
+ * 
+ * 
+ * 相关代码位置:
+ * -----------
+ * 
+ * • UART 初始化: MX_USART2_UART_Init()  (main.c)
+ * • printf 重定向: __io_putchar()        (main.c, 第 62-72 行)
+ * • 按键回调:      Matrix_Key_Callback() (main.c, 第 254-273 行)
+ * 
+ * 
+ * 进阶: 使用 semihosting
+ * ----------------------
+ * 
+ * 如果需要使用 semihosting (通过调试器进行 I/O):
+ * 
+ * 1. 添加链接器选项: --specs=rdimon.specs -lc -lrdimon
+ * 2. 在代码中初始化: initialise_monitor_handles();
+ * 3. 使用 printf() 将输出到调试器窗口
+ * 
+ * 优点: 不需要物理串口硬件
+ * 缺点: 依赖调试器, 速度较慢
+ * 
+ * ============================================================================
+ */

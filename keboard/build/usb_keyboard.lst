@@ -1,0 +1,804 @@
+ARM GAS  /tmp/ccDIilLL.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"usb_keyboard.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "Core/Src/usb_keyboard.c"
+  20              		.section	.text.USB_Keyboard_Init,"ax",%progbits
+  21              		.align	1
+  22              		.global	USB_Keyboard_Init
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	USB_Keyboard_Init:
+  28              	.LFB138:
+   1:Core/Src/usb_keyboard.c **** /**
+   2:Core/Src/usb_keyboard.c ****   ******************************************************************************
+   3:Core/Src/usb_keyboard.c ****   * @file           : usb_keyboard.c
+   4:Core/Src/usb_keyboard.c ****   * @brief          : USB Keyboard HID driver implementation
+   5:Core/Src/usb_keyboard.c ****   ******************************************************************************
+   6:Core/Src/usb_keyboard.c ****   */
+   7:Core/Src/usb_keyboard.c **** 
+   8:Core/Src/usb_keyboard.c **** #include "usb_keyboard.h"
+   9:Core/Src/usb_keyboard.c **** #include "usbd_hid.h"
+  10:Core/Src/usb_keyboard.c **** #include <string.h>
+  11:Core/Src/usb_keyboard.c **** 
+  12:Core/Src/usb_keyboard.c **** /* Keyboard report buffer */
+  13:Core/Src/usb_keyboard.c **** static USB_KeyboardReport_t keyboard_report = {0};
+  14:Core/Src/usb_keyboard.c **** static USB_KeyboardReport_t keyboard_report_last = {0};
+  15:Core/Src/usb_keyboard.c **** 
+  16:Core/Src/usb_keyboard.c **** /* USB device handle (external, from usb_device.c) */
+  17:Core/Src/usb_keyboard.c **** extern USBD_HandleTypeDef hUsbDeviceFS;
+  18:Core/Src/usb_keyboard.c **** 
+  19:Core/Src/usb_keyboard.c **** /* Key state tracking */
+  20:Core/Src/usb_keyboard.c **** static uint8_t pressed_keys[6] = {0};
+  21:Core/Src/usb_keyboard.c **** static uint8_t key_count = 0;
+  22:Core/Src/usb_keyboard.c **** 
+  23:Core/Src/usb_keyboard.c **** /**
+  24:Core/Src/usb_keyboard.c ****   * @brief Initialize USB keyboard
+  25:Core/Src/usb_keyboard.c ****   * @retval None
+  26:Core/Src/usb_keyboard.c ****   */
+  27:Core/Src/usb_keyboard.c **** void USB_Keyboard_Init(void)
+  28:Core/Src/usb_keyboard.c **** {
+  29              		.loc 1 28 1 view -0
+  30              		.cfi_startproc
+ARM GAS  /tmp/ccDIilLL.s 			page 2
+
+
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+  29:Core/Src/usb_keyboard.c ****     memset(&keyboard_report, 0, sizeof(keyboard_report));
+  34              		.loc 1 29 5 view .LVU1
+  35 0000 064A     		ldr	r2, .L2
+  36 0002 0023     		movs	r3, #0
+  37 0004 1360     		str	r3, [r2]
+  38 0006 5360     		str	r3, [r2, #4]
+  30:Core/Src/usb_keyboard.c ****     memset(&keyboard_report_last, 0, sizeof(keyboard_report_last));
+  39              		.loc 1 30 5 view .LVU2
+  40 0008 054A     		ldr	r2, .L2+4
+  41 000a 1360     		str	r3, [r2]
+  42 000c 5360     		str	r3, [r2, #4]
+  31:Core/Src/usb_keyboard.c ****     memset(pressed_keys, 0, sizeof(pressed_keys));
+  43              		.loc 1 31 5 view .LVU3
+  44 000e 054A     		ldr	r2, .L2+8
+  45 0010 1360     		str	r3, [r2]
+  46 0012 9380     		strh	r3, [r2, #4]	@ movhi
+  32:Core/Src/usb_keyboard.c ****     key_count = 0;
+  47              		.loc 1 32 5 view .LVU4
+  48              		.loc 1 32 15 is_stmt 0 view .LVU5
+  49 0014 044A     		ldr	r2, .L2+12
+  50 0016 1370     		strb	r3, [r2]
+  33:Core/Src/usb_keyboard.c **** }
+  51              		.loc 1 33 1 view .LVU6
+  52 0018 7047     		bx	lr
+  53              	.L3:
+  54 001a 00BF     		.align	2
+  55              	.L2:
+  56 001c 00000000 		.word	keyboard_report
+  57 0020 00000000 		.word	keyboard_report_last
+  58 0024 00000000 		.word	pressed_keys
+  59 0028 00000000 		.word	key_count
+  60              		.cfi_endproc
+  61              	.LFE138:
+  63              		.section	.text.USB_Keyboard_PressKey,"ax",%progbits
+  64              		.align	1
+  65              		.global	USB_Keyboard_PressKey
+  66              		.syntax unified
+  67              		.thumb
+  68              		.thumb_func
+  70              	USB_Keyboard_PressKey:
+  71              	.LVL0:
+  72              	.LFB139:
+  34:Core/Src/usb_keyboard.c **** 
+  35:Core/Src/usb_keyboard.c **** /**
+  36:Core/Src/usb_keyboard.c ****   * @brief Add a key to the keyboard report
+  37:Core/Src/usb_keyboard.c ****   * @param key_code: HID keyboard code
+  38:Core/Src/usb_keyboard.c ****   * @retval None
+  39:Core/Src/usb_keyboard.c ****   */
+  40:Core/Src/usb_keyboard.c **** void USB_Keyboard_PressKey(uint8_t key_code)
+  41:Core/Src/usb_keyboard.c **** {
+  73              		.loc 1 41 1 is_stmt 1 view -0
+  74              		.cfi_startproc
+  75              		@ args = 0, pretend = 0, frame = 0
+  76              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  /tmp/ccDIilLL.s 			page 3
+
+
+  77              		@ link register save eliminated.
+  42:Core/Src/usb_keyboard.c ****     if (key_code == 0) return;
+  78              		.loc 1 42 5 view .LVU8
+  79              		.loc 1 42 8 is_stmt 0 view .LVU9
+  80 0000 0146     		mov	r1, r0
+  81 0002 A8B1     		cbz	r0, .L4
+  82              	.LBB2:
+  43:Core/Src/usb_keyboard.c ****     
+  44:Core/Src/usb_keyboard.c ****     /* Check if key already in report */
+  45:Core/Src/usb_keyboard.c ****     for (uint8_t i = 0; i < key_count; i++) {
+  83              		.loc 1 45 18 view .LVU10
+  84 0004 0023     		movs	r3, #0
+  85              	.L6:
+  86              	.LVL1:
+  87              		.loc 1 45 27 is_stmt 1 discriminator 1 view .LVU11
+  88 0006 0B4A     		ldr	r2, .L9
+  89 0008 1278     		ldrb	r2, [r2]	@ zero_extendqisi2
+  90 000a 9A42     		cmp	r2, r3
+  91 000c 06D9     		bls	.L8
+  46:Core/Src/usb_keyboard.c ****         if (pressed_keys[i] == key_code) {
+  92              		.loc 1 46 9 view .LVU12
+  93              		.loc 1 46 25 is_stmt 0 view .LVU13
+  94 000e 0A4A     		ldr	r2, .L9+4
+  95 0010 D25C     		ldrb	r2, [r2, r3]	@ zero_extendqisi2
+  96              		.loc 1 46 12 view .LVU14
+  97 0012 8A42     		cmp	r2, r1
+  98 0014 0CD0     		beq	.L4
+  45:Core/Src/usb_keyboard.c ****         if (pressed_keys[i] == key_code) {
+  99              		.loc 1 45 41 is_stmt 1 discriminator 2 view .LVU15
+ 100 0016 0133     		adds	r3, r3, #1
+ 101              	.LVL2:
+  45:Core/Src/usb_keyboard.c ****         if (pressed_keys[i] == key_code) {
+ 102              		.loc 1 45 41 is_stmt 0 discriminator 2 view .LVU16
+ 103 0018 DBB2     		uxtb	r3, r3
+ 104              	.LVL3:
+  45:Core/Src/usb_keyboard.c ****         if (pressed_keys[i] == key_code) {
+ 105              		.loc 1 45 41 discriminator 2 view .LVU17
+ 106 001a F4E7     		b	.L6
+ 107              	.L8:
+  45:Core/Src/usb_keyboard.c ****         if (pressed_keys[i] == key_code) {
+ 108              		.loc 1 45 41 discriminator 2 view .LVU18
+ 109              	.LBE2:
+  47:Core/Src/usb_keyboard.c ****             return;  /* Already pressed */
+  48:Core/Src/usb_keyboard.c ****         }
+  49:Core/Src/usb_keyboard.c ****     }
+  50:Core/Src/usb_keyboard.c ****     
+  51:Core/Src/usb_keyboard.c ****     /* Add key if there's space */
+  52:Core/Src/usb_keyboard.c ****     if (key_count < 6) {
+ 110              		.loc 1 52 5 is_stmt 1 view .LVU19
+ 111              		.loc 1 52 8 is_stmt 0 view .LVU20
+ 112 001c 052A     		cmp	r2, #5
+ 113 001e 07D8     		bhi	.L4
+  53:Core/Src/usb_keyboard.c ****         pressed_keys[key_count] = key_code;
+ 114              		.loc 1 53 9 is_stmt 1 view .LVU21
+ 115              		.loc 1 53 33 is_stmt 0 view .LVU22
+ 116 0020 054B     		ldr	r3, .L9+4
+ 117              	.LVL4:
+ARM GAS  /tmp/ccDIilLL.s 			page 4
+
+
+ 118              		.loc 1 53 33 view .LVU23
+ 119 0022 9954     		strb	r1, [r3, r2]
+  54:Core/Src/usb_keyboard.c ****         keyboard_report.keycode[key_count] = key_code;
+ 120              		.loc 1 54 9 is_stmt 1 view .LVU24
+ 121              		.loc 1 54 44 is_stmt 0 view .LVU25
+ 122 0024 054B     		ldr	r3, .L9+8
+ 123 0026 1344     		add	r3, r3, r2
+ 124 0028 9970     		strb	r1, [r3, #2]
+  55:Core/Src/usb_keyboard.c ****         key_count++;
+ 125              		.loc 1 55 9 is_stmt 1 view .LVU26
+ 126              		.loc 1 55 18 is_stmt 0 view .LVU27
+ 127 002a 0132     		adds	r2, r2, #1
+ 128 002c 014B     		ldr	r3, .L9
+ 129 002e 1A70     		strb	r2, [r3]
+ 130              	.LVL5:
+ 131              	.L4:
+  56:Core/Src/usb_keyboard.c ****     }
+  57:Core/Src/usb_keyboard.c **** }
+ 132              		.loc 1 57 1 view .LVU28
+ 133 0030 7047     		bx	lr
+ 134              	.L10:
+ 135 0032 00BF     		.align	2
+ 136              	.L9:
+ 137 0034 00000000 		.word	key_count
+ 138 0038 00000000 		.word	pressed_keys
+ 139 003c 00000000 		.word	keyboard_report
+ 140              		.cfi_endproc
+ 141              	.LFE139:
+ 143              		.section	.text.USB_Keyboard_ReleaseKey,"ax",%progbits
+ 144              		.align	1
+ 145              		.global	USB_Keyboard_ReleaseKey
+ 146              		.syntax unified
+ 147              		.thumb
+ 148              		.thumb_func
+ 150              	USB_Keyboard_ReleaseKey:
+ 151              	.LVL6:
+ 152              	.LFB140:
+  58:Core/Src/usb_keyboard.c **** 
+  59:Core/Src/usb_keyboard.c **** /**
+  60:Core/Src/usb_keyboard.c ****   * @brief Remove a key from the keyboard report
+  61:Core/Src/usb_keyboard.c ****   * @param key_code: HID keyboard code
+  62:Core/Src/usb_keyboard.c ****   * @retval None
+  63:Core/Src/usb_keyboard.c ****   */
+  64:Core/Src/usb_keyboard.c **** void USB_Keyboard_ReleaseKey(uint8_t key_code)
+  65:Core/Src/usb_keyboard.c **** {
+ 153              		.loc 1 65 1 is_stmt 1 view -0
+ 154              		.cfi_startproc
+ 155              		@ args = 0, pretend = 0, frame = 0
+ 156              		@ frame_needed = 0, uses_anonymous_args = 0
+ 157              		@ link register save eliminated.
+  66:Core/Src/usb_keyboard.c ****     if (key_code == 0) return;
+ 158              		.loc 1 66 5 view .LVU30
+ 159              		.loc 1 66 8 is_stmt 0 view .LVU31
+ 160 0000 8446     		mov	ip, r0
+ 161 0002 20B3     		cbz	r0, .L11
+ 162              	.LBB3:
+  67:Core/Src/usb_keyboard.c ****     
+ARM GAS  /tmp/ccDIilLL.s 			page 5
+
+
+  68:Core/Src/usb_keyboard.c ****     /* Find and remove the key */
+  69:Core/Src/usb_keyboard.c ****     for (uint8_t i = 0; i < key_count; i++) {
+ 163              		.loc 1 69 18 view .LVU32
+ 164 0004 0023     		movs	r3, #0
+ 165              	.L13:
+ 166              	.LVL7:
+ 167              		.loc 1 69 27 is_stmt 1 discriminator 1 view .LVU33
+ 168 0006 124A     		ldr	r2, .L19
+ 169 0008 1278     		ldrb	r2, [r2]	@ zero_extendqisi2
+ 170 000a 9A42     		cmp	r2, r3
+ 171 000c 1FD9     		bls	.L11
+  70:Core/Src/usb_keyboard.c ****         if (pressed_keys[i] == key_code) {
+ 172              		.loc 1 70 9 view .LVU34
+ 173              		.loc 1 70 25 is_stmt 0 view .LVU35
+ 174 000e 1149     		ldr	r1, .L19+4
+ 175 0010 C95C     		ldrb	r1, [r1, r3]	@ zero_extendqisi2
+ 176              		.loc 1 70 12 view .LVU36
+ 177 0012 6145     		cmp	r1, ip
+ 178 0014 0FD0     		beq	.L14
+  69:Core/Src/usb_keyboard.c ****         if (pressed_keys[i] == key_code) {
+ 179              		.loc 1 69 41 is_stmt 1 discriminator 2 view .LVU37
+ 180 0016 0133     		adds	r3, r3, #1
+ 181              	.LVL8:
+  69:Core/Src/usb_keyboard.c ****         if (pressed_keys[i] == key_code) {
+ 182              		.loc 1 69 41 is_stmt 0 discriminator 2 view .LVU38
+ 183 0018 DBB2     		uxtb	r3, r3
+ 184              	.LVL9:
+  69:Core/Src/usb_keyboard.c ****         if (pressed_keys[i] == key_code) {
+ 185              		.loc 1 69 41 discriminator 2 view .LVU39
+ 186 001a F4E7     		b	.L13
+ 187              	.LVL10:
+ 188              	.L16:
+ 189              	.LBB4:
+  71:Core/Src/usb_keyboard.c ****             /* Shift remaining keys */
+  72:Core/Src/usb_keyboard.c ****             for (uint8_t j = i; j < key_count - 1; j++) {
+  73:Core/Src/usb_keyboard.c ****                 pressed_keys[j] = pressed_keys[j + 1];
+ 190              		.loc 1 73 17 is_stmt 1 view .LVU40
+ 191              		.loc 1 73 50 is_stmt 0 view .LVU41
+ 192 001c 581C     		adds	r0, r3, #1
+ 193              		.loc 1 73 47 view .LVU42
+ 194 001e 0D49     		ldr	r1, .L19+4
+ 195 0020 11F800C0 		ldrb	ip, [r1, r0]	@ zero_extendqisi2
+ 196              		.loc 1 73 33 view .LVU43
+ 197 0024 01F803C0 		strb	ip, [r1, r3]
+  74:Core/Src/usb_keyboard.c ****                 keyboard_report.keycode[j] = keyboard_report.keycode[j + 1];
+ 198              		.loc 1 74 17 is_stmt 1 view .LVU44
+ 199              		.loc 1 74 69 is_stmt 0 view .LVU45
+ 200 0028 0B49     		ldr	r1, .L19+8
+ 201 002a 0844     		add	r0, r0, r1
+ 202 002c 8078     		ldrb	r0, [r0, #2]	@ zero_extendqisi2
+ 203              		.loc 1 74 44 view .LVU46
+ 204 002e 1944     		add	r1, r1, r3
+ 205 0030 8870     		strb	r0, [r1, #2]
+  72:Core/Src/usb_keyboard.c ****                 pressed_keys[j] = pressed_keys[j + 1];
+ 206              		.loc 1 72 53 is_stmt 1 discriminator 3 view .LVU47
+ 207 0032 0133     		adds	r3, r3, #1
+ 208              	.LVL11:
+ARM GAS  /tmp/ccDIilLL.s 			page 6
+
+
+  72:Core/Src/usb_keyboard.c ****                 pressed_keys[j] = pressed_keys[j + 1];
+ 209              		.loc 1 72 53 is_stmt 0 discriminator 3 view .LVU48
+ 210 0034 DBB2     		uxtb	r3, r3
+ 211              	.LVL12:
+ 212              	.L14:
+  72:Core/Src/usb_keyboard.c ****                 pressed_keys[j] = pressed_keys[j + 1];
+ 213              		.loc 1 72 35 is_stmt 1 discriminator 1 view .LVU49
+  72:Core/Src/usb_keyboard.c ****                 pressed_keys[j] = pressed_keys[j + 1];
+ 214              		.loc 1 72 47 is_stmt 0 discriminator 1 view .LVU50
+ 215 0036 511E     		subs	r1, r2, #1
+  72:Core/Src/usb_keyboard.c ****                 pressed_keys[j] = pressed_keys[j + 1];
+ 216              		.loc 1 72 35 discriminator 1 view .LVU51
+ 217 0038 8B42     		cmp	r3, r1
+ 218 003a EFDB     		blt	.L16
+ 219              	.LBE4:
+  75:Core/Src/usb_keyboard.c ****             }
+  76:Core/Src/usb_keyboard.c ****             pressed_keys[key_count - 1] = 0;
+ 220              		.loc 1 76 13 is_stmt 1 view .LVU52
+ 221              		.loc 1 76 41 is_stmt 0 view .LVU53
+ 222 003c 0020     		movs	r0, #0
+ 223 003e 054B     		ldr	r3, .L19+4
+ 224              	.LVL13:
+ 225              		.loc 1 76 41 view .LVU54
+ 226 0040 5854     		strb	r0, [r3, r1]
+  77:Core/Src/usb_keyboard.c ****             keyboard_report.keycode[key_count - 1] = 0;
+ 227              		.loc 1 77 13 is_stmt 1 view .LVU55
+ 228              		.loc 1 77 52 is_stmt 0 view .LVU56
+ 229 0042 054B     		ldr	r3, .L19+8
+ 230 0044 0B44     		add	r3, r3, r1
+ 231 0046 9870     		strb	r0, [r3, #2]
+  78:Core/Src/usb_keyboard.c ****             key_count--;
+ 232              		.loc 1 78 13 is_stmt 1 view .LVU57
+ 233              		.loc 1 78 22 is_stmt 0 view .LVU58
+ 234 0048 014B     		ldr	r3, .L19
+ 235 004a 1970     		strb	r1, [r3]
+  79:Core/Src/usb_keyboard.c ****             return;
+ 236              		.loc 1 79 13 is_stmt 1 view .LVU59
+ 237 004c 7047     		bx	lr
+ 238              	.LVL14:
+ 239              	.L11:
+ 240              		.loc 1 79 13 is_stmt 0 view .LVU60
+ 241              	.LBE3:
+  80:Core/Src/usb_keyboard.c ****         }
+  81:Core/Src/usb_keyboard.c ****     }
+  82:Core/Src/usb_keyboard.c **** }
+ 242              		.loc 1 82 1 view .LVU61
+ 243 004e 7047     		bx	lr
+ 244              	.L20:
+ 245              		.align	2
+ 246              	.L19:
+ 247 0050 00000000 		.word	key_count
+ 248 0054 00000000 		.word	pressed_keys
+ 249 0058 00000000 		.word	keyboard_report
+ 250              		.cfi_endproc
+ 251              	.LFE140:
+ 253              		.section	.text.USB_Keyboard_ReleaseAll,"ax",%progbits
+ 254              		.align	1
+ARM GAS  /tmp/ccDIilLL.s 			page 7
+
+
+ 255              		.global	USB_Keyboard_ReleaseAll
+ 256              		.syntax unified
+ 257              		.thumb
+ 258              		.thumb_func
+ 260              	USB_Keyboard_ReleaseAll:
+ 261              	.LFB141:
+  83:Core/Src/usb_keyboard.c **** 
+  84:Core/Src/usb_keyboard.c **** /**
+  85:Core/Src/usb_keyboard.c ****   * @brief Release all keys
+  86:Core/Src/usb_keyboard.c ****   * @retval None
+  87:Core/Src/usb_keyboard.c ****   */
+  88:Core/Src/usb_keyboard.c **** void USB_Keyboard_ReleaseAll(void)
+  89:Core/Src/usb_keyboard.c **** {
+ 262              		.loc 1 89 1 is_stmt 1 view -0
+ 263              		.cfi_startproc
+ 264              		@ args = 0, pretend = 0, frame = 0
+ 265              		@ frame_needed = 0, uses_anonymous_args = 0
+ 266              		@ link register save eliminated.
+  90:Core/Src/usb_keyboard.c ****     memset(pressed_keys, 0, sizeof(pressed_keys));
+ 267              		.loc 1 90 5 view .LVU63
+ 268 0000 054A     		ldr	r2, .L22
+ 269 0002 0023     		movs	r3, #0
+ 270 0004 1360     		str	r3, [r2]
+ 271 0006 9380     		strh	r3, [r2, #4]	@ movhi
+  91:Core/Src/usb_keyboard.c ****     memset(keyboard_report.keycode, 0, sizeof(keyboard_report.keycode));
+ 272              		.loc 1 91 5 view .LVU64
+ 273 0008 044A     		ldr	r2, .L22+4
+ 274 000a 1360     		str	r3, [r2]	@ unaligned
+ 275 000c 9380     		strh	r3, [r2, #4]	@ movhi
+  92:Core/Src/usb_keyboard.c ****     key_count = 0;
+ 276              		.loc 1 92 5 view .LVU65
+ 277              		.loc 1 92 15 is_stmt 0 view .LVU66
+ 278 000e 0449     		ldr	r1, .L22+8
+ 279 0010 0B70     		strb	r3, [r1]
+  93:Core/Src/usb_keyboard.c ****     keyboard_report.modifier = 0;
+ 280              		.loc 1 93 5 is_stmt 1 view .LVU67
+ 281              		.loc 1 93 30 is_stmt 0 view .LVU68
+ 282 0012 02F8023C 		strb	r3, [r2, #-2]
+  94:Core/Src/usb_keyboard.c **** }
+ 283              		.loc 1 94 1 view .LVU69
+ 284 0016 7047     		bx	lr
+ 285              	.L23:
+ 286              		.align	2
+ 287              	.L22:
+ 288 0018 00000000 		.word	pressed_keys
+ 289 001c 02000000 		.word	keyboard_report+2
+ 290 0020 00000000 		.word	key_count
+ 291              		.cfi_endproc
+ 292              	.LFE141:
+ 294              		.section	.text.USB_Keyboard_SetModifier,"ax",%progbits
+ 295              		.align	1
+ 296              		.global	USB_Keyboard_SetModifier
+ 297              		.syntax unified
+ 298              		.thumb
+ 299              		.thumb_func
+ 301              	USB_Keyboard_SetModifier:
+ 302              	.LVL15:
+ARM GAS  /tmp/ccDIilLL.s 			page 8
+
+
+ 303              	.LFB142:
+  95:Core/Src/usb_keyboard.c **** 
+  96:Core/Src/usb_keyboard.c **** /**
+  97:Core/Src/usb_keyboard.c ****   * @brief Set modifier keys
+  98:Core/Src/usb_keyboard.c ****   * @param modifier: Modifier bits (Shift, Ctrl, Alt, Win)
+  99:Core/Src/usb_keyboard.c ****   * @retval None
+ 100:Core/Src/usb_keyboard.c ****   */
+ 101:Core/Src/usb_keyboard.c **** void USB_Keyboard_SetModifier(uint8_t modifier)
+ 102:Core/Src/usb_keyboard.c **** {
+ 304              		.loc 1 102 1 is_stmt 1 view -0
+ 305              		.cfi_startproc
+ 306              		@ args = 0, pretend = 0, frame = 0
+ 307              		@ frame_needed = 0, uses_anonymous_args = 0
+ 308              		@ link register save eliminated.
+ 103:Core/Src/usb_keyboard.c ****     keyboard_report.modifier = modifier;
+ 309              		.loc 1 103 5 view .LVU71
+ 310              		.loc 1 103 30 is_stmt 0 view .LVU72
+ 311 0000 014B     		ldr	r3, .L25
+ 312 0002 1870     		strb	r0, [r3]
+ 104:Core/Src/usb_keyboard.c **** }
+ 313              		.loc 1 104 1 view .LVU73
+ 314 0004 7047     		bx	lr
+ 315              	.L26:
+ 316 0006 00BF     		.align	2
+ 317              	.L25:
+ 318 0008 00000000 		.word	keyboard_report
+ 319              		.cfi_endproc
+ 320              	.LFE142:
+ 322              		.section	.text.USB_Keyboard_ClearModifier,"ax",%progbits
+ 323              		.align	1
+ 324              		.global	USB_Keyboard_ClearModifier
+ 325              		.syntax unified
+ 326              		.thumb
+ 327              		.thumb_func
+ 329              	USB_Keyboard_ClearModifier:
+ 330              	.LFB143:
+ 105:Core/Src/usb_keyboard.c **** 
+ 106:Core/Src/usb_keyboard.c **** /**
+ 107:Core/Src/usb_keyboard.c ****   * @brief Clear modifier keys
+ 108:Core/Src/usb_keyboard.c ****   * @retval None
+ 109:Core/Src/usb_keyboard.c ****   */
+ 110:Core/Src/usb_keyboard.c **** void USB_Keyboard_ClearModifier(void)
+ 111:Core/Src/usb_keyboard.c **** {
+ 331              		.loc 1 111 1 is_stmt 1 view -0
+ 332              		.cfi_startproc
+ 333              		@ args = 0, pretend = 0, frame = 0
+ 334              		@ frame_needed = 0, uses_anonymous_args = 0
+ 335              		@ link register save eliminated.
+ 112:Core/Src/usb_keyboard.c ****     keyboard_report.modifier = 0;
+ 336              		.loc 1 112 5 view .LVU75
+ 337              		.loc 1 112 30 is_stmt 0 view .LVU76
+ 338 0000 014B     		ldr	r3, .L28
+ 339 0002 0022     		movs	r2, #0
+ 340 0004 1A70     		strb	r2, [r3]
+ 113:Core/Src/usb_keyboard.c **** }
+ 341              		.loc 1 113 1 view .LVU77
+ 342 0006 7047     		bx	lr
+ARM GAS  /tmp/ccDIilLL.s 			page 9
+
+
+ 343              	.L29:
+ 344              		.align	2
+ 345              	.L28:
+ 346 0008 00000000 		.word	keyboard_report
+ 347              		.cfi_endproc
+ 348              	.LFE143:
+ 350              		.section	.text.USB_Keyboard_SendReport,"ax",%progbits
+ 351              		.align	1
+ 352              		.global	USB_Keyboard_SendReport
+ 353              		.syntax unified
+ 354              		.thumb
+ 355              		.thumb_func
+ 357              	USB_Keyboard_SendReport:
+ 358              	.LFB144:
+ 114:Core/Src/usb_keyboard.c **** 
+ 115:Core/Src/usb_keyboard.c **** /**
+ 116:Core/Src/usb_keyboard.c ****   * @brief Send keyboard report to USB host
+ 117:Core/Src/usb_keyboard.c ****   * Only sends if report changed from last time
+ 118:Core/Src/usb_keyboard.c ****   * @retval None
+ 119:Core/Src/usb_keyboard.c ****   */
+ 120:Core/Src/usb_keyboard.c **** void USB_Keyboard_SendReport(void)
+ 121:Core/Src/usb_keyboard.c **** {
+ 359              		.loc 1 121 1 is_stmt 1 view -0
+ 360              		.cfi_startproc
+ 361              		@ args = 0, pretend = 0, frame = 0
+ 362              		@ frame_needed = 0, uses_anonymous_args = 0
+ 363 0000 10B5     		push	{r4, lr}
+ 364              	.LCFI0:
+ 365              		.cfi_def_cfa_offset 8
+ 366              		.cfi_offset 4, -8
+ 367              		.cfi_offset 14, -4
+ 122:Core/Src/usb_keyboard.c ****     /* Check if report changed */
+ 123:Core/Src/usb_keyboard.c ****     if (memcmp(&keyboard_report, &keyboard_report_last, sizeof(keyboard_report)) == 0) {
+ 368              		.loc 1 123 5 view .LVU79
+ 369              		.loc 1 123 9 is_stmt 0 view .LVU80
+ 370 0002 0822     		movs	r2, #8
+ 371 0004 0849     		ldr	r1, .L34
+ 372 0006 0948     		ldr	r0, .L34+4
+ 373 0008 FFF7FEFF 		bl	memcmp
+ 374              	.LVL16:
+ 375              		.loc 1 123 8 discriminator 1 view .LVU81
+ 376 000c 00B9     		cbnz	r0, .L33
+ 377              	.L30:
+ 124:Core/Src/usb_keyboard.c ****         return;  /* No change, don't send */
+ 125:Core/Src/usb_keyboard.c ****     }
+ 126:Core/Src/usb_keyboard.c ****     
+ 127:Core/Src/usb_keyboard.c ****     /* Send report */
+ 128:Core/Src/usb_keyboard.c ****     USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*)&keyboard_report, sizeof(keyboard_report));
+ 129:Core/Src/usb_keyboard.c ****     
+ 130:Core/Src/usb_keyboard.c ****     /* Update last report */
+ 131:Core/Src/usb_keyboard.c ****     memcpy(&keyboard_report_last, &keyboard_report, sizeof(keyboard_report));
+ 132:Core/Src/usb_keyboard.c **** }
+ 378              		.loc 1 132 1 view .LVU82
+ 379 000e 10BD     		pop	{r4, pc}
+ 380              	.L33:
+ 128:Core/Src/usb_keyboard.c ****     
+ 381              		.loc 1 128 5 is_stmt 1 view .LVU83
+ARM GAS  /tmp/ccDIilLL.s 			page 10
+
+
+ 382 0010 064C     		ldr	r4, .L34+4
+ 383 0012 0822     		movs	r2, #8
+ 384 0014 2146     		mov	r1, r4
+ 385 0016 0648     		ldr	r0, .L34+8
+ 386 0018 FFF7FEFF 		bl	USBD_HID_SendReport
+ 387              	.LVL17:
+ 131:Core/Src/usb_keyboard.c **** }
+ 388              		.loc 1 131 5 view .LVU84
+ 389 001c 024B     		ldr	r3, .L34
+ 390 001e 94E80300 		ldm	r4, {r0, r1}
+ 391 0022 83E80300 		stm	r3, {r0, r1}
+ 392 0026 F2E7     		b	.L30
+ 393              	.L35:
+ 394              		.align	2
+ 395              	.L34:
+ 396 0028 00000000 		.word	keyboard_report_last
+ 397 002c 00000000 		.word	keyboard_report
+ 398 0030 00000000 		.word	hUsbDeviceFS
+ 399              		.cfi_endproc
+ 400              	.LFE144:
+ 402              		.section	.text.USB_Keyboard_HandleMatrixKey,"ax",%progbits
+ 403              		.align	1
+ 404              		.global	USB_Keyboard_HandleMatrixKey
+ 405              		.syntax unified
+ 406              		.thumb
+ 407              		.thumb_func
+ 409              	USB_Keyboard_HandleMatrixKey:
+ 410              	.LVL18:
+ 411              	.LFB145:
+ 133:Core/Src/usb_keyboard.c **** 
+ 134:Core/Src/usb_keyboard.c **** /**
+ 135:Core/Src/usb_keyboard.c ****   * @brief Matrix keyboard to USB HID code mapping
+ 136:Core/Src/usb_keyboard.c ****   * Map 3x3 matrix keys to USB HID keycodes
+ 137:Core/Src/usb_keyboard.c ****   * 
+ 138:Core/Src/usb_keyboard.c ****   * Matrix layout:
+ 139:Core/Src/usb_keyboard.c ****   *   0 1 2  ->  Keys: 1 2 3
+ 140:Core/Src/usb_keyboard.c ****   *   3 4 5  ->  Keys: 4 5 6
+ 141:Core/Src/usb_keyboard.c ****   *   6 7 8  ->  Keys: 7 8 9
+ 142:Core/Src/usb_keyboard.c ****   */
+ 143:Core/Src/usb_keyboard.c **** static const uint8_t matrix_to_usb_hid[9] = {
+ 144:Core/Src/usb_keyboard.c ****     KEY_1,      /* Matrix key 0 -> USB 1 */
+ 145:Core/Src/usb_keyboard.c ****     KEY_2,      /* Matrix key 1 -> USB 2 */
+ 146:Core/Src/usb_keyboard.c ****     KEY_3,      /* Matrix key 2 -> USB 3 */
+ 147:Core/Src/usb_keyboard.c ****     KEY_4,      /* Matrix key 3 -> USB 4 */
+ 148:Core/Src/usb_keyboard.c ****     KEY_5,      /* Matrix key 4 -> USB 5 */
+ 149:Core/Src/usb_keyboard.c ****     KEY_6,      /* Matrix key 5 -> USB 6 */
+ 150:Core/Src/usb_keyboard.c ****     KEY_7,      /* Matrix key 6 -> USB 7 */
+ 151:Core/Src/usb_keyboard.c ****     KEY_8,      /* Matrix key 7 -> USB 8 */
+ 152:Core/Src/usb_keyboard.c ****     KEY_9,      /* Matrix key 8 -> USB 9 */
+ 153:Core/Src/usb_keyboard.c **** };
+ 154:Core/Src/usb_keyboard.c **** 
+ 155:Core/Src/usb_keyboard.c **** /**
+ 156:Core/Src/usb_keyboard.c ****   * @brief Convert matrix keyboard code to USB HID code
+ 157:Core/Src/usb_keyboard.c ****   * This is called from Matrix_Key_Callback (override in main.c)
+ 158:Core/Src/usb_keyboard.c ****   * @param matrix_key: Matrix key code (0-8)
+ 159:Core/Src/usb_keyboard.c ****   * @param pressed: 1 if pressed, 0 if released
+ 160:Core/Src/usb_keyboard.c ****   * @retval None
+ARM GAS  /tmp/ccDIilLL.s 			page 11
+
+
+ 161:Core/Src/usb_keyboard.c ****   */
+ 162:Core/Src/usb_keyboard.c **** void USB_Keyboard_HandleMatrixKey(uint8_t matrix_key, uint8_t pressed)
+ 163:Core/Src/usb_keyboard.c **** {
+ 412              		.loc 1 163 1 view -0
+ 413              		.cfi_startproc
+ 414              		@ args = 0, pretend = 0, frame = 0
+ 415              		@ frame_needed = 0, uses_anonymous_args = 0
+ 164:Core/Src/usb_keyboard.c ****     if (matrix_key >= 9) return;
+ 416              		.loc 1 164 5 view .LVU86
+ 417              		.loc 1 164 8 is_stmt 0 view .LVU87
+ 418 0000 0828     		cmp	r0, #8
+ 419 0002 0BD8     		bhi	.L41
+ 163:Core/Src/usb_keyboard.c ****     if (matrix_key >= 9) return;
+ 420              		.loc 1 163 1 view .LVU88
+ 421 0004 08B5     		push	{r3, lr}
+ 422              	.LCFI1:
+ 423              		.cfi_def_cfa_offset 8
+ 424              		.cfi_offset 3, -8
+ 425              		.cfi_offset 14, -4
+ 165:Core/Src/usb_keyboard.c ****     
+ 166:Core/Src/usb_keyboard.c ****     uint8_t usb_key = matrix_to_usb_hid[matrix_key];
+ 426              		.loc 1 166 5 is_stmt 1 view .LVU89
+ 427              		.loc 1 166 13 is_stmt 0 view .LVU90
+ 428 0006 064B     		ldr	r3, .L44
+ 429 0008 185C     		ldrb	r0, [r3, r0]	@ zero_extendqisi2
+ 430              	.LVL19:
+ 167:Core/Src/usb_keyboard.c ****     
+ 168:Core/Src/usb_keyboard.c ****     if (pressed) {
+ 431              		.loc 1 168 5 is_stmt 1 view .LVU91
+ 432              		.loc 1 168 8 is_stmt 0 view .LVU92
+ 433 000a 21B1     		cbz	r1, .L38
+ 169:Core/Src/usb_keyboard.c ****         USB_Keyboard_PressKey(usb_key);
+ 434              		.loc 1 169 9 is_stmt 1 view .LVU93
+ 435 000c FFF7FEFF 		bl	USB_Keyboard_PressKey
+ 436              	.LVL20:
+ 437              	.L39:
+ 170:Core/Src/usb_keyboard.c ****     } else {
+ 171:Core/Src/usb_keyboard.c ****         USB_Keyboard_ReleaseKey(usb_key);
+ 172:Core/Src/usb_keyboard.c ****     }
+ 173:Core/Src/usb_keyboard.c ****     
+ 174:Core/Src/usb_keyboard.c ****     /* Send report */
+ 175:Core/Src/usb_keyboard.c ****     USB_Keyboard_SendReport();
+ 438              		.loc 1 175 5 view .LVU94
+ 439 0010 FFF7FEFF 		bl	USB_Keyboard_SendReport
+ 440              	.LVL21:
+ 176:Core/Src/usb_keyboard.c **** }
+ 441              		.loc 1 176 1 is_stmt 0 view .LVU95
+ 442 0014 08BD     		pop	{r3, pc}
+ 443              	.LVL22:
+ 444              	.L38:
+ 171:Core/Src/usb_keyboard.c ****     }
+ 445              		.loc 1 171 9 is_stmt 1 view .LVU96
+ 446 0016 FFF7FEFF 		bl	USB_Keyboard_ReleaseKey
+ 447              	.LVL23:
+ 171:Core/Src/usb_keyboard.c ****     }
+ 448              		.loc 1 171 9 is_stmt 0 view .LVU97
+ 449 001a F9E7     		b	.L39
+ARM GAS  /tmp/ccDIilLL.s 			page 12
+
+
+ 450              	.LVL24:
+ 451              	.L41:
+ 452              	.LCFI2:
+ 453              		.cfi_def_cfa_offset 0
+ 454              		.cfi_restore 3
+ 455              		.cfi_restore 14
+ 171:Core/Src/usb_keyboard.c ****     }
+ 456              		.loc 1 171 9 view .LVU98
+ 457 001c 7047     		bx	lr
+ 458              	.L45:
+ 459 001e 00BF     		.align	2
+ 460              	.L44:
+ 461 0020 00000000 		.word	matrix_to_usb_hid
+ 462              		.cfi_endproc
+ 463              	.LFE145:
+ 465              		.section	.text.USB_Keyboard_GetReport,"ax",%progbits
+ 466              		.align	1
+ 467              		.global	USB_Keyboard_GetReport
+ 468              		.syntax unified
+ 469              		.thumb
+ 470              		.thumb_func
+ 472              	USB_Keyboard_GetReport:
+ 473              	.LVL25:
+ 474              	.LFB146:
+ 177:Core/Src/usb_keyboard.c **** 
+ 178:Core/Src/usb_keyboard.c **** /**
+ 179:Core/Src/usb_keyboard.c ****   * @brief Get USB keyboard report content
+ 180:Core/Src/usb_keyboard.c ****   * @param report: Pointer to buffer to receive report
+ 181:Core/Src/usb_keyboard.c ****   * @retval Length of report (8 bytes)
+ 182:Core/Src/usb_keyboard.c ****   */
+ 183:Core/Src/usb_keyboard.c **** uint8_t USB_Keyboard_GetReport(uint8_t *report)
+ 184:Core/Src/usb_keyboard.c **** {
+ 475              		.loc 1 184 1 is_stmt 1 view -0
+ 476              		.cfi_startproc
+ 477              		@ args = 0, pretend = 0, frame = 0
+ 478              		@ frame_needed = 0, uses_anonymous_args = 0
+ 479              		@ link register save eliminated.
+ 480              		.loc 1 184 1 is_stmt 0 view .LVU100
+ 481 0000 0346     		mov	r3, r0
+ 185:Core/Src/usb_keyboard.c ****     memcpy(report, &keyboard_report, sizeof(keyboard_report));
+ 482              		.loc 1 185 5 is_stmt 1 view .LVU101
+ 483 0002 034A     		ldr	r2, .L47
+ 484 0004 03CA     		ldmia	r2!, {r0, r1}
+ 485              	.LVL26:
+ 486              		.loc 1 185 5 is_stmt 0 view .LVU102
+ 487 0006 1860     		str	r0, [r3]	@ unaligned
+ 488 0008 5960     		str	r1, [r3, #4]	@ unaligned
+ 186:Core/Src/usb_keyboard.c ****     return sizeof(keyboard_report);
+ 489              		.loc 1 186 5 is_stmt 1 view .LVU103
+ 187:Core/Src/usb_keyboard.c **** }
+ 490              		.loc 1 187 1 is_stmt 0 view .LVU104
+ 491 000a 0820     		movs	r0, #8
+ 492 000c 7047     		bx	lr
+ 493              	.L48:
+ 494 000e 00BF     		.align	2
+ 495              	.L47:
+ 496 0010 00000000 		.word	keyboard_report
+ARM GAS  /tmp/ccDIilLL.s 			page 13
+
+
+ 497              		.cfi_endproc
+ 498              	.LFE146:
+ 500              		.section	.rodata.matrix_to_usb_hid,"a"
+ 501              		.align	2
+ 504              	matrix_to_usb_hid:
+ 505 0000 1E1F2021 		.ascii	"\036\037 !\"#$%&"
+ 505      22232425 
+ 505      26
+ 506              		.section	.bss.key_count,"aw",%nobits
+ 509              	key_count:
+ 510 0000 00       		.space	1
+ 511              		.section	.bss.pressed_keys,"aw",%nobits
+ 512              		.align	2
+ 515              	pressed_keys:
+ 516 0000 00000000 		.space	6
+ 516      0000
+ 517              		.section	.bss.keyboard_report_last,"aw",%nobits
+ 518              		.align	2
+ 521              	keyboard_report_last:
+ 522 0000 00000000 		.space	8
+ 522      00000000 
+ 523              		.section	.bss.keyboard_report,"aw",%nobits
+ 524              		.align	2
+ 527              	keyboard_report:
+ 528 0000 00000000 		.space	8
+ 528      00000000 
+ 529              		.text
+ 530              	.Letext0:
+ 531              		.file 2 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ 532              		.file 3 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stddef.h"
+ 533              		.file 4 "Core/Inc/usb_keyboard.h"
+ 534              		.file 5 "Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h"
+ 535              		.file 6 "Middlewares/ST/STM32_USB_Device_Library/Class/HID/Inc/usbd_hid.h"
+ 536              		.file 7 "/usr/include/newlib/string.h"
+ARM GAS  /tmp/ccDIilLL.s 			page 14
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 usb_keyboard.c
+     /tmp/ccDIilLL.s:21     .text.USB_Keyboard_Init:00000000 $t
+     /tmp/ccDIilLL.s:27     .text.USB_Keyboard_Init:00000000 USB_Keyboard_Init
+     /tmp/ccDIilLL.s:56     .text.USB_Keyboard_Init:0000001c $d
+     /tmp/ccDIilLL.s:527    .bss.keyboard_report:00000000 keyboard_report
+     /tmp/ccDIilLL.s:521    .bss.keyboard_report_last:00000000 keyboard_report_last
+     /tmp/ccDIilLL.s:515    .bss.pressed_keys:00000000 pressed_keys
+     /tmp/ccDIilLL.s:509    .bss.key_count:00000000 key_count
+     /tmp/ccDIilLL.s:64     .text.USB_Keyboard_PressKey:00000000 $t
+     /tmp/ccDIilLL.s:70     .text.USB_Keyboard_PressKey:00000000 USB_Keyboard_PressKey
+     /tmp/ccDIilLL.s:137    .text.USB_Keyboard_PressKey:00000034 $d
+     /tmp/ccDIilLL.s:144    .text.USB_Keyboard_ReleaseKey:00000000 $t
+     /tmp/ccDIilLL.s:150    .text.USB_Keyboard_ReleaseKey:00000000 USB_Keyboard_ReleaseKey
+     /tmp/ccDIilLL.s:247    .text.USB_Keyboard_ReleaseKey:00000050 $d
+     /tmp/ccDIilLL.s:254    .text.USB_Keyboard_ReleaseAll:00000000 $t
+     /tmp/ccDIilLL.s:260    .text.USB_Keyboard_ReleaseAll:00000000 USB_Keyboard_ReleaseAll
+     /tmp/ccDIilLL.s:288    .text.USB_Keyboard_ReleaseAll:00000018 $d
+     /tmp/ccDIilLL.s:295    .text.USB_Keyboard_SetModifier:00000000 $t
+     /tmp/ccDIilLL.s:301    .text.USB_Keyboard_SetModifier:00000000 USB_Keyboard_SetModifier
+     /tmp/ccDIilLL.s:318    .text.USB_Keyboard_SetModifier:00000008 $d
+     /tmp/ccDIilLL.s:323    .text.USB_Keyboard_ClearModifier:00000000 $t
+     /tmp/ccDIilLL.s:329    .text.USB_Keyboard_ClearModifier:00000000 USB_Keyboard_ClearModifier
+     /tmp/ccDIilLL.s:346    .text.USB_Keyboard_ClearModifier:00000008 $d
+     /tmp/ccDIilLL.s:351    .text.USB_Keyboard_SendReport:00000000 $t
+     /tmp/ccDIilLL.s:357    .text.USB_Keyboard_SendReport:00000000 USB_Keyboard_SendReport
+     /tmp/ccDIilLL.s:396    .text.USB_Keyboard_SendReport:00000028 $d
+     /tmp/ccDIilLL.s:403    .text.USB_Keyboard_HandleMatrixKey:00000000 $t
+     /tmp/ccDIilLL.s:409    .text.USB_Keyboard_HandleMatrixKey:00000000 USB_Keyboard_HandleMatrixKey
+     /tmp/ccDIilLL.s:461    .text.USB_Keyboard_HandleMatrixKey:00000020 $d
+     /tmp/ccDIilLL.s:504    .rodata.matrix_to_usb_hid:00000000 matrix_to_usb_hid
+     /tmp/ccDIilLL.s:466    .text.USB_Keyboard_GetReport:00000000 $t
+     /tmp/ccDIilLL.s:472    .text.USB_Keyboard_GetReport:00000000 USB_Keyboard_GetReport
+     /tmp/ccDIilLL.s:496    .text.USB_Keyboard_GetReport:00000010 $d
+     /tmp/ccDIilLL.s:501    .rodata.matrix_to_usb_hid:00000000 $d
+     /tmp/ccDIilLL.s:510    .bss.key_count:00000000 $d
+     /tmp/ccDIilLL.s:512    .bss.pressed_keys:00000000 $d
+     /tmp/ccDIilLL.s:518    .bss.keyboard_report_last:00000000 $d
+     /tmp/ccDIilLL.s:524    .bss.keyboard_report:00000000 $d
+
+UNDEFINED SYMBOLS
+memcmp
+USBD_HID_SendReport
+hUsbDeviceFS
