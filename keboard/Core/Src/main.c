@@ -1,20 +1,20 @@
 /* USER CODE BEGIN Header */
 /**
-  ******************************************************************************
-  * @file           : main.c
-  * @brief          : Main program body
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2025 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file           : main.c
+ * @brief          : Main program body
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2025 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file
+ * in the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
@@ -24,6 +24,7 @@
 /* USER CODE BEGIN Includes */
 #include "matrix_keyboard.h"
 #include "usb_keyboard.h"
+#include "usbd_hid.h"
 #include <stdio.h>
 /* USER CODE END Includes */
 
@@ -61,18 +62,17 @@ static void MX_USART2_UART_Init(void);
 /* USER CODE BEGIN 0 */
 
 /**
-  * @brief Printf 重定向到 UART
-  */
+ * @brief Printf 重定向到 UART
+ */
 #ifdef __GNUC__
 #define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
 #else
 #define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
 #endif
 
-PUTCHAR_PROTOTYPE
-{
-    HAL_UART_Transmit(&huart2, (uint8_t *)&ch, 1, HAL_MAX_DELAY);
-    return ch;
+PUTCHAR_PROTOTYPE {
+  HAL_UART_Transmit(&huart2, (uint8_t *)&ch, 1, HAL_MAX_DELAY);
+  return ch;
 }
 
 /* USER CODE END 0 */
@@ -109,13 +109,13 @@ int main(void)
   MX_USART2_UART_Init();
   MX_USB_DEVICE_Init();
   /* USER CODE BEGIN 2 */
-  
+
   /* Initialize matrix keyboard */
   Matrix_Keyboard_Init();
-  
+
   /* Initialize USB keyboard */
   USB_Keyboard_Init();
-  
+
   /* Print welcome message */
   printf("\r\n===============================================\r\n");
   printf("   USB Keyboard - STM32F407\r\n");
@@ -129,15 +129,14 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  while (1)
-  {
+  while (1) {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
     /* Scan keyboard every 10ms */
     if ((HAL_GetTick() - scan_timer) >= 10) {
-        scan_timer = HAL_GetTick();
-        Matrix_Keyboard_Scan();
+      scan_timer = HAL_GetTick();
+      Matrix_Keyboard_Scan();
     }
   }
   /* USER CODE END 3 */
@@ -164,10 +163,10 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-  RCC_OscInitStruct.PLL.PLLM = 15;
-  RCC_OscInitStruct.PLL.PLLN = 144;
+  RCC_OscInitStruct.PLL.PLLM = 4;
+  RCC_OscInitStruct.PLL.PLLN = 72;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
-  RCC_OscInitStruct.PLL.PLLQ = 5;
+  RCC_OscInitStruct.PLL.PLLQ = 3;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     Error_Handler();
@@ -179,10 +178,10 @@ void SystemClock_Config(void)
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
+  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_3) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
   {
     Error_Handler();
   }
@@ -263,27 +262,22 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 
 /**
-  * @brief Matrix keyboard key callback function
-  * @param key_code: Key code (0-8)
-  * @param pressed: 1 = key pressed, 0 = key released
-  * @retval None
-  */
-void Matrix_Key_Callback(uint8_t key_code, uint8_t pressed)
-{
-    const char *key_names[] = {
-        "1", "2", "3",
-        "4", "5", "6",
-        "7", "8", "9"
-    };
-    
-    if (pressed) {
-        printf("[USB] Key %s pressed\r\n", key_names[key_code]);
-    } else {
-        printf("[USB] Key %s released\r\n", key_names[key_code]);
-    }
-    
-    /* Send to USB HID */
-    USB_Keyboard_HandleMatrixKey(key_code, pressed);
+ * @brief Matrix keyboard key callback function
+ * @param key_code: Key code (0-8)
+ * @param pressed: 1 = key pressed, 0 = key released
+ * @retval None
+ */
+void Matrix_Key_Callback(uint8_t key_code, uint8_t pressed) {
+  const char *key_names[] = {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
+
+  if (pressed) {
+    printf("[USB] Key %s pressed\r\n", key_names[key_code]);
+  } else {
+    printf("[USB] Key %s released\r\n", key_names[key_code]);
+  }
+
+  /* Send to USB HID */
+  USB_Keyboard_HandleMatrixKey(key_code, pressed);
 }
 
 /* USER CODE END 4 */
@@ -297,8 +291,7 @@ void Error_Handler(void)
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
   __disable_irq();
-  while (1)
-  {
+  while (1) {
   }
   /* USER CODE END Error_Handler_Debug */
 }
@@ -313,8 +306,9 @@ void Error_Handler(void)
 void assert_failed(uint8_t *file, uint32_t line)
 {
   /* USER CODE BEGIN 6 */
-  /* User can add his own implementation to report the file name and line number,
-     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+  /* User can add his own implementation to report the file name and line
+     number, ex: printf("Wrong parameters value: file %s on line %d\r\n", file,
+     line) */
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
