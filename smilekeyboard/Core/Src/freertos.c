@@ -29,12 +29,19 @@
 #include "matrix_keyboard.h"
 #include "usbd_hid.h"
 #include "OLED.h"
+#include "tim.h"
+#include "u8g2.h"
 
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
+/* u8g2 实体定义 */
+static u8g2_t u8g2;
 
+// 声明你的移植回调函数 (在 u8g2_port.c 中实现)
+extern uint8_t u8x8_byte_stm32_hw_i2c(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr);
+extern uint8_t u8x8_stm32_gpio_and_delay(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr);
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -72,6 +79,11 @@ const osThreadAttr_t encoderTask_attributes = {
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
+/* Definitions for guiEventQueue */
+osMessageQueueId_t guiEventQueueHandle;
+const osMessageQueueAttr_t guiEventQueue_attributes = {
+  .name = "guiEventQueue"
+};
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -106,6 +118,10 @@ void MX_FREERTOS_Init(void) {
   /* USER CODE BEGIN RTOS_TIMERS */
   /* start timers, add new ones, ... */
   /* USER CODE END RTOS_TIMERS */
+
+  /* Create the queue(s) */
+  /* creation of guiEventQueue */
+  guiEventQueueHandle = osMessageQueueNew (16, sizeof(InputEvent_t), &guiEventQueue_attributes);
 
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
@@ -175,42 +191,173 @@ void StartkeyboardTask(void *argument)
 void StartguiTask(void *argument)
 {
   /* USER CODE BEGIN StartguiTask */
-  OLED_Init(); // OLED初始化
-
-
-   uint32_t count = 0; // 计数变量
   
-  /* Infinite loop */
+  /* ================= 1. 初始化阶段 ================= */
+  
+  // 初始化 u8g2 (SSD1306, 128x64, 硬件I2C, 全屏缓冲_f)
+  // 如果内存不够(F103 RAM紧张)，可以将 _f 改为 _1 (页缓冲模式)，但绘图逻辑要改
+  u8g2_Setup_ssd1306_i2c_128x64_noname_f(&u8g2, U8G2_R0, u8x8_byte_stm32_hw_i2c, u8x8_stm32_gpio_and_delay);
+  
+  // 设置设备地址 (通常是 0x78)
+  u8x8_SetI2CAddress(&u8g2.u8x8, 0x78);
+  
+  // 启动显示
+  u8g2_InitDisplay(&u8g2);
+  u8g2_SetPowerSave(&u8g2, 0); // 唤醒屏幕
+
+  /* ================= 2. 局部变量定义 ================= */
+  
+  InputEvent_t recv_evt;       // 接收到的队列消息
+  UI_Page_t current_page = PAGE_HOME; // 当前页面状态
+  
+  int8_t menu_index = 0;       // 菜单光标位置
+  const int8_t MENU_MAX = 3;   // 菜单项数量
+  char *menu_items[] = {"Back", "Pomodoro", "Game"}; // 菜单文字
+
+  uint32_t last_blink_time = 0; // 控制眨眼的时间戳
+  uint8_t is_eye_closed = 0;    // 眼睛状态
+
+  /* ================= 3. 任务主循环 ================= */
   for(;;)
   {
-    OLED_Clear();
+    // --- A. 接收输入 (带超时机制) ---
+    // 这里设置 20ms 超时。意味着：
+    // 1. 如果有按键，立即响应，无延迟。
+    // 2. 如果没按键，20ms 后也会向下执行，保证屏幕能刷新动画(眨眼)。
+    osStatus_t status = osMessageQueueGet(guiEventQueueHandle, &recv_evt, NULL, 20);
+    
+    // 如果超时没收到消息，重置事件为 NONE
+    if (status != osOK) {
+        recv_evt = EVENT_NONE;
+    }
 
-    // 3. 绘制内容
-    // 显示静态文字
-    OLED_ShowString(0, 0, "STM32 OLED Test", OLED_8X16);
-    OLED_ShowString(0, 16, "Count:", OLED_8X16);
-    
-    // 显示动态数字
-    OLED_ShowNum(48, 16, count, 5, OLED_8X16);
-    
-    // 画一个简单的图形测试（画一个矩形框）
-    OLED_DrawRectangle(0, 34, 127, 10, OLED_UNFILLED);
-    
-    // 画一个动态的进度条（在矩形框内部）
-    uint8_t width = (count % 100) * 1.25; // 简单的计算，让它循环变长
-    OLED_DrawRectangle(2, 36, width, 6, OLED_FILLED);
-    
-    // 4. 将显存写入屏幕
-    OLED_Update();
+    // --- B. 逻辑处理 (状态机) ---
+    switch (current_page) 
+    {
+        // ------------- 主页逻辑 -------------
+        case PAGE_HOME:
+            // 响应点击 -> 进菜单
+            if (recv_evt == EVENT_ENCODER_CLICK) {
+                current_page = PAGE_MENU;
+                menu_index = 0; // 重置光标
+            }
+            break;
 
-    // 5. 更新数据
-    count++;
-    
-    // 6. 延时 (FreeRTOS 延时，让出CPU权)
-    osDelay(50); 
+        // ------------- 菜单逻辑 -------------
+        case PAGE_MENU:
+            // 响应旋转 -> 移动光标
+            if (recv_evt == EVENT_ENCODER_DOWN) menu_index++;
+            if (recv_evt == EVENT_ENCODER_UP)   menu_index--;
+            
+            // 限制光标范围
+            if (menu_index < 0) menu_index = 0;
+            if (menu_index >= MENU_MAX) menu_index = MENU_MAX - 1;
+
+            // 响应点击 -> 执行功能
+            if (recv_evt == EVENT_ENCODER_CLICK) {
+                if (menu_index == 0) current_page = PAGE_HOME;     // Back
+                if (menu_index == 1) current_page = PAGE_POMODORO; // Pomodoro
+                if (menu_index == 2) current_page = PAGE_GAME;     // Game
+            }
+            break;
+
+        // ------------- 其他页面逻辑 -------------
+        case PAGE_POMODORO:
+        case PAGE_GAME:
+            // 点击返回主菜单
+            if (recv_evt == EVENT_ENCODER_CLICK) {
+                current_page = PAGE_MENU;
+            }
+            break;
+    }
+
+    // --- C. 绘图处理 (u8g2) ---
+    u8g2_ClearBuffer(&u8g2); // 清空缓冲区
+
+    switch (current_page) 
+    {
+        // ============= 绘制主页 (动态脸) =============
+        case PAGE_HOME:
+            // 1. 设置字体画文字
+            u8g2_SetFont(&u8g2, u8g2_font_ncenB08_tr);
+            u8g2_DrawStr(&u8g2, 0, 10, "Speed: 0 WPM"); 
+            
+            // 2. 计算眨眼动画 (每3秒眨眼一次)
+            uint32_t now = osKernelGetTickCount();
+            if (now - last_blink_time > 3000) {
+                is_eye_closed = 1; // 闭眼
+                if (now - last_blink_time > 3200) { // 闭眼维持200ms
+                    is_eye_closed = 0; // 睁眼
+                    last_blink_time = now;
+                }
+            }
+
+            // 3. 画脸
+            u8g2_DrawCircle(&u8g2, 64, 40, 20, U8G2_DRAW_ALL); // 脸轮廓
+            
+            if (is_eye_closed) {
+                // 闭眼：画两条横线
+                u8g2_DrawLine(&u8g2, 54, 38, 60, 38); // 左眼
+                u8g2_DrawLine(&u8g2, 68, 38, 74, 38); // 右眼
+            } else {
+                // 睁眼：画两个实心圆
+                u8g2_DrawDisc(&u8g2, 57, 38, 3, U8G2_DRAW_ALL); // 左眼
+                u8g2_DrawDisc(&u8g2, 71, 38, 3, U8G2_DRAW_ALL); // 右眼
+            }
+            
+            // 画嘴巴 (画一个圆弧模拟微笑)
+            // Center(64,40), Radius 12, Angle 45~135 degree
+            // 注意：u8g2 只有 DrawCircle，没有简单的 DrawArc，这里用简单的线代替嘴巴
+            u8g2_DrawLine(&u8g2, 58, 50, 70, 50); 
+            break;
+
+        // ============= 绘制菜单 =============
+        case PAGE_MENU:
+            u8g2_SetFont(&u8g2, u8g2_font_ncenB08_tr);
+            u8g2_DrawStr(&u8g2, 40, 10, "- MENU -");
+            
+            // 循环绘制菜单项
+            for (int i = 0; i < MENU_MAX; i++) {
+                // 如果是当前选中项，画一个实心框作为背景（反色显示）
+                if (i == menu_index) {
+                    u8g2_SetDrawColor(&u8g2, 1); // 正常色
+                    u8g2_DrawBox(&u8g2, 0, 16 + i*16, 128, 14); // 画框
+                    u8g2_SetDrawColor(&u8g2, 0); // 设为背景色(黑色)，实现文字反白
+                } else {
+                    u8g2_SetDrawColor(&u8g2, 1);
+                }
+                
+                // 绘制文字 (Y坐标需要微调以垂直居中)
+                u8g2_DrawStr(&u8g2, 10, 27 + i*16, menu_items[i]);
+            }
+            // 恢复颜色设置，以免影响下次循环
+            u8g2_SetDrawColor(&u8g2, 1); 
+            break;
+
+        // ============= 绘制番茄钟 =============
+        case PAGE_POMODORO:
+            u8g2_SetFont(&u8g2, u8g2_font_ncenB14_tr); // 大字体
+            u8g2_DrawStr(&u8g2, 35, 40, "25:00");
+            u8g2_SetFont(&u8g2, u8g2_font_ncenB08_tr);
+            u8g2_DrawStr(&u8g2, 30, 60, "Click to Exit");
+            break;
+            
+        // ============= 绘制游戏 =============
+        case PAGE_GAME:
+            u8g2_SetFont(&u8g2, u8g2_font_ncenB08_tr);
+            u8g2_DrawStr(&u8g2, 20, 30, "Game Area...");
+            u8g2_DrawFrame(&u8g2, 10, 10, 108, 44); // 画个框假装是游戏界面
+            break;
+    }
+
+    // --- D. 发送显存到屏幕 ---
+    u8g2_SendBuffer(&u8g2);
+    } 
+    /* USER CODE END StartguiTask */
+
   }
-  /* USER CODE END StartguiTask */
-}
+ 
+
 
 /* USER CODE BEGIN Header_StartencoderTask */
 /**
@@ -222,10 +369,33 @@ void StartguiTask(void *argument)
 void StartencoderTask(void *argument)
 {
   /* USER CODE BEGIN StartencoderTask */
+   HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);
+  int16_t last_counter = 0;
+
+
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+     // 1. 处理旋转
+    int16_t current_counter = (int16_t)__HAL_TIM_GET_COUNTER(&htim2);
+    int16_t diff = current_counter - last_counter;
+    
+    if (abs(diff) >= 2) { // 假设转一格计数变2
+        InputEvent_t evt = (diff > 0) ? EVENT_ENCODER_DOWN : EVENT_ENCODER_UP;
+        osMessageQueuePut(guiEventQueueHandle, &evt, 0, 0); // 发送到队列
+        last_counter = current_counter;
+    }
+    
+    // 2. 处理按键 (此处省略消抖逻辑)
+    if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_5) == GPIO_PIN_RESET) {
+        InputEvent_t evt = EVENT_ENCODER_CLICK;
+        osMessageQueuePut(guiEventQueueHandle, &evt, 0, 0);
+        // 等待松开，防止重复触发
+        while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_5) == GPIO_PIN_RESET) osDelay(20);
+    }
+    
+    osDelay(20);
+
   }
   /* USER CODE END StartencoderTask */
 }

@@ -36,6 +36,19 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
+typedef enum {
+    EVENT_NONE,
+    EVENT_ENCODER_UP,    // 旋钮向上转
+    EVENT_ENCODER_DOWN,  // 旋钮向下转
+    EVENT_ENCODER_CLICK  // 旋钮按键点击
+} InputEvent_t;
+
+typedef enum {
+    PAGE_HOME,      // 主页：显示表情
+    PAGE_MENU,      // 菜单：选择功能
+    PAGE_POMODORO,  // 番茄钟
+    PAGE_GAME       // 小游戏
+} UI_Page_t;
 
 /* USER CODE END ET */
 
