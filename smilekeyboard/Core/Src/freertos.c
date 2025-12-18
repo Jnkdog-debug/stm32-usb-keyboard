@@ -188,175 +188,168 @@ void StartkeyboardTask(void *argument)
 * @retval None
 */
 /* USER CODE END Header_StartguiTask */
+typedef enum {
+    FACE_NORMAL,
+    FACE_BLINK,
+    FACE_DIZZY // 预留晕的状态
+} FaceState_t;
+
 void StartguiTask(void *argument)
 {
-  /* USER CODE BEGIN StartguiTask */
-  
-  /* ================= 1. 初始化阶段 ================= */
-  
-  // 初始化 u8g2 (SSD1306, 128x64, 硬件I2C, 全屏缓冲_f)
-  // 如果内存不够(F103 RAM紧张)，可以将 _f 改为 _1 (页缓冲模式)，但绘图逻辑要改
+  // 1. 初始化 (保持不变)
   u8g2_Setup_ssd1306_i2c_128x64_noname_f(&u8g2, U8G2_R0, u8x8_byte_stm32_hw_i2c, u8x8_stm32_gpio_and_delay);
-  
-  // 设置设备地址 (通常是 0x78)
   u8x8_SetI2CAddress(&u8g2.u8x8, 0x78);
-  
-  // 启动显示
   u8g2_InitDisplay(&u8g2);
-  u8g2_SetPowerSave(&u8g2, 0); // 唤醒屏幕
+  u8g2_SetPowerSave(&u8g2, 0);
 
-  /* ================= 2. 局部变量定义 ================= */
+  // 2. 变量定义
+  InputEvent_t recv_evt;
+  UI_Page_t current_page = PAGE_HOME;
   
-  InputEvent_t recv_evt;       // 接收到的队列消息
-  UI_Page_t current_page = PAGE_HOME; // 当前页面状态
+  int8_t menu_index = 0;
+  const int8_t MENU_MAX = 3;
+  char *menu_items[] = {"Return", "Pomodoro", "Settings"};
+
+  // === 动画变量 ===
+  uint32_t last_blink_time = 0;
+  FaceState_t current_face = FACE_NORMAL;
   
-  int8_t menu_index = 0;       // 菜单光标位置
-  const int8_t MENU_MAX = 3;   // 菜单项数量
-  char *menu_items[] = {"Back", "Pomodoro", "Game"}; // 菜单文字
+  // === 【关键修改】热度与时间戳 ===
+  int16_t typing_heat = 0;      // 热度值
+  uint32_t last_key_time = 0;   // 最后一次按键的时间戳
 
-  uint32_t last_blink_time = 0; // 控制眨眼的时间戳
-  uint8_t is_eye_closed = 0;    // 眼睛状态
-
-  /* ================= 3. 任务主循环 ================= */
   for(;;)
   {
-    // --- A. 接收输入 (带超时机制) ---
-    // 这里设置 20ms 超时。意味着：
-    // 1. 如果有按键，立即响应，无延迟。
-    // 2. 如果没按键，20ms 后也会向下执行，保证屏幕能刷新动画(眨眼)。
+    // 20ms 刷新率
     osStatus_t status = osMessageQueueGet(guiEventQueueHandle, &recv_evt, NULL, 20);
+    if (status != osOK) recv_evt = EVENT_NONE;
+
+    uint32_t now = osKernelGetTickCount(); // 获取当前系统时间
+
+    // ================= 逻辑处理 =================
     
-    // 如果超时没收到消息，重置事件为 NONE
-    if (status != osOK) {
-        recv_evt = EVENT_NONE;
+    // --- 1. 捕捉按键，更新时间戳 ---
+    if (recv_evt == EVENT_KEY_HIT) {
+        last_key_time = now; // 更新最后按键时间
+        typing_heat += 20;   // 升温：数值越大越容易晕
     }
 
-    // --- B. 逻辑处理 (状态机) ---
+    // --- 2. 热度自然衰减 (用于触发眩晕) ---
+    // 只有在 3秒内 有输入时，才计算热度逻辑
+    if (now - last_key_time < 3000) {
+        typing_heat -= 1; // 缓慢降温
+    } else {
+        // --- 3. 【核心逻辑】超时 3秒 强制恢复 ---
+        typing_heat = 0;            // 热度归零
+        current_face = FACE_NORMAL; // 强制恢复正常脸
+    }
+    
+    // 限制热度范围
+    if (typing_heat > 100) typing_heat = 100;
+    if (typing_heat < 0) typing_heat = 0;
+
+    // --- 4. 状态切换判定 ---
+    // 只有没超时的时候，才允许变晕
+    if (now - last_key_time < 3000) {
+        if (typing_heat > 80) {
+            current_face = FACE_DIZZY; // 热度超过60变晕
+        }
+        // 注意：这里去掉了“降到40恢复”的逻辑，完全交给 3秒倒计时来恢复
+        // 这样只要你一旦晕了，就会晕满 3秒 (或者直到你停止输入3秒)
+    }
+
+    // --- 5. 页面跳转逻辑 (保持不变) ---
     switch (current_page) 
     {
-        // ------------- 主页逻辑 -------------
         case PAGE_HOME:
-            // 响应点击 -> 进菜单
-            if (recv_evt == EVENT_ENCODER_CLICK) {
+            if (recv_evt == EVENT_ENCODER_UP || 
+                recv_evt == EVENT_ENCODER_DOWN || 
+                recv_evt == EVENT_ENCODER_CLICK) 
+            {
                 current_page = PAGE_MENU;
-                menu_index = 0; // 重置光标
+                menu_index = 0;
             }
             break;
-
-        // ------------- 菜单逻辑 -------------
+        // ... (其他页面逻辑不变) ...
         case PAGE_MENU:
-            // 响应旋转 -> 移动光标
             if (recv_evt == EVENT_ENCODER_DOWN) menu_index++;
             if (recv_evt == EVENT_ENCODER_UP)   menu_index--;
-            
-            // 限制光标范围
-            if (menu_index < 0) menu_index = 0;
-            if (menu_index >= MENU_MAX) menu_index = MENU_MAX - 1;
-
-            // 响应点击 -> 执行功能
+            if (menu_index < 0) menu_index = MENU_MAX - 1;
+            if (menu_index >= MENU_MAX) menu_index = 0;
             if (recv_evt == EVENT_ENCODER_CLICK) {
-                if (menu_index == 0) current_page = PAGE_HOME;     // Back
-                if (menu_index == 1) current_page = PAGE_POMODORO; // Pomodoro
-                if (menu_index == 2) current_page = PAGE_GAME;     // Game
+                if (menu_index == 0) current_page = PAGE_HOME;
             }
             break;
-
-        // ------------- 其他页面逻辑 -------------
         case PAGE_POMODORO:
         case PAGE_GAME:
-            // 点击返回主菜单
-            if (recv_evt == EVENT_ENCODER_CLICK) {
-                current_page = PAGE_MENU;
-            }
-            break;
+             if (recv_evt == EVENT_ENCODER_CLICK) current_page = PAGE_MENU;
+             break;
     }
 
-    // --- C. 绘图处理 (u8g2) ---
-    u8g2_ClearBuffer(&u8g2); // 清空缓冲区
+    // ================= 绘图处理 (保持不变) =================
+    u8g2_ClearBuffer(&u8g2);
 
     switch (current_page) 
     {
-        // ============= 绘制主页 (动态脸) =============
         case PAGE_HOME:
-            // 1. 设置字体画文字
-            u8g2_SetFont(&u8g2, u8g2_font_ncenB08_tr);
-            u8g2_DrawStr(&u8g2, 0, 10, "Speed: 0 WPM"); 
-            
-            // 2. 计算眨眼动画 (每3秒眨眼一次)
-            uint32_t now = osKernelGetTickCount();
-            if (now - last_blink_time > 3000) {
-                is_eye_closed = 1; // 闭眼
-                if (now - last_blink_time > 3200) { // 闭眼维持200ms
-                    is_eye_closed = 0; // 睁眼
-                    last_blink_time = now;
+            if (current_face == FACE_DIZZY) {
+                // 晕脸绘制 (X 眼睛)
+                u8g2_DrawLine(&u8g2, 22, 15, 42, 35);
+                u8g2_DrawLine(&u8g2, 42, 15, 22, 35);
+                u8g2_DrawLine(&u8g2, 86, 15, 106, 35);
+                u8g2_DrawLine(&u8g2, 106, 15, 86, 35);
+                u8g2_DrawCircle(&u8g2, 64, 52, 6, U8G2_DRAW_ALL);
+                // 蚊香圈
+                u8g2_DrawLine(&u8g2, 58, 5, 70, 5);
+                u8g2_DrawLine(&u8g2, 60, 2, 68, 2);
+            }
+            else { // FACE_NORMAL
+                // 正常脸绘制 (眨眼动画)
+                int is_blink = 0;
+                // 只有不是晕的时候才眨眼
+                if (now - last_blink_time > 3500) {
+                    is_blink = 1;
+                    if (now - last_blink_time > 3650) {
+                        is_blink = 0;
+                        last_blink_time = now;
+                    }
                 }
+                if (is_blink) {
+                    u8g2_DrawBox(&u8g2, 18, 23, 28, 4);
+                    u8g2_DrawBox(&u8g2, 82, 23, 28, 4);
+                } else {
+                    u8g2_DrawFilledEllipse(&u8g2, 32, 25, 12, 18, U8G2_DRAW_ALL);
+                    u8g2_DrawFilledEllipse(&u8g2, 96, 25, 12, 18, U8G2_DRAW_ALL);
+                    u8g2_SetDrawColor(&u8g2, 0); 
+                    u8g2_DrawDisc(&u8g2, 36, 20, 3, U8G2_DRAW_ALL);
+                    u8g2_DrawDisc(&u8g2, 100, 20, 3, U8G2_DRAW_ALL);
+                    u8g2_SetDrawColor(&u8g2, 1);
+                }
+                u8g2_DrawRBox(&u8g2, 44, 50, 40, 8, 3);
             }
-
-            // 3. 画脸
-            u8g2_DrawCircle(&u8g2, 64, 40, 20, U8G2_DRAW_ALL); // 脸轮廓
-            
-            if (is_eye_closed) {
-                // 闭眼：画两条横线
-                u8g2_DrawLine(&u8g2, 54, 38, 60, 38); // 左眼
-                u8g2_DrawLine(&u8g2, 68, 38, 74, 38); // 右眼
-            } else {
-                // 睁眼：画两个实心圆
-                u8g2_DrawDisc(&u8g2, 57, 38, 3, U8G2_DRAW_ALL); // 左眼
-                u8g2_DrawDisc(&u8g2, 71, 38, 3, U8G2_DRAW_ALL); // 右眼
-            }
-            
-            // 画嘴巴 (画一个圆弧模拟微笑)
-            // Center(64,40), Radius 12, Angle 45~135 degree
-            // 注意：u8g2 只有 DrawCircle，没有简单的 DrawArc，这里用简单的线代替嘴巴
-            u8g2_DrawLine(&u8g2, 58, 50, 70, 50); 
             break;
 
-        // ============= 绘制菜单 =============
         case PAGE_MENU:
-            u8g2_SetFont(&u8g2, u8g2_font_ncenB08_tr);
-            u8g2_DrawStr(&u8g2, 40, 10, "- MENU -");
-            
-            // 循环绘制菜单项
+            // 菜单绘制保持不变...
+            u8g2_SetFont(&u8g2, u8g2_font_ncenB10_tr);
             for (int i = 0; i < MENU_MAX; i++) {
-                // 如果是当前选中项，画一个实心框作为背景（反色显示）
+                int y_pos = 20 + i * 20;
                 if (i == menu_index) {
-                    u8g2_SetDrawColor(&u8g2, 1); // 正常色
-                    u8g2_DrawBox(&u8g2, 0, 16 + i*16, 128, 14); // 画框
-                    u8g2_SetDrawColor(&u8g2, 0); // 设为背景色(黑色)，实现文字反白
+                    u8g2_DrawRBox(&u8g2, 10, y_pos - 14, 108, 19, 4);
+                    u8g2_SetDrawColor(&u8g2, 0);
                 } else {
                     u8g2_SetDrawColor(&u8g2, 1);
                 }
-                
-                // 绘制文字 (Y坐标需要微调以垂直居中)
-                u8g2_DrawStr(&u8g2, 10, 27 + i*16, menu_items[i]);
+                int str_w = u8g2_GetStrWidth(&u8g2, menu_items[i]);
+                u8g2_DrawStr(&u8g2, (128 - str_w) / 2, y_pos, menu_items[i]);
             }
-            // 恢复颜色设置，以免影响下次循环
-            u8g2_SetDrawColor(&u8g2, 1); 
-            break;
-
-        // ============= 绘制番茄钟 =============
-        case PAGE_POMODORO:
-            u8g2_SetFont(&u8g2, u8g2_font_ncenB14_tr); // 大字体
-            u8g2_DrawStr(&u8g2, 35, 40, "25:00");
-            u8g2_SetFont(&u8g2, u8g2_font_ncenB08_tr);
-            u8g2_DrawStr(&u8g2, 30, 60, "Click to Exit");
-            break;
-            
-        // ============= 绘制游戏 =============
-        case PAGE_GAME:
-            u8g2_SetFont(&u8g2, u8g2_font_ncenB08_tr);
-            u8g2_DrawStr(&u8g2, 20, 30, "Game Area...");
-            u8g2_DrawFrame(&u8g2, 10, 10, 108, 44); // 画个框假装是游戏界面
+            u8g2_SetDrawColor(&u8g2, 1);
             break;
     }
 
-    // --- D. 发送显存到屏幕 ---
     u8g2_SendBuffer(&u8g2);
-    } 
-    /* USER CODE END StartguiTask */
-
   }
- 
+}
 
 
 /* USER CODE BEGIN Header_StartencoderTask */
@@ -380,7 +373,7 @@ void StartencoderTask(void *argument)
     int16_t current_counter = (int16_t)__HAL_TIM_GET_COUNTER(&htim2);
     int16_t diff = current_counter - last_counter;
     
-    if (abs(diff) >= 2) { // 假设转一格计数变2
+    if (abs(diff) >= 4) { // 假设转一格计数变2
         InputEvent_t evt = (diff > 0) ? EVENT_ENCODER_DOWN : EVENT_ENCODER_UP;
         osMessageQueuePut(guiEventQueueHandle, &evt, 0, 0); // 发送到队列
         last_counter = current_counter;
@@ -402,12 +395,18 @@ void StartencoderTask(void *argument)
 
 /* Private application code --------------------------------------------------*/
 /* USER CODE BEGIN Application */
+
 void Matrix_Key_Callback(uint8_t key_code, uint8_t pressed) {
-  const char *key_names[] = {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
-
-
-  /* Send to USB HID */
+  // 1. 原有的 USB 发送
   USB_Keyboard_HandleMatrixKey(key_code, pressed);
+  
+  // 2. 新增：如果是按下动作，通知 GUI 增加热度
+  if (pressed) {
+      InputEvent_t evt = EVENT_KEY_HIT;
+      // timeout=0 表示如果不阻塞，队列满了就丢弃，不影响打字
+      osMessageQueuePut(guiEventQueueHandle, &evt, 0, 0); 
+  }
 }
+
 /* USER CODE END Application */
 

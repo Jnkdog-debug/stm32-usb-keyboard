@@ -1,0 +1,3577 @@
+ARM GAS  /tmp/cc6PBIIV.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.arch armv7-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"u8x8_byte.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.file 1 "BSP/u8g2/u8x8_byte.c"
+  18              		.section	.text.i2c_delay,"ax",%progbits
+  19              		.align	1
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  24              	i2c_delay:
+  25              	.LVL0:
+  26              	.LFB13:
+   1:BSP/u8g2/u8x8_byte.c **** /*
+   2:BSP/u8g2/u8x8_byte.c **** 
+   3:BSP/u8g2/u8x8_byte.c ****   u8x8_byte.c 
+   4:BSP/u8g2/u8x8_byte.c ****   
+   5:BSP/u8g2/u8x8_byte.c ****   Universal 8bit Graphics Library (https://github.com/olikraus/u8g2/)
+   6:BSP/u8g2/u8x8_byte.c **** 
+   7:BSP/u8g2/u8x8_byte.c ****   Copyright (c) 2016, olikraus@gmail.com
+   8:BSP/u8g2/u8x8_byte.c ****   All rights reserved.
+   9:BSP/u8g2/u8x8_byte.c **** 
+  10:BSP/u8g2/u8x8_byte.c ****   Redistribution and use in source and binary forms, with or without modification, 
+  11:BSP/u8g2/u8x8_byte.c ****   are permitted provided that the following conditions are met:
+  12:BSP/u8g2/u8x8_byte.c **** 
+  13:BSP/u8g2/u8x8_byte.c ****   * Redistributions of source code must retain the above copyright notice, this list 
+  14:BSP/u8g2/u8x8_byte.c ****     of conditions and the following disclaimer.
+  15:BSP/u8g2/u8x8_byte.c ****     
+  16:BSP/u8g2/u8x8_byte.c ****   * Redistributions in binary form must reproduce the above copyright notice, this 
+  17:BSP/u8g2/u8x8_byte.c ****     list of conditions and the following disclaimer in the documentation and/or other 
+  18:BSP/u8g2/u8x8_byte.c ****     materials provided with the distribution.
+  19:BSP/u8g2/u8x8_byte.c **** 
+  20:BSP/u8g2/u8x8_byte.c ****   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND 
+  21:BSP/u8g2/u8x8_byte.c ****   CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, 
+  22:BSP/u8g2/u8x8_byte.c ****   INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF 
+  23:BSP/u8g2/u8x8_byte.c ****   MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
+  24:BSP/u8g2/u8x8_byte.c ****   DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR 
+  25:BSP/u8g2/u8x8_byte.c ****   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+  26:BSP/u8g2/u8x8_byte.c ****   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+  27:BSP/u8g2/u8x8_byte.c ****   NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
+  28:BSP/u8g2/u8x8_byte.c ****   LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
+  29:BSP/u8g2/u8x8_byte.c ****   CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, 
+  30:BSP/u8g2/u8x8_byte.c ****   STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+  31:BSP/u8g2/u8x8_byte.c ****   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
+  32:BSP/u8g2/u8x8_byte.c ****   ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
+ARM GAS  /tmp/cc6PBIIV.s 			page 2
+
+
+  33:BSP/u8g2/u8x8_byte.c ****   
+  34:BSP/u8g2/u8x8_byte.c ****   
+  35:BSP/u8g2/u8x8_byte.c **** */
+  36:BSP/u8g2/u8x8_byte.c **** 
+  37:BSP/u8g2/u8x8_byte.c **** #include "u8x8.h"
+  38:BSP/u8g2/u8x8_byte.c **** 
+  39:BSP/u8g2/u8x8_byte.c **** uint8_t u8x8_byte_SetDC(u8x8_t *u8x8, uint8_t dc)
+  40:BSP/u8g2/u8x8_byte.c **** {
+  41:BSP/u8g2/u8x8_byte.c ****   return u8x8->byte_cb(u8x8, U8X8_MSG_BYTE_SET_DC, dc, NULL);
+  42:BSP/u8g2/u8x8_byte.c **** }
+  43:BSP/u8g2/u8x8_byte.c **** 
+  44:BSP/u8g2/u8x8_byte.c **** uint8_t u8x8_byte_SendBytes(u8x8_t *u8x8, uint8_t cnt, uint8_t *data)
+  45:BSP/u8g2/u8x8_byte.c **** {
+  46:BSP/u8g2/u8x8_byte.c ****   return u8x8->byte_cb(u8x8, U8X8_MSG_BYTE_SEND, cnt, (void *)data);
+  47:BSP/u8g2/u8x8_byte.c **** }
+  48:BSP/u8g2/u8x8_byte.c **** 
+  49:BSP/u8g2/u8x8_byte.c **** uint8_t u8x8_byte_SendByte(u8x8_t *u8x8, uint8_t byte)
+  50:BSP/u8g2/u8x8_byte.c **** {
+  51:BSP/u8g2/u8x8_byte.c ****   return u8x8_byte_SendBytes(u8x8, 1, &byte);
+  52:BSP/u8g2/u8x8_byte.c **** }
+  53:BSP/u8g2/u8x8_byte.c **** 
+  54:BSP/u8g2/u8x8_byte.c **** uint8_t u8x8_byte_StartTransfer(u8x8_t *u8x8)
+  55:BSP/u8g2/u8x8_byte.c **** {
+  56:BSP/u8g2/u8x8_byte.c ****   return u8x8->byte_cb(u8x8, U8X8_MSG_BYTE_START_TRANSFER, 0, NULL);
+  57:BSP/u8g2/u8x8_byte.c **** }
+  58:BSP/u8g2/u8x8_byte.c **** 
+  59:BSP/u8g2/u8x8_byte.c **** uint8_t u8x8_byte_EndTransfer(u8x8_t *u8x8)
+  60:BSP/u8g2/u8x8_byte.c **** {
+  61:BSP/u8g2/u8x8_byte.c ****   return u8x8->byte_cb(u8x8, U8X8_MSG_BYTE_END_TRANSFER, 0, NULL);
+  62:BSP/u8g2/u8x8_byte.c **** }
+  63:BSP/u8g2/u8x8_byte.c **** 
+  64:BSP/u8g2/u8x8_byte.c **** /*=========================================*/
+  65:BSP/u8g2/u8x8_byte.c **** 
+  66:BSP/u8g2/u8x8_byte.c **** uint8_t u8x8_byte_empty(U8X8_UNUSED u8x8_t *u8x8, uint8_t msg, U8X8_UNUSED uint8_t arg_int, U8X8_UN
+  67:BSP/u8g2/u8x8_byte.c **** {
+  68:BSP/u8g2/u8x8_byte.c ****   switch(msg)
+  69:BSP/u8g2/u8x8_byte.c ****   {
+  70:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_SEND:
+  71:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_INIT:
+  72:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_SET_DC:
+  73:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_START_TRANSFER:
+  74:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_END_TRANSFER:
+  75:BSP/u8g2/u8x8_byte.c ****       break;	/* do nothing */
+  76:BSP/u8g2/u8x8_byte.c ****   }
+  77:BSP/u8g2/u8x8_byte.c ****   return 1;	/* always succeed */
+  78:BSP/u8g2/u8x8_byte.c **** }
+  79:BSP/u8g2/u8x8_byte.c **** 
+  80:BSP/u8g2/u8x8_byte.c **** 
+  81:BSP/u8g2/u8x8_byte.c **** /*=========================================*/
+  82:BSP/u8g2/u8x8_byte.c **** 
+  83:BSP/u8g2/u8x8_byte.c **** 
+  84:BSP/u8g2/u8x8_byte.c **** /*
+  85:BSP/u8g2/u8x8_byte.c ****   Uses:
+  86:BSP/u8g2/u8x8_byte.c ****     u8x8->display_info->sda_setup_time_ns
+  87:BSP/u8g2/u8x8_byte.c ****     u8x8->display_info->sck_pulse_width_ns
+  88:BSP/u8g2/u8x8_byte.c ****     u8x8->display_info->spi_mode
+  89:BSP/u8g2/u8x8_byte.c ****     u8x8->display_info->chip_disable_level
+ARM GAS  /tmp/cc6PBIIV.s 			page 3
+
+
+  90:BSP/u8g2/u8x8_byte.c ****     u8x8->display_info->chip_enable_level
+  91:BSP/u8g2/u8x8_byte.c ****     u8x8->display_info->post_chip_enable_wait_ns
+  92:BSP/u8g2/u8x8_byte.c ****     u8x8->display_info->pre_chip_disable_wait_ns
+  93:BSP/u8g2/u8x8_byte.c ****   Calls to GPIO and DELAY:
+  94:BSP/u8g2/u8x8_byte.c ****     U8X8_MSG_DELAY_NANO
+  95:BSP/u8g2/u8x8_byte.c ****     U8X8_MSG_GPIO_DC
+  96:BSP/u8g2/u8x8_byte.c ****     U8X8_MSG_GPIO_CS
+  97:BSP/u8g2/u8x8_byte.c ****     U8X8_MSG_GPIO_CLOCK
+  98:BSP/u8g2/u8x8_byte.c ****     U8X8_MSG_GPIO_DATA
+  99:BSP/u8g2/u8x8_byte.c ****   Handles:
+ 100:BSP/u8g2/u8x8_byte.c ****     U8X8_MSG_BYTE_INIT
+ 101:BSP/u8g2/u8x8_byte.c ****     U8X8_MSG_BYTE_SEND
+ 102:BSP/u8g2/u8x8_byte.c ****     U8X8_MSG_BYTE_SET_DC
+ 103:BSP/u8g2/u8x8_byte.c ****     U8X8_MSG_BYTE_START_TRANSFER
+ 104:BSP/u8g2/u8x8_byte.c ****     U8X8_MSG_BYTE_END_TRANSFER
+ 105:BSP/u8g2/u8x8_byte.c **** */
+ 106:BSP/u8g2/u8x8_byte.c **** 
+ 107:BSP/u8g2/u8x8_byte.c **** uint8_t u8x8_byte_4wire_sw_spi(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr)
+ 108:BSP/u8g2/u8x8_byte.c **** {
+ 109:BSP/u8g2/u8x8_byte.c ****   uint8_t i, b;
+ 110:BSP/u8g2/u8x8_byte.c ****   uint8_t *data;
+ 111:BSP/u8g2/u8x8_byte.c ****   uint8_t takeover_edge = u8x8_GetSPIClockPhase(u8x8);
+ 112:BSP/u8g2/u8x8_byte.c ****   uint8_t not_takeover_edge = 1 - takeover_edge;
+ 113:BSP/u8g2/u8x8_byte.c ****  
+ 114:BSP/u8g2/u8x8_byte.c ****   switch(msg)
+ 115:BSP/u8g2/u8x8_byte.c ****   {
+ 116:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_SEND:
+ 117:BSP/u8g2/u8x8_byte.c ****       data = (uint8_t *)arg_ptr;
+ 118:BSP/u8g2/u8x8_byte.c ****       while( arg_int > 0 )
+ 119:BSP/u8g2/u8x8_byte.c ****       {
+ 120:BSP/u8g2/u8x8_byte.c **** 	b = *data;
+ 121:BSP/u8g2/u8x8_byte.c **** 	data++;
+ 122:BSP/u8g2/u8x8_byte.c **** 	arg_int--;
+ 123:BSP/u8g2/u8x8_byte.c **** 	for( i = 0; i < 8; i++ )
+ 124:BSP/u8g2/u8x8_byte.c **** 	{
+ 125:BSP/u8g2/u8x8_byte.c **** 	  if ( b & 128 )
+ 126:BSP/u8g2/u8x8_byte.c **** 	    u8x8_gpio_SetSPIData(u8x8, 1);
+ 127:BSP/u8g2/u8x8_byte.c **** 	  else
+ 128:BSP/u8g2/u8x8_byte.c **** 	    u8x8_gpio_SetSPIData(u8x8, 0);
+ 129:BSP/u8g2/u8x8_byte.c **** 	  b <<= 1;
+ 130:BSP/u8g2/u8x8_byte.c **** 	  
+ 131:BSP/u8g2/u8x8_byte.c **** 	  u8x8_gpio_SetSPIClock(u8x8, not_takeover_edge);
+ 132:BSP/u8g2/u8x8_byte.c **** 	  u8x8_gpio_Delay(u8x8, U8X8_MSG_DELAY_NANO, u8x8->display_info->sda_setup_time_ns);
+ 133:BSP/u8g2/u8x8_byte.c **** 	  u8x8_gpio_SetSPIClock(u8x8, takeover_edge);
+ 134:BSP/u8g2/u8x8_byte.c **** 	  u8x8_gpio_Delay(u8x8, U8X8_MSG_DELAY_NANO, u8x8->display_info->sck_pulse_width_ns);
+ 135:BSP/u8g2/u8x8_byte.c **** 	}    
+ 136:BSP/u8g2/u8x8_byte.c ****       }
+ 137:BSP/u8g2/u8x8_byte.c ****       break;
+ 138:BSP/u8g2/u8x8_byte.c ****       
+ 139:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_INIT:
+ 140:BSP/u8g2/u8x8_byte.c ****       /* disable chipselect */
+ 141:BSP/u8g2/u8x8_byte.c ****       u8x8_gpio_SetCS(u8x8, u8x8->display_info->chip_disable_level);
+ 142:BSP/u8g2/u8x8_byte.c ****       /* no wait required here */
+ 143:BSP/u8g2/u8x8_byte.c ****       
+ 144:BSP/u8g2/u8x8_byte.c ****       /* for SPI: setup correct level of the clock signal */
+ 145:BSP/u8g2/u8x8_byte.c ****       u8x8_gpio_SetSPIClock(u8x8, u8x8_GetSPIClockPhase(u8x8));
+ 146:BSP/u8g2/u8x8_byte.c ****       break;
+ARM GAS  /tmp/cc6PBIIV.s 			page 4
+
+
+ 147:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_SET_DC:
+ 148:BSP/u8g2/u8x8_byte.c ****       u8x8_gpio_SetDC(u8x8, arg_int);
+ 149:BSP/u8g2/u8x8_byte.c ****       break;
+ 150:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_START_TRANSFER:
+ 151:BSP/u8g2/u8x8_byte.c ****       u8x8_gpio_SetCS(u8x8, u8x8->display_info->chip_enable_level);  
+ 152:BSP/u8g2/u8x8_byte.c ****       u8x8->gpio_and_delay_cb(u8x8, U8X8_MSG_DELAY_NANO, u8x8->display_info->post_chip_enable_wait_
+ 153:BSP/u8g2/u8x8_byte.c ****       break;
+ 154:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_END_TRANSFER:
+ 155:BSP/u8g2/u8x8_byte.c ****       u8x8->gpio_and_delay_cb(u8x8, U8X8_MSG_DELAY_NANO, u8x8->display_info->pre_chip_disable_wait_
+ 156:BSP/u8g2/u8x8_byte.c ****       u8x8_gpio_SetCS(u8x8, u8x8->display_info->chip_disable_level);
+ 157:BSP/u8g2/u8x8_byte.c ****       break;
+ 158:BSP/u8g2/u8x8_byte.c ****     default:
+ 159:BSP/u8g2/u8x8_byte.c ****       return 0;
+ 160:BSP/u8g2/u8x8_byte.c ****   }
+ 161:BSP/u8g2/u8x8_byte.c ****   return 1;
+ 162:BSP/u8g2/u8x8_byte.c **** }
+ 163:BSP/u8g2/u8x8_byte.c **** 
+ 164:BSP/u8g2/u8x8_byte.c **** /*=========================================*/
+ 165:BSP/u8g2/u8x8_byte.c **** 
+ 166:BSP/u8g2/u8x8_byte.c **** uint8_t u8x8_byte_8bit_6800mode(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr)
+ 167:BSP/u8g2/u8x8_byte.c **** {
+ 168:BSP/u8g2/u8x8_byte.c ****   uint8_t i, b;
+ 169:BSP/u8g2/u8x8_byte.c ****   uint8_t *data;
+ 170:BSP/u8g2/u8x8_byte.c ****  
+ 171:BSP/u8g2/u8x8_byte.c ****   switch(msg)
+ 172:BSP/u8g2/u8x8_byte.c ****   {
+ 173:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_SEND:
+ 174:BSP/u8g2/u8x8_byte.c ****       data = (uint8_t *)arg_ptr;
+ 175:BSP/u8g2/u8x8_byte.c ****       while( arg_int > 0 )
+ 176:BSP/u8g2/u8x8_byte.c ****       {
+ 177:BSP/u8g2/u8x8_byte.c **** 	b = *data;
+ 178:BSP/u8g2/u8x8_byte.c **** 	data++;
+ 179:BSP/u8g2/u8x8_byte.c **** 	arg_int--;
+ 180:BSP/u8g2/u8x8_byte.c **** 	for( i = U8X8_MSG_GPIO_D0; i <= U8X8_MSG_GPIO_D7; i++ )
+ 181:BSP/u8g2/u8x8_byte.c **** 	{
+ 182:BSP/u8g2/u8x8_byte.c **** 	  u8x8_gpio_call(u8x8, i, b&1);
+ 183:BSP/u8g2/u8x8_byte.c **** 	  b >>= 1;
+ 184:BSP/u8g2/u8x8_byte.c **** 	}    
+ 185:BSP/u8g2/u8x8_byte.c **** 	
+ 186:BSP/u8g2/u8x8_byte.c **** 	u8x8_gpio_Delay(u8x8, U8X8_MSG_DELAY_NANO, u8x8->display_info->data_setup_time_ns);
+ 187:BSP/u8g2/u8x8_byte.c **** 	u8x8_gpio_call(u8x8, U8X8_MSG_GPIO_E, 1);
+ 188:BSP/u8g2/u8x8_byte.c **** 	u8x8_gpio_Delay(u8x8, U8X8_MSG_DELAY_NANO, u8x8->display_info->write_pulse_width_ns);
+ 189:BSP/u8g2/u8x8_byte.c **** 	u8x8_gpio_call(u8x8, U8X8_MSG_GPIO_E, 0);
+ 190:BSP/u8g2/u8x8_byte.c ****       }
+ 191:BSP/u8g2/u8x8_byte.c ****       break;
+ 192:BSP/u8g2/u8x8_byte.c ****       
+ 193:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_INIT:
+ 194:BSP/u8g2/u8x8_byte.c ****       /* disable chipselect */
+ 195:BSP/u8g2/u8x8_byte.c ****       u8x8_gpio_SetCS(u8x8, u8x8->display_info->chip_disable_level);    
+ 196:BSP/u8g2/u8x8_byte.c ****       /* ensure that the enable signal is high */
+ 197:BSP/u8g2/u8x8_byte.c ****       u8x8_gpio_call(u8x8, U8X8_MSG_GPIO_E, 0);
+ 198:BSP/u8g2/u8x8_byte.c ****       break;
+ 199:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_SET_DC:
+ 200:BSP/u8g2/u8x8_byte.c ****       u8x8_gpio_SetDC(u8x8, arg_int);
+ 201:BSP/u8g2/u8x8_byte.c ****       break;
+ 202:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_START_TRANSFER:
+ 203:BSP/u8g2/u8x8_byte.c ****       u8x8_gpio_SetCS(u8x8, u8x8->display_info->chip_enable_level);  
+ARM GAS  /tmp/cc6PBIIV.s 			page 5
+
+
+ 204:BSP/u8g2/u8x8_byte.c ****       u8x8->gpio_and_delay_cb(u8x8, U8X8_MSG_DELAY_NANO, u8x8->display_info->post_chip_enable_wait_
+ 205:BSP/u8g2/u8x8_byte.c ****       break;
+ 206:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_END_TRANSFER:
+ 207:BSP/u8g2/u8x8_byte.c ****       u8x8->gpio_and_delay_cb(u8x8, U8X8_MSG_DELAY_NANO, u8x8->display_info->pre_chip_disable_wait_
+ 208:BSP/u8g2/u8x8_byte.c ****       u8x8_gpio_SetCS(u8x8, u8x8->display_info->chip_disable_level);
+ 209:BSP/u8g2/u8x8_byte.c ****       break;
+ 210:BSP/u8g2/u8x8_byte.c ****     default:
+ 211:BSP/u8g2/u8x8_byte.c ****       return 0;
+ 212:BSP/u8g2/u8x8_byte.c ****   }
+ 213:BSP/u8g2/u8x8_byte.c ****   return 1;
+ 214:BSP/u8g2/u8x8_byte.c **** }
+ 215:BSP/u8g2/u8x8_byte.c **** 
+ 216:BSP/u8g2/u8x8_byte.c **** uint8_t u8x8_byte_8bit_8080mode(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr)
+ 217:BSP/u8g2/u8x8_byte.c **** {
+ 218:BSP/u8g2/u8x8_byte.c ****   uint8_t i, b;
+ 219:BSP/u8g2/u8x8_byte.c ****   uint8_t *data;
+ 220:BSP/u8g2/u8x8_byte.c ****  
+ 221:BSP/u8g2/u8x8_byte.c ****   switch(msg)
+ 222:BSP/u8g2/u8x8_byte.c ****   {
+ 223:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_SEND:
+ 224:BSP/u8g2/u8x8_byte.c ****       data = (uint8_t *)arg_ptr;
+ 225:BSP/u8g2/u8x8_byte.c ****       while( arg_int > 0 )
+ 226:BSP/u8g2/u8x8_byte.c ****       {
+ 227:BSP/u8g2/u8x8_byte.c **** 	b = *data;
+ 228:BSP/u8g2/u8x8_byte.c **** 	data++;
+ 229:BSP/u8g2/u8x8_byte.c **** 	arg_int--;
+ 230:BSP/u8g2/u8x8_byte.c **** 	for( i = U8X8_MSG_GPIO_D0; i <= U8X8_MSG_GPIO_D7; i++ )
+ 231:BSP/u8g2/u8x8_byte.c **** 	{
+ 232:BSP/u8g2/u8x8_byte.c **** 	  u8x8_gpio_call(u8x8, i, b&1);
+ 233:BSP/u8g2/u8x8_byte.c **** 	  b >>= 1;
+ 234:BSP/u8g2/u8x8_byte.c **** 	}    
+ 235:BSP/u8g2/u8x8_byte.c **** 	
+ 236:BSP/u8g2/u8x8_byte.c **** 	u8x8_gpio_Delay(u8x8, U8X8_MSG_DELAY_NANO, u8x8->display_info->data_setup_time_ns);
+ 237:BSP/u8g2/u8x8_byte.c **** 	u8x8_gpio_call(u8x8, U8X8_MSG_GPIO_E, 0);
+ 238:BSP/u8g2/u8x8_byte.c **** 	u8x8_gpio_Delay(u8x8, U8X8_MSG_DELAY_NANO, u8x8->display_info->write_pulse_width_ns);
+ 239:BSP/u8g2/u8x8_byte.c **** 	u8x8_gpio_call(u8x8, U8X8_MSG_GPIO_E, 1);
+ 240:BSP/u8g2/u8x8_byte.c ****       }
+ 241:BSP/u8g2/u8x8_byte.c ****       break;
+ 242:BSP/u8g2/u8x8_byte.c ****       
+ 243:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_INIT:
+ 244:BSP/u8g2/u8x8_byte.c ****       /* disable chipselect */
+ 245:BSP/u8g2/u8x8_byte.c ****       u8x8_gpio_SetCS(u8x8, u8x8->display_info->chip_disable_level);    
+ 246:BSP/u8g2/u8x8_byte.c ****       /* ensure that the enable signal is high */
+ 247:BSP/u8g2/u8x8_byte.c ****       u8x8_gpio_call(u8x8, U8X8_MSG_GPIO_E, 1);
+ 248:BSP/u8g2/u8x8_byte.c ****       break;
+ 249:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_SET_DC:
+ 250:BSP/u8g2/u8x8_byte.c ****       u8x8_gpio_SetDC(u8x8, arg_int);
+ 251:BSP/u8g2/u8x8_byte.c ****       break;
+ 252:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_START_TRANSFER:
+ 253:BSP/u8g2/u8x8_byte.c ****       u8x8_gpio_SetCS(u8x8, u8x8->display_info->chip_enable_level);  
+ 254:BSP/u8g2/u8x8_byte.c ****       u8x8->gpio_and_delay_cb(u8x8, U8X8_MSG_DELAY_NANO, u8x8->display_info->post_chip_enable_wait_
+ 255:BSP/u8g2/u8x8_byte.c ****       break;
+ 256:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_END_TRANSFER:
+ 257:BSP/u8g2/u8x8_byte.c ****       u8x8->gpio_and_delay_cb(u8x8, U8X8_MSG_DELAY_NANO, u8x8->display_info->pre_chip_disable_wait_
+ 258:BSP/u8g2/u8x8_byte.c ****       u8x8_gpio_SetCS(u8x8, u8x8->display_info->chip_disable_level);
+ 259:BSP/u8g2/u8x8_byte.c ****       break;
+ 260:BSP/u8g2/u8x8_byte.c ****     default:
+ARM GAS  /tmp/cc6PBIIV.s 			page 6
+
+
+ 261:BSP/u8g2/u8x8_byte.c ****       return 0;
+ 262:BSP/u8g2/u8x8_byte.c ****   }
+ 263:BSP/u8g2/u8x8_byte.c ****   return 1;
+ 264:BSP/u8g2/u8x8_byte.c **** }
+ 265:BSP/u8g2/u8x8_byte.c **** 
+ 266:BSP/u8g2/u8x8_byte.c **** /*=========================================*/
+ 267:BSP/u8g2/u8x8_byte.c **** 
+ 268:BSP/u8g2/u8x8_byte.c **** uint8_t u8x8_byte_3wire_sw_spi(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr)
+ 269:BSP/u8g2/u8x8_byte.c **** {
+ 270:BSP/u8g2/u8x8_byte.c ****   uint8_t i;
+ 271:BSP/u8g2/u8x8_byte.c ****   uint8_t *data;
+ 272:BSP/u8g2/u8x8_byte.c ****   uint8_t takeover_edge = u8x8_GetSPIClockPhase(u8x8);
+ 273:BSP/u8g2/u8x8_byte.c ****   uint8_t not_takeover_edge = 1 - takeover_edge;
+ 274:BSP/u8g2/u8x8_byte.c ****   uint16_t b;
+ 275:BSP/u8g2/u8x8_byte.c ****   static uint8_t last_dc;
+ 276:BSP/u8g2/u8x8_byte.c ****  
+ 277:BSP/u8g2/u8x8_byte.c ****   switch(msg)
+ 278:BSP/u8g2/u8x8_byte.c ****   {
+ 279:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_SEND:
+ 280:BSP/u8g2/u8x8_byte.c ****       data = (uint8_t *)arg_ptr;
+ 281:BSP/u8g2/u8x8_byte.c ****       while( arg_int > 0 )
+ 282:BSP/u8g2/u8x8_byte.c ****       {
+ 283:BSP/u8g2/u8x8_byte.c **** 	b = *data;
+ 284:BSP/u8g2/u8x8_byte.c **** 	if ( last_dc != 0 )
+ 285:BSP/u8g2/u8x8_byte.c **** 	  b |= 256;
+ 286:BSP/u8g2/u8x8_byte.c **** 	data++;
+ 287:BSP/u8g2/u8x8_byte.c **** 	arg_int--;
+ 288:BSP/u8g2/u8x8_byte.c **** 	for( i = 0; i < 9; i++ )
+ 289:BSP/u8g2/u8x8_byte.c **** 	{
+ 290:BSP/u8g2/u8x8_byte.c **** 	  if ( b & 256 )
+ 291:BSP/u8g2/u8x8_byte.c **** 	    u8x8_gpio_SetSPIData(u8x8, 1);
+ 292:BSP/u8g2/u8x8_byte.c **** 	  else
+ 293:BSP/u8g2/u8x8_byte.c **** 	    u8x8_gpio_SetSPIData(u8x8, 0);
+ 294:BSP/u8g2/u8x8_byte.c **** 	  b <<= 1;
+ 295:BSP/u8g2/u8x8_byte.c **** 	  
+ 296:BSP/u8g2/u8x8_byte.c **** 	  u8x8_gpio_SetSPIClock(u8x8, not_takeover_edge);
+ 297:BSP/u8g2/u8x8_byte.c **** 	  u8x8_gpio_Delay(u8x8, U8X8_MSG_DELAY_NANO, u8x8->display_info->sda_setup_time_ns);
+ 298:BSP/u8g2/u8x8_byte.c **** 	  u8x8_gpio_SetSPIClock(u8x8, takeover_edge);
+ 299:BSP/u8g2/u8x8_byte.c **** 	  u8x8_gpio_Delay(u8x8, U8X8_MSG_DELAY_NANO, u8x8->display_info->sck_pulse_width_ns);
+ 300:BSP/u8g2/u8x8_byte.c **** 	}    
+ 301:BSP/u8g2/u8x8_byte.c ****       }
+ 302:BSP/u8g2/u8x8_byte.c ****       break;
+ 303:BSP/u8g2/u8x8_byte.c ****       
+ 304:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_INIT:
+ 305:BSP/u8g2/u8x8_byte.c ****       /* disable chipselect */
+ 306:BSP/u8g2/u8x8_byte.c ****       u8x8_gpio_SetCS(u8x8, u8x8->display_info->chip_disable_level);
+ 307:BSP/u8g2/u8x8_byte.c ****       /* no wait required here */
+ 308:BSP/u8g2/u8x8_byte.c ****       
+ 309:BSP/u8g2/u8x8_byte.c ****       /* for SPI: setup correct level of the clock signal */
+ 310:BSP/u8g2/u8x8_byte.c ****       u8x8_gpio_SetSPIClock(u8x8, u8x8_GetSPIClockPhase(u8x8));
+ 311:BSP/u8g2/u8x8_byte.c ****       break;
+ 312:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_SET_DC:
+ 313:BSP/u8g2/u8x8_byte.c ****       last_dc = arg_int;
+ 314:BSP/u8g2/u8x8_byte.c ****       break;
+ 315:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_START_TRANSFER:
+ 316:BSP/u8g2/u8x8_byte.c ****       u8x8_gpio_SetCS(u8x8, u8x8->display_info->chip_enable_level);  
+ 317:BSP/u8g2/u8x8_byte.c ****       u8x8->gpio_and_delay_cb(u8x8, U8X8_MSG_DELAY_NANO, u8x8->display_info->post_chip_enable_wait_
+ARM GAS  /tmp/cc6PBIIV.s 			page 7
+
+
+ 318:BSP/u8g2/u8x8_byte.c ****       break;
+ 319:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_END_TRANSFER:
+ 320:BSP/u8g2/u8x8_byte.c ****       u8x8->gpio_and_delay_cb(u8x8, U8X8_MSG_DELAY_NANO, u8x8->display_info->pre_chip_disable_wait_
+ 321:BSP/u8g2/u8x8_byte.c ****       u8x8_gpio_SetCS(u8x8, u8x8->display_info->chip_disable_level);
+ 322:BSP/u8g2/u8x8_byte.c ****       break;
+ 323:BSP/u8g2/u8x8_byte.c ****     default:
+ 324:BSP/u8g2/u8x8_byte.c ****       return 0;
+ 325:BSP/u8g2/u8x8_byte.c ****   }
+ 326:BSP/u8g2/u8x8_byte.c ****   return 1;
+ 327:BSP/u8g2/u8x8_byte.c **** }
+ 328:BSP/u8g2/u8x8_byte.c **** 
+ 329:BSP/u8g2/u8x8_byte.c **** /*=========================================*/
+ 330:BSP/u8g2/u8x8_byte.c **** 
+ 331:BSP/u8g2/u8x8_byte.c **** void u8x8_byte_set_ks0108_cs(u8x8_t *u8x8, uint8_t arg)
+ 332:BSP/u8g2/u8x8_byte.c **** {
+ 333:BSP/u8g2/u8x8_byte.c ****   u8x8_gpio_SetCS(u8x8, arg&1);
+ 334:BSP/u8g2/u8x8_byte.c ****   arg = arg >> 1;
+ 335:BSP/u8g2/u8x8_byte.c ****   u8x8_gpio_call(u8x8, U8X8_MSG_GPIO_CS1, arg&1);
+ 336:BSP/u8g2/u8x8_byte.c ****   arg = arg >> 1;
+ 337:BSP/u8g2/u8x8_byte.c ****   u8x8_gpio_call(u8x8, U8X8_MSG_GPIO_CS2, arg&1);
+ 338:BSP/u8g2/u8x8_byte.c **** }
+ 339:BSP/u8g2/u8x8_byte.c **** 
+ 340:BSP/u8g2/u8x8_byte.c **** /* 6800 mode */
+ 341:BSP/u8g2/u8x8_byte.c **** uint8_t u8x8_byte_ks0108(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr)
+ 342:BSP/u8g2/u8x8_byte.c **** {
+ 343:BSP/u8g2/u8x8_byte.c ****   uint8_t i, b;
+ 344:BSP/u8g2/u8x8_byte.c ****   uint8_t *data;
+ 345:BSP/u8g2/u8x8_byte.c ****  
+ 346:BSP/u8g2/u8x8_byte.c ****   switch(msg)
+ 347:BSP/u8g2/u8x8_byte.c ****   {
+ 348:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_SEND:
+ 349:BSP/u8g2/u8x8_byte.c ****       data = (uint8_t *)arg_ptr;
+ 350:BSP/u8g2/u8x8_byte.c ****       while( arg_int > 0 )
+ 351:BSP/u8g2/u8x8_byte.c ****       {
+ 352:BSP/u8g2/u8x8_byte.c **** 	b = *data;
+ 353:BSP/u8g2/u8x8_byte.c **** 	data++;
+ 354:BSP/u8g2/u8x8_byte.c **** 	arg_int--;
+ 355:BSP/u8g2/u8x8_byte.c **** 	for( i = U8X8_MSG_GPIO_D0; i <= U8X8_MSG_GPIO_D7; i++ )
+ 356:BSP/u8g2/u8x8_byte.c **** 	{
+ 357:BSP/u8g2/u8x8_byte.c **** 	  u8x8_gpio_call(u8x8, i, b&1);
+ 358:BSP/u8g2/u8x8_byte.c **** 	  b >>= 1;
+ 359:BSP/u8g2/u8x8_byte.c **** 	}    
+ 360:BSP/u8g2/u8x8_byte.c **** 	
+ 361:BSP/u8g2/u8x8_byte.c **** 	u8x8_gpio_Delay(u8x8, U8X8_MSG_DELAY_NANO, u8x8->display_info->data_setup_time_ns);
+ 362:BSP/u8g2/u8x8_byte.c **** 	u8x8_gpio_call(u8x8, U8X8_MSG_GPIO_E, 1);
+ 363:BSP/u8g2/u8x8_byte.c **** 	u8x8_gpio_Delay(u8x8, U8X8_MSG_DELAY_NANO, u8x8->display_info->write_pulse_width_ns);
+ 364:BSP/u8g2/u8x8_byte.c **** 	u8x8_gpio_call(u8x8, U8X8_MSG_GPIO_E, 0);
+ 365:BSP/u8g2/u8x8_byte.c ****       }
+ 366:BSP/u8g2/u8x8_byte.c ****       break;
+ 367:BSP/u8g2/u8x8_byte.c ****       
+ 368:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_INIT:
+ 369:BSP/u8g2/u8x8_byte.c ****       /* disable chipselect */
+ 370:BSP/u8g2/u8x8_byte.c ****       u8x8_gpio_SetCS(u8x8, u8x8->display_info->chip_disable_level);    
+ 371:BSP/u8g2/u8x8_byte.c ****       /* ensure that the enable signal is low */
+ 372:BSP/u8g2/u8x8_byte.c ****       u8x8_gpio_call(u8x8, U8X8_MSG_GPIO_E, 0);
+ 373:BSP/u8g2/u8x8_byte.c ****       break;
+ 374:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_SET_DC:
+ARM GAS  /tmp/cc6PBIIV.s 			page 8
+
+
+ 375:BSP/u8g2/u8x8_byte.c ****       u8x8_gpio_SetDC(u8x8, arg_int);
+ 376:BSP/u8g2/u8x8_byte.c ****       break;
+ 377:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_START_TRANSFER:
+ 378:BSP/u8g2/u8x8_byte.c ****       /* expects 3 bits in arg_int for the chip select lines */ 
+ 379:BSP/u8g2/u8x8_byte.c ****       u8x8_byte_set_ks0108_cs(u8x8, arg_int);
+ 380:BSP/u8g2/u8x8_byte.c ****       u8x8->gpio_and_delay_cb(u8x8, U8X8_MSG_DELAY_NANO, u8x8->display_info->post_chip_enable_wait_
+ 381:BSP/u8g2/u8x8_byte.c ****       break;
+ 382:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_END_TRANSFER:
+ 383:BSP/u8g2/u8x8_byte.c ****       u8x8->gpio_and_delay_cb(u8x8, U8X8_MSG_DELAY_NANO, u8x8->display_info->pre_chip_disable_wait_
+ 384:BSP/u8g2/u8x8_byte.c ****       u8x8_byte_set_ks0108_cs(u8x8, arg_int);
+ 385:BSP/u8g2/u8x8_byte.c ****       break;
+ 386:BSP/u8g2/u8x8_byte.c ****     default:
+ 387:BSP/u8g2/u8x8_byte.c ****       return 0;
+ 388:BSP/u8g2/u8x8_byte.c ****   }
+ 389:BSP/u8g2/u8x8_byte.c ****   return 1;
+ 390:BSP/u8g2/u8x8_byte.c **** }
+ 391:BSP/u8g2/u8x8_byte.c **** 
+ 392:BSP/u8g2/u8x8_byte.c **** 
+ 393:BSP/u8g2/u8x8_byte.c **** /* sed1520 or sbn1661 
+ 394:BSP/u8g2/u8x8_byte.c ****   U8X8_MSG_GPIO_E --> E1
+ 395:BSP/u8g2/u8x8_byte.c ****   U8X8_MSG_GPIO_CS --> E2
+ 396:BSP/u8g2/u8x8_byte.c **** */
+ 397:BSP/u8g2/u8x8_byte.c **** uint8_t u8x8_byte_sed1520(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr)
+ 398:BSP/u8g2/u8x8_byte.c **** {
+ 399:BSP/u8g2/u8x8_byte.c ****   uint8_t i, b;
+ 400:BSP/u8g2/u8x8_byte.c ****   uint8_t *data;
+ 401:BSP/u8g2/u8x8_byte.c ****   static uint8_t enable_pin;
+ 402:BSP/u8g2/u8x8_byte.c ****  
+ 403:BSP/u8g2/u8x8_byte.c ****   switch(msg)
+ 404:BSP/u8g2/u8x8_byte.c ****   {
+ 405:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_SEND:
+ 406:BSP/u8g2/u8x8_byte.c ****       data = (uint8_t *)arg_ptr;
+ 407:BSP/u8g2/u8x8_byte.c ****       while( arg_int > 0 )
+ 408:BSP/u8g2/u8x8_byte.c ****       {
+ 409:BSP/u8g2/u8x8_byte.c **** 	b = *data;
+ 410:BSP/u8g2/u8x8_byte.c **** 	data++;
+ 411:BSP/u8g2/u8x8_byte.c **** 	arg_int--;
+ 412:BSP/u8g2/u8x8_byte.c **** 	for( i = U8X8_MSG_GPIO_D0; i <= U8X8_MSG_GPIO_D7; i++ )
+ 413:BSP/u8g2/u8x8_byte.c **** 	{
+ 414:BSP/u8g2/u8x8_byte.c **** 	  u8x8_gpio_call(u8x8, i, b&1);
+ 415:BSP/u8g2/u8x8_byte.c **** 	  b >>= 1;
+ 416:BSP/u8g2/u8x8_byte.c **** 	}    
+ 417:BSP/u8g2/u8x8_byte.c **** 	
+ 418:BSP/u8g2/u8x8_byte.c **** 	u8x8_gpio_Delay(u8x8, U8X8_MSG_DELAY_NANO, u8x8->display_info->data_setup_time_ns);
+ 419:BSP/u8g2/u8x8_byte.c **** 	u8x8_gpio_call(u8x8, enable_pin, 1);
+ 420:BSP/u8g2/u8x8_byte.c **** 	u8x8_gpio_Delay(u8x8, U8X8_MSG_DELAY_NANO, 200);		/* KS0108 requires 450 ns, use 200 here */
+ 421:BSP/u8g2/u8x8_byte.c **** 	u8x8_gpio_Delay(u8x8, U8X8_MSG_DELAY_NANO, u8x8->display_info->write_pulse_width_ns);  /* expect 2
+ 422:BSP/u8g2/u8x8_byte.c **** 	u8x8_gpio_call(u8x8, enable_pin, 0);
+ 423:BSP/u8g2/u8x8_byte.c ****       }
+ 424:BSP/u8g2/u8x8_byte.c ****       break;
+ 425:BSP/u8g2/u8x8_byte.c ****       
+ 426:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_INIT:
+ 427:BSP/u8g2/u8x8_byte.c ****       /* disable chipselect */
+ 428:BSP/u8g2/u8x8_byte.c ****       u8x8_gpio_SetCS(u8x8, u8x8->display_info->chip_disable_level);    
+ 429:BSP/u8g2/u8x8_byte.c ****       /* ensure that the enable signals are low */
+ 430:BSP/u8g2/u8x8_byte.c ****       u8x8_gpio_call(u8x8, U8X8_MSG_GPIO_E, 0);
+ 431:BSP/u8g2/u8x8_byte.c ****       u8x8_gpio_call(u8x8, U8X8_MSG_GPIO_CS, 0);
+ARM GAS  /tmp/cc6PBIIV.s 			page 9
+
+
+ 432:BSP/u8g2/u8x8_byte.c ****       enable_pin = U8X8_MSG_GPIO_E;
+ 433:BSP/u8g2/u8x8_byte.c ****       break;
+ 434:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_SET_DC:
+ 435:BSP/u8g2/u8x8_byte.c ****       u8x8_gpio_SetDC(u8x8, arg_int);
+ 436:BSP/u8g2/u8x8_byte.c ****       break;
+ 437:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_START_TRANSFER:
+ 438:BSP/u8g2/u8x8_byte.c ****       /* cs lines are not supported for the SED1520/SBN1661 */
+ 439:BSP/u8g2/u8x8_byte.c ****       /* instead, this will select the E1 or E2 line */ 
+ 440:BSP/u8g2/u8x8_byte.c ****       enable_pin = U8X8_MSG_GPIO_E;
+ 441:BSP/u8g2/u8x8_byte.c ****       if ( arg_int != 0 )
+ 442:BSP/u8g2/u8x8_byte.c **** 	enable_pin = U8X8_MSG_GPIO_CS;
+ 443:BSP/u8g2/u8x8_byte.c ****       break;
+ 444:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_END_TRANSFER:
+ 445:BSP/u8g2/u8x8_byte.c ****       break;
+ 446:BSP/u8g2/u8x8_byte.c ****     default:
+ 447:BSP/u8g2/u8x8_byte.c ****       return 0;
+ 448:BSP/u8g2/u8x8_byte.c ****   }
+ 449:BSP/u8g2/u8x8_byte.c ****   return 1;
+ 450:BSP/u8g2/u8x8_byte.c **** }
+ 451:BSP/u8g2/u8x8_byte.c **** 
+ 452:BSP/u8g2/u8x8_byte.c **** /*=========================================*/
+ 453:BSP/u8g2/u8x8_byte.c **** 
+ 454:BSP/u8g2/u8x8_byte.c **** 
+ 455:BSP/u8g2/u8x8_byte.c **** /*
+ 456:BSP/u8g2/u8x8_byte.c ****   software i2c,
+ 457:BSP/u8g2/u8x8_byte.c ****   ignores ACK response (which is anyway not provided by some displays)
+ 458:BSP/u8g2/u8x8_byte.c ****   also does not allow reading from the device
+ 459:BSP/u8g2/u8x8_byte.c **** */
+ 460:BSP/u8g2/u8x8_byte.c **** static void i2c_delay(u8x8_t *u8x8) U8X8_NOINLINE;
+ 461:BSP/u8g2/u8x8_byte.c **** static void i2c_delay(u8x8_t *u8x8)
+ 462:BSP/u8g2/u8x8_byte.c **** {
+  27              		.loc 1 462 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		.loc 1 462 1 is_stmt 0 view .LVU1
+  32 0000 08B5     		push	{r3, lr}
+  33              	.LCFI0:
+  34              		.cfi_def_cfa_offset 8
+  35              		.cfi_offset 3, -8
+  36              		.cfi_offset 14, -4
+ 463:BSP/u8g2/u8x8_byte.c ****   //u8x8_gpio_Delay(u8x8, U8X8_MSG_DELAY_10MICRO, u8x8->display_info->i2c_bus_clock_100kHz);
+ 464:BSP/u8g2/u8x8_byte.c ****   u8x8_gpio_Delay(u8x8, U8X8_MSG_DELAY_I2C, u8x8->display_info->i2c_bus_clock_100kHz);
+  37              		.loc 1 464 3 is_stmt 1 view .LVU2
+  38 0002 0368     		ldr	r3, [r0]
+  39 0004 5A7B     		ldrb	r2, [r3, #13]	@ zero_extendqisi2
+  40 0006 2D21     		movs	r1, #45
+  41 0008 FFF7FEFF 		bl	u8x8_gpio_call
+  42              	.LVL1:
+ 465:BSP/u8g2/u8x8_byte.c **** }
+  43              		.loc 1 465 1 is_stmt 0 view .LVU3
+  44 000c 08BD     		pop	{r3, pc}
+  45              		.cfi_endproc
+  46              	.LFE13:
+  48              		.section	.text.i2c_init,"ax",%progbits
+  49              		.align	1
+  50              		.syntax unified
+ARM GAS  /tmp/cc6PBIIV.s 			page 10
+
+
+  51              		.thumb
+  52              		.thumb_func
+  54              	i2c_init:
+  55              	.LVL2:
+  56              	.LFB14:
+ 466:BSP/u8g2/u8x8_byte.c **** 
+ 467:BSP/u8g2/u8x8_byte.c **** static void i2c_init(u8x8_t *u8x8)
+ 468:BSP/u8g2/u8x8_byte.c **** {
+  57              		.loc 1 468 1 is_stmt 1 view -0
+  58              		.cfi_startproc
+  59              		@ args = 0, pretend = 0, frame = 0
+  60              		@ frame_needed = 0, uses_anonymous_args = 0
+  61              		.loc 1 468 1 is_stmt 0 view .LVU5
+  62 0000 10B5     		push	{r4, lr}
+  63              	.LCFI1:
+  64              		.cfi_def_cfa_offset 8
+  65              		.cfi_offset 4, -8
+  66              		.cfi_offset 14, -4
+  67 0002 0446     		mov	r4, r0
+ 469:BSP/u8g2/u8x8_byte.c ****   u8x8_gpio_SetI2CClock(u8x8, 1);
+  68              		.loc 1 469 3 is_stmt 1 view .LVU6
+  69 0004 0122     		movs	r2, #1
+  70 0006 4C21     		movs	r1, #76
+  71 0008 FFF7FEFF 		bl	u8x8_gpio_call
+  72              	.LVL3:
+ 470:BSP/u8g2/u8x8_byte.c ****   u8x8_gpio_SetI2CData(u8x8, 1);
+  73              		.loc 1 470 3 view .LVU7
+  74 000c 0122     		movs	r2, #1
+  75 000e 4D21     		movs	r1, #77
+  76 0010 2046     		mov	r0, r4
+  77 0012 FFF7FEFF 		bl	u8x8_gpio_call
+  78              	.LVL4:
+ 471:BSP/u8g2/u8x8_byte.c ****   
+ 472:BSP/u8g2/u8x8_byte.c ****   i2c_delay(u8x8);
+  79              		.loc 1 472 3 view .LVU8
+  80 0016 2046     		mov	r0, r4
+  81 0018 FFF7FEFF 		bl	i2c_delay
+  82              	.LVL5:
+ 473:BSP/u8g2/u8x8_byte.c **** }
+  83              		.loc 1 473 1 is_stmt 0 view .LVU9
+  84 001c 10BD     		pop	{r4, pc}
+  85              		.loc 1 473 1 view .LVU10
+  86              		.cfi_endproc
+  87              	.LFE14:
+  89              		.section	.text.i2c_read_scl_and_delay,"ax",%progbits
+  90              		.align	1
+  91              		.syntax unified
+  92              		.thumb
+  93              		.thumb_func
+  95              	i2c_read_scl_and_delay:
+  96              	.LVL6:
+  97              	.LFB15:
+ 474:BSP/u8g2/u8x8_byte.c **** 
+ 475:BSP/u8g2/u8x8_byte.c **** /* actually, the scl line is not observed, so this procedure does not return a value */
+ 476:BSP/u8g2/u8x8_byte.c **** 
+ 477:BSP/u8g2/u8x8_byte.c **** static void i2c_read_scl_and_delay(u8x8_t *u8x8)
+ 478:BSP/u8g2/u8x8_byte.c **** {
+ARM GAS  /tmp/cc6PBIIV.s 			page 11
+
+
+  98              		.loc 1 478 1 is_stmt 1 view -0
+  99              		.cfi_startproc
+ 100              		@ args = 0, pretend = 0, frame = 0
+ 101              		@ frame_needed = 0, uses_anonymous_args = 0
+ 102              		.loc 1 478 1 is_stmt 0 view .LVU12
+ 103 0000 10B5     		push	{r4, lr}
+ 104              	.LCFI2:
+ 105              		.cfi_def_cfa_offset 8
+ 106              		.cfi_offset 4, -8
+ 107              		.cfi_offset 14, -4
+ 108 0002 0446     		mov	r4, r0
+ 479:BSP/u8g2/u8x8_byte.c ****   /* set as input (line will be high) */
+ 480:BSP/u8g2/u8x8_byte.c ****   u8x8_gpio_SetI2CClock(u8x8, 1);
+ 109              		.loc 1 480 3 is_stmt 1 view .LVU13
+ 110 0004 0122     		movs	r2, #1
+ 111 0006 4C21     		movs	r1, #76
+ 112 0008 FFF7FEFF 		bl	u8x8_gpio_call
+ 113              	.LVL7:
+ 481:BSP/u8g2/u8x8_byte.c **** 
+ 482:BSP/u8g2/u8x8_byte.c ****   i2c_delay(u8x8);
+ 114              		.loc 1 482 3 view .LVU14
+ 115 000c 2046     		mov	r0, r4
+ 116 000e FFF7FEFF 		bl	i2c_delay
+ 117              	.LVL8:
+ 483:BSP/u8g2/u8x8_byte.c **** }
+ 118              		.loc 1 483 1 is_stmt 0 view .LVU15
+ 119 0012 10BD     		pop	{r4, pc}
+ 120              		.loc 1 483 1 view .LVU16
+ 121              		.cfi_endproc
+ 122              	.LFE15:
+ 124              		.section	.text.i2c_read_sda,"ax",%progbits
+ 125              		.align	1
+ 126              		.syntax unified
+ 127              		.thumb
+ 128              		.thumb_func
+ 130              	i2c_read_sda:
+ 131              	.LVL9:
+ 132              	.LFB17:
+ 484:BSP/u8g2/u8x8_byte.c **** 
+ 485:BSP/u8g2/u8x8_byte.c **** static void i2c_clear_scl(u8x8_t *u8x8)
+ 486:BSP/u8g2/u8x8_byte.c **** {
+ 487:BSP/u8g2/u8x8_byte.c ****   u8x8_gpio_SetI2CClock(u8x8, 0);
+ 488:BSP/u8g2/u8x8_byte.c **** }
+ 489:BSP/u8g2/u8x8_byte.c **** 
+ 490:BSP/u8g2/u8x8_byte.c **** static void i2c_read_sda(u8x8_t *u8x8)
+ 491:BSP/u8g2/u8x8_byte.c **** {
+ 133              		.loc 1 491 1 is_stmt 1 view -0
+ 134              		.cfi_startproc
+ 135              		@ args = 0, pretend = 0, frame = 0
+ 136              		@ frame_needed = 0, uses_anonymous_args = 0
+ 137              		.loc 1 491 1 is_stmt 0 view .LVU18
+ 138 0000 08B5     		push	{r3, lr}
+ 139              	.LCFI3:
+ 140              		.cfi_def_cfa_offset 8
+ 141              		.cfi_offset 3, -8
+ 142              		.cfi_offset 14, -4
+ 492:BSP/u8g2/u8x8_byte.c ****   /* set as input (line will be high) */
+ARM GAS  /tmp/cc6PBIIV.s 			page 12
+
+
+ 493:BSP/u8g2/u8x8_byte.c ****   u8x8_gpio_SetI2CData(u8x8, 1);
+ 143              		.loc 1 493 3 is_stmt 1 view .LVU19
+ 144 0002 0122     		movs	r2, #1
+ 145 0004 4D21     		movs	r1, #77
+ 146 0006 FFF7FEFF 		bl	u8x8_gpio_call
+ 147              	.LVL10:
+ 494:BSP/u8g2/u8x8_byte.c **** }
+ 148              		.loc 1 494 1 is_stmt 0 view .LVU20
+ 149 000a 08BD     		pop	{r3, pc}
+ 150              		.cfi_endproc
+ 151              	.LFE17:
+ 153              		.section	.text.i2c_clear_sda,"ax",%progbits
+ 154              		.align	1
+ 155              		.syntax unified
+ 156              		.thumb
+ 157              		.thumb_func
+ 159              	i2c_clear_sda:
+ 160              	.LVL11:
+ 161              	.LFB18:
+ 495:BSP/u8g2/u8x8_byte.c **** 
+ 496:BSP/u8g2/u8x8_byte.c **** static void i2c_clear_sda(u8x8_t *u8x8)
+ 497:BSP/u8g2/u8x8_byte.c **** {
+ 162              		.loc 1 497 1 is_stmt 1 view -0
+ 163              		.cfi_startproc
+ 164              		@ args = 0, pretend = 0, frame = 0
+ 165              		@ frame_needed = 0, uses_anonymous_args = 0
+ 166              		.loc 1 497 1 is_stmt 0 view .LVU22
+ 167 0000 08B5     		push	{r3, lr}
+ 168              	.LCFI4:
+ 169              		.cfi_def_cfa_offset 8
+ 170              		.cfi_offset 3, -8
+ 171              		.cfi_offset 14, -4
+ 498:BSP/u8g2/u8x8_byte.c ****   /* set open collector and drive low */
+ 499:BSP/u8g2/u8x8_byte.c ****   u8x8_gpio_SetI2CData(u8x8, 0);
+ 172              		.loc 1 499 3 is_stmt 1 view .LVU23
+ 173 0002 0022     		movs	r2, #0
+ 174 0004 4D21     		movs	r1, #77
+ 175 0006 FFF7FEFF 		bl	u8x8_gpio_call
+ 176              	.LVL12:
+ 500:BSP/u8g2/u8x8_byte.c **** }
+ 177              		.loc 1 500 1 is_stmt 0 view .LVU24
+ 178 000a 08BD     		pop	{r3, pc}
+ 179              		.cfi_endproc
+ 180              	.LFE18:
+ 182              		.section	.text.i2c_stop,"ax",%progbits
+ 183              		.align	1
+ 184              		.syntax unified
+ 185              		.thumb
+ 186              		.thumb_func
+ 188              	i2c_stop:
+ 189              	.LVL13:
+ 190              	.LFB20:
+ 501:BSP/u8g2/u8x8_byte.c **** 
+ 502:BSP/u8g2/u8x8_byte.c **** static void i2c_start(u8x8_t *u8x8)
+ 503:BSP/u8g2/u8x8_byte.c **** {
+ 504:BSP/u8g2/u8x8_byte.c ****   if ( u8x8->i2c_started != 0 )
+ 505:BSP/u8g2/u8x8_byte.c ****   {
+ARM GAS  /tmp/cc6PBIIV.s 			page 13
+
+
+ 506:BSP/u8g2/u8x8_byte.c ****     /* if already started: do restart */
+ 507:BSP/u8g2/u8x8_byte.c ****     i2c_read_sda(u8x8);     /* SDA = 1 */
+ 508:BSP/u8g2/u8x8_byte.c ****     i2c_delay(u8x8);
+ 509:BSP/u8g2/u8x8_byte.c ****     i2c_read_scl_and_delay(u8x8);
+ 510:BSP/u8g2/u8x8_byte.c ****   }
+ 511:BSP/u8g2/u8x8_byte.c ****   i2c_read_sda(u8x8);
+ 512:BSP/u8g2/u8x8_byte.c ****   /* send the start condition, both lines go from 1 to 0 */
+ 513:BSP/u8g2/u8x8_byte.c ****   i2c_clear_sda(u8x8);
+ 514:BSP/u8g2/u8x8_byte.c ****   i2c_delay(u8x8);
+ 515:BSP/u8g2/u8x8_byte.c ****   i2c_clear_scl(u8x8);
+ 516:BSP/u8g2/u8x8_byte.c ****   u8x8->i2c_started = 1;
+ 517:BSP/u8g2/u8x8_byte.c **** }
+ 518:BSP/u8g2/u8x8_byte.c **** 
+ 519:BSP/u8g2/u8x8_byte.c **** 
+ 520:BSP/u8g2/u8x8_byte.c **** static void i2c_stop(u8x8_t *u8x8)
+ 521:BSP/u8g2/u8x8_byte.c **** {
+ 191              		.loc 1 521 1 is_stmt 1 view -0
+ 192              		.cfi_startproc
+ 193              		@ args = 0, pretend = 0, frame = 0
+ 194              		@ frame_needed = 0, uses_anonymous_args = 0
+ 195              		.loc 1 521 1 is_stmt 0 view .LVU26
+ 196 0000 10B5     		push	{r4, lr}
+ 197              	.LCFI5:
+ 198              		.cfi_def_cfa_offset 8
+ 199              		.cfi_offset 4, -8
+ 200              		.cfi_offset 14, -4
+ 201 0002 0446     		mov	r4, r0
+ 522:BSP/u8g2/u8x8_byte.c ****   /* set SDA to 0 */
+ 523:BSP/u8g2/u8x8_byte.c ****   i2c_clear_sda(u8x8);  
+ 202              		.loc 1 523 3 is_stmt 1 view .LVU27
+ 203 0004 FFF7FEFF 		bl	i2c_clear_sda
+ 204              	.LVL14:
+ 524:BSP/u8g2/u8x8_byte.c ****   i2c_delay(u8x8);
+ 205              		.loc 1 524 3 view .LVU28
+ 206 0008 2046     		mov	r0, r4
+ 207 000a FFF7FEFF 		bl	i2c_delay
+ 208              	.LVL15:
+ 525:BSP/u8g2/u8x8_byte.c ****  
+ 526:BSP/u8g2/u8x8_byte.c ****   /* now release all lines */
+ 527:BSP/u8g2/u8x8_byte.c ****   i2c_read_scl_and_delay(u8x8);
+ 209              		.loc 1 527 3 view .LVU29
+ 210 000e 2046     		mov	r0, r4
+ 211 0010 FFF7FEFF 		bl	i2c_read_scl_and_delay
+ 212              	.LVL16:
+ 528:BSP/u8g2/u8x8_byte.c ****  
+ 529:BSP/u8g2/u8x8_byte.c ****   /* set SDA to 1 */
+ 530:BSP/u8g2/u8x8_byte.c ****   i2c_read_sda(u8x8);
+ 213              		.loc 1 530 3 view .LVU30
+ 214 0014 2046     		mov	r0, r4
+ 215 0016 FFF7FEFF 		bl	i2c_read_sda
+ 216              	.LVL17:
+ 531:BSP/u8g2/u8x8_byte.c ****   i2c_delay(u8x8);
+ 217              		.loc 1 531 3 view .LVU31
+ 218 001a 2046     		mov	r0, r4
+ 219 001c FFF7FEFF 		bl	i2c_delay
+ 220              	.LVL18:
+ 532:BSP/u8g2/u8x8_byte.c ****   u8x8->i2c_started = 0;
+ARM GAS  /tmp/cc6PBIIV.s 			page 14
+
+
+ 221              		.loc 1 532 3 view .LVU32
+ 222              		.loc 1 532 21 is_stmt 0 view .LVU33
+ 223 0020 0023     		movs	r3, #0
+ 224 0022 84F82530 		strb	r3, [r4, #37]
+ 533:BSP/u8g2/u8x8_byte.c **** }
+ 225              		.loc 1 533 1 view .LVU34
+ 226 0026 10BD     		pop	{r4, pc}
+ 227              		.loc 1 533 1 view .LVU35
+ 228              		.cfi_endproc
+ 229              	.LFE20:
+ 231              		.section	.text.i2c_clear_scl,"ax",%progbits
+ 232              		.align	1
+ 233              		.syntax unified
+ 234              		.thumb
+ 235              		.thumb_func
+ 237              	i2c_clear_scl:
+ 238              	.LVL19:
+ 239              	.LFB16:
+ 486:BSP/u8g2/u8x8_byte.c ****   u8x8_gpio_SetI2CClock(u8x8, 0);
+ 240              		.loc 1 486 1 is_stmt 1 view -0
+ 241              		.cfi_startproc
+ 242              		@ args = 0, pretend = 0, frame = 0
+ 243              		@ frame_needed = 0, uses_anonymous_args = 0
+ 486:BSP/u8g2/u8x8_byte.c ****   u8x8_gpio_SetI2CClock(u8x8, 0);
+ 244              		.loc 1 486 1 is_stmt 0 view .LVU37
+ 245 0000 08B5     		push	{r3, lr}
+ 246              	.LCFI6:
+ 247              		.cfi_def_cfa_offset 8
+ 248              		.cfi_offset 3, -8
+ 249              		.cfi_offset 14, -4
+ 487:BSP/u8g2/u8x8_byte.c **** }
+ 250              		.loc 1 487 3 is_stmt 1 view .LVU38
+ 251 0002 0022     		movs	r2, #0
+ 252 0004 4C21     		movs	r1, #76
+ 253 0006 FFF7FEFF 		bl	u8x8_gpio_call
+ 254              	.LVL20:
+ 488:BSP/u8g2/u8x8_byte.c **** 
+ 255              		.loc 1 488 1 is_stmt 0 view .LVU39
+ 256 000a 08BD     		pop	{r3, pc}
+ 257              		.cfi_endproc
+ 258              	.LFE16:
+ 260              		.section	.text.i2c_start,"ax",%progbits
+ 261              		.align	1
+ 262              		.syntax unified
+ 263              		.thumb
+ 264              		.thumb_func
+ 266              	i2c_start:
+ 267              	.LVL21:
+ 268              	.LFB19:
+ 503:BSP/u8g2/u8x8_byte.c ****   if ( u8x8->i2c_started != 0 )
+ 269              		.loc 1 503 1 is_stmt 1 view -0
+ 270              		.cfi_startproc
+ 271              		@ args = 0, pretend = 0, frame = 0
+ 272              		@ frame_needed = 0, uses_anonymous_args = 0
+ 503:BSP/u8g2/u8x8_byte.c ****   if ( u8x8->i2c_started != 0 )
+ 273              		.loc 1 503 1 is_stmt 0 view .LVU41
+ 274 0000 10B5     		push	{r4, lr}
+ARM GAS  /tmp/cc6PBIIV.s 			page 15
+
+
+ 275              	.LCFI7:
+ 276              		.cfi_def_cfa_offset 8
+ 277              		.cfi_offset 4, -8
+ 278              		.cfi_offset 14, -4
+ 279 0002 0446     		mov	r4, r0
+ 504:BSP/u8g2/u8x8_byte.c ****   {
+ 280              		.loc 1 504 3 is_stmt 1 view .LVU42
+ 504:BSP/u8g2/u8x8_byte.c ****   {
+ 281              		.loc 1 504 12 is_stmt 0 view .LVU43
+ 282 0004 90F82530 		ldrb	r3, [r0, #37]	@ zero_extendqisi2
+ 504:BSP/u8g2/u8x8_byte.c ****   {
+ 283              		.loc 1 504 6 view .LVU44
+ 284 0008 7BB9     		cbnz	r3, .L18
+ 285              	.LVL22:
+ 286              	.L16:
+ 511:BSP/u8g2/u8x8_byte.c ****   /* send the start condition, both lines go from 1 to 0 */
+ 287              		.loc 1 511 3 is_stmt 1 view .LVU45
+ 288 000a 2046     		mov	r0, r4
+ 289 000c FFF7FEFF 		bl	i2c_read_sda
+ 290              	.LVL23:
+ 513:BSP/u8g2/u8x8_byte.c ****   i2c_delay(u8x8);
+ 291              		.loc 1 513 3 view .LVU46
+ 292 0010 2046     		mov	r0, r4
+ 293 0012 FFF7FEFF 		bl	i2c_clear_sda
+ 294              	.LVL24:
+ 514:BSP/u8g2/u8x8_byte.c ****   i2c_clear_scl(u8x8);
+ 295              		.loc 1 514 3 view .LVU47
+ 296 0016 2046     		mov	r0, r4
+ 297 0018 FFF7FEFF 		bl	i2c_delay
+ 298              	.LVL25:
+ 515:BSP/u8g2/u8x8_byte.c ****   u8x8->i2c_started = 1;
+ 299              		.loc 1 515 3 view .LVU48
+ 300 001c 2046     		mov	r0, r4
+ 301 001e FFF7FEFF 		bl	i2c_clear_scl
+ 302              	.LVL26:
+ 516:BSP/u8g2/u8x8_byte.c **** }
+ 303              		.loc 1 516 3 view .LVU49
+ 516:BSP/u8g2/u8x8_byte.c **** }
+ 304              		.loc 1 516 21 is_stmt 0 view .LVU50
+ 305 0022 0123     		movs	r3, #1
+ 306 0024 84F82530 		strb	r3, [r4, #37]
+ 517:BSP/u8g2/u8x8_byte.c **** 
+ 307              		.loc 1 517 1 view .LVU51
+ 308 0028 10BD     		pop	{r4, pc}
+ 309              	.LVL27:
+ 310              	.L18:
+ 507:BSP/u8g2/u8x8_byte.c ****     i2c_delay(u8x8);
+ 311              		.loc 1 507 5 is_stmt 1 view .LVU52
+ 312 002a FFF7FEFF 		bl	i2c_read_sda
+ 313              	.LVL28:
+ 508:BSP/u8g2/u8x8_byte.c ****     i2c_read_scl_and_delay(u8x8);
+ 314              		.loc 1 508 5 view .LVU53
+ 315 002e 2046     		mov	r0, r4
+ 316 0030 FFF7FEFF 		bl	i2c_delay
+ 317              	.LVL29:
+ 509:BSP/u8g2/u8x8_byte.c ****   }
+ 318              		.loc 1 509 5 view .LVU54
+ARM GAS  /tmp/cc6PBIIV.s 			page 16
+
+
+ 319 0034 2046     		mov	r0, r4
+ 320 0036 FFF7FEFF 		bl	i2c_read_scl_and_delay
+ 321              	.LVL30:
+ 322 003a E6E7     		b	.L16
+ 323              		.cfi_endproc
+ 324              	.LFE19:
+ 326              		.section	.text.i2c_write_bit,"ax",%progbits
+ 327              		.align	1
+ 328              		.syntax unified
+ 329              		.thumb
+ 330              		.thumb_func
+ 332              	i2c_write_bit:
+ 333              	.LVL31:
+ 334              	.LFB21:
+ 534:BSP/u8g2/u8x8_byte.c **** 
+ 535:BSP/u8g2/u8x8_byte.c **** static void i2c_write_bit(u8x8_t *u8x8, uint8_t val)
+ 536:BSP/u8g2/u8x8_byte.c **** {
+ 335              		.loc 1 536 1 view -0
+ 336              		.cfi_startproc
+ 337              		@ args = 0, pretend = 0, frame = 0
+ 338              		@ frame_needed = 0, uses_anonymous_args = 0
+ 339              		.loc 1 536 1 is_stmt 0 view .LVU56
+ 340 0000 10B5     		push	{r4, lr}
+ 341              	.LCFI8:
+ 342              		.cfi_def_cfa_offset 8
+ 343              		.cfi_offset 4, -8
+ 344              		.cfi_offset 14, -4
+ 345 0002 0446     		mov	r4, r0
+ 537:BSP/u8g2/u8x8_byte.c ****   if (val)
+ 346              		.loc 1 537 3 is_stmt 1 view .LVU57
+ 347              		.loc 1 537 6 is_stmt 0 view .LVU58
+ 348 0004 59B1     		cbz	r1, .L20
+ 538:BSP/u8g2/u8x8_byte.c ****     i2c_read_sda(u8x8);
+ 349              		.loc 1 538 5 is_stmt 1 view .LVU59
+ 350 0006 FFF7FEFF 		bl	i2c_read_sda
+ 351              	.LVL32:
+ 352              	.L21:
+ 539:BSP/u8g2/u8x8_byte.c ****   else
+ 540:BSP/u8g2/u8x8_byte.c ****     i2c_clear_sda(u8x8);
+ 541:BSP/u8g2/u8x8_byte.c ****  
+ 542:BSP/u8g2/u8x8_byte.c ****   i2c_delay(u8x8);
+ 353              		.loc 1 542 3 view .LVU60
+ 354 000a 2046     		mov	r0, r4
+ 355 000c FFF7FEFF 		bl	i2c_delay
+ 356              	.LVL33:
+ 543:BSP/u8g2/u8x8_byte.c ****   i2c_read_scl_and_delay(u8x8);
+ 357              		.loc 1 543 3 view .LVU61
+ 358 0010 2046     		mov	r0, r4
+ 359 0012 FFF7FEFF 		bl	i2c_read_scl_and_delay
+ 360              	.LVL34:
+ 544:BSP/u8g2/u8x8_byte.c ****   i2c_clear_scl(u8x8);
+ 361              		.loc 1 544 3 view .LVU62
+ 362 0016 2046     		mov	r0, r4
+ 363 0018 FFF7FEFF 		bl	i2c_clear_scl
+ 364              	.LVL35:
+ 545:BSP/u8g2/u8x8_byte.c **** }
+ 365              		.loc 1 545 1 is_stmt 0 view .LVU63
+ARM GAS  /tmp/cc6PBIIV.s 			page 17
+
+
+ 366 001c 10BD     		pop	{r4, pc}
+ 367              	.LVL36:
+ 368              	.L20:
+ 540:BSP/u8g2/u8x8_byte.c ****  
+ 369              		.loc 1 540 5 is_stmt 1 view .LVU64
+ 370 001e FFF7FEFF 		bl	i2c_clear_sda
+ 371              	.LVL37:
+ 540:BSP/u8g2/u8x8_byte.c ****  
+ 372              		.loc 1 540 5 is_stmt 0 view .LVU65
+ 373 0022 F2E7     		b	.L21
+ 374              		.cfi_endproc
+ 375              	.LFE21:
+ 377              		.section	.text.i2c_read_bit,"ax",%progbits
+ 378              		.align	1
+ 379              		.syntax unified
+ 380              		.thumb
+ 381              		.thumb_func
+ 383              	i2c_read_bit:
+ 384              	.LVL38:
+ 385              	.LFB22:
+ 546:BSP/u8g2/u8x8_byte.c **** 
+ 547:BSP/u8g2/u8x8_byte.c **** static void i2c_read_bit(u8x8_t *u8x8)
+ 548:BSP/u8g2/u8x8_byte.c **** {
+ 386              		.loc 1 548 1 is_stmt 1 view -0
+ 387              		.cfi_startproc
+ 388              		@ args = 0, pretend = 0, frame = 0
+ 389              		@ frame_needed = 0, uses_anonymous_args = 0
+ 390              		.loc 1 548 1 is_stmt 0 view .LVU67
+ 391 0000 10B5     		push	{r4, lr}
+ 392              	.LCFI9:
+ 393              		.cfi_def_cfa_offset 8
+ 394              		.cfi_offset 4, -8
+ 395              		.cfi_offset 14, -4
+ 396 0002 0446     		mov	r4, r0
+ 549:BSP/u8g2/u8x8_byte.c ****   //uint8_t val;
+ 550:BSP/u8g2/u8x8_byte.c ****   /* do not drive SDA */
+ 551:BSP/u8g2/u8x8_byte.c ****   i2c_read_sda(u8x8);
+ 397              		.loc 1 551 3 is_stmt 1 view .LVU68
+ 398 0004 FFF7FEFF 		bl	i2c_read_sda
+ 399              	.LVL39:
+ 552:BSP/u8g2/u8x8_byte.c ****   i2c_delay(u8x8);
+ 400              		.loc 1 552 3 view .LVU69
+ 401 0008 2046     		mov	r0, r4
+ 402 000a FFF7FEFF 		bl	i2c_delay
+ 403              	.LVL40:
+ 553:BSP/u8g2/u8x8_byte.c ****   i2c_read_scl_and_delay(u8x8);
+ 404              		.loc 1 553 3 view .LVU70
+ 405 000e 2046     		mov	r0, r4
+ 406 0010 FFF7FEFF 		bl	i2c_read_scl_and_delay
+ 407              	.LVL41:
+ 554:BSP/u8g2/u8x8_byte.c ****   i2c_read_sda(u8x8);
+ 408              		.loc 1 554 3 view .LVU71
+ 409 0014 2046     		mov	r0, r4
+ 410 0016 FFF7FEFF 		bl	i2c_read_sda
+ 411              	.LVL42:
+ 555:BSP/u8g2/u8x8_byte.c ****   i2c_delay(u8x8);
+ 412              		.loc 1 555 3 view .LVU72
+ARM GAS  /tmp/cc6PBIIV.s 			page 18
+
+
+ 413 001a 2046     		mov	r0, r4
+ 414 001c FFF7FEFF 		bl	i2c_delay
+ 415              	.LVL43:
+ 556:BSP/u8g2/u8x8_byte.c ****   i2c_clear_scl(u8x8);
+ 416              		.loc 1 556 3 view .LVU73
+ 417 0020 2046     		mov	r0, r4
+ 418 0022 FFF7FEFF 		bl	i2c_clear_scl
+ 419              	.LVL44:
+ 557:BSP/u8g2/u8x8_byte.c ****   //return val;
+ 558:BSP/u8g2/u8x8_byte.c **** }
+ 420              		.loc 1 558 1 is_stmt 0 view .LVU74
+ 421 0026 10BD     		pop	{r4, pc}
+ 422              		.loc 1 558 1 view .LVU75
+ 423              		.cfi_endproc
+ 424              	.LFE22:
+ 426              		.section	.text.i2c_write_byte,"ax",%progbits
+ 427              		.align	1
+ 428              		.syntax unified
+ 429              		.thumb
+ 430              		.thumb_func
+ 432              	i2c_write_byte:
+ 433              	.LVL45:
+ 434              	.LFB23:
+ 559:BSP/u8g2/u8x8_byte.c **** 
+ 560:BSP/u8g2/u8x8_byte.c **** static void i2c_write_byte(u8x8_t *u8x8, uint8_t b)
+ 561:BSP/u8g2/u8x8_byte.c **** {
+ 435              		.loc 1 561 1 is_stmt 1 view -0
+ 436              		.cfi_startproc
+ 437              		@ args = 0, pretend = 0, frame = 0
+ 438              		@ frame_needed = 0, uses_anonymous_args = 0
+ 439              		.loc 1 561 1 is_stmt 0 view .LVU77
+ 440 0000 38B5     		push	{r3, r4, r5, lr}
+ 441              	.LCFI10:
+ 442              		.cfi_def_cfa_offset 16
+ 443              		.cfi_offset 3, -16
+ 444              		.cfi_offset 4, -12
+ 445              		.cfi_offset 5, -8
+ 446              		.cfi_offset 14, -4
+ 447 0002 0446     		mov	r4, r0
+ 448 0004 0D46     		mov	r5, r1
+ 562:BSP/u8g2/u8x8_byte.c ****   i2c_write_bit(u8x8, b & 128);
+ 449              		.loc 1 562 3 is_stmt 1 view .LVU78
+ 450 0006 01F08001 		and	r1, r1, #128
+ 451              	.LVL46:
+ 452              		.loc 1 562 3 is_stmt 0 view .LVU79
+ 453 000a FFF7FEFF 		bl	i2c_write_bit
+ 454              	.LVL47:
+ 563:BSP/u8g2/u8x8_byte.c ****   i2c_write_bit(u8x8, b & 64);
+ 455              		.loc 1 563 3 is_stmt 1 view .LVU80
+ 456 000e 05F04001 		and	r1, r5, #64
+ 457 0012 2046     		mov	r0, r4
+ 458 0014 FFF7FEFF 		bl	i2c_write_bit
+ 459              	.LVL48:
+ 564:BSP/u8g2/u8x8_byte.c ****   i2c_write_bit(u8x8, b & 32);
+ 460              		.loc 1 564 3 view .LVU81
+ 461 0018 05F02001 		and	r1, r5, #32
+ 462 001c 2046     		mov	r0, r4
+ARM GAS  /tmp/cc6PBIIV.s 			page 19
+
+
+ 463 001e FFF7FEFF 		bl	i2c_write_bit
+ 464              	.LVL49:
+ 565:BSP/u8g2/u8x8_byte.c ****   i2c_write_bit(u8x8, b & 16);
+ 465              		.loc 1 565 3 view .LVU82
+ 466 0022 05F01001 		and	r1, r5, #16
+ 467 0026 2046     		mov	r0, r4
+ 468 0028 FFF7FEFF 		bl	i2c_write_bit
+ 469              	.LVL50:
+ 566:BSP/u8g2/u8x8_byte.c ****   i2c_write_bit(u8x8, b & 8);
+ 470              		.loc 1 566 3 view .LVU83
+ 471 002c 05F00801 		and	r1, r5, #8
+ 472 0030 2046     		mov	r0, r4
+ 473 0032 FFF7FEFF 		bl	i2c_write_bit
+ 474              	.LVL51:
+ 567:BSP/u8g2/u8x8_byte.c ****   i2c_write_bit(u8x8, b & 4);
+ 475              		.loc 1 567 3 view .LVU84
+ 476 0036 05F00401 		and	r1, r5, #4
+ 477 003a 2046     		mov	r0, r4
+ 478 003c FFF7FEFF 		bl	i2c_write_bit
+ 479              	.LVL52:
+ 568:BSP/u8g2/u8x8_byte.c ****   i2c_write_bit(u8x8, b & 2);
+ 480              		.loc 1 568 3 view .LVU85
+ 481 0040 05F00201 		and	r1, r5, #2
+ 482 0044 2046     		mov	r0, r4
+ 483 0046 FFF7FEFF 		bl	i2c_write_bit
+ 484              	.LVL53:
+ 569:BSP/u8g2/u8x8_byte.c ****   i2c_write_bit(u8x8, b & 1);
+ 485              		.loc 1 569 3 view .LVU86
+ 486 004a 05F00101 		and	r1, r5, #1
+ 487 004e 2046     		mov	r0, r4
+ 488 0050 FFF7FEFF 		bl	i2c_write_bit
+ 489              	.LVL54:
+ 570:BSP/u8g2/u8x8_byte.c ****     
+ 571:BSP/u8g2/u8x8_byte.c ****   /* read ack from client */
+ 572:BSP/u8g2/u8x8_byte.c ****   /* 0: ack was given by client */
+ 573:BSP/u8g2/u8x8_byte.c ****   /* 1: nothing happend during ack cycle */  
+ 574:BSP/u8g2/u8x8_byte.c ****   i2c_read_bit(u8x8);
+ 490              		.loc 1 574 3 view .LVU87
+ 491 0054 2046     		mov	r0, r4
+ 492 0056 FFF7FEFF 		bl	i2c_read_bit
+ 493              	.LVL55:
+ 575:BSP/u8g2/u8x8_byte.c **** }
+ 494              		.loc 1 575 1 is_stmt 0 view .LVU88
+ 495 005a 38BD     		pop	{r3, r4, r5, pc}
+ 496              		.loc 1 575 1 view .LVU89
+ 497              		.cfi_endproc
+ 498              	.LFE23:
+ 500              		.section	.text.u8x8_byte_SetDC,"ax",%progbits
+ 501              		.align	1
+ 502              		.global	u8x8_byte_SetDC
+ 503              		.syntax unified
+ 504              		.thumb
+ 505              		.thumb_func
+ 507              	u8x8_byte_SetDC:
+ 508              	.LVL56:
+ 509              	.LFB0:
+  40:BSP/u8g2/u8x8_byte.c ****   return u8x8->byte_cb(u8x8, U8X8_MSG_BYTE_SET_DC, dc, NULL);
+ARM GAS  /tmp/cc6PBIIV.s 			page 20
+
+
+ 510              		.loc 1 40 1 is_stmt 1 view -0
+ 511              		.cfi_startproc
+ 512              		@ args = 0, pretend = 0, frame = 0
+ 513              		@ frame_needed = 0, uses_anonymous_args = 0
+  40:BSP/u8g2/u8x8_byte.c ****   return u8x8->byte_cb(u8x8, U8X8_MSG_BYTE_SET_DC, dc, NULL);
+ 514              		.loc 1 40 1 is_stmt 0 view .LVU91
+ 515 0000 10B5     		push	{r4, lr}
+ 516              	.LCFI11:
+ 517              		.cfi_def_cfa_offset 8
+ 518              		.cfi_offset 4, -8
+ 519              		.cfi_offset 14, -4
+ 520 0002 0A46     		mov	r2, r1
+  41:BSP/u8g2/u8x8_byte.c **** }
+ 521              		.loc 1 41 3 is_stmt 1 view .LVU92
+  41:BSP/u8g2/u8x8_byte.c **** }
+ 522              		.loc 1 41 14 is_stmt 0 view .LVU93
+ 523 0004 0469     		ldr	r4, [r0, #16]
+  41:BSP/u8g2/u8x8_byte.c **** }
+ 524              		.loc 1 41 10 view .LVU94
+ 525 0006 0023     		movs	r3, #0
+ 526 0008 2021     		movs	r1, #32
+ 527              	.LVL57:
+  41:BSP/u8g2/u8x8_byte.c **** }
+ 528              		.loc 1 41 10 view .LVU95
+ 529 000a A047     		blx	r4
+ 530              	.LVL58:
+  42:BSP/u8g2/u8x8_byte.c **** 
+ 531              		.loc 1 42 1 view .LVU96
+ 532 000c 10BD     		pop	{r4, pc}
+ 533              		.cfi_endproc
+ 534              	.LFE0:
+ 536              		.section	.text.u8x8_byte_SendBytes,"ax",%progbits
+ 537              		.align	1
+ 538              		.global	u8x8_byte_SendBytes
+ 539              		.syntax unified
+ 540              		.thumb
+ 541              		.thumb_func
+ 543              	u8x8_byte_SendBytes:
+ 544              	.LVL59:
+ 545              	.LFB1:
+  45:BSP/u8g2/u8x8_byte.c ****   return u8x8->byte_cb(u8x8, U8X8_MSG_BYTE_SEND, cnt, (void *)data);
+ 546              		.loc 1 45 1 is_stmt 1 view -0
+ 547              		.cfi_startproc
+ 548              		@ args = 0, pretend = 0, frame = 0
+ 549              		@ frame_needed = 0, uses_anonymous_args = 0
+  45:BSP/u8g2/u8x8_byte.c ****   return u8x8->byte_cb(u8x8, U8X8_MSG_BYTE_SEND, cnt, (void *)data);
+ 550              		.loc 1 45 1 is_stmt 0 view .LVU98
+ 551 0000 10B5     		push	{r4, lr}
+ 552              	.LCFI12:
+ 553              		.cfi_def_cfa_offset 8
+ 554              		.cfi_offset 4, -8
+ 555              		.cfi_offset 14, -4
+ 556 0002 1346     		mov	r3, r2
+  46:BSP/u8g2/u8x8_byte.c **** }
+ 557              		.loc 1 46 3 is_stmt 1 view .LVU99
+  46:BSP/u8g2/u8x8_byte.c **** }
+ 558              		.loc 1 46 14 is_stmt 0 view .LVU100
+ARM GAS  /tmp/cc6PBIIV.s 			page 21
+
+
+ 559 0004 0469     		ldr	r4, [r0, #16]
+  46:BSP/u8g2/u8x8_byte.c **** }
+ 560              		.loc 1 46 10 view .LVU101
+ 561 0006 0A46     		mov	r2, r1
+ 562              	.LVL60:
+  46:BSP/u8g2/u8x8_byte.c **** }
+ 563              		.loc 1 46 10 view .LVU102
+ 564 0008 1721     		movs	r1, #23
+ 565              	.LVL61:
+  46:BSP/u8g2/u8x8_byte.c **** }
+ 566              		.loc 1 46 10 view .LVU103
+ 567 000a A047     		blx	r4
+ 568              	.LVL62:
+  47:BSP/u8g2/u8x8_byte.c **** 
+ 569              		.loc 1 47 1 view .LVU104
+ 570 000c 10BD     		pop	{r4, pc}
+ 571              		.cfi_endproc
+ 572              	.LFE1:
+ 574              		.section	.text.u8x8_byte_SendByte,"ax",%progbits
+ 575              		.align	1
+ 576              		.global	u8x8_byte_SendByte
+ 577              		.syntax unified
+ 578              		.thumb
+ 579              		.thumb_func
+ 581              	u8x8_byte_SendByte:
+ 582              	.LVL63:
+ 583              	.LFB2:
+  50:BSP/u8g2/u8x8_byte.c ****   return u8x8_byte_SendBytes(u8x8, 1, &byte);
+ 584              		.loc 1 50 1 is_stmt 1 view -0
+ 585              		.cfi_startproc
+ 586              		@ args = 0, pretend = 0, frame = 8
+ 587              		@ frame_needed = 0, uses_anonymous_args = 0
+  50:BSP/u8g2/u8x8_byte.c ****   return u8x8_byte_SendBytes(u8x8, 1, &byte);
+ 588              		.loc 1 50 1 is_stmt 0 view .LVU106
+ 589 0000 00B5     		push	{lr}
+ 590              	.LCFI13:
+ 591              		.cfi_def_cfa_offset 4
+ 592              		.cfi_offset 14, -4
+ 593 0002 83B0     		sub	sp, sp, #12
+ 594              	.LCFI14:
+ 595              		.cfi_def_cfa_offset 16
+ 596 0004 8DF80710 		strb	r1, [sp, #7]
+  51:BSP/u8g2/u8x8_byte.c **** }
+ 597              		.loc 1 51 3 is_stmt 1 view .LVU107
+  51:BSP/u8g2/u8x8_byte.c **** }
+ 598              		.loc 1 51 10 is_stmt 0 view .LVU108
+ 599 0008 0DF10702 		add	r2, sp, #7
+ 600 000c 0121     		movs	r1, #1
+ 601              	.LVL64:
+  51:BSP/u8g2/u8x8_byte.c **** }
+ 602              		.loc 1 51 10 view .LVU109
+ 603 000e FFF7FEFF 		bl	u8x8_byte_SendBytes
+ 604              	.LVL65:
+  52:BSP/u8g2/u8x8_byte.c **** 
+ 605              		.loc 1 52 1 view .LVU110
+ 606 0012 03B0     		add	sp, sp, #12
+ 607              	.LCFI15:
+ARM GAS  /tmp/cc6PBIIV.s 			page 22
+
+
+ 608              		.cfi_def_cfa_offset 4
+ 609              		@ sp needed
+ 610 0014 5DF804FB 		ldr	pc, [sp], #4
+ 611              		.cfi_endproc
+ 612              	.LFE2:
+ 614              		.section	.text.u8x8_byte_StartTransfer,"ax",%progbits
+ 615              		.align	1
+ 616              		.global	u8x8_byte_StartTransfer
+ 617              		.syntax unified
+ 618              		.thumb
+ 619              		.thumb_func
+ 621              	u8x8_byte_StartTransfer:
+ 622              	.LVL66:
+ 623              	.LFB3:
+  55:BSP/u8g2/u8x8_byte.c ****   return u8x8->byte_cb(u8x8, U8X8_MSG_BYTE_START_TRANSFER, 0, NULL);
+ 624              		.loc 1 55 1 is_stmt 1 view -0
+ 625              		.cfi_startproc
+ 626              		@ args = 0, pretend = 0, frame = 0
+ 627              		@ frame_needed = 0, uses_anonymous_args = 0
+  55:BSP/u8g2/u8x8_byte.c ****   return u8x8->byte_cb(u8x8, U8X8_MSG_BYTE_START_TRANSFER, 0, NULL);
+ 628              		.loc 1 55 1 is_stmt 0 view .LVU112
+ 629 0000 10B5     		push	{r4, lr}
+ 630              	.LCFI16:
+ 631              		.cfi_def_cfa_offset 8
+ 632              		.cfi_offset 4, -8
+ 633              		.cfi_offset 14, -4
+  56:BSP/u8g2/u8x8_byte.c **** }
+ 634              		.loc 1 56 3 is_stmt 1 view .LVU113
+  56:BSP/u8g2/u8x8_byte.c **** }
+ 635              		.loc 1 56 14 is_stmt 0 view .LVU114
+ 636 0002 0469     		ldr	r4, [r0, #16]
+  56:BSP/u8g2/u8x8_byte.c **** }
+ 637              		.loc 1 56 10 view .LVU115
+ 638 0004 0023     		movs	r3, #0
+ 639 0006 1A46     		mov	r2, r3
+ 640 0008 1821     		movs	r1, #24
+ 641 000a A047     		blx	r4
+ 642              	.LVL67:
+  57:BSP/u8g2/u8x8_byte.c **** 
+ 643              		.loc 1 57 1 view .LVU116
+ 644 000c 10BD     		pop	{r4, pc}
+ 645              		.cfi_endproc
+ 646              	.LFE3:
+ 648              		.section	.text.u8x8_byte_EndTransfer,"ax",%progbits
+ 649              		.align	1
+ 650              		.global	u8x8_byte_EndTransfer
+ 651              		.syntax unified
+ 652              		.thumb
+ 653              		.thumb_func
+ 655              	u8x8_byte_EndTransfer:
+ 656              	.LVL68:
+ 657              	.LFB4:
+  60:BSP/u8g2/u8x8_byte.c ****   return u8x8->byte_cb(u8x8, U8X8_MSG_BYTE_END_TRANSFER, 0, NULL);
+ 658              		.loc 1 60 1 is_stmt 1 view -0
+ 659              		.cfi_startproc
+ 660              		@ args = 0, pretend = 0, frame = 0
+ 661              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  /tmp/cc6PBIIV.s 			page 23
+
+
+  60:BSP/u8g2/u8x8_byte.c ****   return u8x8->byte_cb(u8x8, U8X8_MSG_BYTE_END_TRANSFER, 0, NULL);
+ 662              		.loc 1 60 1 is_stmt 0 view .LVU118
+ 663 0000 10B5     		push	{r4, lr}
+ 664              	.LCFI17:
+ 665              		.cfi_def_cfa_offset 8
+ 666              		.cfi_offset 4, -8
+ 667              		.cfi_offset 14, -4
+  61:BSP/u8g2/u8x8_byte.c **** }
+ 668              		.loc 1 61 3 is_stmt 1 view .LVU119
+  61:BSP/u8g2/u8x8_byte.c **** }
+ 669              		.loc 1 61 14 is_stmt 0 view .LVU120
+ 670 0002 0469     		ldr	r4, [r0, #16]
+  61:BSP/u8g2/u8x8_byte.c **** }
+ 671              		.loc 1 61 10 view .LVU121
+ 672 0004 0023     		movs	r3, #0
+ 673 0006 1A46     		mov	r2, r3
+ 674 0008 1921     		movs	r1, #25
+ 675 000a A047     		blx	r4
+ 676              	.LVL69:
+  62:BSP/u8g2/u8x8_byte.c **** 
+ 677              		.loc 1 62 1 view .LVU122
+ 678 000c 10BD     		pop	{r4, pc}
+ 679              		.cfi_endproc
+ 680              	.LFE4:
+ 682              		.section	.text.u8x8_byte_empty,"ax",%progbits
+ 683              		.align	1
+ 684              		.global	u8x8_byte_empty
+ 685              		.syntax unified
+ 686              		.thumb
+ 687              		.thumb_func
+ 689              	u8x8_byte_empty:
+ 690              	.LVL70:
+ 691              	.LFB5:
+  67:BSP/u8g2/u8x8_byte.c ****   switch(msg)
+ 692              		.loc 1 67 1 is_stmt 1 view -0
+ 693              		.cfi_startproc
+ 694              		@ args = 0, pretend = 0, frame = 0
+ 695              		@ frame_needed = 0, uses_anonymous_args = 0
+ 696              		@ link register save eliminated.
+  68:BSP/u8g2/u8x8_byte.c ****   {
+ 697              		.loc 1 68 3 view .LVU124
+  75:BSP/u8g2/u8x8_byte.c ****   }
+ 698              		.loc 1 75 7 view .LVU125
+  77:BSP/u8g2/u8x8_byte.c **** }
+ 699              		.loc 1 77 3 view .LVU126
+  78:BSP/u8g2/u8x8_byte.c **** 
+ 700              		.loc 1 78 1 is_stmt 0 view .LVU127
+ 701 0000 0120     		movs	r0, #1
+ 702              	.LVL71:
+  78:BSP/u8g2/u8x8_byte.c **** 
+ 703              		.loc 1 78 1 view .LVU128
+ 704 0002 7047     		bx	lr
+ 705              		.cfi_endproc
+ 706              	.LFE5:
+ 708              		.section	.text.u8x8_byte_4wire_sw_spi,"ax",%progbits
+ 709              		.align	1
+ 710              		.global	u8x8_byte_4wire_sw_spi
+ARM GAS  /tmp/cc6PBIIV.s 			page 24
+
+
+ 711              		.syntax unified
+ 712              		.thumb
+ 713              		.thumb_func
+ 715              	u8x8_byte_4wire_sw_spi:
+ 716              	.LVL72:
+ 717              	.LFB6:
+ 108:BSP/u8g2/u8x8_byte.c ****   uint8_t i, b;
+ 718              		.loc 1 108 1 is_stmt 1 view -0
+ 719              		.cfi_startproc
+ 720              		@ args = 0, pretend = 0, frame = 0
+ 721              		@ frame_needed = 0, uses_anonymous_args = 0
+ 108:BSP/u8g2/u8x8_byte.c ****   uint8_t i, b;
+ 722              		.loc 1 108 1 is_stmt 0 view .LVU130
+ 723 0000 2DE9F047 		push	{r4, r5, r6, r7, r8, r9, r10, lr}
+ 724              	.LCFI18:
+ 725              		.cfi_def_cfa_offset 32
+ 726              		.cfi_offset 4, -32
+ 727              		.cfi_offset 5, -28
+ 728              		.cfi_offset 6, -24
+ 729              		.cfi_offset 7, -20
+ 730              		.cfi_offset 8, -16
+ 731              		.cfi_offset 9, -12
+ 732              		.cfi_offset 10, -8
+ 733              		.cfi_offset 14, -4
+ 734 0004 0446     		mov	r4, r0
+ 735 0006 9146     		mov	r9, r2
+ 736 0008 9A46     		mov	r10, r3
+ 109:BSP/u8g2/u8x8_byte.c ****   uint8_t *data;
+ 737              		.loc 1 109 3 is_stmt 1 view .LVU131
+ 110:BSP/u8g2/u8x8_byte.c ****   uint8_t takeover_edge = u8x8_GetSPIClockPhase(u8x8);
+ 738              		.loc 1 110 3 view .LVU132
+ 111:BSP/u8g2/u8x8_byte.c ****   uint8_t not_takeover_edge = 1 - takeover_edge;
+ 739              		.loc 1 111 3 view .LVU133
+ 111:BSP/u8g2/u8x8_byte.c ****   uint8_t not_takeover_edge = 1 - takeover_edge;
+ 740              		.loc 1 111 27 is_stmt 0 view .LVU134
+ 741 000a 0268     		ldr	r2, [r0]
+ 742              	.LVL73:
+ 111:BSP/u8g2/u8x8_byte.c ****   uint8_t not_takeover_edge = 1 - takeover_edge;
+ 743              		.loc 1 111 27 view .LVU135
+ 744 000c 177B     		ldrb	r7, [r2, #12]	@ zero_extendqisi2
+ 111:BSP/u8g2/u8x8_byte.c ****   uint8_t not_takeover_edge = 1 - takeover_edge;
+ 745              		.loc 1 111 11 view .LVU136
+ 746 000e 07F00107 		and	r7, r7, #1
+ 747              	.LVL74:
+ 112:BSP/u8g2/u8x8_byte.c ****  
+ 748              		.loc 1 112 3 is_stmt 1 view .LVU137
+ 112:BSP/u8g2/u8x8_byte.c ****  
+ 749              		.loc 1 112 11 is_stmt 0 view .LVU138
+ 750 0012 87F00108 		eor	r8, r7, #1
+ 751              	.LVL75:
+ 114:BSP/u8g2/u8x8_byte.c ****   {
+ 752              		.loc 1 114 3 is_stmt 1 view .LVU139
+ 753 0016 1439     		subs	r1, r1, #20
+ 754              	.LVL76:
+ 114:BSP/u8g2/u8x8_byte.c ****   {
+ 755              		.loc 1 114 3 is_stmt 0 view .LVU140
+ 756 0018 0C29     		cmp	r1, #12
+ARM GAS  /tmp/cc6PBIIV.s 			page 25
+
+
+ 757 001a 6DD8     		bhi	.L51
+ 758 001c DFE801F0 		tbb	[pc, r1]
+ 759              	.LVL77:
+ 760              	.L41:
+ 761 0020 3E       		.byte	(.L45-.L41)/2
+ 762 0021 6C       		.byte	(.L51-.L41)/2
+ 763 0022 6C       		.byte	(.L51-.L41)/2
+ 764 0023 31       		.byte	(.L44-.L41)/2
+ 765 0024 52       		.byte	(.L43-.L41)/2
+ 766 0025 5F       		.byte	(.L42-.L41)/2
+ 767 0026 6C       		.byte	(.L51-.L41)/2
+ 768 0027 6C       		.byte	(.L51-.L41)/2
+ 769 0028 6C       		.byte	(.L51-.L41)/2
+ 770 0029 6C       		.byte	(.L51-.L41)/2
+ 771 002a 6C       		.byte	(.L51-.L41)/2
+ 772 002b 6C       		.byte	(.L51-.L41)/2
+ 773 002c 4C       		.byte	(.L40-.L41)/2
+ 774 002d 00       		.p2align 1
+ 775              	.L47:
+ 128:BSP/u8g2/u8x8_byte.c **** 	  b <<= 1;
+ 776              		.loc 1 128 6 is_stmt 1 view .LVU141
+ 777 002e 0022     		movs	r2, #0
+ 778 0030 4121     		movs	r1, #65
+ 779 0032 2046     		mov	r0, r4
+ 780 0034 FFF7FEFF 		bl	u8x8_gpio_call
+ 781              	.LVL78:
+ 782              	.L48:
+ 129:BSP/u8g2/u8x8_byte.c **** 	  
+ 783              		.loc 1 129 4 view .LVU142
+ 129:BSP/u8g2/u8x8_byte.c **** 	  
+ 784              		.loc 1 129 6 is_stmt 0 view .LVU143
+ 785 0038 7600     		lsls	r6, r6, #1
+ 786              	.LVL79:
+ 129:BSP/u8g2/u8x8_byte.c **** 	  
+ 787              		.loc 1 129 6 view .LVU144
+ 788 003a F6B2     		uxtb	r6, r6
+ 789              	.LVL80:
+ 131:BSP/u8g2/u8x8_byte.c **** 	  u8x8_gpio_Delay(u8x8, U8X8_MSG_DELAY_NANO, u8x8->display_info->sda_setup_time_ns);
+ 790              		.loc 1 131 4 is_stmt 1 view .LVU145
+ 791 003c 4246     		mov	r2, r8
+ 792 003e 4021     		movs	r1, #64
+ 793 0040 2046     		mov	r0, r4
+ 794 0042 FFF7FEFF 		bl	u8x8_gpio_call
+ 795              	.LVL81:
+ 132:BSP/u8g2/u8x8_byte.c **** 	  u8x8_gpio_SetSPIClock(u8x8, takeover_edge);
+ 796              		.loc 1 132 4 view .LVU146
+ 797 0046 2368     		ldr	r3, [r4]
+ 798 0048 9A79     		ldrb	r2, [r3, #6]	@ zero_extendqisi2
+ 799 004a 2C21     		movs	r1, #44
+ 800 004c 2046     		mov	r0, r4
+ 801 004e FFF7FEFF 		bl	u8x8_gpio_call
+ 802              	.LVL82:
+ 133:BSP/u8g2/u8x8_byte.c **** 	  u8x8_gpio_Delay(u8x8, U8X8_MSG_DELAY_NANO, u8x8->display_info->sck_pulse_width_ns);
+ 803              		.loc 1 133 4 view .LVU147
+ 804 0052 3A46     		mov	r2, r7
+ 805 0054 4021     		movs	r1, #64
+ 806 0056 2046     		mov	r0, r4
+ARM GAS  /tmp/cc6PBIIV.s 			page 26
+
+
+ 807 0058 FFF7FEFF 		bl	u8x8_gpio_call
+ 808              	.LVL83:
+ 134:BSP/u8g2/u8x8_byte.c **** 	}    
+ 809              		.loc 1 134 4 view .LVU148
+ 810 005c 2368     		ldr	r3, [r4]
+ 811 005e DA79     		ldrb	r2, [r3, #7]	@ zero_extendqisi2
+ 812 0060 2C21     		movs	r1, #44
+ 813 0062 2046     		mov	r0, r4
+ 814 0064 FFF7FEFF 		bl	u8x8_gpio_call
+ 815              	.LVL84:
+ 123:BSP/u8g2/u8x8_byte.c **** 	{
+ 816              		.loc 1 123 22 discriminator 2 view .LVU149
+ 817 0068 0135     		adds	r5, r5, #1
+ 818              	.LVL85:
+ 123:BSP/u8g2/u8x8_byte.c **** 	{
+ 819              		.loc 1 123 22 is_stmt 0 discriminator 2 view .LVU150
+ 820 006a EDB2     		uxtb	r5, r5
+ 821              	.LVL86:
+ 822              	.L46:
+ 123:BSP/u8g2/u8x8_byte.c **** 	{
+ 823              		.loc 1 123 16 is_stmt 1 discriminator 1 view .LVU151
+ 824 006c 072D     		cmp	r5, #7
+ 825 006e 08D8     		bhi	.L44
+ 125:BSP/u8g2/u8x8_byte.c **** 	    u8x8_gpio_SetSPIData(u8x8, 1);
+ 826              		.loc 1 125 4 view .LVU152
+ 125:BSP/u8g2/u8x8_byte.c **** 	    u8x8_gpio_SetSPIData(u8x8, 1);
+ 827              		.loc 1 125 7 is_stmt 0 view .LVU153
+ 828 0070 16F0800F 		tst	r6, #128
+ 829 0074 DBD0     		beq	.L47
+ 126:BSP/u8g2/u8x8_byte.c **** 	  else
+ 830              		.loc 1 126 6 is_stmt 1 view .LVU154
+ 831 0076 0122     		movs	r2, #1
+ 832 0078 4121     		movs	r1, #65
+ 833 007a 2046     		mov	r0, r4
+ 834 007c FFF7FEFF 		bl	u8x8_gpio_call
+ 835              	.LVL87:
+ 836 0080 DAE7     		b	.L48
+ 837              	.LVL88:
+ 838              	.L44:
+ 118:BSP/u8g2/u8x8_byte.c ****       {
+ 839              		.loc 1 118 22 view .LVU155
+ 840 0082 B9F1000F 		cmp	r9, #0
+ 841 0086 07D0     		beq	.L54
+ 120:BSP/u8g2/u8x8_byte.c **** 	data++;
+ 842              		.loc 1 120 2 view .LVU156
+ 120:BSP/u8g2/u8x8_byte.c **** 	data++;
+ 843              		.loc 1 120 4 is_stmt 0 view .LVU157
+ 844 0088 1AF8016B 		ldrb	r6, [r10], #1	@ zero_extendqisi2
+ 845              	.LVL89:
+ 121:BSP/u8g2/u8x8_byte.c **** 	arg_int--;
+ 846              		.loc 1 121 2 is_stmt 1 view .LVU158
+ 122:BSP/u8g2/u8x8_byte.c **** 	for( i = 0; i < 8; i++ )
+ 847              		.loc 1 122 2 view .LVU159
+ 122:BSP/u8g2/u8x8_byte.c **** 	for( i = 0; i < 8; i++ )
+ 848              		.loc 1 122 9 is_stmt 0 view .LVU160
+ 849 008c 09F1FF39 		add	r9, r9, #-1
+ 850              	.LVL90:
+ARM GAS  /tmp/cc6PBIIV.s 			page 27
+
+
+ 122:BSP/u8g2/u8x8_byte.c **** 	for( i = 0; i < 8; i++ )
+ 851              		.loc 1 122 9 view .LVU161
+ 852 0090 5FFA89F9 		uxtb	r9, r9
+ 853              	.LVL91:
+ 123:BSP/u8g2/u8x8_byte.c **** 	{
+ 854              		.loc 1 123 2 is_stmt 1 view .LVU162
+ 123:BSP/u8g2/u8x8_byte.c **** 	{
+ 855              		.loc 1 123 9 is_stmt 0 view .LVU163
+ 856 0094 0025     		movs	r5, #0
+ 123:BSP/u8g2/u8x8_byte.c **** 	{
+ 857              		.loc 1 123 2 view .LVU164
+ 858 0096 E9E7     		b	.L46
+ 859              	.LVL92:
+ 860              	.L54:
+ 161:BSP/u8g2/u8x8_byte.c **** }
+ 861              		.loc 1 161 10 view .LVU165
+ 862 0098 0120     		movs	r0, #1
+ 863 009a 2EE0     		b	.L39
+ 864              	.LVL93:
+ 865              	.L45:
+ 141:BSP/u8g2/u8x8_byte.c ****       /* no wait required here */
+ 866              		.loc 1 141 7 is_stmt 1 view .LVU166
+ 867 009c 5278     		ldrb	r2, [r2, #1]	@ zero_extendqisi2
+ 868 009e 4921     		movs	r1, #73
+ 869 00a0 FFF7FEFF 		bl	u8x8_gpio_call
+ 870              	.LVL94:
+ 145:BSP/u8g2/u8x8_byte.c ****       break;
+ 871              		.loc 1 145 7 view .LVU167
+ 872 00a4 2368     		ldr	r3, [r4]
+ 873 00a6 1A7B     		ldrb	r2, [r3, #12]	@ zero_extendqisi2
+ 874 00a8 02F00102 		and	r2, r2, #1
+ 875 00ac 4021     		movs	r1, #64
+ 876 00ae 2046     		mov	r0, r4
+ 877 00b0 FFF7FEFF 		bl	u8x8_gpio_call
+ 878              	.LVL95:
+ 146:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_SET_DC:
+ 879              		.loc 1 146 7 view .LVU168
+ 161:BSP/u8g2/u8x8_byte.c **** }
+ 880              		.loc 1 161 10 is_stmt 0 view .LVU169
+ 881 00b4 0120     		movs	r0, #1
+ 146:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_SET_DC:
+ 882              		.loc 1 146 7 view .LVU170
+ 883 00b6 20E0     		b	.L39
+ 884              	.LVL96:
+ 885              	.L40:
+ 148:BSP/u8g2/u8x8_byte.c ****       break;
+ 886              		.loc 1 148 7 is_stmt 1 view .LVU171
+ 887 00b8 4A46     		mov	r2, r9
+ 888 00ba 4A21     		movs	r1, #74
+ 889 00bc FFF7FEFF 		bl	u8x8_gpio_call
+ 890              	.LVL97:
+ 149:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_START_TRANSFER:
+ 891              		.loc 1 149 7 view .LVU172
+ 161:BSP/u8g2/u8x8_byte.c **** }
+ 892              		.loc 1 161 10 is_stmt 0 view .LVU173
+ 893 00c0 0120     		movs	r0, #1
+ 149:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_START_TRANSFER:
+ARM GAS  /tmp/cc6PBIIV.s 			page 28
+
+
+ 894              		.loc 1 149 7 view .LVU174
+ 895 00c2 1AE0     		b	.L39
+ 896              	.LVL98:
+ 897              	.L43:
+ 151:BSP/u8g2/u8x8_byte.c ****       u8x8->gpio_and_delay_cb(u8x8, U8X8_MSG_DELAY_NANO, u8x8->display_info->post_chip_enable_wait_
+ 898              		.loc 1 151 7 is_stmt 1 view .LVU175
+ 899 00c4 1278     		ldrb	r2, [r2]	@ zero_extendqisi2
+ 900 00c6 4921     		movs	r1, #73
+ 901 00c8 FFF7FEFF 		bl	u8x8_gpio_call
+ 902              	.LVL99:
+ 152:BSP/u8g2/u8x8_byte.c ****       break;
+ 903              		.loc 1 152 7 view .LVU176
+ 152:BSP/u8g2/u8x8_byte.c ****       break;
+ 904              		.loc 1 152 11 is_stmt 0 view .LVU177
+ 905 00cc 6569     		ldr	r5, [r4, #20]
+ 152:BSP/u8g2/u8x8_byte.c ****       break;
+ 906              		.loc 1 152 62 view .LVU178
+ 907 00ce 2268     		ldr	r2, [r4]
+ 152:BSP/u8g2/u8x8_byte.c ****       break;
+ 908              		.loc 1 152 7 view .LVU179
+ 909 00d0 0023     		movs	r3, #0
+ 910 00d2 9278     		ldrb	r2, [r2, #2]	@ zero_extendqisi2
+ 911 00d4 2C21     		movs	r1, #44
+ 912 00d6 2046     		mov	r0, r4
+ 913 00d8 A847     		blx	r5
+ 914              	.LVL100:
+ 153:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_END_TRANSFER:
+ 915              		.loc 1 153 7 is_stmt 1 view .LVU180
+ 161:BSP/u8g2/u8x8_byte.c **** }
+ 916              		.loc 1 161 10 is_stmt 0 view .LVU181
+ 917 00da 0120     		movs	r0, #1
+ 153:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_END_TRANSFER:
+ 918              		.loc 1 153 7 view .LVU182
+ 919 00dc 0DE0     		b	.L39
+ 920              	.LVL101:
+ 921              	.L42:
+ 155:BSP/u8g2/u8x8_byte.c ****       u8x8_gpio_SetCS(u8x8, u8x8->display_info->chip_disable_level);
+ 922              		.loc 1 155 7 is_stmt 1 view .LVU183
+ 155:BSP/u8g2/u8x8_byte.c ****       u8x8_gpio_SetCS(u8x8, u8x8->display_info->chip_disable_level);
+ 923              		.loc 1 155 11 is_stmt 0 view .LVU184
+ 924 00de 4569     		ldr	r5, [r0, #20]
+ 155:BSP/u8g2/u8x8_byte.c ****       u8x8_gpio_SetCS(u8x8, u8x8->display_info->chip_disable_level);
+ 925              		.loc 1 155 7 view .LVU185
+ 926 00e0 0023     		movs	r3, #0
+ 927 00e2 D278     		ldrb	r2, [r2, #3]	@ zero_extendqisi2
+ 928 00e4 2C21     		movs	r1, #44
+ 929 00e6 A847     		blx	r5
+ 930              	.LVL102:
+ 156:BSP/u8g2/u8x8_byte.c ****       break;
+ 931              		.loc 1 156 7 is_stmt 1 view .LVU186
+ 932 00e8 2368     		ldr	r3, [r4]
+ 933 00ea 5A78     		ldrb	r2, [r3, #1]	@ zero_extendqisi2
+ 934 00ec 4921     		movs	r1, #73
+ 935 00ee 2046     		mov	r0, r4
+ 936 00f0 FFF7FEFF 		bl	u8x8_gpio_call
+ 937              	.LVL103:
+ 157:BSP/u8g2/u8x8_byte.c ****     default:
+ARM GAS  /tmp/cc6PBIIV.s 			page 29
+
+
+ 938              		.loc 1 157 7 view .LVU187
+ 161:BSP/u8g2/u8x8_byte.c **** }
+ 939              		.loc 1 161 10 is_stmt 0 view .LVU188
+ 940 00f4 0120     		movs	r0, #1
+ 157:BSP/u8g2/u8x8_byte.c ****     default:
+ 941              		.loc 1 157 7 view .LVU189
+ 942 00f6 00E0     		b	.L39
+ 943              	.LVL104:
+ 944              	.L51:
+ 114:BSP/u8g2/u8x8_byte.c ****   {
+ 945              		.loc 1 114 3 view .LVU190
+ 946 00f8 0020     		movs	r0, #0
+ 947              	.LVL105:
+ 948              	.L39:
+ 162:BSP/u8g2/u8x8_byte.c **** 
+ 949              		.loc 1 162 1 view .LVU191
+ 950 00fa BDE8F087 		pop	{r4, r5, r6, r7, r8, r9, r10, pc}
+ 162:BSP/u8g2/u8x8_byte.c **** 
+ 951              		.loc 1 162 1 view .LVU192
+ 952              		.cfi_endproc
+ 953              	.LFE6:
+ 955              		.section	.text.u8x8_byte_8bit_6800mode,"ax",%progbits
+ 956              		.align	1
+ 957              		.global	u8x8_byte_8bit_6800mode
+ 958              		.syntax unified
+ 959              		.thumb
+ 960              		.thumb_func
+ 962              	u8x8_byte_8bit_6800mode:
+ 963              	.LVL106:
+ 964              	.LFB7:
+ 167:BSP/u8g2/u8x8_byte.c ****   uint8_t i, b;
+ 965              		.loc 1 167 1 is_stmt 1 view -0
+ 966              		.cfi_startproc
+ 967              		@ args = 0, pretend = 0, frame = 0
+ 968              		@ frame_needed = 0, uses_anonymous_args = 0
+ 167:BSP/u8g2/u8x8_byte.c ****   uint8_t i, b;
+ 969              		.loc 1 167 1 is_stmt 0 view .LVU194
+ 970 0000 2DE9F041 		push	{r4, r5, r6, r7, r8, lr}
+ 971              	.LCFI19:
+ 972              		.cfi_def_cfa_offset 24
+ 973              		.cfi_offset 4, -24
+ 974              		.cfi_offset 5, -20
+ 975              		.cfi_offset 6, -16
+ 976              		.cfi_offset 7, -12
+ 977              		.cfi_offset 8, -8
+ 978              		.cfi_offset 14, -4
+ 979 0004 0646     		mov	r6, r0
+ 980 0006 1746     		mov	r7, r2
+ 981 0008 9846     		mov	r8, r3
+ 168:BSP/u8g2/u8x8_byte.c ****   uint8_t *data;
+ 982              		.loc 1 168 3 is_stmt 1 view .LVU195
+ 169:BSP/u8g2/u8x8_byte.c ****  
+ 983              		.loc 1 169 3 view .LVU196
+ 171:BSP/u8g2/u8x8_byte.c ****   {
+ 984              		.loc 1 171 3 view .LVU197
+ 985 000a 1439     		subs	r1, r1, #20
+ 986              	.LVL107:
+ARM GAS  /tmp/cc6PBIIV.s 			page 30
+
+
+ 171:BSP/u8g2/u8x8_byte.c ****   {
+ 987              		.loc 1 171 3 is_stmt 0 view .LVU198
+ 988 000c 0C29     		cmp	r1, #12
+ 989 000e 5FD8     		bhi	.L66
+ 990 0010 DFE801F0 		tbb	[pc, r1]
+ 991              	.LVL108:
+ 992              	.L58:
+ 993 0014 31       		.byte	(.L62-.L58)/2
+ 994 0015 5E       		.byte	(.L66-.L58)/2
+ 995 0016 5E       		.byte	(.L66-.L58)/2
+ 996 0017 28       		.byte	(.L61-.L58)/2
+ 997 0018 42       		.byte	(.L60-.L58)/2
+ 998 0019 50       		.byte	(.L59-.L58)/2
+ 999 001a 5E       		.byte	(.L66-.L58)/2
+ 1000 001b 5E       		.byte	(.L66-.L58)/2
+ 1001 001c 5E       		.byte	(.L66-.L58)/2
+ 1002 001d 5E       		.byte	(.L66-.L58)/2
+ 1003 001e 5E       		.byte	(.L66-.L58)/2
+ 1004 001f 5E       		.byte	(.L66-.L58)/2
+ 1005 0020 3D       		.byte	(.L57-.L58)/2
+ 1006 0021 00       		.p2align 1
+ 1007              	.L64:
+ 182:BSP/u8g2/u8x8_byte.c **** 	  b >>= 1;
+ 1008              		.loc 1 182 4 is_stmt 1 view .LVU199
+ 1009 0022 05F00102 		and	r2, r5, #1
+ 1010 0026 2146     		mov	r1, r4
+ 1011 0028 3046     		mov	r0, r6
+ 1012 002a FFF7FEFF 		bl	u8x8_gpio_call
+ 1013              	.LVL109:
+ 183:BSP/u8g2/u8x8_byte.c **** 	}    
+ 1014              		.loc 1 183 4 view .LVU200
+ 183:BSP/u8g2/u8x8_byte.c **** 	}    
+ 1015              		.loc 1 183 6 is_stmt 0 view .LVU201
+ 1016 002e 6D08     		lsrs	r5, r5, #1
+ 1017              	.LVL110:
+ 180:BSP/u8g2/u8x8_byte.c **** 	{
+ 1018              		.loc 1 180 53 is_stmt 1 discriminator 3 view .LVU202
+ 1019 0030 0134     		adds	r4, r4, #1
+ 1020              	.LVL111:
+ 180:BSP/u8g2/u8x8_byte.c **** 	{
+ 1021              		.loc 1 180 53 is_stmt 0 discriminator 3 view .LVU203
+ 1022 0032 E4B2     		uxtb	r4, r4
+ 1023              	.LVL112:
+ 1024              	.L63:
+ 180:BSP/u8g2/u8x8_byte.c **** 	{
+ 1025              		.loc 1 180 31 is_stmt 1 discriminator 1 view .LVU204
+ 1026 0034 472C     		cmp	r4, #71
+ 1027 0036 F4D9     		bls	.L64
+ 186:BSP/u8g2/u8x8_byte.c **** 	u8x8_gpio_call(u8x8, U8X8_MSG_GPIO_E, 1);
+ 1028              		.loc 1 186 2 view .LVU205
+ 1029 0038 3368     		ldr	r3, [r6]
+ 1030 003a 9A7B     		ldrb	r2, [r3, #14]	@ zero_extendqisi2
+ 1031 003c 2C21     		movs	r1, #44
+ 1032 003e 3046     		mov	r0, r6
+ 1033 0040 FFF7FEFF 		bl	u8x8_gpio_call
+ 1034              	.LVL113:
+ 187:BSP/u8g2/u8x8_byte.c **** 	u8x8_gpio_Delay(u8x8, U8X8_MSG_DELAY_NANO, u8x8->display_info->write_pulse_width_ns);
+ARM GAS  /tmp/cc6PBIIV.s 			page 31
+
+
+ 1035              		.loc 1 187 2 view .LVU206
+ 1036 0044 0122     		movs	r2, #1
+ 1037 0046 4821     		movs	r1, #72
+ 1038 0048 3046     		mov	r0, r6
+ 1039 004a FFF7FEFF 		bl	u8x8_gpio_call
+ 1040              	.LVL114:
+ 188:BSP/u8g2/u8x8_byte.c **** 	u8x8_gpio_call(u8x8, U8X8_MSG_GPIO_E, 0);
+ 1041              		.loc 1 188 2 view .LVU207
+ 1042 004e 3368     		ldr	r3, [r6]
+ 1043 0050 DA7B     		ldrb	r2, [r3, #15]	@ zero_extendqisi2
+ 1044 0052 2C21     		movs	r1, #44
+ 1045 0054 3046     		mov	r0, r6
+ 1046 0056 FFF7FEFF 		bl	u8x8_gpio_call
+ 1047              	.LVL115:
+ 189:BSP/u8g2/u8x8_byte.c ****       }
+ 1048              		.loc 1 189 2 view .LVU208
+ 1049 005a 0022     		movs	r2, #0
+ 1050 005c 4821     		movs	r1, #72
+ 1051 005e 3046     		mov	r0, r6
+ 1052 0060 FFF7FEFF 		bl	u8x8_gpio_call
+ 1053              	.LVL116:
+ 1054              	.L61:
+ 175:BSP/u8g2/u8x8_byte.c ****       {
+ 1055              		.loc 1 175 22 view .LVU209
+ 1056 0064 2FB1     		cbz	r7, .L69
+ 177:BSP/u8g2/u8x8_byte.c **** 	data++;
+ 1057              		.loc 1 177 2 view .LVU210
+ 177:BSP/u8g2/u8x8_byte.c **** 	data++;
+ 1058              		.loc 1 177 4 is_stmt 0 view .LVU211
+ 1059 0066 18F8015B 		ldrb	r5, [r8], #1	@ zero_extendqisi2
+ 1060              	.LVL117:
+ 178:BSP/u8g2/u8x8_byte.c **** 	arg_int--;
+ 1061              		.loc 1 178 2 is_stmt 1 view .LVU212
+ 179:BSP/u8g2/u8x8_byte.c **** 	for( i = U8X8_MSG_GPIO_D0; i <= U8X8_MSG_GPIO_D7; i++ )
+ 1062              		.loc 1 179 2 view .LVU213
+ 179:BSP/u8g2/u8x8_byte.c **** 	for( i = U8X8_MSG_GPIO_D0; i <= U8X8_MSG_GPIO_D7; i++ )
+ 1063              		.loc 1 179 9 is_stmt 0 view .LVU214
+ 1064 006a 013F     		subs	r7, r7, #1
+ 1065              	.LVL118:
+ 179:BSP/u8g2/u8x8_byte.c **** 	for( i = U8X8_MSG_GPIO_D0; i <= U8X8_MSG_GPIO_D7; i++ )
+ 1066              		.loc 1 179 9 view .LVU215
+ 1067 006c FFB2     		uxtb	r7, r7
+ 1068              	.LVL119:
+ 180:BSP/u8g2/u8x8_byte.c **** 	{
+ 1069              		.loc 1 180 2 is_stmt 1 view .LVU216
+ 180:BSP/u8g2/u8x8_byte.c **** 	{
+ 1070              		.loc 1 180 9 is_stmt 0 view .LVU217
+ 1071 006e 4024     		movs	r4, #64
+ 180:BSP/u8g2/u8x8_byte.c **** 	{
+ 1072              		.loc 1 180 2 view .LVU218
+ 1073 0070 E0E7     		b	.L63
+ 1074              	.LVL120:
+ 1075              	.L69:
+ 213:BSP/u8g2/u8x8_byte.c **** }
+ 1076              		.loc 1 213 10 view .LVU219
+ 1077 0072 0120     		movs	r0, #1
+ 1078 0074 2DE0     		b	.L56
+ARM GAS  /tmp/cc6PBIIV.s 			page 32
+
+
+ 1079              	.LVL121:
+ 1080              	.L62:
+ 195:BSP/u8g2/u8x8_byte.c ****       /* ensure that the enable signal is high */
+ 1081              		.loc 1 195 7 is_stmt 1 view .LVU220
+ 1082 0076 0368     		ldr	r3, [r0]
+ 1083 0078 5A78     		ldrb	r2, [r3, #1]	@ zero_extendqisi2
+ 1084              	.LVL122:
+ 195:BSP/u8g2/u8x8_byte.c ****       /* ensure that the enable signal is high */
+ 1085              		.loc 1 195 7 is_stmt 0 view .LVU221
+ 1086 007a 4921     		movs	r1, #73
+ 1087 007c FFF7FEFF 		bl	u8x8_gpio_call
+ 1088              	.LVL123:
+ 197:BSP/u8g2/u8x8_byte.c ****       break;
+ 1089              		.loc 1 197 7 is_stmt 1 view .LVU222
+ 1090 0080 0022     		movs	r2, #0
+ 1091 0082 4821     		movs	r1, #72
+ 1092 0084 3046     		mov	r0, r6
+ 1093 0086 FFF7FEFF 		bl	u8x8_gpio_call
+ 1094              	.LVL124:
+ 198:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_SET_DC:
+ 1095              		.loc 1 198 7 view .LVU223
+ 213:BSP/u8g2/u8x8_byte.c **** }
+ 1096              		.loc 1 213 10 is_stmt 0 view .LVU224
+ 1097 008a 0120     		movs	r0, #1
+ 198:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_SET_DC:
+ 1098              		.loc 1 198 7 view .LVU225
+ 1099 008c 21E0     		b	.L56
+ 1100              	.LVL125:
+ 1101              	.L57:
+ 200:BSP/u8g2/u8x8_byte.c ****       break;
+ 1102              		.loc 1 200 7 is_stmt 1 view .LVU226
+ 1103 008e 4A21     		movs	r1, #74
+ 1104 0090 FFF7FEFF 		bl	u8x8_gpio_call
+ 1105              	.LVL126:
+ 201:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_START_TRANSFER:
+ 1106              		.loc 1 201 7 view .LVU227
+ 213:BSP/u8g2/u8x8_byte.c **** }
+ 1107              		.loc 1 213 10 is_stmt 0 view .LVU228
+ 1108 0094 0120     		movs	r0, #1
+ 201:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_START_TRANSFER:
+ 1109              		.loc 1 201 7 view .LVU229
+ 1110 0096 1CE0     		b	.L56
+ 1111              	.LVL127:
+ 1112              	.L60:
+ 203:BSP/u8g2/u8x8_byte.c ****       u8x8->gpio_and_delay_cb(u8x8, U8X8_MSG_DELAY_NANO, u8x8->display_info->post_chip_enable_wait_
+ 1113              		.loc 1 203 7 is_stmt 1 view .LVU230
+ 1114 0098 0368     		ldr	r3, [r0]
+ 1115 009a 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+ 1116              	.LVL128:
+ 203:BSP/u8g2/u8x8_byte.c ****       u8x8->gpio_and_delay_cb(u8x8, U8X8_MSG_DELAY_NANO, u8x8->display_info->post_chip_enable_wait_
+ 1117              		.loc 1 203 7 is_stmt 0 view .LVU231
+ 1118 009c 4921     		movs	r1, #73
+ 1119 009e FFF7FEFF 		bl	u8x8_gpio_call
+ 1120              	.LVL129:
+ 204:BSP/u8g2/u8x8_byte.c ****       break;
+ 1121              		.loc 1 204 7 is_stmt 1 view .LVU232
+ 204:BSP/u8g2/u8x8_byte.c ****       break;
+ARM GAS  /tmp/cc6PBIIV.s 			page 33
+
+
+ 1122              		.loc 1 204 11 is_stmt 0 view .LVU233
+ 1123 00a2 7469     		ldr	r4, [r6, #20]
+ 204:BSP/u8g2/u8x8_byte.c ****       break;
+ 1124              		.loc 1 204 62 view .LVU234
+ 1125 00a4 3268     		ldr	r2, [r6]
+ 204:BSP/u8g2/u8x8_byte.c ****       break;
+ 1126              		.loc 1 204 7 view .LVU235
+ 1127 00a6 0023     		movs	r3, #0
+ 1128 00a8 9278     		ldrb	r2, [r2, #2]	@ zero_extendqisi2
+ 1129 00aa 2C21     		movs	r1, #44
+ 1130 00ac 3046     		mov	r0, r6
+ 1131 00ae A047     		blx	r4
+ 1132              	.LVL130:
+ 205:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_END_TRANSFER:
+ 1133              		.loc 1 205 7 is_stmt 1 view .LVU236
+ 213:BSP/u8g2/u8x8_byte.c **** }
+ 1134              		.loc 1 213 10 is_stmt 0 view .LVU237
+ 1135 00b0 0120     		movs	r0, #1
+ 205:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_END_TRANSFER:
+ 1136              		.loc 1 205 7 view .LVU238
+ 1137 00b2 0EE0     		b	.L56
+ 1138              	.LVL131:
+ 1139              	.L59:
+ 207:BSP/u8g2/u8x8_byte.c ****       u8x8_gpio_SetCS(u8x8, u8x8->display_info->chip_disable_level);
+ 1140              		.loc 1 207 7 is_stmt 1 view .LVU239
+ 207:BSP/u8g2/u8x8_byte.c ****       u8x8_gpio_SetCS(u8x8, u8x8->display_info->chip_disable_level);
+ 1141              		.loc 1 207 11 is_stmt 0 view .LVU240
+ 1142 00b4 4469     		ldr	r4, [r0, #20]
+ 207:BSP/u8g2/u8x8_byte.c ****       u8x8_gpio_SetCS(u8x8, u8x8->display_info->chip_disable_level);
+ 1143              		.loc 1 207 62 view .LVU241
+ 1144 00b6 0268     		ldr	r2, [r0]
+ 1145              	.LVL132:
+ 207:BSP/u8g2/u8x8_byte.c ****       u8x8_gpio_SetCS(u8x8, u8x8->display_info->chip_disable_level);
+ 1146              		.loc 1 207 7 view .LVU242
+ 1147 00b8 0023     		movs	r3, #0
+ 1148 00ba D278     		ldrb	r2, [r2, #3]	@ zero_extendqisi2
+ 1149 00bc 2C21     		movs	r1, #44
+ 1150 00be A047     		blx	r4
+ 1151              	.LVL133:
+ 208:BSP/u8g2/u8x8_byte.c ****       break;
+ 1152              		.loc 1 208 7 is_stmt 1 view .LVU243
+ 1153 00c0 3368     		ldr	r3, [r6]
+ 1154 00c2 5A78     		ldrb	r2, [r3, #1]	@ zero_extendqisi2
+ 1155 00c4 4921     		movs	r1, #73
+ 1156 00c6 3046     		mov	r0, r6
+ 1157 00c8 FFF7FEFF 		bl	u8x8_gpio_call
+ 1158              	.LVL134:
+ 209:BSP/u8g2/u8x8_byte.c ****     default:
+ 1159              		.loc 1 209 7 view .LVU244
+ 213:BSP/u8g2/u8x8_byte.c **** }
+ 1160              		.loc 1 213 10 is_stmt 0 view .LVU245
+ 1161 00cc 0120     		movs	r0, #1
+ 209:BSP/u8g2/u8x8_byte.c ****     default:
+ 1162              		.loc 1 209 7 view .LVU246
+ 1163 00ce 00E0     		b	.L56
+ 1164              	.LVL135:
+ 1165              	.L66:
+ARM GAS  /tmp/cc6PBIIV.s 			page 34
+
+
+ 171:BSP/u8g2/u8x8_byte.c ****   {
+ 1166              		.loc 1 171 3 view .LVU247
+ 1167 00d0 0020     		movs	r0, #0
+ 1168              	.LVL136:
+ 1169              	.L56:
+ 214:BSP/u8g2/u8x8_byte.c **** 
+ 1170              		.loc 1 214 1 view .LVU248
+ 1171 00d2 BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
+ 214:BSP/u8g2/u8x8_byte.c **** 
+ 1172              		.loc 1 214 1 view .LVU249
+ 1173              		.cfi_endproc
+ 1174              	.LFE7:
+ 1176              		.section	.text.u8x8_byte_8bit_8080mode,"ax",%progbits
+ 1177              		.align	1
+ 1178              		.global	u8x8_byte_8bit_8080mode
+ 1179              		.syntax unified
+ 1180              		.thumb
+ 1181              		.thumb_func
+ 1183              	u8x8_byte_8bit_8080mode:
+ 1184              	.LVL137:
+ 1185              	.LFB8:
+ 217:BSP/u8g2/u8x8_byte.c ****   uint8_t i, b;
+ 1186              		.loc 1 217 1 is_stmt 1 view -0
+ 1187              		.cfi_startproc
+ 1188              		@ args = 0, pretend = 0, frame = 0
+ 1189              		@ frame_needed = 0, uses_anonymous_args = 0
+ 217:BSP/u8g2/u8x8_byte.c ****   uint8_t i, b;
+ 1190              		.loc 1 217 1 is_stmt 0 view .LVU251
+ 1191 0000 2DE9F041 		push	{r4, r5, r6, r7, r8, lr}
+ 1192              	.LCFI20:
+ 1193              		.cfi_def_cfa_offset 24
+ 1194              		.cfi_offset 4, -24
+ 1195              		.cfi_offset 5, -20
+ 1196              		.cfi_offset 6, -16
+ 1197              		.cfi_offset 7, -12
+ 1198              		.cfi_offset 8, -8
+ 1199              		.cfi_offset 14, -4
+ 1200 0004 0646     		mov	r6, r0
+ 1201 0006 1746     		mov	r7, r2
+ 1202 0008 9846     		mov	r8, r3
+ 218:BSP/u8g2/u8x8_byte.c ****   uint8_t *data;
+ 1203              		.loc 1 218 3 is_stmt 1 view .LVU252
+ 219:BSP/u8g2/u8x8_byte.c ****  
+ 1204              		.loc 1 219 3 view .LVU253
+ 221:BSP/u8g2/u8x8_byte.c ****   {
+ 1205              		.loc 1 221 3 view .LVU254
+ 1206 000a 1439     		subs	r1, r1, #20
+ 1207              	.LVL138:
+ 221:BSP/u8g2/u8x8_byte.c ****   {
+ 1208              		.loc 1 221 3 is_stmt 0 view .LVU255
+ 1209 000c 0C29     		cmp	r1, #12
+ 1210 000e 5FD8     		bhi	.L81
+ 1211 0010 DFE801F0 		tbb	[pc, r1]
+ 1212              	.LVL139:
+ 1213              	.L73:
+ 1214 0014 31       		.byte	(.L77-.L73)/2
+ 1215 0015 5E       		.byte	(.L81-.L73)/2
+ARM GAS  /tmp/cc6PBIIV.s 			page 35
+
+
+ 1216 0016 5E       		.byte	(.L81-.L73)/2
+ 1217 0017 28       		.byte	(.L76-.L73)/2
+ 1218 0018 42       		.byte	(.L75-.L73)/2
+ 1219 0019 50       		.byte	(.L74-.L73)/2
+ 1220 001a 5E       		.byte	(.L81-.L73)/2
+ 1221 001b 5E       		.byte	(.L81-.L73)/2
+ 1222 001c 5E       		.byte	(.L81-.L73)/2
+ 1223 001d 5E       		.byte	(.L81-.L73)/2
+ 1224 001e 5E       		.byte	(.L81-.L73)/2
+ 1225 001f 5E       		.byte	(.L81-.L73)/2
+ 1226 0020 3D       		.byte	(.L72-.L73)/2
+ 1227 0021 00       		.p2align 1
+ 1228              	.L79:
+ 232:BSP/u8g2/u8x8_byte.c **** 	  b >>= 1;
+ 1229              		.loc 1 232 4 is_stmt 1 view .LVU256
+ 1230 0022 05F00102 		and	r2, r5, #1
+ 1231 0026 2146     		mov	r1, r4
+ 1232 0028 3046     		mov	r0, r6
+ 1233 002a FFF7FEFF 		bl	u8x8_gpio_call
+ 1234              	.LVL140:
+ 233:BSP/u8g2/u8x8_byte.c **** 	}    
+ 1235              		.loc 1 233 4 view .LVU257
+ 233:BSP/u8g2/u8x8_byte.c **** 	}    
+ 1236              		.loc 1 233 6 is_stmt 0 view .LVU258
+ 1237 002e 6D08     		lsrs	r5, r5, #1
+ 1238              	.LVL141:
+ 230:BSP/u8g2/u8x8_byte.c **** 	{
+ 1239              		.loc 1 230 53 is_stmt 1 discriminator 3 view .LVU259
+ 1240 0030 0134     		adds	r4, r4, #1
+ 1241              	.LVL142:
+ 230:BSP/u8g2/u8x8_byte.c **** 	{
+ 1242              		.loc 1 230 53 is_stmt 0 discriminator 3 view .LVU260
+ 1243 0032 E4B2     		uxtb	r4, r4
+ 1244              	.LVL143:
+ 1245              	.L78:
+ 230:BSP/u8g2/u8x8_byte.c **** 	{
+ 1246              		.loc 1 230 31 is_stmt 1 discriminator 1 view .LVU261
+ 1247 0034 472C     		cmp	r4, #71
+ 1248 0036 F4D9     		bls	.L79
+ 236:BSP/u8g2/u8x8_byte.c **** 	u8x8_gpio_call(u8x8, U8X8_MSG_GPIO_E, 0);
+ 1249              		.loc 1 236 2 view .LVU262
+ 1250 0038 3368     		ldr	r3, [r6]
+ 1251 003a 9A7B     		ldrb	r2, [r3, #14]	@ zero_extendqisi2
+ 1252 003c 2C21     		movs	r1, #44
+ 1253 003e 3046     		mov	r0, r6
+ 1254 0040 FFF7FEFF 		bl	u8x8_gpio_call
+ 1255              	.LVL144:
+ 237:BSP/u8g2/u8x8_byte.c **** 	u8x8_gpio_Delay(u8x8, U8X8_MSG_DELAY_NANO, u8x8->display_info->write_pulse_width_ns);
+ 1256              		.loc 1 237 2 view .LVU263
+ 1257 0044 0022     		movs	r2, #0
+ 1258 0046 4821     		movs	r1, #72
+ 1259 0048 3046     		mov	r0, r6
+ 1260 004a FFF7FEFF 		bl	u8x8_gpio_call
+ 1261              	.LVL145:
+ 238:BSP/u8g2/u8x8_byte.c **** 	u8x8_gpio_call(u8x8, U8X8_MSG_GPIO_E, 1);
+ 1262              		.loc 1 238 2 view .LVU264
+ 1263 004e 3368     		ldr	r3, [r6]
+ARM GAS  /tmp/cc6PBIIV.s 			page 36
+
+
+ 1264 0050 DA7B     		ldrb	r2, [r3, #15]	@ zero_extendqisi2
+ 1265 0052 2C21     		movs	r1, #44
+ 1266 0054 3046     		mov	r0, r6
+ 1267 0056 FFF7FEFF 		bl	u8x8_gpio_call
+ 1268              	.LVL146:
+ 239:BSP/u8g2/u8x8_byte.c ****       }
+ 1269              		.loc 1 239 2 view .LVU265
+ 1270 005a 0122     		movs	r2, #1
+ 1271 005c 4821     		movs	r1, #72
+ 1272 005e 3046     		mov	r0, r6
+ 1273 0060 FFF7FEFF 		bl	u8x8_gpio_call
+ 1274              	.LVL147:
+ 1275              	.L76:
+ 225:BSP/u8g2/u8x8_byte.c ****       {
+ 1276              		.loc 1 225 22 view .LVU266
+ 1277 0064 2FB1     		cbz	r7, .L84
+ 227:BSP/u8g2/u8x8_byte.c **** 	data++;
+ 1278              		.loc 1 227 2 view .LVU267
+ 227:BSP/u8g2/u8x8_byte.c **** 	data++;
+ 1279              		.loc 1 227 4 is_stmt 0 view .LVU268
+ 1280 0066 18F8015B 		ldrb	r5, [r8], #1	@ zero_extendqisi2
+ 1281              	.LVL148:
+ 228:BSP/u8g2/u8x8_byte.c **** 	arg_int--;
+ 1282              		.loc 1 228 2 is_stmt 1 view .LVU269
+ 229:BSP/u8g2/u8x8_byte.c **** 	for( i = U8X8_MSG_GPIO_D0; i <= U8X8_MSG_GPIO_D7; i++ )
+ 1283              		.loc 1 229 2 view .LVU270
+ 229:BSP/u8g2/u8x8_byte.c **** 	for( i = U8X8_MSG_GPIO_D0; i <= U8X8_MSG_GPIO_D7; i++ )
+ 1284              		.loc 1 229 9 is_stmt 0 view .LVU271
+ 1285 006a 013F     		subs	r7, r7, #1
+ 1286              	.LVL149:
+ 229:BSP/u8g2/u8x8_byte.c **** 	for( i = U8X8_MSG_GPIO_D0; i <= U8X8_MSG_GPIO_D7; i++ )
+ 1287              		.loc 1 229 9 view .LVU272
+ 1288 006c FFB2     		uxtb	r7, r7
+ 1289              	.LVL150:
+ 230:BSP/u8g2/u8x8_byte.c **** 	{
+ 1290              		.loc 1 230 2 is_stmt 1 view .LVU273
+ 230:BSP/u8g2/u8x8_byte.c **** 	{
+ 1291              		.loc 1 230 9 is_stmt 0 view .LVU274
+ 1292 006e 4024     		movs	r4, #64
+ 230:BSP/u8g2/u8x8_byte.c **** 	{
+ 1293              		.loc 1 230 2 view .LVU275
+ 1294 0070 E0E7     		b	.L78
+ 1295              	.LVL151:
+ 1296              	.L84:
+ 263:BSP/u8g2/u8x8_byte.c **** }
+ 1297              		.loc 1 263 10 view .LVU276
+ 1298 0072 0120     		movs	r0, #1
+ 1299 0074 2DE0     		b	.L71
+ 1300              	.LVL152:
+ 1301              	.L77:
+ 245:BSP/u8g2/u8x8_byte.c ****       /* ensure that the enable signal is high */
+ 1302              		.loc 1 245 7 is_stmt 1 view .LVU277
+ 1303 0076 0368     		ldr	r3, [r0]
+ 1304 0078 5A78     		ldrb	r2, [r3, #1]	@ zero_extendqisi2
+ 1305              	.LVL153:
+ 245:BSP/u8g2/u8x8_byte.c ****       /* ensure that the enable signal is high */
+ 1306              		.loc 1 245 7 is_stmt 0 view .LVU278
+ARM GAS  /tmp/cc6PBIIV.s 			page 37
+
+
+ 1307 007a 4921     		movs	r1, #73
+ 1308 007c FFF7FEFF 		bl	u8x8_gpio_call
+ 1309              	.LVL154:
+ 247:BSP/u8g2/u8x8_byte.c ****       break;
+ 1310              		.loc 1 247 7 is_stmt 1 view .LVU279
+ 1311 0080 0122     		movs	r2, #1
+ 1312 0082 4821     		movs	r1, #72
+ 1313 0084 3046     		mov	r0, r6
+ 1314 0086 FFF7FEFF 		bl	u8x8_gpio_call
+ 1315              	.LVL155:
+ 248:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_SET_DC:
+ 1316              		.loc 1 248 7 view .LVU280
+ 263:BSP/u8g2/u8x8_byte.c **** }
+ 1317              		.loc 1 263 10 is_stmt 0 view .LVU281
+ 1318 008a 0120     		movs	r0, #1
+ 248:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_SET_DC:
+ 1319              		.loc 1 248 7 view .LVU282
+ 1320 008c 21E0     		b	.L71
+ 1321              	.LVL156:
+ 1322              	.L72:
+ 250:BSP/u8g2/u8x8_byte.c ****       break;
+ 1323              		.loc 1 250 7 is_stmt 1 view .LVU283
+ 1324 008e 4A21     		movs	r1, #74
+ 1325 0090 FFF7FEFF 		bl	u8x8_gpio_call
+ 1326              	.LVL157:
+ 251:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_START_TRANSFER:
+ 1327              		.loc 1 251 7 view .LVU284
+ 263:BSP/u8g2/u8x8_byte.c **** }
+ 1328              		.loc 1 263 10 is_stmt 0 view .LVU285
+ 1329 0094 0120     		movs	r0, #1
+ 251:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_START_TRANSFER:
+ 1330              		.loc 1 251 7 view .LVU286
+ 1331 0096 1CE0     		b	.L71
+ 1332              	.LVL158:
+ 1333              	.L75:
+ 253:BSP/u8g2/u8x8_byte.c ****       u8x8->gpio_and_delay_cb(u8x8, U8X8_MSG_DELAY_NANO, u8x8->display_info->post_chip_enable_wait_
+ 1334              		.loc 1 253 7 is_stmt 1 view .LVU287
+ 1335 0098 0368     		ldr	r3, [r0]
+ 1336 009a 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+ 1337              	.LVL159:
+ 253:BSP/u8g2/u8x8_byte.c ****       u8x8->gpio_and_delay_cb(u8x8, U8X8_MSG_DELAY_NANO, u8x8->display_info->post_chip_enable_wait_
+ 1338              		.loc 1 253 7 is_stmt 0 view .LVU288
+ 1339 009c 4921     		movs	r1, #73
+ 1340 009e FFF7FEFF 		bl	u8x8_gpio_call
+ 1341              	.LVL160:
+ 254:BSP/u8g2/u8x8_byte.c ****       break;
+ 1342              		.loc 1 254 7 is_stmt 1 view .LVU289
+ 254:BSP/u8g2/u8x8_byte.c ****       break;
+ 1343              		.loc 1 254 11 is_stmt 0 view .LVU290
+ 1344 00a2 7469     		ldr	r4, [r6, #20]
+ 254:BSP/u8g2/u8x8_byte.c ****       break;
+ 1345              		.loc 1 254 62 view .LVU291
+ 1346 00a4 3268     		ldr	r2, [r6]
+ 254:BSP/u8g2/u8x8_byte.c ****       break;
+ 1347              		.loc 1 254 7 view .LVU292
+ 1348 00a6 0023     		movs	r3, #0
+ 1349 00a8 9278     		ldrb	r2, [r2, #2]	@ zero_extendqisi2
+ARM GAS  /tmp/cc6PBIIV.s 			page 38
+
+
+ 1350 00aa 2C21     		movs	r1, #44
+ 1351 00ac 3046     		mov	r0, r6
+ 1352 00ae A047     		blx	r4
+ 1353              	.LVL161:
+ 255:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_END_TRANSFER:
+ 1354              		.loc 1 255 7 is_stmt 1 view .LVU293
+ 263:BSP/u8g2/u8x8_byte.c **** }
+ 1355              		.loc 1 263 10 is_stmt 0 view .LVU294
+ 1356 00b0 0120     		movs	r0, #1
+ 255:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_END_TRANSFER:
+ 1357              		.loc 1 255 7 view .LVU295
+ 1358 00b2 0EE0     		b	.L71
+ 1359              	.LVL162:
+ 1360              	.L74:
+ 257:BSP/u8g2/u8x8_byte.c ****       u8x8_gpio_SetCS(u8x8, u8x8->display_info->chip_disable_level);
+ 1361              		.loc 1 257 7 is_stmt 1 view .LVU296
+ 257:BSP/u8g2/u8x8_byte.c ****       u8x8_gpio_SetCS(u8x8, u8x8->display_info->chip_disable_level);
+ 1362              		.loc 1 257 11 is_stmt 0 view .LVU297
+ 1363 00b4 4469     		ldr	r4, [r0, #20]
+ 257:BSP/u8g2/u8x8_byte.c ****       u8x8_gpio_SetCS(u8x8, u8x8->display_info->chip_disable_level);
+ 1364              		.loc 1 257 62 view .LVU298
+ 1365 00b6 0268     		ldr	r2, [r0]
+ 1366              	.LVL163:
+ 257:BSP/u8g2/u8x8_byte.c ****       u8x8_gpio_SetCS(u8x8, u8x8->display_info->chip_disable_level);
+ 1367              		.loc 1 257 7 view .LVU299
+ 1368 00b8 0023     		movs	r3, #0
+ 1369 00ba D278     		ldrb	r2, [r2, #3]	@ zero_extendqisi2
+ 1370 00bc 2C21     		movs	r1, #44
+ 1371 00be A047     		blx	r4
+ 1372              	.LVL164:
+ 258:BSP/u8g2/u8x8_byte.c ****       break;
+ 1373              		.loc 1 258 7 is_stmt 1 view .LVU300
+ 1374 00c0 3368     		ldr	r3, [r6]
+ 1375 00c2 5A78     		ldrb	r2, [r3, #1]	@ zero_extendqisi2
+ 1376 00c4 4921     		movs	r1, #73
+ 1377 00c6 3046     		mov	r0, r6
+ 1378 00c8 FFF7FEFF 		bl	u8x8_gpio_call
+ 1379              	.LVL165:
+ 259:BSP/u8g2/u8x8_byte.c ****     default:
+ 1380              		.loc 1 259 7 view .LVU301
+ 263:BSP/u8g2/u8x8_byte.c **** }
+ 1381              		.loc 1 263 10 is_stmt 0 view .LVU302
+ 1382 00cc 0120     		movs	r0, #1
+ 259:BSP/u8g2/u8x8_byte.c ****     default:
+ 1383              		.loc 1 259 7 view .LVU303
+ 1384 00ce 00E0     		b	.L71
+ 1385              	.LVL166:
+ 1386              	.L81:
+ 221:BSP/u8g2/u8x8_byte.c ****   {
+ 1387              		.loc 1 221 3 view .LVU304
+ 1388 00d0 0020     		movs	r0, #0
+ 1389              	.LVL167:
+ 1390              	.L71:
+ 264:BSP/u8g2/u8x8_byte.c **** 
+ 1391              		.loc 1 264 1 view .LVU305
+ 1392 00d2 BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
+ 264:BSP/u8g2/u8x8_byte.c **** 
+ARM GAS  /tmp/cc6PBIIV.s 			page 39
+
+
+ 1393              		.loc 1 264 1 view .LVU306
+ 1394              		.cfi_endproc
+ 1395              	.LFE8:
+ 1397              		.section	.text.u8x8_byte_3wire_sw_spi,"ax",%progbits
+ 1398              		.align	1
+ 1399              		.global	u8x8_byte_3wire_sw_spi
+ 1400              		.syntax unified
+ 1401              		.thumb
+ 1402              		.thumb_func
+ 1404              	u8x8_byte_3wire_sw_spi:
+ 1405              	.LVL168:
+ 1406              	.LFB9:
+ 269:BSP/u8g2/u8x8_byte.c ****   uint8_t i;
+ 1407              		.loc 1 269 1 is_stmt 1 view -0
+ 1408              		.cfi_startproc
+ 1409              		@ args = 0, pretend = 0, frame = 0
+ 1410              		@ frame_needed = 0, uses_anonymous_args = 0
+ 269:BSP/u8g2/u8x8_byte.c ****   uint8_t i;
+ 1411              		.loc 1 269 1 is_stmt 0 view .LVU308
+ 1412 0000 2DE9F047 		push	{r4, r5, r6, r7, r8, r9, r10, lr}
+ 1413              	.LCFI21:
+ 1414              		.cfi_def_cfa_offset 32
+ 1415              		.cfi_offset 4, -32
+ 1416              		.cfi_offset 5, -28
+ 1417              		.cfi_offset 6, -24
+ 1418              		.cfi_offset 7, -20
+ 1419              		.cfi_offset 8, -16
+ 1420              		.cfi_offset 9, -12
+ 1421              		.cfi_offset 10, -8
+ 1422              		.cfi_offset 14, -4
+ 1423 0004 0446     		mov	r4, r0
+ 1424 0006 9146     		mov	r9, r2
+ 1425 0008 9A46     		mov	r10, r3
+ 270:BSP/u8g2/u8x8_byte.c ****   uint8_t *data;
+ 1426              		.loc 1 270 3 is_stmt 1 view .LVU309
+ 271:BSP/u8g2/u8x8_byte.c ****   uint8_t takeover_edge = u8x8_GetSPIClockPhase(u8x8);
+ 1427              		.loc 1 271 3 view .LVU310
+ 272:BSP/u8g2/u8x8_byte.c ****   uint8_t not_takeover_edge = 1 - takeover_edge;
+ 1428              		.loc 1 272 3 view .LVU311
+ 272:BSP/u8g2/u8x8_byte.c ****   uint8_t not_takeover_edge = 1 - takeover_edge;
+ 1429              		.loc 1 272 27 is_stmt 0 view .LVU312
+ 1430 000a 0268     		ldr	r2, [r0]
+ 1431              	.LVL169:
+ 272:BSP/u8g2/u8x8_byte.c ****   uint8_t not_takeover_edge = 1 - takeover_edge;
+ 1432              		.loc 1 272 27 view .LVU313
+ 1433 000c 177B     		ldrb	r7, [r2, #12]	@ zero_extendqisi2
+ 272:BSP/u8g2/u8x8_byte.c ****   uint8_t not_takeover_edge = 1 - takeover_edge;
+ 1434              		.loc 1 272 11 view .LVU314
+ 1435 000e 07F00107 		and	r7, r7, #1
+ 1436              	.LVL170:
+ 273:BSP/u8g2/u8x8_byte.c ****   uint16_t b;
+ 1437              		.loc 1 273 3 is_stmt 1 view .LVU315
+ 273:BSP/u8g2/u8x8_byte.c ****   uint16_t b;
+ 1438              		.loc 1 273 11 is_stmt 0 view .LVU316
+ 1439 0012 87F00108 		eor	r8, r7, #1
+ 1440              	.LVL171:
+ 274:BSP/u8g2/u8x8_byte.c ****   static uint8_t last_dc;
+ARM GAS  /tmp/cc6PBIIV.s 			page 40
+
+
+ 1441              		.loc 1 274 3 is_stmt 1 view .LVU317
+ 275:BSP/u8g2/u8x8_byte.c ****  
+ 1442              		.loc 1 275 3 view .LVU318
+ 277:BSP/u8g2/u8x8_byte.c ****   {
+ 1443              		.loc 1 277 3 view .LVU319
+ 1444 0016 1439     		subs	r1, r1, #20
+ 1445              	.LVL172:
+ 277:BSP/u8g2/u8x8_byte.c ****   {
+ 1446              		.loc 1 277 3 is_stmt 0 view .LVU320
+ 1447 0018 0C29     		cmp	r1, #12
+ 1448 001a 73D8     		bhi	.L99
+ 1449 001c DFE801F0 		tbb	[pc, r1]
+ 1450              	.LVL173:
+ 1451              	.L88:
+ 1452 0020 45       		.byte	(.L92-.L88)/2
+ 1453 0021 72       		.byte	(.L99-.L88)/2
+ 1454 0022 72       		.byte	(.L99-.L88)/2
+ 1455 0023 31       		.byte	(.L91-.L88)/2
+ 1456 0024 58       		.byte	(.L90-.L88)/2
+ 1457 0025 65       		.byte	(.L89-.L88)/2
+ 1458 0026 72       		.byte	(.L99-.L88)/2
+ 1459 0027 72       		.byte	(.L99-.L88)/2
+ 1460 0028 72       		.byte	(.L99-.L88)/2
+ 1461 0029 72       		.byte	(.L99-.L88)/2
+ 1462 002a 72       		.byte	(.L99-.L88)/2
+ 1463 002b 72       		.byte	(.L99-.L88)/2
+ 1464 002c 53       		.byte	(.L87-.L88)/2
+ 1465 002d 00       		.p2align 1
+ 1466              	.L95:
+ 293:BSP/u8g2/u8x8_byte.c **** 	  b <<= 1;
+ 1467              		.loc 1 293 6 is_stmt 1 view .LVU321
+ 1468 002e 0022     		movs	r2, #0
+ 1469 0030 4121     		movs	r1, #65
+ 1470 0032 2046     		mov	r0, r4
+ 1471 0034 FFF7FEFF 		bl	u8x8_gpio_call
+ 1472              	.LVL174:
+ 1473              	.L96:
+ 294:BSP/u8g2/u8x8_byte.c **** 	  
+ 1474              		.loc 1 294 4 view .LVU322
+ 294:BSP/u8g2/u8x8_byte.c **** 	  
+ 1475              		.loc 1 294 6 is_stmt 0 view .LVU323
+ 1476 0038 7600     		lsls	r6, r6, #1
+ 1477              	.LVL175:
+ 294:BSP/u8g2/u8x8_byte.c **** 	  
+ 1478              		.loc 1 294 6 view .LVU324
+ 1479 003a B6B2     		uxth	r6, r6
+ 1480              	.LVL176:
+ 296:BSP/u8g2/u8x8_byte.c **** 	  u8x8_gpio_Delay(u8x8, U8X8_MSG_DELAY_NANO, u8x8->display_info->sda_setup_time_ns);
+ 1481              		.loc 1 296 4 is_stmt 1 view .LVU325
+ 1482 003c 4246     		mov	r2, r8
+ 1483 003e 4021     		movs	r1, #64
+ 1484 0040 2046     		mov	r0, r4
+ 1485 0042 FFF7FEFF 		bl	u8x8_gpio_call
+ 1486              	.LVL177:
+ 297:BSP/u8g2/u8x8_byte.c **** 	  u8x8_gpio_SetSPIClock(u8x8, takeover_edge);
+ 1487              		.loc 1 297 4 view .LVU326
+ 1488 0046 2368     		ldr	r3, [r4]
+ARM GAS  /tmp/cc6PBIIV.s 			page 41
+
+
+ 1489 0048 9A79     		ldrb	r2, [r3, #6]	@ zero_extendqisi2
+ 1490 004a 2C21     		movs	r1, #44
+ 1491 004c 2046     		mov	r0, r4
+ 1492 004e FFF7FEFF 		bl	u8x8_gpio_call
+ 1493              	.LVL178:
+ 298:BSP/u8g2/u8x8_byte.c **** 	  u8x8_gpio_Delay(u8x8, U8X8_MSG_DELAY_NANO, u8x8->display_info->sck_pulse_width_ns);
+ 1494              		.loc 1 298 4 view .LVU327
+ 1495 0052 3A46     		mov	r2, r7
+ 1496 0054 4021     		movs	r1, #64
+ 1497 0056 2046     		mov	r0, r4
+ 1498 0058 FFF7FEFF 		bl	u8x8_gpio_call
+ 1499              	.LVL179:
+ 299:BSP/u8g2/u8x8_byte.c **** 	}    
+ 1500              		.loc 1 299 4 view .LVU328
+ 1501 005c 2368     		ldr	r3, [r4]
+ 1502 005e DA79     		ldrb	r2, [r3, #7]	@ zero_extendqisi2
+ 1503 0060 2C21     		movs	r1, #44
+ 1504 0062 2046     		mov	r0, r4
+ 1505 0064 FFF7FEFF 		bl	u8x8_gpio_call
+ 1506              	.LVL180:
+ 288:BSP/u8g2/u8x8_byte.c **** 	{
+ 1507              		.loc 1 288 22 discriminator 2 view .LVU329
+ 1508 0068 0135     		adds	r5, r5, #1
+ 1509              	.LVL181:
+ 288:BSP/u8g2/u8x8_byte.c **** 	{
+ 1510              		.loc 1 288 22 is_stmt 0 discriminator 2 view .LVU330
+ 1511 006a EDB2     		uxtb	r5, r5
+ 1512              	.LVL182:
+ 1513              	.L94:
+ 288:BSP/u8g2/u8x8_byte.c **** 	{
+ 1514              		.loc 1 288 16 is_stmt 1 discriminator 1 view .LVU331
+ 1515 006c 082D     		cmp	r5, #8
+ 1516 006e 08D8     		bhi	.L91
+ 290:BSP/u8g2/u8x8_byte.c **** 	    u8x8_gpio_SetSPIData(u8x8, 1);
+ 1517              		.loc 1 290 4 view .LVU332
+ 290:BSP/u8g2/u8x8_byte.c **** 	    u8x8_gpio_SetSPIData(u8x8, 1);
+ 1518              		.loc 1 290 7 is_stmt 0 view .LVU333
+ 1519 0070 16F4807F 		tst	r6, #256
+ 1520 0074 DBD0     		beq	.L95
+ 291:BSP/u8g2/u8x8_byte.c **** 	  else
+ 1521              		.loc 1 291 6 is_stmt 1 view .LVU334
+ 1522 0076 0122     		movs	r2, #1
+ 1523 0078 4121     		movs	r1, #65
+ 1524 007a 2046     		mov	r0, r4
+ 1525 007c FFF7FEFF 		bl	u8x8_gpio_call
+ 1526              	.LVL183:
+ 1527 0080 DAE7     		b	.L96
+ 1528              	.LVL184:
+ 1529              	.L91:
+ 281:BSP/u8g2/u8x8_byte.c ****       {
+ 1530              		.loc 1 281 22 view .LVU335
+ 1531 0082 B9F1000F 		cmp	r9, #0
+ 1532 0086 0ED0     		beq	.L102
+ 283:BSP/u8g2/u8x8_byte.c **** 	if ( last_dc != 0 )
+ 1533              		.loc 1 283 2 view .LVU336
+ 283:BSP/u8g2/u8x8_byte.c **** 	if ( last_dc != 0 )
+ 1534              		.loc 1 283 6 is_stmt 0 view .LVU337
+ARM GAS  /tmp/cc6PBIIV.s 			page 42
+
+
+ 1535 0088 9AF80060 		ldrb	r6, [r10]	@ zero_extendqisi2
+ 1536              	.LVL185:
+ 284:BSP/u8g2/u8x8_byte.c **** 	  b |= 256;
+ 1537              		.loc 1 284 2 is_stmt 1 view .LVU338
+ 284:BSP/u8g2/u8x8_byte.c **** 	  b |= 256;
+ 1538              		.loc 1 284 15 is_stmt 0 view .LVU339
+ 1539 008c 1F4B     		ldr	r3, .L103
+ 1540 008e 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 284:BSP/u8g2/u8x8_byte.c **** 	  b |= 256;
+ 1541              		.loc 1 284 5 view .LVU340
+ 1542 0090 0BB1     		cbz	r3, .L93
+ 285:BSP/u8g2/u8x8_byte.c **** 	data++;
+ 1543              		.loc 1 285 4 is_stmt 1 view .LVU341
+ 285:BSP/u8g2/u8x8_byte.c **** 	data++;
+ 1544              		.loc 1 285 6 is_stmt 0 view .LVU342
+ 1545 0092 46F48076 		orr	r6, r6, #256
+ 1546              	.LVL186:
+ 1547              	.L93:
+ 286:BSP/u8g2/u8x8_byte.c **** 	arg_int--;
+ 1548              		.loc 1 286 2 is_stmt 1 view .LVU343
+ 286:BSP/u8g2/u8x8_byte.c **** 	arg_int--;
+ 1549              		.loc 1 286 6 is_stmt 0 view .LVU344
+ 1550 0096 0AF1010A 		add	r10, r10, #1
+ 1551              	.LVL187:
+ 287:BSP/u8g2/u8x8_byte.c **** 	for( i = 0; i < 9; i++ )
+ 1552              		.loc 1 287 2 is_stmt 1 view .LVU345
+ 287:BSP/u8g2/u8x8_byte.c **** 	for( i = 0; i < 9; i++ )
+ 1553              		.loc 1 287 9 is_stmt 0 view .LVU346
+ 1554 009a 09F1FF39 		add	r9, r9, #-1
+ 1555              	.LVL188:
+ 287:BSP/u8g2/u8x8_byte.c **** 	for( i = 0; i < 9; i++ )
+ 1556              		.loc 1 287 9 view .LVU347
+ 1557 009e 5FFA89F9 		uxtb	r9, r9
+ 1558              	.LVL189:
+ 288:BSP/u8g2/u8x8_byte.c **** 	{
+ 1559              		.loc 1 288 2 is_stmt 1 view .LVU348
+ 288:BSP/u8g2/u8x8_byte.c **** 	{
+ 1560              		.loc 1 288 9 is_stmt 0 view .LVU349
+ 1561 00a2 0025     		movs	r5, #0
+ 288:BSP/u8g2/u8x8_byte.c **** 	{
+ 1562              		.loc 1 288 2 view .LVU350
+ 1563 00a4 E2E7     		b	.L94
+ 1564              	.LVL190:
+ 1565              	.L102:
+ 326:BSP/u8g2/u8x8_byte.c **** }
+ 1566              		.loc 1 326 10 view .LVU351
+ 1567 00a6 0120     		movs	r0, #1
+ 1568 00a8 2DE0     		b	.L86
+ 1569              	.LVL191:
+ 1570              	.L92:
+ 306:BSP/u8g2/u8x8_byte.c ****       /* no wait required here */
+ 1571              		.loc 1 306 7 is_stmt 1 view .LVU352
+ 1572 00aa 5278     		ldrb	r2, [r2, #1]	@ zero_extendqisi2
+ 1573 00ac 4921     		movs	r1, #73
+ 1574 00ae FFF7FEFF 		bl	u8x8_gpio_call
+ 1575              	.LVL192:
+ 310:BSP/u8g2/u8x8_byte.c ****       break;
+ARM GAS  /tmp/cc6PBIIV.s 			page 43
+
+
+ 1576              		.loc 1 310 7 view .LVU353
+ 1577 00b2 2368     		ldr	r3, [r4]
+ 1578 00b4 1A7B     		ldrb	r2, [r3, #12]	@ zero_extendqisi2
+ 1579 00b6 02F00102 		and	r2, r2, #1
+ 1580 00ba 4021     		movs	r1, #64
+ 1581 00bc 2046     		mov	r0, r4
+ 1582 00be FFF7FEFF 		bl	u8x8_gpio_call
+ 1583              	.LVL193:
+ 311:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_SET_DC:
+ 1584              		.loc 1 311 7 view .LVU354
+ 326:BSP/u8g2/u8x8_byte.c **** }
+ 1585              		.loc 1 326 10 is_stmt 0 view .LVU355
+ 1586 00c2 0120     		movs	r0, #1
+ 311:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_SET_DC:
+ 1587              		.loc 1 311 7 view .LVU356
+ 1588 00c4 1FE0     		b	.L86
+ 1589              	.LVL194:
+ 1590              	.L87:
+ 313:BSP/u8g2/u8x8_byte.c ****       break;
+ 1591              		.loc 1 313 7 is_stmt 1 view .LVU357
+ 313:BSP/u8g2/u8x8_byte.c ****       break;
+ 1592              		.loc 1 313 15 is_stmt 0 view .LVU358
+ 1593 00c6 114B     		ldr	r3, .L103
+ 1594 00c8 83F80090 		strb	r9, [r3]
+ 314:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_START_TRANSFER:
+ 1595              		.loc 1 314 7 is_stmt 1 view .LVU359
+ 326:BSP/u8g2/u8x8_byte.c **** }
+ 1596              		.loc 1 326 10 is_stmt 0 view .LVU360
+ 1597 00cc 0120     		movs	r0, #1
+ 1598              	.LVL195:
+ 314:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_START_TRANSFER:
+ 1599              		.loc 1 314 7 view .LVU361
+ 1600 00ce 1AE0     		b	.L86
+ 1601              	.LVL196:
+ 1602              	.L90:
+ 316:BSP/u8g2/u8x8_byte.c ****       u8x8->gpio_and_delay_cb(u8x8, U8X8_MSG_DELAY_NANO, u8x8->display_info->post_chip_enable_wait_
+ 1603              		.loc 1 316 7 is_stmt 1 view .LVU362
+ 1604 00d0 1278     		ldrb	r2, [r2]	@ zero_extendqisi2
+ 1605 00d2 4921     		movs	r1, #73
+ 1606 00d4 FFF7FEFF 		bl	u8x8_gpio_call
+ 1607              	.LVL197:
+ 317:BSP/u8g2/u8x8_byte.c ****       break;
+ 1608              		.loc 1 317 7 view .LVU363
+ 317:BSP/u8g2/u8x8_byte.c ****       break;
+ 1609              		.loc 1 317 11 is_stmt 0 view .LVU364
+ 1610 00d8 6569     		ldr	r5, [r4, #20]
+ 317:BSP/u8g2/u8x8_byte.c ****       break;
+ 1611              		.loc 1 317 62 view .LVU365
+ 1612 00da 2268     		ldr	r2, [r4]
+ 317:BSP/u8g2/u8x8_byte.c ****       break;
+ 1613              		.loc 1 317 7 view .LVU366
+ 1614 00dc 0023     		movs	r3, #0
+ 1615 00de 9278     		ldrb	r2, [r2, #2]	@ zero_extendqisi2
+ 1616 00e0 2C21     		movs	r1, #44
+ 1617 00e2 2046     		mov	r0, r4
+ 1618 00e4 A847     		blx	r5
+ 1619              	.LVL198:
+ARM GAS  /tmp/cc6PBIIV.s 			page 44
+
+
+ 318:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_END_TRANSFER:
+ 1620              		.loc 1 318 7 is_stmt 1 view .LVU367
+ 326:BSP/u8g2/u8x8_byte.c **** }
+ 1621              		.loc 1 326 10 is_stmt 0 view .LVU368
+ 1622 00e6 0120     		movs	r0, #1
+ 318:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_END_TRANSFER:
+ 1623              		.loc 1 318 7 view .LVU369
+ 1624 00e8 0DE0     		b	.L86
+ 1625              	.LVL199:
+ 1626              	.L89:
+ 320:BSP/u8g2/u8x8_byte.c ****       u8x8_gpio_SetCS(u8x8, u8x8->display_info->chip_disable_level);
+ 1627              		.loc 1 320 7 is_stmt 1 view .LVU370
+ 320:BSP/u8g2/u8x8_byte.c ****       u8x8_gpio_SetCS(u8x8, u8x8->display_info->chip_disable_level);
+ 1628              		.loc 1 320 11 is_stmt 0 view .LVU371
+ 1629 00ea 4569     		ldr	r5, [r0, #20]
+ 320:BSP/u8g2/u8x8_byte.c ****       u8x8_gpio_SetCS(u8x8, u8x8->display_info->chip_disable_level);
+ 1630              		.loc 1 320 7 view .LVU372
+ 1631 00ec 0023     		movs	r3, #0
+ 1632 00ee D278     		ldrb	r2, [r2, #3]	@ zero_extendqisi2
+ 1633 00f0 2C21     		movs	r1, #44
+ 1634 00f2 A847     		blx	r5
+ 1635              	.LVL200:
+ 321:BSP/u8g2/u8x8_byte.c ****       break;
+ 1636              		.loc 1 321 7 is_stmt 1 view .LVU373
+ 1637 00f4 2368     		ldr	r3, [r4]
+ 1638 00f6 5A78     		ldrb	r2, [r3, #1]	@ zero_extendqisi2
+ 1639 00f8 4921     		movs	r1, #73
+ 1640 00fa 2046     		mov	r0, r4
+ 1641 00fc FFF7FEFF 		bl	u8x8_gpio_call
+ 1642              	.LVL201:
+ 322:BSP/u8g2/u8x8_byte.c ****     default:
+ 1643              		.loc 1 322 7 view .LVU374
+ 326:BSP/u8g2/u8x8_byte.c **** }
+ 1644              		.loc 1 326 10 is_stmt 0 view .LVU375
+ 1645 0100 0120     		movs	r0, #1
+ 322:BSP/u8g2/u8x8_byte.c ****     default:
+ 1646              		.loc 1 322 7 view .LVU376
+ 1647 0102 00E0     		b	.L86
+ 1648              	.LVL202:
+ 1649              	.L99:
+ 277:BSP/u8g2/u8x8_byte.c ****   {
+ 1650              		.loc 1 277 3 view .LVU377
+ 1651 0104 0020     		movs	r0, #0
+ 1652              	.LVL203:
+ 1653              	.L86:
+ 327:BSP/u8g2/u8x8_byte.c **** 
+ 1654              		.loc 1 327 1 view .LVU378
+ 1655 0106 BDE8F087 		pop	{r4, r5, r6, r7, r8, r9, r10, pc}
+ 1656              	.LVL204:
+ 1657              	.L104:
+ 327:BSP/u8g2/u8x8_byte.c **** 
+ 1658              		.loc 1 327 1 view .LVU379
+ 1659 010a 00BF     		.align	2
+ 1660              	.L103:
+ 1661 010c 00000000 		.word	last_dc.1
+ 1662              		.cfi_endproc
+ 1663              	.LFE9:
+ARM GAS  /tmp/cc6PBIIV.s 			page 45
+
+
+ 1665              		.section	.text.u8x8_byte_set_ks0108_cs,"ax",%progbits
+ 1666              		.align	1
+ 1667              		.global	u8x8_byte_set_ks0108_cs
+ 1668              		.syntax unified
+ 1669              		.thumb
+ 1670              		.thumb_func
+ 1672              	u8x8_byte_set_ks0108_cs:
+ 1673              	.LVL205:
+ 1674              	.LFB10:
+ 332:BSP/u8g2/u8x8_byte.c ****   u8x8_gpio_SetCS(u8x8, arg&1);
+ 1675              		.loc 1 332 1 is_stmt 1 view -0
+ 1676              		.cfi_startproc
+ 1677              		@ args = 0, pretend = 0, frame = 0
+ 1678              		@ frame_needed = 0, uses_anonymous_args = 0
+ 332:BSP/u8g2/u8x8_byte.c ****   u8x8_gpio_SetCS(u8x8, arg&1);
+ 1679              		.loc 1 332 1 is_stmt 0 view .LVU381
+ 1680 0000 38B5     		push	{r3, r4, r5, lr}
+ 1681              	.LCFI22:
+ 1682              		.cfi_def_cfa_offset 16
+ 1683              		.cfi_offset 3, -16
+ 1684              		.cfi_offset 4, -12
+ 1685              		.cfi_offset 5, -8
+ 1686              		.cfi_offset 14, -4
+ 1687 0002 0546     		mov	r5, r0
+ 1688 0004 0C46     		mov	r4, r1
+ 333:BSP/u8g2/u8x8_byte.c ****   arg = arg >> 1;
+ 1689              		.loc 1 333 3 is_stmt 1 view .LVU382
+ 1690 0006 01F00102 		and	r2, r1, #1
+ 1691 000a 4921     		movs	r1, #73
+ 1692              	.LVL206:
+ 333:BSP/u8g2/u8x8_byte.c ****   arg = arg >> 1;
+ 1693              		.loc 1 333 3 is_stmt 0 view .LVU383
+ 1694 000c FFF7FEFF 		bl	u8x8_gpio_call
+ 1695              	.LVL207:
+ 334:BSP/u8g2/u8x8_byte.c ****   u8x8_gpio_call(u8x8, U8X8_MSG_GPIO_CS1, arg&1);
+ 1696              		.loc 1 334 3 is_stmt 1 view .LVU384
+ 335:BSP/u8g2/u8x8_byte.c ****   arg = arg >> 1;
+ 1697              		.loc 1 335 3 view .LVU385
+ 1698 0010 C4F34002 		ubfx	r2, r4, #1, #1
+ 1699 0014 4E21     		movs	r1, #78
+ 1700 0016 2846     		mov	r0, r5
+ 1701 0018 FFF7FEFF 		bl	u8x8_gpio_call
+ 1702              	.LVL208:
+ 336:BSP/u8g2/u8x8_byte.c ****   u8x8_gpio_call(u8x8, U8X8_MSG_GPIO_CS2, arg&1);
+ 1703              		.loc 1 336 3 view .LVU386
+ 337:BSP/u8g2/u8x8_byte.c **** }
+ 1704              		.loc 1 337 3 view .LVU387
+ 1705 001c C4F38002 		ubfx	r2, r4, #2, #1
+ 1706 0020 4F21     		movs	r1, #79
+ 1707 0022 2846     		mov	r0, r5
+ 1708 0024 FFF7FEFF 		bl	u8x8_gpio_call
+ 1709              	.LVL209:
+ 338:BSP/u8g2/u8x8_byte.c **** 
+ 1710              		.loc 1 338 1 is_stmt 0 view .LVU388
+ 1711 0028 38BD     		pop	{r3, r4, r5, pc}
+ 338:BSP/u8g2/u8x8_byte.c **** 
+ 1712              		.loc 1 338 1 view .LVU389
+ARM GAS  /tmp/cc6PBIIV.s 			page 46
+
+
+ 1713              		.cfi_endproc
+ 1714              	.LFE10:
+ 1716              		.section	.text.u8x8_byte_ks0108,"ax",%progbits
+ 1717              		.align	1
+ 1718              		.global	u8x8_byte_ks0108
+ 1719              		.syntax unified
+ 1720              		.thumb
+ 1721              		.thumb_func
+ 1723              	u8x8_byte_ks0108:
+ 1724              	.LVL210:
+ 1725              	.LFB11:
+ 342:BSP/u8g2/u8x8_byte.c ****   uint8_t i, b;
+ 1726              		.loc 1 342 1 is_stmt 1 view -0
+ 1727              		.cfi_startproc
+ 1728              		@ args = 0, pretend = 0, frame = 0
+ 1729              		@ frame_needed = 0, uses_anonymous_args = 0
+ 342:BSP/u8g2/u8x8_byte.c ****   uint8_t i, b;
+ 1730              		.loc 1 342 1 is_stmt 0 view .LVU391
+ 1731 0000 2DE9F041 		push	{r4, r5, r6, r7, r8, lr}
+ 1732              	.LCFI23:
+ 1733              		.cfi_def_cfa_offset 24
+ 1734              		.cfi_offset 4, -24
+ 1735              		.cfi_offset 5, -20
+ 1736              		.cfi_offset 6, -16
+ 1737              		.cfi_offset 7, -12
+ 1738              		.cfi_offset 8, -8
+ 1739              		.cfi_offset 14, -4
+ 1740 0004 0646     		mov	r6, r0
+ 1741 0006 1746     		mov	r7, r2
+ 1742 0008 9846     		mov	r8, r3
+ 343:BSP/u8g2/u8x8_byte.c ****   uint8_t *data;
+ 1743              		.loc 1 343 3 is_stmt 1 view .LVU392
+ 344:BSP/u8g2/u8x8_byte.c ****  
+ 1744              		.loc 1 344 3 view .LVU393
+ 346:BSP/u8g2/u8x8_byte.c ****   {
+ 1745              		.loc 1 346 3 view .LVU394
+ 1746 000a 1439     		subs	r1, r1, #20
+ 1747              	.LVL211:
+ 346:BSP/u8g2/u8x8_byte.c ****   {
+ 1748              		.loc 1 346 3 is_stmt 0 view .LVU395
+ 1749 000c 0C29     		cmp	r1, #12
+ 1750 000e 5BD8     		bhi	.L118
+ 1751 0010 DFE801F0 		tbb	[pc, r1]
+ 1752              	.LVL212:
+ 1753              	.L110:
+ 1754 0014 31       		.byte	(.L114-.L110)/2
+ 1755 0015 5A       		.byte	(.L118-.L110)/2
+ 1756 0016 5A       		.byte	(.L118-.L110)/2
+ 1757 0017 28       		.byte	(.L113-.L110)/2
+ 1758 0018 42       		.byte	(.L112-.L110)/2
+ 1759 0019 4E       		.byte	(.L111-.L110)/2
+ 1760 001a 5A       		.byte	(.L118-.L110)/2
+ 1761 001b 5A       		.byte	(.L118-.L110)/2
+ 1762 001c 5A       		.byte	(.L118-.L110)/2
+ 1763 001d 5A       		.byte	(.L118-.L110)/2
+ 1764 001e 5A       		.byte	(.L118-.L110)/2
+ 1765 001f 5A       		.byte	(.L118-.L110)/2
+ARM GAS  /tmp/cc6PBIIV.s 			page 47
+
+
+ 1766 0020 3D       		.byte	(.L109-.L110)/2
+ 1767 0021 00       		.p2align 1
+ 1768              	.L116:
+ 357:BSP/u8g2/u8x8_byte.c **** 	  b >>= 1;
+ 1769              		.loc 1 357 4 is_stmt 1 view .LVU396
+ 1770 0022 05F00102 		and	r2, r5, #1
+ 1771 0026 2146     		mov	r1, r4
+ 1772 0028 3046     		mov	r0, r6
+ 1773 002a FFF7FEFF 		bl	u8x8_gpio_call
+ 1774              	.LVL213:
+ 358:BSP/u8g2/u8x8_byte.c **** 	}    
+ 1775              		.loc 1 358 4 view .LVU397
+ 358:BSP/u8g2/u8x8_byte.c **** 	}    
+ 1776              		.loc 1 358 6 is_stmt 0 view .LVU398
+ 1777 002e 6D08     		lsrs	r5, r5, #1
+ 1778              	.LVL214:
+ 355:BSP/u8g2/u8x8_byte.c **** 	{
+ 1779              		.loc 1 355 53 is_stmt 1 discriminator 3 view .LVU399
+ 1780 0030 0134     		adds	r4, r4, #1
+ 1781              	.LVL215:
+ 355:BSP/u8g2/u8x8_byte.c **** 	{
+ 1782              		.loc 1 355 53 is_stmt 0 discriminator 3 view .LVU400
+ 1783 0032 E4B2     		uxtb	r4, r4
+ 1784              	.LVL216:
+ 1785              	.L115:
+ 355:BSP/u8g2/u8x8_byte.c **** 	{
+ 1786              		.loc 1 355 31 is_stmt 1 discriminator 1 view .LVU401
+ 1787 0034 472C     		cmp	r4, #71
+ 1788 0036 F4D9     		bls	.L116
+ 361:BSP/u8g2/u8x8_byte.c **** 	u8x8_gpio_call(u8x8, U8X8_MSG_GPIO_E, 1);
+ 1789              		.loc 1 361 2 view .LVU402
+ 1790 0038 3368     		ldr	r3, [r6]
+ 1791 003a 9A7B     		ldrb	r2, [r3, #14]	@ zero_extendqisi2
+ 1792 003c 2C21     		movs	r1, #44
+ 1793 003e 3046     		mov	r0, r6
+ 1794 0040 FFF7FEFF 		bl	u8x8_gpio_call
+ 1795              	.LVL217:
+ 362:BSP/u8g2/u8x8_byte.c **** 	u8x8_gpio_Delay(u8x8, U8X8_MSG_DELAY_NANO, u8x8->display_info->write_pulse_width_ns);
+ 1796              		.loc 1 362 2 view .LVU403
+ 1797 0044 0122     		movs	r2, #1
+ 1798 0046 4821     		movs	r1, #72
+ 1799 0048 3046     		mov	r0, r6
+ 1800 004a FFF7FEFF 		bl	u8x8_gpio_call
+ 1801              	.LVL218:
+ 363:BSP/u8g2/u8x8_byte.c **** 	u8x8_gpio_call(u8x8, U8X8_MSG_GPIO_E, 0);
+ 1802              		.loc 1 363 2 view .LVU404
+ 1803 004e 3368     		ldr	r3, [r6]
+ 1804 0050 DA7B     		ldrb	r2, [r3, #15]	@ zero_extendqisi2
+ 1805 0052 2C21     		movs	r1, #44
+ 1806 0054 3046     		mov	r0, r6
+ 1807 0056 FFF7FEFF 		bl	u8x8_gpio_call
+ 1808              	.LVL219:
+ 364:BSP/u8g2/u8x8_byte.c ****       }
+ 1809              		.loc 1 364 2 view .LVU405
+ 1810 005a 0022     		movs	r2, #0
+ 1811 005c 4821     		movs	r1, #72
+ 1812 005e 3046     		mov	r0, r6
+ARM GAS  /tmp/cc6PBIIV.s 			page 48
+
+
+ 1813 0060 FFF7FEFF 		bl	u8x8_gpio_call
+ 1814              	.LVL220:
+ 1815              	.L113:
+ 350:BSP/u8g2/u8x8_byte.c ****       {
+ 1816              		.loc 1 350 22 view .LVU406
+ 1817 0064 2FB1     		cbz	r7, .L121
+ 352:BSP/u8g2/u8x8_byte.c **** 	data++;
+ 1818              		.loc 1 352 2 view .LVU407
+ 352:BSP/u8g2/u8x8_byte.c **** 	data++;
+ 1819              		.loc 1 352 4 is_stmt 0 view .LVU408
+ 1820 0066 18F8015B 		ldrb	r5, [r8], #1	@ zero_extendqisi2
+ 1821              	.LVL221:
+ 353:BSP/u8g2/u8x8_byte.c **** 	arg_int--;
+ 1822              		.loc 1 353 2 is_stmt 1 view .LVU409
+ 354:BSP/u8g2/u8x8_byte.c **** 	for( i = U8X8_MSG_GPIO_D0; i <= U8X8_MSG_GPIO_D7; i++ )
+ 1823              		.loc 1 354 2 view .LVU410
+ 354:BSP/u8g2/u8x8_byte.c **** 	for( i = U8X8_MSG_GPIO_D0; i <= U8X8_MSG_GPIO_D7; i++ )
+ 1824              		.loc 1 354 9 is_stmt 0 view .LVU411
+ 1825 006a 013F     		subs	r7, r7, #1
+ 1826              	.LVL222:
+ 354:BSP/u8g2/u8x8_byte.c **** 	for( i = U8X8_MSG_GPIO_D0; i <= U8X8_MSG_GPIO_D7; i++ )
+ 1827              		.loc 1 354 9 view .LVU412
+ 1828 006c FFB2     		uxtb	r7, r7
+ 1829              	.LVL223:
+ 355:BSP/u8g2/u8x8_byte.c **** 	{
+ 1830              		.loc 1 355 2 is_stmt 1 view .LVU413
+ 355:BSP/u8g2/u8x8_byte.c **** 	{
+ 1831              		.loc 1 355 9 is_stmt 0 view .LVU414
+ 1832 006e 4024     		movs	r4, #64
+ 355:BSP/u8g2/u8x8_byte.c **** 	{
+ 1833              		.loc 1 355 2 view .LVU415
+ 1834 0070 E0E7     		b	.L115
+ 1835              	.LVL224:
+ 1836              	.L121:
+ 389:BSP/u8g2/u8x8_byte.c **** }
+ 1837              		.loc 1 389 10 view .LVU416
+ 1838 0072 0120     		movs	r0, #1
+ 1839 0074 29E0     		b	.L108
+ 1840              	.LVL225:
+ 1841              	.L114:
+ 370:BSP/u8g2/u8x8_byte.c ****       /* ensure that the enable signal is low */
+ 1842              		.loc 1 370 7 is_stmt 1 view .LVU417
+ 1843 0076 0368     		ldr	r3, [r0]
+ 1844 0078 5A78     		ldrb	r2, [r3, #1]	@ zero_extendqisi2
+ 1845              	.LVL226:
+ 370:BSP/u8g2/u8x8_byte.c ****       /* ensure that the enable signal is low */
+ 1846              		.loc 1 370 7 is_stmt 0 view .LVU418
+ 1847 007a 4921     		movs	r1, #73
+ 1848 007c FFF7FEFF 		bl	u8x8_gpio_call
+ 1849              	.LVL227:
+ 372:BSP/u8g2/u8x8_byte.c ****       break;
+ 1850              		.loc 1 372 7 is_stmt 1 view .LVU419
+ 1851 0080 0022     		movs	r2, #0
+ 1852 0082 4821     		movs	r1, #72
+ 1853 0084 3046     		mov	r0, r6
+ 1854 0086 FFF7FEFF 		bl	u8x8_gpio_call
+ 1855              	.LVL228:
+ARM GAS  /tmp/cc6PBIIV.s 			page 49
+
+
+ 373:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_SET_DC:
+ 1856              		.loc 1 373 7 view .LVU420
+ 389:BSP/u8g2/u8x8_byte.c **** }
+ 1857              		.loc 1 389 10 is_stmt 0 view .LVU421
+ 1858 008a 0120     		movs	r0, #1
+ 373:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_SET_DC:
+ 1859              		.loc 1 373 7 view .LVU422
+ 1860 008c 1DE0     		b	.L108
+ 1861              	.LVL229:
+ 1862              	.L109:
+ 375:BSP/u8g2/u8x8_byte.c ****       break;
+ 1863              		.loc 1 375 7 is_stmt 1 view .LVU423
+ 1864 008e 4A21     		movs	r1, #74
+ 1865 0090 FFF7FEFF 		bl	u8x8_gpio_call
+ 1866              	.LVL230:
+ 376:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_START_TRANSFER:
+ 1867              		.loc 1 376 7 view .LVU424
+ 389:BSP/u8g2/u8x8_byte.c **** }
+ 1868              		.loc 1 389 10 is_stmt 0 view .LVU425
+ 1869 0094 0120     		movs	r0, #1
+ 376:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_START_TRANSFER:
+ 1870              		.loc 1 376 7 view .LVU426
+ 1871 0096 18E0     		b	.L108
+ 1872              	.LVL231:
+ 1873              	.L112:
+ 379:BSP/u8g2/u8x8_byte.c ****       u8x8->gpio_and_delay_cb(u8x8, U8X8_MSG_DELAY_NANO, u8x8->display_info->post_chip_enable_wait_
+ 1874              		.loc 1 379 7 is_stmt 1 view .LVU427
+ 1875 0098 1146     		mov	r1, r2
+ 1876 009a FFF7FEFF 		bl	u8x8_byte_set_ks0108_cs
+ 1877              	.LVL232:
+ 380:BSP/u8g2/u8x8_byte.c ****       break;
+ 1878              		.loc 1 380 7 view .LVU428
+ 380:BSP/u8g2/u8x8_byte.c ****       break;
+ 1879              		.loc 1 380 11 is_stmt 0 view .LVU429
+ 1880 009e 7469     		ldr	r4, [r6, #20]
+ 380:BSP/u8g2/u8x8_byte.c ****       break;
+ 1881              		.loc 1 380 62 view .LVU430
+ 1882 00a0 3268     		ldr	r2, [r6]
+ 380:BSP/u8g2/u8x8_byte.c ****       break;
+ 1883              		.loc 1 380 7 view .LVU431
+ 1884 00a2 0023     		movs	r3, #0
+ 1885 00a4 9278     		ldrb	r2, [r2, #2]	@ zero_extendqisi2
+ 1886 00a6 2C21     		movs	r1, #44
+ 1887 00a8 3046     		mov	r0, r6
+ 1888 00aa A047     		blx	r4
+ 1889              	.LVL233:
+ 381:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_END_TRANSFER:
+ 1890              		.loc 1 381 7 is_stmt 1 view .LVU432
+ 389:BSP/u8g2/u8x8_byte.c **** }
+ 1891              		.loc 1 389 10 is_stmt 0 view .LVU433
+ 1892 00ac 0120     		movs	r0, #1
+ 381:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_END_TRANSFER:
+ 1893              		.loc 1 381 7 view .LVU434
+ 1894 00ae 0CE0     		b	.L108
+ 1895              	.LVL234:
+ 1896              	.L111:
+ 383:BSP/u8g2/u8x8_byte.c ****       u8x8_byte_set_ks0108_cs(u8x8, arg_int);
+ARM GAS  /tmp/cc6PBIIV.s 			page 50
+
+
+ 1897              		.loc 1 383 7 is_stmt 1 view .LVU435
+ 383:BSP/u8g2/u8x8_byte.c ****       u8x8_byte_set_ks0108_cs(u8x8, arg_int);
+ 1898              		.loc 1 383 11 is_stmt 0 view .LVU436
+ 1899 00b0 4469     		ldr	r4, [r0, #20]
+ 383:BSP/u8g2/u8x8_byte.c ****       u8x8_byte_set_ks0108_cs(u8x8, arg_int);
+ 1900              		.loc 1 383 62 view .LVU437
+ 1901 00b2 0268     		ldr	r2, [r0]
+ 1902              	.LVL235:
+ 383:BSP/u8g2/u8x8_byte.c ****       u8x8_byte_set_ks0108_cs(u8x8, arg_int);
+ 1903              		.loc 1 383 7 view .LVU438
+ 1904 00b4 0023     		movs	r3, #0
+ 1905 00b6 D278     		ldrb	r2, [r2, #3]	@ zero_extendqisi2
+ 1906 00b8 2C21     		movs	r1, #44
+ 1907 00ba A047     		blx	r4
+ 1908              	.LVL236:
+ 384:BSP/u8g2/u8x8_byte.c ****       break;
+ 1909              		.loc 1 384 7 is_stmt 1 view .LVU439
+ 1910 00bc 3946     		mov	r1, r7
+ 1911 00be 3046     		mov	r0, r6
+ 1912 00c0 FFF7FEFF 		bl	u8x8_byte_set_ks0108_cs
+ 1913              	.LVL237:
+ 385:BSP/u8g2/u8x8_byte.c ****     default:
+ 1914              		.loc 1 385 7 view .LVU440
+ 389:BSP/u8g2/u8x8_byte.c **** }
+ 1915              		.loc 1 389 10 is_stmt 0 view .LVU441
+ 1916 00c4 0120     		movs	r0, #1
+ 385:BSP/u8g2/u8x8_byte.c ****     default:
+ 1917              		.loc 1 385 7 view .LVU442
+ 1918 00c6 00E0     		b	.L108
+ 1919              	.LVL238:
+ 1920              	.L118:
+ 346:BSP/u8g2/u8x8_byte.c ****   {
+ 1921              		.loc 1 346 3 view .LVU443
+ 1922 00c8 0020     		movs	r0, #0
+ 1923              	.LVL239:
+ 1924              	.L108:
+ 390:BSP/u8g2/u8x8_byte.c **** 
+ 1925              		.loc 1 390 1 view .LVU444
+ 1926 00ca BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
+ 390:BSP/u8g2/u8x8_byte.c **** 
+ 1927              		.loc 1 390 1 view .LVU445
+ 1928              		.cfi_endproc
+ 1929              	.LFE11:
+ 1931              		.section	.text.u8x8_byte_sed1520,"ax",%progbits
+ 1932              		.align	1
+ 1933              		.global	u8x8_byte_sed1520
+ 1934              		.syntax unified
+ 1935              		.thumb
+ 1936              		.thumb_func
+ 1938              	u8x8_byte_sed1520:
+ 1939              	.LVL240:
+ 1940              	.LFB12:
+ 398:BSP/u8g2/u8x8_byte.c ****   uint8_t i, b;
+ 1941              		.loc 1 398 1 is_stmt 1 view -0
+ 1942              		.cfi_startproc
+ 1943              		@ args = 0, pretend = 0, frame = 0
+ 1944              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  /tmp/cc6PBIIV.s 			page 51
+
+
+ 398:BSP/u8g2/u8x8_byte.c ****   uint8_t i, b;
+ 1945              		.loc 1 398 1 is_stmt 0 view .LVU447
+ 1946 0000 2DE9F041 		push	{r4, r5, r6, r7, r8, lr}
+ 1947              	.LCFI24:
+ 1948              		.cfi_def_cfa_offset 24
+ 1949              		.cfi_offset 4, -24
+ 1950              		.cfi_offset 5, -20
+ 1951              		.cfi_offset 6, -16
+ 1952              		.cfi_offset 7, -12
+ 1953              		.cfi_offset 8, -8
+ 1954              		.cfi_offset 14, -4
+ 1955 0004 0646     		mov	r6, r0
+ 1956 0006 1746     		mov	r7, r2
+ 1957 0008 9846     		mov	r8, r3
+ 399:BSP/u8g2/u8x8_byte.c ****   uint8_t *data;
+ 1958              		.loc 1 399 3 is_stmt 1 view .LVU448
+ 400:BSP/u8g2/u8x8_byte.c ****   static uint8_t enable_pin;
+ 1959              		.loc 1 400 3 view .LVU449
+ 401:BSP/u8g2/u8x8_byte.c ****  
+ 1960              		.loc 1 401 3 view .LVU450
+ 403:BSP/u8g2/u8x8_byte.c ****   {
+ 1961              		.loc 1 403 3 view .LVU451
+ 1962 000a 1439     		subs	r1, r1, #20
+ 1963              	.LVL241:
+ 403:BSP/u8g2/u8x8_byte.c ****   {
+ 1964              		.loc 1 403 3 is_stmt 0 view .LVU452
+ 1965 000c 0C29     		cmp	r1, #12
+ 1966 000e 08D8     		bhi	.L123
+ 1967 0010 DFE801F0 		tbb	[pc, r1]
+ 1968              	.LVL242:
+ 1969              	.L125:
+ 1970 0014 3A       		.byte	(.L129-.L125)/2
+ 1971 0015 07       		.byte	(.L123-.L125)/2
+ 1972 0016 07       		.byte	(.L123-.L125)/2
+ 1973 0017 31       		.byte	(.L128-.L125)/2
+ 1974 0018 53       		.byte	(.L127-.L125)/2
+ 1975 0019 5B       		.byte	(.L133-.L125)/2
+ 1976 001a 07       		.byte	(.L123-.L125)/2
+ 1977 001b 07       		.byte	(.L123-.L125)/2
+ 1978 001c 07       		.byte	(.L123-.L125)/2
+ 1979 001d 07       		.byte	(.L123-.L125)/2
+ 1980 001e 07       		.byte	(.L123-.L125)/2
+ 1981 001f 07       		.byte	(.L123-.L125)/2
+ 1982 0020 4E       		.byte	(.L124-.L125)/2
+ 1983 0021 00       		.p2align 1
+ 1984              	.L123:
+ 403:BSP/u8g2/u8x8_byte.c ****   {
+ 1985              		.loc 1 403 3 view .LVU453
+ 1986 0022 0020     		movs	r0, #0
+ 1987              	.LVL243:
+ 1988              	.L126:
+ 450:BSP/u8g2/u8x8_byte.c **** 
+ 1989              		.loc 1 450 1 view .LVU454
+ 1990 0024 BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
+ 1991              	.LVL244:
+ 1992              	.L131:
+ 414:BSP/u8g2/u8x8_byte.c **** 	  b >>= 1;
+ARM GAS  /tmp/cc6PBIIV.s 			page 52
+
+
+ 1993              		.loc 1 414 4 is_stmt 1 view .LVU455
+ 1994 0028 05F00102 		and	r2, r5, #1
+ 1995 002c 2146     		mov	r1, r4
+ 1996 002e 3046     		mov	r0, r6
+ 1997 0030 FFF7FEFF 		bl	u8x8_gpio_call
+ 1998              	.LVL245:
+ 415:BSP/u8g2/u8x8_byte.c **** 	}    
+ 1999              		.loc 1 415 4 view .LVU456
+ 415:BSP/u8g2/u8x8_byte.c **** 	}    
+ 2000              		.loc 1 415 6 is_stmt 0 view .LVU457
+ 2001 0034 6D08     		lsrs	r5, r5, #1
+ 2002              	.LVL246:
+ 412:BSP/u8g2/u8x8_byte.c **** 	{
+ 2003              		.loc 1 412 53 is_stmt 1 discriminator 3 view .LVU458
+ 2004 0036 0134     		adds	r4, r4, #1
+ 2005              	.LVL247:
+ 412:BSP/u8g2/u8x8_byte.c **** 	{
+ 2006              		.loc 1 412 53 is_stmt 0 discriminator 3 view .LVU459
+ 2007 0038 E4B2     		uxtb	r4, r4
+ 2008              	.LVL248:
+ 2009              	.L130:
+ 412:BSP/u8g2/u8x8_byte.c **** 	{
+ 2010              		.loc 1 412 31 is_stmt 1 discriminator 1 view .LVU460
+ 2011 003a 472C     		cmp	r4, #71
+ 2012 003c F4D9     		bls	.L131
+ 418:BSP/u8g2/u8x8_byte.c **** 	u8x8_gpio_call(u8x8, enable_pin, 1);
+ 2013              		.loc 1 418 2 view .LVU461
+ 2014 003e 3368     		ldr	r3, [r6]
+ 2015 0040 9A7B     		ldrb	r2, [r3, #14]	@ zero_extendqisi2
+ 2016 0042 2C21     		movs	r1, #44
+ 2017 0044 3046     		mov	r0, r6
+ 2018 0046 FFF7FEFF 		bl	u8x8_gpio_call
+ 2019              	.LVL249:
+ 419:BSP/u8g2/u8x8_byte.c **** 	u8x8_gpio_Delay(u8x8, U8X8_MSG_DELAY_NANO, 200);		/* KS0108 requires 450 ns, use 200 here */
+ 2020              		.loc 1 419 2 view .LVU462
+ 2021 004a 224C     		ldr	r4, .L138
+ 2022              	.LVL250:
+ 419:BSP/u8g2/u8x8_byte.c **** 	u8x8_gpio_Delay(u8x8, U8X8_MSG_DELAY_NANO, 200);		/* KS0108 requires 450 ns, use 200 here */
+ 2023              		.loc 1 419 2 is_stmt 0 view .LVU463
+ 2024 004c 0122     		movs	r2, #1
+ 2025 004e 2178     		ldrb	r1, [r4]	@ zero_extendqisi2
+ 2026 0050 3046     		mov	r0, r6
+ 2027 0052 FFF7FEFF 		bl	u8x8_gpio_call
+ 2028              	.LVL251:
+ 420:BSP/u8g2/u8x8_byte.c **** 	u8x8_gpio_Delay(u8x8, U8X8_MSG_DELAY_NANO, u8x8->display_info->write_pulse_width_ns);  /* expect 2
+ 2029              		.loc 1 420 2 is_stmt 1 view .LVU464
+ 2030 0056 C822     		movs	r2, #200
+ 2031 0058 2C21     		movs	r1, #44
+ 2032 005a 3046     		mov	r0, r6
+ 2033 005c FFF7FEFF 		bl	u8x8_gpio_call
+ 2034              	.LVL252:
+ 421:BSP/u8g2/u8x8_byte.c **** 	u8x8_gpio_call(u8x8, enable_pin, 0);
+ 2035              		.loc 1 421 2 view .LVU465
+ 2036 0060 3368     		ldr	r3, [r6]
+ 2037 0062 DA7B     		ldrb	r2, [r3, #15]	@ zero_extendqisi2
+ 2038 0064 2C21     		movs	r1, #44
+ 2039 0066 3046     		mov	r0, r6
+ARM GAS  /tmp/cc6PBIIV.s 			page 53
+
+
+ 2040 0068 FFF7FEFF 		bl	u8x8_gpio_call
+ 2041              	.LVL253:
+ 422:BSP/u8g2/u8x8_byte.c ****       }
+ 2042              		.loc 1 422 2 view .LVU466
+ 2043 006c 0022     		movs	r2, #0
+ 2044 006e 2178     		ldrb	r1, [r4]	@ zero_extendqisi2
+ 2045 0070 3046     		mov	r0, r6
+ 2046 0072 FFF7FEFF 		bl	u8x8_gpio_call
+ 2047              	.LVL254:
+ 2048              	.L128:
+ 407:BSP/u8g2/u8x8_byte.c ****       {
+ 2049              		.loc 1 407 22 view .LVU467
+ 2050 0076 2FB1     		cbz	r7, .L137
+ 409:BSP/u8g2/u8x8_byte.c **** 	data++;
+ 2051              		.loc 1 409 2 view .LVU468
+ 409:BSP/u8g2/u8x8_byte.c **** 	data++;
+ 2052              		.loc 1 409 4 is_stmt 0 view .LVU469
+ 2053 0078 18F8015B 		ldrb	r5, [r8], #1	@ zero_extendqisi2
+ 2054              	.LVL255:
+ 410:BSP/u8g2/u8x8_byte.c **** 	arg_int--;
+ 2055              		.loc 1 410 2 is_stmt 1 view .LVU470
+ 411:BSP/u8g2/u8x8_byte.c **** 	for( i = U8X8_MSG_GPIO_D0; i <= U8X8_MSG_GPIO_D7; i++ )
+ 2056              		.loc 1 411 2 view .LVU471
+ 411:BSP/u8g2/u8x8_byte.c **** 	for( i = U8X8_MSG_GPIO_D0; i <= U8X8_MSG_GPIO_D7; i++ )
+ 2057              		.loc 1 411 9 is_stmt 0 view .LVU472
+ 2058 007c 013F     		subs	r7, r7, #1
+ 2059              	.LVL256:
+ 411:BSP/u8g2/u8x8_byte.c **** 	for( i = U8X8_MSG_GPIO_D0; i <= U8X8_MSG_GPIO_D7; i++ )
+ 2060              		.loc 1 411 9 view .LVU473
+ 2061 007e FFB2     		uxtb	r7, r7
+ 2062              	.LVL257:
+ 412:BSP/u8g2/u8x8_byte.c **** 	{
+ 2063              		.loc 1 412 2 is_stmt 1 view .LVU474
+ 412:BSP/u8g2/u8x8_byte.c **** 	{
+ 2064              		.loc 1 412 9 is_stmt 0 view .LVU475
+ 2065 0080 4024     		movs	r4, #64
+ 412:BSP/u8g2/u8x8_byte.c **** 	{
+ 2066              		.loc 1 412 2 view .LVU476
+ 2067 0082 DAE7     		b	.L130
+ 2068              	.LVL258:
+ 2069              	.L137:
+ 449:BSP/u8g2/u8x8_byte.c **** }
+ 2070              		.loc 1 449 10 view .LVU477
+ 2071 0084 0120     		movs	r0, #1
+ 2072 0086 CDE7     		b	.L126
+ 2073              	.LVL259:
+ 2074              	.L129:
+ 428:BSP/u8g2/u8x8_byte.c ****       /* ensure that the enable signals are low */
+ 2075              		.loc 1 428 7 is_stmt 1 view .LVU478
+ 2076 0088 0368     		ldr	r3, [r0]
+ 2077 008a 5A78     		ldrb	r2, [r3, #1]	@ zero_extendqisi2
+ 2078              	.LVL260:
+ 428:BSP/u8g2/u8x8_byte.c ****       /* ensure that the enable signals are low */
+ 2079              		.loc 1 428 7 is_stmt 0 view .LVU479
+ 2080 008c 4921     		movs	r1, #73
+ 2081 008e FFF7FEFF 		bl	u8x8_gpio_call
+ 2082              	.LVL261:
+ARM GAS  /tmp/cc6PBIIV.s 			page 54
+
+
+ 430:BSP/u8g2/u8x8_byte.c ****       u8x8_gpio_call(u8x8, U8X8_MSG_GPIO_CS, 0);
+ 2083              		.loc 1 430 7 is_stmt 1 view .LVU480
+ 2084 0092 0022     		movs	r2, #0
+ 2085 0094 4821     		movs	r1, #72
+ 2086 0096 3046     		mov	r0, r6
+ 2087 0098 FFF7FEFF 		bl	u8x8_gpio_call
+ 2088              	.LVL262:
+ 431:BSP/u8g2/u8x8_byte.c ****       enable_pin = U8X8_MSG_GPIO_E;
+ 2089              		.loc 1 431 7 view .LVU481
+ 2090 009c 0022     		movs	r2, #0
+ 2091 009e 4921     		movs	r1, #73
+ 2092 00a0 3046     		mov	r0, r6
+ 2093 00a2 FFF7FEFF 		bl	u8x8_gpio_call
+ 2094              	.LVL263:
+ 432:BSP/u8g2/u8x8_byte.c ****       break;
+ 2095              		.loc 1 432 7 view .LVU482
+ 432:BSP/u8g2/u8x8_byte.c ****       break;
+ 2096              		.loc 1 432 18 is_stmt 0 view .LVU483
+ 2097 00a6 0B4B     		ldr	r3, .L138
+ 2098 00a8 4822     		movs	r2, #72
+ 2099 00aa 1A70     		strb	r2, [r3]
+ 433:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_SET_DC:
+ 2100              		.loc 1 433 7 is_stmt 1 view .LVU484
+ 449:BSP/u8g2/u8x8_byte.c **** }
+ 2101              		.loc 1 449 10 is_stmt 0 view .LVU485
+ 2102 00ac 0120     		movs	r0, #1
+ 433:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_SET_DC:
+ 2103              		.loc 1 433 7 view .LVU486
+ 2104 00ae B9E7     		b	.L126
+ 2105              	.LVL264:
+ 2106              	.L124:
+ 435:BSP/u8g2/u8x8_byte.c ****       break;
+ 2107              		.loc 1 435 7 is_stmt 1 view .LVU487
+ 2108 00b0 4A21     		movs	r1, #74
+ 2109 00b2 FFF7FEFF 		bl	u8x8_gpio_call
+ 2110              	.LVL265:
+ 436:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_START_TRANSFER:
+ 2111              		.loc 1 436 7 view .LVU488
+ 449:BSP/u8g2/u8x8_byte.c **** }
+ 2112              		.loc 1 449 10 is_stmt 0 view .LVU489
+ 2113 00b6 0120     		movs	r0, #1
+ 436:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_START_TRANSFER:
+ 2114              		.loc 1 436 7 view .LVU490
+ 2115 00b8 B4E7     		b	.L126
+ 2116              	.LVL266:
+ 2117              	.L127:
+ 440:BSP/u8g2/u8x8_byte.c ****       if ( arg_int != 0 )
+ 2118              		.loc 1 440 7 is_stmt 1 view .LVU491
+ 440:BSP/u8g2/u8x8_byte.c ****       if ( arg_int != 0 )
+ 2119              		.loc 1 440 18 is_stmt 0 view .LVU492
+ 2120 00ba 064B     		ldr	r3, .L138
+ 2121 00bc 4822     		movs	r2, #72
+ 2122              	.LVL267:
+ 440:BSP/u8g2/u8x8_byte.c ****       if ( arg_int != 0 )
+ 2123              		.loc 1 440 18 view .LVU493
+ 2124 00be 1A70     		strb	r2, [r3]
+ 441:BSP/u8g2/u8x8_byte.c **** 	enable_pin = U8X8_MSG_GPIO_CS;
+ARM GAS  /tmp/cc6PBIIV.s 			page 55
+
+
+ 2125              		.loc 1 441 7 is_stmt 1 view .LVU494
+ 441:BSP/u8g2/u8x8_byte.c **** 	enable_pin = U8X8_MSG_GPIO_CS;
+ 2126              		.loc 1 441 10 is_stmt 0 view .LVU495
+ 2127 00c0 2FB1     		cbz	r7, .L134
+ 442:BSP/u8g2/u8x8_byte.c ****       break;
+ 2128              		.loc 1 442 2 is_stmt 1 view .LVU496
+ 442:BSP/u8g2/u8x8_byte.c ****       break;
+ 2129              		.loc 1 442 13 is_stmt 0 view .LVU497
+ 2130 00c2 4922     		movs	r2, #73
+ 2131 00c4 1A70     		strb	r2, [r3]
+ 449:BSP/u8g2/u8x8_byte.c **** }
+ 2132              		.loc 1 449 10 view .LVU498
+ 2133 00c6 0120     		movs	r0, #1
+ 2134              	.LVL268:
+ 449:BSP/u8g2/u8x8_byte.c **** }
+ 2135              		.loc 1 449 10 view .LVU499
+ 2136 00c8 ACE7     		b	.L126
+ 2137              	.LVL269:
+ 2138              	.L133:
+ 449:BSP/u8g2/u8x8_byte.c **** }
+ 2139              		.loc 1 449 10 view .LVU500
+ 2140 00ca 0120     		movs	r0, #1
+ 2141              	.LVL270:
+ 449:BSP/u8g2/u8x8_byte.c **** }
+ 2142              		.loc 1 449 10 view .LVU501
+ 2143 00cc AAE7     		b	.L126
+ 2144              	.LVL271:
+ 2145              	.L134:
+ 449:BSP/u8g2/u8x8_byte.c **** }
+ 2146              		.loc 1 449 10 view .LVU502
+ 2147 00ce 0120     		movs	r0, #1
+ 2148              	.LVL272:
+ 449:BSP/u8g2/u8x8_byte.c **** }
+ 2149              		.loc 1 449 10 view .LVU503
+ 2150 00d0 A8E7     		b	.L126
+ 2151              	.L139:
+ 2152 00d2 00BF     		.align	2
+ 2153              	.L138:
+ 2154 00d4 00000000 		.word	enable_pin.0
+ 2155              		.cfi_endproc
+ 2156              	.LFE12:
+ 2158              		.section	.text.u8x8_byte_sw_i2c,"ax",%progbits
+ 2159              		.align	1
+ 2160              		.global	u8x8_byte_sw_i2c
+ 2161              		.syntax unified
+ 2162              		.thumb
+ 2163              		.thumb_func
+ 2165              	u8x8_byte_sw_i2c:
+ 2166              	.LVL273:
+ 2167              	.LFB24:
+ 576:BSP/u8g2/u8x8_byte.c **** 
+ 577:BSP/u8g2/u8x8_byte.c **** uint8_t u8x8_byte_sw_i2c(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr)
+ 578:BSP/u8g2/u8x8_byte.c **** {
+ 2168              		.loc 1 578 1 is_stmt 1 view -0
+ 2169              		.cfi_startproc
+ 2170              		@ args = 0, pretend = 0, frame = 0
+ 2171              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  /tmp/cc6PBIIV.s 			page 56
+
+
+ 2172              		.loc 1 578 1 is_stmt 0 view .LVU505
+ 2173 0000 70B5     		push	{r4, r5, r6, lr}
+ 2174              	.LCFI25:
+ 2175              		.cfi_def_cfa_offset 16
+ 2176              		.cfi_offset 4, -16
+ 2177              		.cfi_offset 5, -12
+ 2178              		.cfi_offset 6, -8
+ 2179              		.cfi_offset 14, -4
+ 2180 0002 0646     		mov	r6, r0
+ 2181 0004 1446     		mov	r4, r2
+ 2182 0006 1D46     		mov	r5, r3
+ 579:BSP/u8g2/u8x8_byte.c ****   uint8_t *data;
+ 2183              		.loc 1 579 3 is_stmt 1 view .LVU506
+ 580:BSP/u8g2/u8x8_byte.c **** 
+ 581:BSP/u8g2/u8x8_byte.c ****   switch(msg)
+ 2184              		.loc 1 581 3 view .LVU507
+ 2185 0008 1439     		subs	r1, r1, #20
+ 2186              	.LVL274:
+ 2187              		.loc 1 581 3 is_stmt 0 view .LVU508
+ 2188 000a 0C29     		cmp	r1, #12
+ 2189 000c 08D8     		bhi	.L141
+ 2190 000e DFE801F0 		tbb	[pc, r1]
+ 2191              	.LVL275:
+ 2192              	.L143:
+ 2193 0012 14       		.byte	(.L147-.L143)/2
+ 2194 0013 07       		.byte	(.L141-.L143)/2
+ 2195 0014 07       		.byte	(.L141-.L143)/2
+ 2196 0015 10       		.byte	(.L146-.L143)/2
+ 2197 0016 18       		.byte	(.L145-.L143)/2
+ 2198 0017 21       		.byte	(.L144-.L143)/2
+ 2199 0018 07       		.byte	(.L141-.L143)/2
+ 2200 0019 07       		.byte	(.L141-.L143)/2
+ 2201 001a 07       		.byte	(.L141-.L143)/2
+ 2202 001b 07       		.byte	(.L141-.L143)/2
+ 2203 001c 07       		.byte	(.L141-.L143)/2
+ 2204 001d 07       		.byte	(.L141-.L143)/2
+ 2205 001e 25       		.byte	(.L149-.L143)/2
+ 2206 001f 00       		.p2align 1
+ 2207              	.L141:
+ 2208              		.loc 1 581 3 view .LVU509
+ 2209 0020 0020     		movs	r0, #0
+ 2210              	.LVL276:
+ 2211              	.L142:
+ 582:BSP/u8g2/u8x8_byte.c ****   {
+ 583:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_SEND:
+ 584:BSP/u8g2/u8x8_byte.c ****       data = (uint8_t *)arg_ptr;
+ 585:BSP/u8g2/u8x8_byte.c ****     
+ 586:BSP/u8g2/u8x8_byte.c ****       while( arg_int > 0 )
+ 587:BSP/u8g2/u8x8_byte.c ****       {
+ 588:BSP/u8g2/u8x8_byte.c **** 	i2c_write_byte(u8x8, *data);
+ 589:BSP/u8g2/u8x8_byte.c **** 	data++;
+ 590:BSP/u8g2/u8x8_byte.c **** 	arg_int--;
+ 591:BSP/u8g2/u8x8_byte.c ****       }
+ 592:BSP/u8g2/u8x8_byte.c ****       
+ 593:BSP/u8g2/u8x8_byte.c ****       break;
+ 594:BSP/u8g2/u8x8_byte.c ****       
+ 595:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_INIT:
+ARM GAS  /tmp/cc6PBIIV.s 			page 57
+
+
+ 596:BSP/u8g2/u8x8_byte.c ****       i2c_init(u8x8);
+ 597:BSP/u8g2/u8x8_byte.c ****       break;
+ 598:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_SET_DC:
+ 599:BSP/u8g2/u8x8_byte.c ****       break;
+ 600:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_START_TRANSFER:
+ 601:BSP/u8g2/u8x8_byte.c ****       i2c_start(u8x8);
+ 602:BSP/u8g2/u8x8_byte.c ****       i2c_write_byte(u8x8, u8x8_GetI2CAddress(u8x8));
+ 603:BSP/u8g2/u8x8_byte.c ****       //i2c_write_byte(u8x8, 0x078);
+ 604:BSP/u8g2/u8x8_byte.c ****       break;
+ 605:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_END_TRANSFER:
+ 606:BSP/u8g2/u8x8_byte.c ****       i2c_stop(u8x8);
+ 607:BSP/u8g2/u8x8_byte.c ****       break;
+ 608:BSP/u8g2/u8x8_byte.c ****     default:
+ 609:BSP/u8g2/u8x8_byte.c ****       return 0;
+ 610:BSP/u8g2/u8x8_byte.c ****   }
+ 611:BSP/u8g2/u8x8_byte.c ****   return 1;
+ 612:BSP/u8g2/u8x8_byte.c **** }
+ 2212              		.loc 1 612 1 view .LVU510
+ 2213 0022 70BD     		pop	{r4, r5, r6, pc}
+ 2214              	.LVL277:
+ 2215              	.L148:
+ 588:BSP/u8g2/u8x8_byte.c **** 	data++;
+ 2216              		.loc 1 588 2 is_stmt 1 view .LVU511
+ 2217 0024 15F8011B 		ldrb	r1, [r5], #1	@ zero_extendqisi2
+ 2218              	.LVL278:
+ 588:BSP/u8g2/u8x8_byte.c **** 	data++;
+ 2219              		.loc 1 588 2 is_stmt 0 view .LVU512
+ 2220 0028 3046     		mov	r0, r6
+ 2221 002a FFF7FEFF 		bl	i2c_write_byte
+ 2222              	.LVL279:
+ 589:BSP/u8g2/u8x8_byte.c **** 	arg_int--;
+ 2223              		.loc 1 589 2 is_stmt 1 view .LVU513
+ 590:BSP/u8g2/u8x8_byte.c ****       }
+ 2224              		.loc 1 590 2 view .LVU514
+ 590:BSP/u8g2/u8x8_byte.c ****       }
+ 2225              		.loc 1 590 9 is_stmt 0 view .LVU515
+ 2226 002e 013C     		subs	r4, r4, #1
+ 2227              	.LVL280:
+ 590:BSP/u8g2/u8x8_byte.c ****       }
+ 2228              		.loc 1 590 9 view .LVU516
+ 2229 0030 E4B2     		uxtb	r4, r4
+ 2230              	.LVL281:
+ 2231              	.L146:
+ 586:BSP/u8g2/u8x8_byte.c ****       {
+ 2232              		.loc 1 586 22 is_stmt 1 view .LVU517
+ 2233 0032 002C     		cmp	r4, #0
+ 2234 0034 F6D1     		bne	.L148
+ 611:BSP/u8g2/u8x8_byte.c **** }
+ 2235              		.loc 1 611 10 is_stmt 0 view .LVU518
+ 2236 0036 0120     		movs	r0, #1
+ 2237 0038 F3E7     		b	.L142
+ 2238              	.LVL282:
+ 2239              	.L147:
+ 596:BSP/u8g2/u8x8_byte.c ****       break;
+ 2240              		.loc 1 596 7 is_stmt 1 view .LVU519
+ 2241 003a FFF7FEFF 		bl	i2c_init
+ 2242              	.LVL283:
+ARM GAS  /tmp/cc6PBIIV.s 			page 58
+
+
+ 597:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_SET_DC:
+ 2243              		.loc 1 597 7 view .LVU520
+ 611:BSP/u8g2/u8x8_byte.c **** }
+ 2244              		.loc 1 611 10 is_stmt 0 view .LVU521
+ 2245 003e 0120     		movs	r0, #1
+ 597:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_SET_DC:
+ 2246              		.loc 1 597 7 view .LVU522
+ 2247 0040 EFE7     		b	.L142
+ 2248              	.LVL284:
+ 2249              	.L145:
+ 601:BSP/u8g2/u8x8_byte.c ****       i2c_write_byte(u8x8, u8x8_GetI2CAddress(u8x8));
+ 2250              		.loc 1 601 7 is_stmt 1 view .LVU523
+ 2251 0042 FFF7FEFF 		bl	i2c_start
+ 2252              	.LVL285:
+ 602:BSP/u8g2/u8x8_byte.c ****       //i2c_write_byte(u8x8, 0x078);
+ 2253              		.loc 1 602 7 view .LVU524
+ 2254 0046 96F82410 		ldrb	r1, [r6, #36]	@ zero_extendqisi2
+ 2255 004a 3046     		mov	r0, r6
+ 2256 004c FFF7FEFF 		bl	i2c_write_byte
+ 2257              	.LVL286:
+ 604:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_END_TRANSFER:
+ 2258              		.loc 1 604 7 view .LVU525
+ 611:BSP/u8g2/u8x8_byte.c **** }
+ 2259              		.loc 1 611 10 is_stmt 0 view .LVU526
+ 2260 0050 0120     		movs	r0, #1
+ 604:BSP/u8g2/u8x8_byte.c ****     case U8X8_MSG_BYTE_END_TRANSFER:
+ 2261              		.loc 1 604 7 view .LVU527
+ 2262 0052 E6E7     		b	.L142
+ 2263              	.LVL287:
+ 2264              	.L144:
+ 606:BSP/u8g2/u8x8_byte.c ****       break;
+ 2265              		.loc 1 606 7 is_stmt 1 view .LVU528
+ 2266 0054 FFF7FEFF 		bl	i2c_stop
+ 2267              	.LVL288:
+ 607:BSP/u8g2/u8x8_byte.c ****     default:
+ 2268              		.loc 1 607 7 view .LVU529
+ 611:BSP/u8g2/u8x8_byte.c **** }
+ 2269              		.loc 1 611 10 is_stmt 0 view .LVU530
+ 2270 0058 0120     		movs	r0, #1
+ 607:BSP/u8g2/u8x8_byte.c ****     default:
+ 2271              		.loc 1 607 7 view .LVU531
+ 2272 005a E2E7     		b	.L142
+ 2273              	.LVL289:
+ 2274              	.L149:
+ 611:BSP/u8g2/u8x8_byte.c **** }
+ 2275              		.loc 1 611 10 view .LVU532
+ 2276 005c 0120     		movs	r0, #1
+ 2277              	.LVL290:
+ 611:BSP/u8g2/u8x8_byte.c **** }
+ 2278              		.loc 1 611 10 view .LVU533
+ 2279 005e E0E7     		b	.L142
+ 2280              		.cfi_endproc
+ 2281              	.LFE24:
+ 2283              		.section	.bss.enable_pin.0,"aw",%nobits
+ 2286              	enable_pin.0:
+ 2287 0000 00       		.space	1
+ 2288              		.section	.bss.last_dc.1,"aw",%nobits
+ARM GAS  /tmp/cc6PBIIV.s 			page 59
+
+
+ 2291              	last_dc.1:
+ 2292 0000 00       		.space	1
+ 2293              		.text
+ 2294              	.Letext0:
+ 2295              		.file 2 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ 2296              		.file 3 "BSP/u8g2/u8x8.h"
+ARM GAS  /tmp/cc6PBIIV.s 			page 60
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 u8x8_byte.c
+     /tmp/cc6PBIIV.s:19     .text.i2c_delay:00000000 $t
+     /tmp/cc6PBIIV.s:24     .text.i2c_delay:00000000 i2c_delay
+     /tmp/cc6PBIIV.s:49     .text.i2c_init:00000000 $t
+     /tmp/cc6PBIIV.s:54     .text.i2c_init:00000000 i2c_init
+     /tmp/cc6PBIIV.s:90     .text.i2c_read_scl_and_delay:00000000 $t
+     /tmp/cc6PBIIV.s:95     .text.i2c_read_scl_and_delay:00000000 i2c_read_scl_and_delay
+     /tmp/cc6PBIIV.s:125    .text.i2c_read_sda:00000000 $t
+     /tmp/cc6PBIIV.s:130    .text.i2c_read_sda:00000000 i2c_read_sda
+     /tmp/cc6PBIIV.s:154    .text.i2c_clear_sda:00000000 $t
+     /tmp/cc6PBIIV.s:159    .text.i2c_clear_sda:00000000 i2c_clear_sda
+     /tmp/cc6PBIIV.s:183    .text.i2c_stop:00000000 $t
+     /tmp/cc6PBIIV.s:188    .text.i2c_stop:00000000 i2c_stop
+     /tmp/cc6PBIIV.s:232    .text.i2c_clear_scl:00000000 $t
+     /tmp/cc6PBIIV.s:237    .text.i2c_clear_scl:00000000 i2c_clear_scl
+     /tmp/cc6PBIIV.s:261    .text.i2c_start:00000000 $t
+     /tmp/cc6PBIIV.s:266    .text.i2c_start:00000000 i2c_start
+     /tmp/cc6PBIIV.s:327    .text.i2c_write_bit:00000000 $t
+     /tmp/cc6PBIIV.s:332    .text.i2c_write_bit:00000000 i2c_write_bit
+     /tmp/cc6PBIIV.s:378    .text.i2c_read_bit:00000000 $t
+     /tmp/cc6PBIIV.s:383    .text.i2c_read_bit:00000000 i2c_read_bit
+     /tmp/cc6PBIIV.s:427    .text.i2c_write_byte:00000000 $t
+     /tmp/cc6PBIIV.s:432    .text.i2c_write_byte:00000000 i2c_write_byte
+     /tmp/cc6PBIIV.s:501    .text.u8x8_byte_SetDC:00000000 $t
+     /tmp/cc6PBIIV.s:507    .text.u8x8_byte_SetDC:00000000 u8x8_byte_SetDC
+     /tmp/cc6PBIIV.s:537    .text.u8x8_byte_SendBytes:00000000 $t
+     /tmp/cc6PBIIV.s:543    .text.u8x8_byte_SendBytes:00000000 u8x8_byte_SendBytes
+     /tmp/cc6PBIIV.s:575    .text.u8x8_byte_SendByte:00000000 $t
+     /tmp/cc6PBIIV.s:581    .text.u8x8_byte_SendByte:00000000 u8x8_byte_SendByte
+     /tmp/cc6PBIIV.s:615    .text.u8x8_byte_StartTransfer:00000000 $t
+     /tmp/cc6PBIIV.s:621    .text.u8x8_byte_StartTransfer:00000000 u8x8_byte_StartTransfer
+     /tmp/cc6PBIIV.s:649    .text.u8x8_byte_EndTransfer:00000000 $t
+     /tmp/cc6PBIIV.s:655    .text.u8x8_byte_EndTransfer:00000000 u8x8_byte_EndTransfer
+     /tmp/cc6PBIIV.s:683    .text.u8x8_byte_empty:00000000 $t
+     /tmp/cc6PBIIV.s:689    .text.u8x8_byte_empty:00000000 u8x8_byte_empty
+     /tmp/cc6PBIIV.s:709    .text.u8x8_byte_4wire_sw_spi:00000000 $t
+     /tmp/cc6PBIIV.s:715    .text.u8x8_byte_4wire_sw_spi:00000000 u8x8_byte_4wire_sw_spi
+     /tmp/cc6PBIIV.s:761    .text.u8x8_byte_4wire_sw_spi:00000020 $d
+     /tmp/cc6PBIIV.s:956    .text.u8x8_byte_8bit_6800mode:00000000 $t
+     /tmp/cc6PBIIV.s:962    .text.u8x8_byte_8bit_6800mode:00000000 u8x8_byte_8bit_6800mode
+     /tmp/cc6PBIIV.s:993    .text.u8x8_byte_8bit_6800mode:00000014 $d
+     /tmp/cc6PBIIV.s:1177   .text.u8x8_byte_8bit_8080mode:00000000 $t
+     /tmp/cc6PBIIV.s:1183   .text.u8x8_byte_8bit_8080mode:00000000 u8x8_byte_8bit_8080mode
+     /tmp/cc6PBIIV.s:1214   .text.u8x8_byte_8bit_8080mode:00000014 $d
+     /tmp/cc6PBIIV.s:1398   .text.u8x8_byte_3wire_sw_spi:00000000 $t
+     /tmp/cc6PBIIV.s:1404   .text.u8x8_byte_3wire_sw_spi:00000000 u8x8_byte_3wire_sw_spi
+     /tmp/cc6PBIIV.s:1452   .text.u8x8_byte_3wire_sw_spi:00000020 $d
+     /tmp/cc6PBIIV.s:1661   .text.u8x8_byte_3wire_sw_spi:0000010c $d
+     /tmp/cc6PBIIV.s:2291   .bss.last_dc.1:00000000 last_dc.1
+     /tmp/cc6PBIIV.s:1666   .text.u8x8_byte_set_ks0108_cs:00000000 $t
+     /tmp/cc6PBIIV.s:1672   .text.u8x8_byte_set_ks0108_cs:00000000 u8x8_byte_set_ks0108_cs
+     /tmp/cc6PBIIV.s:1717   .text.u8x8_byte_ks0108:00000000 $t
+     /tmp/cc6PBIIV.s:1723   .text.u8x8_byte_ks0108:00000000 u8x8_byte_ks0108
+     /tmp/cc6PBIIV.s:1754   .text.u8x8_byte_ks0108:00000014 $d
+     /tmp/cc6PBIIV.s:1932   .text.u8x8_byte_sed1520:00000000 $t
+     /tmp/cc6PBIIV.s:1938   .text.u8x8_byte_sed1520:00000000 u8x8_byte_sed1520
+ARM GAS  /tmp/cc6PBIIV.s 			page 61
+
+
+     /tmp/cc6PBIIV.s:1970   .text.u8x8_byte_sed1520:00000014 $d
+     /tmp/cc6PBIIV.s:2154   .text.u8x8_byte_sed1520:000000d4 $d
+     /tmp/cc6PBIIV.s:2286   .bss.enable_pin.0:00000000 enable_pin.0
+     /tmp/cc6PBIIV.s:2159   .text.u8x8_byte_sw_i2c:00000000 $t
+     /tmp/cc6PBIIV.s:2165   .text.u8x8_byte_sw_i2c:00000000 u8x8_byte_sw_i2c
+     /tmp/cc6PBIIV.s:2193   .text.u8x8_byte_sw_i2c:00000012 $d
+     /tmp/cc6PBIIV.s:2287   .bss.enable_pin.0:00000000 $d
+     /tmp/cc6PBIIV.s:2292   .bss.last_dc.1:00000000 $d
+     /tmp/cc6PBIIV.s:774    .text.u8x8_byte_4wire_sw_spi:0000002d $d
+     /tmp/cc6PBIIV.s:774    .text.u8x8_byte_4wire_sw_spi:0000002e $t
+     /tmp/cc6PBIIV.s:1006   .text.u8x8_byte_8bit_6800mode:00000021 $d
+     /tmp/cc6PBIIV.s:1006   .text.u8x8_byte_8bit_6800mode:00000022 $t
+     /tmp/cc6PBIIV.s:1227   .text.u8x8_byte_8bit_8080mode:00000021 $d
+     /tmp/cc6PBIIV.s:1227   .text.u8x8_byte_8bit_8080mode:00000022 $t
+     /tmp/cc6PBIIV.s:1465   .text.u8x8_byte_3wire_sw_spi:0000002d $d
+     /tmp/cc6PBIIV.s:1465   .text.u8x8_byte_3wire_sw_spi:0000002e $t
+     /tmp/cc6PBIIV.s:1767   .text.u8x8_byte_ks0108:00000021 $d
+     /tmp/cc6PBIIV.s:1767   .text.u8x8_byte_ks0108:00000022 $t
+     /tmp/cc6PBIIV.s:1983   .text.u8x8_byte_sed1520:00000021 $d
+     /tmp/cc6PBIIV.s:1983   .text.u8x8_byte_sed1520:00000022 $t
+     /tmp/cc6PBIIV.s:2206   .text.u8x8_byte_sw_i2c:0000001f $d
+     /tmp/cc6PBIIV.s:2206   .text.u8x8_byte_sw_i2c:00000020 $t
+
+UNDEFINED SYMBOLS
+u8x8_gpio_call

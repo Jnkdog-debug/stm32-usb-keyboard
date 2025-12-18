@@ -1,0 +1,885 @@
+ARM GAS  /tmp/cccVnj2H.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.arch armv7-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"matrix_keyboard.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.file 1 "BSP/KEYBOARD/matrix_keyboard.c"
+  18              		.section	.text.Matrix_Keyboard_Init,"ax",%progbits
+  19              		.align	1
+  20              		.global	Matrix_Keyboard_Init
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  25              	Matrix_Keyboard_Init:
+  26              	.LFB65:
+   1:BSP/KEYBOARD/matrix_keyboard.c **** /**
+   2:BSP/KEYBOARD/matrix_keyboard.c ****   ******************************************************************************
+   3:BSP/KEYBOARD/matrix_keyboard.c ****   * @file           : matrix_keyboard.c
+   4:BSP/KEYBOARD/matrix_keyboard.c ****   * @brief          : Matrix keyboard driver implementation
+   5:BSP/KEYBOARD/matrix_keyboard.c ****   * 
+   6:BSP/KEYBOARD/matrix_keyboard.c ****   * Scanning method: Drive rows one by one, read columns
+   7:BSP/KEYBOARD/matrix_keyboard.c ****   * Matrix layout:
+   8:BSP/KEYBOARD/matrix_keyboard.c ****   *        COL0(C6)  COL1(C7)  COL2(C8)
+   9:BSP/KEYBOARD/matrix_keyboard.c ****   * ROW0(A12)  0       1        2
+  10:BSP/KEYBOARD/matrix_keyboard.c ****   * ROW1(A10)  3       4        5
+  11:BSP/KEYBOARD/matrix_keyboard.c ****   * ROW2(A8)   6       7        8
+  12:BSP/KEYBOARD/matrix_keyboard.c ****   ******************************************************************************
+  13:BSP/KEYBOARD/matrix_keyboard.c ****   */
+  14:BSP/KEYBOARD/matrix_keyboard.c **** 
+  15:BSP/KEYBOARD/matrix_keyboard.c **** #include "matrix_keyboard.h"
+  16:BSP/KEYBOARD/matrix_keyboard.c **** 
+  17:BSP/KEYBOARD/matrix_keyboard.c **** /* Global variables for keyboard state */
+  18:BSP/KEYBOARD/matrix_keyboard.c **** static uint8_t key_state[KEYBOARD_ROWS][KEYBOARD_COLS] = {0};
+  19:BSP/KEYBOARD/matrix_keyboard.c **** static uint8_t key_state_last[KEYBOARD_ROWS][KEYBOARD_COLS] = {0};
+  20:BSP/KEYBOARD/matrix_keyboard.c **** static uint32_t debounce_timer[KEYBOARD_ROWS][KEYBOARD_COLS] = {0};
+  21:BSP/KEYBOARD/matrix_keyboard.c **** 
+  22:BSP/KEYBOARD/matrix_keyboard.c **** /* Row and Column pin definitions */
+  23:BSP/KEYBOARD/matrix_keyboard.c **** static const uint16_t row_pins[KEYBOARD_ROWS] = {ROW_PIN_0, ROW_PIN_1, ROW_PIN_2};
+  24:BSP/KEYBOARD/matrix_keyboard.c **** static const uint16_t col_pins[KEYBOARD_COLS] = {COL_PIN_0, COL_PIN_1, COL_PIN_2};
+  25:BSP/KEYBOARD/matrix_keyboard.c **** 
+  26:BSP/KEYBOARD/matrix_keyboard.c **** /* Key mapping table for easier reference */
+  27:BSP/KEYBOARD/matrix_keyboard.c **** static const uint8_t key_map[KEYBOARD_ROWS][KEYBOARD_COLS] = {
+  28:BSP/KEYBOARD/matrix_keyboard.c ****     {0, 1, 2},
+  29:BSP/KEYBOARD/matrix_keyboard.c ****     {3, 4, 5},
+  30:BSP/KEYBOARD/matrix_keyboard.c ****     {6, 7, 8}
+  31:BSP/KEYBOARD/matrix_keyboard.c **** };
+  32:BSP/KEYBOARD/matrix_keyboard.c **** 
+ARM GAS  /tmp/cccVnj2H.s 			page 2
+
+
+  33:BSP/KEYBOARD/matrix_keyboard.c **** /**
+  34:BSP/KEYBOARD/matrix_keyboard.c ****   * @brief Initialize matrix keyboard
+  35:BSP/KEYBOARD/matrix_keyboard.c ****   * @retval None
+  36:BSP/KEYBOARD/matrix_keyboard.c ****   */
+  37:BSP/KEYBOARD/matrix_keyboard.c **** void Matrix_Keyboard_Init(void)
+  38:BSP/KEYBOARD/matrix_keyboard.c **** {
+  27              		.loc 1 38 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 16
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+  32              	.LCFI0:
+  33              		.cfi_def_cfa_offset 20
+  34              		.cfi_offset 4, -20
+  35              		.cfi_offset 5, -16
+  36              		.cfi_offset 6, -12
+  37              		.cfi_offset 7, -8
+  38              		.cfi_offset 14, -4
+  39 0002 85B0     		sub	sp, sp, #20
+  40              	.LCFI1:
+  41              		.cfi_def_cfa_offset 40
+  39:BSP/KEYBOARD/matrix_keyboard.c ****     GPIO_InitTypeDef GPIO_InitStruct = {0};
+  42              		.loc 1 39 5 view .LVU1
+  43              		.loc 1 39 22 is_stmt 0 view .LVU2
+  44 0004 0024     		movs	r4, #0
+  45 0006 0094     		str	r4, [sp]
+  46 0008 0194     		str	r4, [sp, #4]
+  47 000a 0294     		str	r4, [sp, #8]
+  48 000c 0394     		str	r4, [sp, #12]
+  40:BSP/KEYBOARD/matrix_keyboard.c ****     
+  41:BSP/KEYBOARD/matrix_keyboard.c ****     /* Configure rows as output (push-pull, low) */
+  42:BSP/KEYBOARD/matrix_keyboard.c ****     GPIO_InitStruct.Pin = ROW_PIN_0 | ROW_PIN_1 | ROW_PIN_2;
+  49              		.loc 1 42 5 is_stmt 1 view .LVU3
+  50              		.loc 1 42 25 is_stmt 0 view .LVU4
+  51 000e 0E23     		movs	r3, #14
+  52 0010 0093     		str	r3, [sp]
+  43:BSP/KEYBOARD/matrix_keyboard.c ****     GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  53              		.loc 1 43 5 is_stmt 1 view .LVU5
+  54              		.loc 1 43 26 is_stmt 0 view .LVU6
+  55 0012 0126     		movs	r6, #1
+  56 0014 0196     		str	r6, [sp, #4]
+  44:BSP/KEYBOARD/matrix_keyboard.c ****     GPIO_InitStruct.Pull = GPIO_NOPULL;
+  57              		.loc 1 44 5 is_stmt 1 view .LVU7
+  45:BSP/KEYBOARD/matrix_keyboard.c ****     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  58              		.loc 1 45 5 view .LVU8
+  59              		.loc 1 45 27 is_stmt 0 view .LVU9
+  60 0016 0227     		movs	r7, #2
+  61 0018 0397     		str	r7, [sp, #12]
+  46:BSP/KEYBOARD/matrix_keyboard.c ****     HAL_GPIO_Init(ROW_PORT, &GPIO_InitStruct);
+  62              		.loc 1 46 5 is_stmt 1 view .LVU10
+  63 001a 1B4D     		ldr	r5, .L8
+  64 001c 6946     		mov	r1, sp
+  65 001e 2846     		mov	r0, r5
+  66 0020 FFF7FEFF 		bl	HAL_GPIO_Init
+  67              	.LVL0:
+  47:BSP/KEYBOARD/matrix_keyboard.c ****     
+  48:BSP/KEYBOARD/matrix_keyboard.c ****     /* Configure columns as input (with pull-up for stable detection) */
+ARM GAS  /tmp/cccVnj2H.s 			page 3
+
+
+  49:BSP/KEYBOARD/matrix_keyboard.c ****     GPIO_InitStruct.Pin = COL_PIN_0 | COL_PIN_1 | COL_PIN_2;
+  68              		.loc 1 49 5 view .LVU11
+  69              		.loc 1 49 25 is_stmt 0 view .LVU12
+  70 0024 7023     		movs	r3, #112
+  71 0026 0093     		str	r3, [sp]
+  50:BSP/KEYBOARD/matrix_keyboard.c ****     GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  72              		.loc 1 50 5 is_stmt 1 view .LVU13
+  73              		.loc 1 50 26 is_stmt 0 view .LVU14
+  74 0028 0194     		str	r4, [sp, #4]
+  51:BSP/KEYBOARD/matrix_keyboard.c ****     GPIO_InitStruct.Pull = GPIO_PULLUP;
+  75              		.loc 1 51 5 is_stmt 1 view .LVU15
+  76              		.loc 1 51 26 is_stmt 0 view .LVU16
+  77 002a 0296     		str	r6, [sp, #8]
+  52:BSP/KEYBOARD/matrix_keyboard.c ****     HAL_GPIO_Init(COL_PORT, &GPIO_InitStruct);
+  78              		.loc 1 52 5 is_stmt 1 view .LVU17
+  79 002c 6946     		mov	r1, sp
+  80 002e 2846     		mov	r0, r5
+  81 0030 FFF7FEFF 		bl	HAL_GPIO_Init
+  82              	.LVL1:
+  53:BSP/KEYBOARD/matrix_keyboard.c ****     
+  54:BSP/KEYBOARD/matrix_keyboard.c ****     /* Initialize all rows to inactive state (HIGH) */
+  55:BSP/KEYBOARD/matrix_keyboard.c ****     HAL_GPIO_WritePin(ROW_PORT, ROW_PIN_0, GPIO_PIN_SET);
+  83              		.loc 1 55 5 view .LVU18
+  84 0034 3246     		mov	r2, r6
+  85 0036 3946     		mov	r1, r7
+  86 0038 2846     		mov	r0, r5
+  87 003a FFF7FEFF 		bl	HAL_GPIO_WritePin
+  88              	.LVL2:
+  56:BSP/KEYBOARD/matrix_keyboard.c ****     HAL_GPIO_WritePin(ROW_PORT, ROW_PIN_1, GPIO_PIN_SET);
+  89              		.loc 1 56 5 view .LVU19
+  90 003e 3246     		mov	r2, r6
+  91 0040 0421     		movs	r1, #4
+  92 0042 2846     		mov	r0, r5
+  93 0044 FFF7FEFF 		bl	HAL_GPIO_WritePin
+  94              	.LVL3:
+  57:BSP/KEYBOARD/matrix_keyboard.c ****     HAL_GPIO_WritePin(ROW_PORT, ROW_PIN_2, GPIO_PIN_SET);
+  95              		.loc 1 57 5 view .LVU20
+  96 0048 3246     		mov	r2, r6
+  97 004a 0821     		movs	r1, #8
+  98 004c 2846     		mov	r0, r5
+  99 004e FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 100              	.LVL4:
+  58:BSP/KEYBOARD/matrix_keyboard.c ****     
+  59:BSP/KEYBOARD/matrix_keyboard.c ****     /* Clear state arrays */
+  60:BSP/KEYBOARD/matrix_keyboard.c ****     for (uint8_t i = 0; i < KEYBOARD_ROWS; i++) {
+ 101              		.loc 1 60 5 view .LVU21
+ 102              	.LBB2:
+ 103              		.loc 1 60 10 view .LVU22
+ 104              		.loc 1 60 18 is_stmt 0 view .LVU23
+ 105 0052 2146     		mov	r1, r4
+ 106              		.loc 1 60 5 view .LVU24
+ 107 0054 12E0     		b	.L2
+ 108              	.LVL5:
+ 109              	.L3:
+ 110              	.LBB3:
+  61:BSP/KEYBOARD/matrix_keyboard.c ****         for (uint8_t j = 0; j < KEYBOARD_COLS; j++) {
+  62:BSP/KEYBOARD/matrix_keyboard.c ****             key_state[i][j] = 0;
+ARM GAS  /tmp/cccVnj2H.s 			page 4
+
+
+ 111              		.loc 1 62 13 is_stmt 1 view .LVU25
+ 112              		.loc 1 62 29 is_stmt 0 view .LVU26
+ 113 0056 01EB4102 		add	r2, r1, r1, lsl #1
+ 114 005a 0C4C     		ldr	r4, .L8+4
+ 115 005c 1444     		add	r4, r4, r2
+ 116 005e 0020     		movs	r0, #0
+ 117 0060 E054     		strb	r0, [r4, r3]
+  63:BSP/KEYBOARD/matrix_keyboard.c ****             key_state_last[i][j] = 0;
+ 118              		.loc 1 63 13 is_stmt 1 view .LVU27
+ 119              		.loc 1 63 34 is_stmt 0 view .LVU28
+ 120 0062 0B4C     		ldr	r4, .L8+8
+ 121 0064 1444     		add	r4, r4, r2
+ 122 0066 E054     		strb	r0, [r4, r3]
+  64:BSP/KEYBOARD/matrix_keyboard.c ****             debounce_timer[i][j] = 0;
+ 123              		.loc 1 64 13 is_stmt 1 view .LVU29
+ 124              		.loc 1 64 34 is_stmt 0 view .LVU30
+ 125 0068 1A44     		add	r2, r2, r3
+ 126 006a 0A4C     		ldr	r4, .L8+12
+ 127 006c 44F82200 		str	r0, [r4, r2, lsl #2]
+  61:BSP/KEYBOARD/matrix_keyboard.c ****         for (uint8_t j = 0; j < KEYBOARD_COLS; j++) {
+ 128              		.loc 1 61 49 is_stmt 1 discriminator 3 view .LVU31
+ 129 0070 0133     		adds	r3, r3, #1
+ 130              	.LVL6:
+  61:BSP/KEYBOARD/matrix_keyboard.c ****         for (uint8_t j = 0; j < KEYBOARD_COLS; j++) {
+ 131              		.loc 1 61 49 is_stmt 0 discriminator 3 view .LVU32
+ 132 0072 DBB2     		uxtb	r3, r3
+ 133              	.LVL7:
+ 134              	.L4:
+  61:BSP/KEYBOARD/matrix_keyboard.c ****         for (uint8_t j = 0; j < KEYBOARD_COLS; j++) {
+ 135              		.loc 1 61 31 is_stmt 1 discriminator 1 view .LVU33
+ 136 0074 022B     		cmp	r3, #2
+ 137 0076 EED9     		bls	.L3
+ 138              	.LBE3:
+  60:BSP/KEYBOARD/matrix_keyboard.c ****         for (uint8_t j = 0; j < KEYBOARD_COLS; j++) {
+ 139              		.loc 1 60 45 discriminator 2 view .LVU34
+ 140 0078 0131     		adds	r1, r1, #1
+ 141              	.LVL8:
+  60:BSP/KEYBOARD/matrix_keyboard.c ****         for (uint8_t j = 0; j < KEYBOARD_COLS; j++) {
+ 142              		.loc 1 60 45 is_stmt 0 discriminator 2 view .LVU35
+ 143 007a C9B2     		uxtb	r1, r1
+ 144              	.LVL9:
+ 145              	.L2:
+  60:BSP/KEYBOARD/matrix_keyboard.c ****         for (uint8_t j = 0; j < KEYBOARD_COLS; j++) {
+ 146              		.loc 1 60 27 is_stmt 1 discriminator 1 view .LVU36
+ 147 007c 0229     		cmp	r1, #2
+ 148 007e 01D8     		bhi	.L7
+ 149              	.LBB4:
+  61:BSP/KEYBOARD/matrix_keyboard.c ****             key_state[i][j] = 0;
+ 150              		.loc 1 61 22 is_stmt 0 view .LVU37
+ 151 0080 0023     		movs	r3, #0
+ 152 0082 F7E7     		b	.L4
+ 153              	.L7:
+ 154              	.LBE4:
+ 155              	.LBE2:
+  65:BSP/KEYBOARD/matrix_keyboard.c ****         }
+  66:BSP/KEYBOARD/matrix_keyboard.c ****     }
+  67:BSP/KEYBOARD/matrix_keyboard.c **** }
+ARM GAS  /tmp/cccVnj2H.s 			page 5
+
+
+ 156              		.loc 1 67 1 view .LVU38
+ 157 0084 05B0     		add	sp, sp, #20
+ 158              	.LCFI2:
+ 159              		.cfi_def_cfa_offset 20
+ 160              		@ sp needed
+ 161 0086 F0BD     		pop	{r4, r5, r6, r7, pc}
+ 162              	.L9:
+ 163              		.align	2
+ 164              	.L8:
+ 165 0088 00080140 		.word	1073809408
+ 166 008c 00000000 		.word	key_state
+ 167 0090 00000000 		.word	key_state_last
+ 168 0094 00000000 		.word	debounce_timer
+ 169              		.cfi_endproc
+ 170              	.LFE65:
+ 172              		.section	.text.Matrix_Get_Key_Status,"ax",%progbits
+ 173              		.align	1
+ 174              		.global	Matrix_Get_Key_Status
+ 175              		.syntax unified
+ 176              		.thumb
+ 177              		.thumb_func
+ 179              	Matrix_Get_Key_Status:
+ 180              	.LVL10:
+ 181              	.LFB67:
+  68:BSP/KEYBOARD/matrix_keyboard.c **** 
+  69:BSP/KEYBOARD/matrix_keyboard.c **** /**
+  70:BSP/KEYBOARD/matrix_keyboard.c ****   * @brief Scan the matrix keyboard
+  71:BSP/KEYBOARD/matrix_keyboard.c ****   * This function should be called periodically (e.g., every 5-10ms)
+  72:BSP/KEYBOARD/matrix_keyboard.c ****   * @retval None
+  73:BSP/KEYBOARD/matrix_keyboard.c ****   */
+  74:BSP/KEYBOARD/matrix_keyboard.c **** void Matrix_Keyboard_Scan(void)
+  75:BSP/KEYBOARD/matrix_keyboard.c **** {
+  76:BSP/KEYBOARD/matrix_keyboard.c ****     uint8_t col;
+  77:BSP/KEYBOARD/matrix_keyboard.c ****     GPIO_PinState pin_state;
+  78:BSP/KEYBOARD/matrix_keyboard.c ****     uint32_t current_time = HAL_GetTick();
+  79:BSP/KEYBOARD/matrix_keyboard.c ****     
+  80:BSP/KEYBOARD/matrix_keyboard.c ****     /* Scan each row */
+  81:BSP/KEYBOARD/matrix_keyboard.c ****     for (uint8_t row = 0; row < KEYBOARD_ROWS; row++) {
+  82:BSP/KEYBOARD/matrix_keyboard.c ****         /* Set current row to LOW (activate it), others to HIGH */
+  83:BSP/KEYBOARD/matrix_keyboard.c ****         for (uint8_t i = 0; i < KEYBOARD_ROWS; i++) {
+  84:BSP/KEYBOARD/matrix_keyboard.c ****             if (i == row) {
+  85:BSP/KEYBOARD/matrix_keyboard.c ****                 HAL_GPIO_WritePin(ROW_PORT, row_pins[i], GPIO_PIN_RESET);  // LOW = active
+  86:BSP/KEYBOARD/matrix_keyboard.c ****             } else {
+  87:BSP/KEYBOARD/matrix_keyboard.c ****                 HAL_GPIO_WritePin(ROW_PORT, row_pins[i], GPIO_PIN_SET);    // HIGH = inactive
+  88:BSP/KEYBOARD/matrix_keyboard.c ****             }
+  89:BSP/KEYBOARD/matrix_keyboard.c ****         }
+  90:BSP/KEYBOARD/matrix_keyboard.c ****         
+  91:BSP/KEYBOARD/matrix_keyboard.c ****         /* Small delay for signal stabilization */
+  92:BSP/KEYBOARD/matrix_keyboard.c ****         for (volatile uint32_t i = 0; i < 100; i++);
+  93:BSP/KEYBOARD/matrix_keyboard.c ****         
+  94:BSP/KEYBOARD/matrix_keyboard.c ****         /* Read each column */
+  95:BSP/KEYBOARD/matrix_keyboard.c ****         for (col = 0; col < KEYBOARD_COLS; col++) {
+  96:BSP/KEYBOARD/matrix_keyboard.c ****             pin_state = HAL_GPIO_ReadPin(COL_PORT, col_pins[col]);
+  97:BSP/KEYBOARD/matrix_keyboard.c ****             
+  98:BSP/KEYBOARD/matrix_keyboard.c ****             /* With pull-up: GPIO_PIN_RESET (0) = pressed, GPIO_PIN_SET (1) = not pressed */
+  99:BSP/KEYBOARD/matrix_keyboard.c ****             uint8_t current_state = (pin_state == GPIO_PIN_RESET) ? 1 : 0;
+ 100:BSP/KEYBOARD/matrix_keyboard.c ****             
+ARM GAS  /tmp/cccVnj2H.s 			page 6
+
+
+ 101:BSP/KEYBOARD/matrix_keyboard.c ****             /* Debounce logic */
+ 102:BSP/KEYBOARD/matrix_keyboard.c ****             if (current_state != key_state[row][col]) {
+ 103:BSP/KEYBOARD/matrix_keyboard.c ****                 /* State changed, start debounce timer */
+ 104:BSP/KEYBOARD/matrix_keyboard.c ****                 if (debounce_timer[row][col] == 0) {
+ 105:BSP/KEYBOARD/matrix_keyboard.c ****                     debounce_timer[row][col] = current_time;
+ 106:BSP/KEYBOARD/matrix_keyboard.c ****                 }
+ 107:BSP/KEYBOARD/matrix_keyboard.c ****                 
+ 108:BSP/KEYBOARD/matrix_keyboard.c ****                 /* Check if debounce time has passed */
+ 109:BSP/KEYBOARD/matrix_keyboard.c ****                 if ((current_time - debounce_timer[row][col]) >= DEBOUNCE_TIME) {
+ 110:BSP/KEYBOARD/matrix_keyboard.c ****                     /* State is stable, update key state */
+ 111:BSP/KEYBOARD/matrix_keyboard.c ****                     key_state_last[row][col] = key_state[row][col];
+ 112:BSP/KEYBOARD/matrix_keyboard.c ****                     key_state[row][col] = current_state;
+ 113:BSP/KEYBOARD/matrix_keyboard.c ****                     debounce_timer[row][col] = 0;
+ 114:BSP/KEYBOARD/matrix_keyboard.c ****                     
+ 115:BSP/KEYBOARD/matrix_keyboard.c ****                     /* Call callback if state changed */
+ 116:BSP/KEYBOARD/matrix_keyboard.c ****                     if (key_state[row][col] != key_state_last[row][col]) {
+ 117:BSP/KEYBOARD/matrix_keyboard.c ****                         uint8_t key_code = key_map[row][col];
+ 118:BSP/KEYBOARD/matrix_keyboard.c ****                         Matrix_Key_Callback(key_code, key_state[row][col]);
+ 119:BSP/KEYBOARD/matrix_keyboard.c ****                     }
+ 120:BSP/KEYBOARD/matrix_keyboard.c ****                 }
+ 121:BSP/KEYBOARD/matrix_keyboard.c ****             } else {
+ 122:BSP/KEYBOARD/matrix_keyboard.c ****                 /* State stable, reset debounce timer */
+ 123:BSP/KEYBOARD/matrix_keyboard.c ****                 debounce_timer[row][col] = 0;
+ 124:BSP/KEYBOARD/matrix_keyboard.c ****             }
+ 125:BSP/KEYBOARD/matrix_keyboard.c ****         }
+ 126:BSP/KEYBOARD/matrix_keyboard.c ****     }
+ 127:BSP/KEYBOARD/matrix_keyboard.c ****     
+ 128:BSP/KEYBOARD/matrix_keyboard.c ****     /* Set all rows back to HIGH when done */
+ 129:BSP/KEYBOARD/matrix_keyboard.c ****     for (uint8_t i = 0; i < KEYBOARD_ROWS; i++) {
+ 130:BSP/KEYBOARD/matrix_keyboard.c ****         HAL_GPIO_WritePin(ROW_PORT, row_pins[i], GPIO_PIN_SET);
+ 131:BSP/KEYBOARD/matrix_keyboard.c ****     }
+ 132:BSP/KEYBOARD/matrix_keyboard.c **** }
+ 133:BSP/KEYBOARD/matrix_keyboard.c **** 
+ 134:BSP/KEYBOARD/matrix_keyboard.c **** /**
+ 135:BSP/KEYBOARD/matrix_keyboard.c ****   * @brief Get the status of a specific key
+ 136:BSP/KEYBOARD/matrix_keyboard.c ****   * @param row: Row index (0-2)
+ 137:BSP/KEYBOARD/matrix_keyboard.c ****   * @param col: Column index (0-2)
+ 138:BSP/KEYBOARD/matrix_keyboard.c ****   * @retval Key status: 1 = pressed, 0 = not pressed
+ 139:BSP/KEYBOARD/matrix_keyboard.c ****   */
+ 140:BSP/KEYBOARD/matrix_keyboard.c **** uint8_t Matrix_Get_Key_Status(uint8_t row, uint8_t col)
+ 141:BSP/KEYBOARD/matrix_keyboard.c **** {
+ 182              		.loc 1 141 1 is_stmt 1 view -0
+ 183              		.cfi_startproc
+ 184              		@ args = 0, pretend = 0, frame = 0
+ 185              		@ frame_needed = 0, uses_anonymous_args = 0
+ 186              		@ link register save eliminated.
+ 142:BSP/KEYBOARD/matrix_keyboard.c ****     if (row < KEYBOARD_ROWS && col < KEYBOARD_COLS) {
+ 187              		.loc 1 142 5 view .LVU40
+ 188              		.loc 1 142 8 is_stmt 0 view .LVU41
+ 189 0000 0228     		cmp	r0, #2
+ 190 0002 09D8     		bhi	.L12
+ 191              		.loc 1 142 29 discriminator 1 view .LVU42
+ 192 0004 0229     		cmp	r1, #2
+ 193 0006 01D9     		bls	.L14
+ 143:BSP/KEYBOARD/matrix_keyboard.c ****         return key_state[row][col];
+ 144:BSP/KEYBOARD/matrix_keyboard.c ****     }
+ 145:BSP/KEYBOARD/matrix_keyboard.c ****     return 0;
+ARM GAS  /tmp/cccVnj2H.s 			page 7
+
+
+ 194              		.loc 1 145 12 view .LVU43
+ 195 0008 0020     		movs	r0, #0
+ 196              	.LVL11:
+ 146:BSP/KEYBOARD/matrix_keyboard.c **** }
+ 197              		.loc 1 146 1 view .LVU44
+ 198 000a 7047     		bx	lr
+ 199              	.LVL12:
+ 200              	.L14:
+ 143:BSP/KEYBOARD/matrix_keyboard.c ****         return key_state[row][col];
+ 201              		.loc 1 143 9 is_stmt 1 view .LVU45
+ 143:BSP/KEYBOARD/matrix_keyboard.c ****         return key_state[row][col];
+ 202              		.loc 1 143 30 is_stmt 0 view .LVU46
+ 203 000c 00EB4000 		add	r0, r0, r0, lsl #1
+ 204              	.LVL13:
+ 143:BSP/KEYBOARD/matrix_keyboard.c ****         return key_state[row][col];
+ 205              		.loc 1 143 30 view .LVU47
+ 206 0010 024B     		ldr	r3, .L15
+ 207 0012 0344     		add	r3, r3, r0
+ 208 0014 585C     		ldrb	r0, [r3, r1]	@ zero_extendqisi2
+ 209 0016 7047     		bx	lr
+ 210              	.LVL14:
+ 211              	.L12:
+ 145:BSP/KEYBOARD/matrix_keyboard.c **** }
+ 212              		.loc 1 145 12 view .LVU48
+ 213 0018 0020     		movs	r0, #0
+ 214              	.LVL15:
+ 145:BSP/KEYBOARD/matrix_keyboard.c **** }
+ 215              		.loc 1 145 12 view .LVU49
+ 216 001a 7047     		bx	lr
+ 217              	.L16:
+ 218              		.align	2
+ 219              	.L15:
+ 220 001c 00000000 		.word	key_state
+ 221              		.cfi_endproc
+ 222              	.LFE67:
+ 224              		.section	.text.Matrix_Key_Callback,"ax",%progbits
+ 225              		.align	1
+ 226              		.weak	Matrix_Key_Callback
+ 227              		.syntax unified
+ 228              		.thumb
+ 229              		.thumb_func
+ 231              	Matrix_Key_Callback:
+ 232              	.LVL16:
+ 233              	.LFB68:
+ 147:BSP/KEYBOARD/matrix_keyboard.c **** 
+ 148:BSP/KEYBOARD/matrix_keyboard.c **** /**
+ 149:BSP/KEYBOARD/matrix_keyboard.c ****   * @brief Callback function for key press/release events
+ 150:BSP/KEYBOARD/matrix_keyboard.c ****   * This function should be overridden by user application
+ 151:BSP/KEYBOARD/matrix_keyboard.c ****   * @param key_code: Key code (0-8)
+ 152:BSP/KEYBOARD/matrix_keyboard.c ****   * @param pressed: 1 = key pressed, 0 = key released
+ 153:BSP/KEYBOARD/matrix_keyboard.c ****   * @retval None
+ 154:BSP/KEYBOARD/matrix_keyboard.c ****   */
+ 155:BSP/KEYBOARD/matrix_keyboard.c **** __weak void Matrix_Key_Callback(uint8_t key_code, uint8_t pressed)
+ 156:BSP/KEYBOARD/matrix_keyboard.c **** {
+ 234              		.loc 1 156 1 is_stmt 1 view -0
+ 235              		.cfi_startproc
+ 236              		@ args = 0, pretend = 0, frame = 0
+ARM GAS  /tmp/cccVnj2H.s 			page 8
+
+
+ 237              		@ frame_needed = 0, uses_anonymous_args = 0
+ 238              		@ link register save eliminated.
+ 157:BSP/KEYBOARD/matrix_keyboard.c ****     /* This is a weak function, user can override it in application code */
+ 158:BSP/KEYBOARD/matrix_keyboard.c ****     /* Example implementation:
+ 159:BSP/KEYBOARD/matrix_keyboard.c ****      * if (pressed) {
+ 160:BSP/KEYBOARD/matrix_keyboard.c ****      *     printf("Key %d pressed\r\n", key_code);
+ 161:BSP/KEYBOARD/matrix_keyboard.c ****      * } else {
+ 162:BSP/KEYBOARD/matrix_keyboard.c ****      *     printf("Key %d released\r\n", key_code);
+ 163:BSP/KEYBOARD/matrix_keyboard.c ****      * }
+ 164:BSP/KEYBOARD/matrix_keyboard.c ****      */
+ 165:BSP/KEYBOARD/matrix_keyboard.c **** }
+ 239              		.loc 1 165 1 view .LVU51
+ 240 0000 7047     		bx	lr
+ 241              		.cfi_endproc
+ 242              	.LFE68:
+ 244              		.section	.text.Matrix_Keyboard_Scan,"ax",%progbits
+ 245              		.align	1
+ 246              		.global	Matrix_Keyboard_Scan
+ 247              		.syntax unified
+ 248              		.thumb
+ 249              		.thumb_func
+ 251              	Matrix_Keyboard_Scan:
+ 252              	.LFB66:
+  75:BSP/KEYBOARD/matrix_keyboard.c ****     uint8_t col;
+ 253              		.loc 1 75 1 view -0
+ 254              		.cfi_startproc
+ 255              		@ args = 0, pretend = 0, frame = 8
+ 256              		@ frame_needed = 0, uses_anonymous_args = 0
+ 257 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 258              	.LCFI3:
+ 259              		.cfi_def_cfa_offset 20
+ 260              		.cfi_offset 4, -20
+ 261              		.cfi_offset 5, -16
+ 262              		.cfi_offset 6, -12
+ 263              		.cfi_offset 7, -8
+ 264              		.cfi_offset 14, -4
+ 265 0002 83B0     		sub	sp, sp, #12
+ 266              	.LCFI4:
+ 267              		.cfi_def_cfa_offset 32
+  76:BSP/KEYBOARD/matrix_keyboard.c ****     GPIO_PinState pin_state;
+ 268              		.loc 1 76 5 view .LVU53
+  77:BSP/KEYBOARD/matrix_keyboard.c ****     uint32_t current_time = HAL_GetTick();
+ 269              		.loc 1 77 5 view .LVU54
+  78:BSP/KEYBOARD/matrix_keyboard.c ****     
+ 270              		.loc 1 78 5 view .LVU55
+  78:BSP/KEYBOARD/matrix_keyboard.c ****     
+ 271              		.loc 1 78 29 is_stmt 0 view .LVU56
+ 272 0004 FFF7FEFF 		bl	HAL_GetTick
+ 273              	.LVL17:
+ 274 0008 0646     		mov	r6, r0
+ 275              	.LVL18:
+  81:BSP/KEYBOARD/matrix_keyboard.c ****         /* Set current row to LOW (activate it), others to HIGH */
+ 276              		.loc 1 81 5 is_stmt 1 view .LVU57
+ 277              	.LBB5:
+  81:BSP/KEYBOARD/matrix_keyboard.c ****         /* Set current row to LOW (activate it), others to HIGH */
+ 278              		.loc 1 81 10 view .LVU58
+  81:BSP/KEYBOARD/matrix_keyboard.c ****         /* Set current row to LOW (activate it), others to HIGH */
+ARM GAS  /tmp/cccVnj2H.s 			page 9
+
+
+ 279              		.loc 1 81 18 is_stmt 0 view .LVU59
+ 280 000a 0025     		movs	r5, #0
+  81:BSP/KEYBOARD/matrix_keyboard.c ****         /* Set current row to LOW (activate it), others to HIGH */
+ 281              		.loc 1 81 5 view .LVU60
+ 282 000c 6CE0     		b	.L19
+ 283              	.LVL19:
+ 284              	.L36:
+ 285              	.LBB6:
+  85:BSP/KEYBOARD/matrix_keyboard.c ****             } else {
+ 286              		.loc 1 85 17 is_stmt 1 view .LVU61
+ 287 000e 0022     		movs	r2, #0
+ 288 0010 3F4B     		ldr	r3, .L40
+ 289 0012 33F81410 		ldrh	r1, [r3, r4, lsl #1]
+ 290 0016 3F48     		ldr	r0, .L40+4
+ 291 0018 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 292              	.LVL20:
+ 293              	.L21:
+  83:BSP/KEYBOARD/matrix_keyboard.c ****             if (i == row) {
+ 294              		.loc 1 83 49 discriminator 2 view .LVU62
+ 295 001c 0134     		adds	r4, r4, #1
+ 296              	.LVL21:
+  83:BSP/KEYBOARD/matrix_keyboard.c ****             if (i == row) {
+ 297              		.loc 1 83 49 is_stmt 0 discriminator 2 view .LVU63
+ 298 001e E4B2     		uxtb	r4, r4
+ 299              	.LVL22:
+ 300              	.L30:
+  83:BSP/KEYBOARD/matrix_keyboard.c ****             if (i == row) {
+ 301              		.loc 1 83 31 is_stmt 1 discriminator 1 view .LVU64
+ 302 0020 022C     		cmp	r4, #2
+ 303 0022 09D8     		bhi	.L35
+  84:BSP/KEYBOARD/matrix_keyboard.c ****                 HAL_GPIO_WritePin(ROW_PORT, row_pins[i], GPIO_PIN_RESET);  // LOW = active
+ 304              		.loc 1 84 13 view .LVU65
+  84:BSP/KEYBOARD/matrix_keyboard.c ****                 HAL_GPIO_WritePin(ROW_PORT, row_pins[i], GPIO_PIN_RESET);  // LOW = active
+ 305              		.loc 1 84 16 is_stmt 0 view .LVU66
+ 306 0024 A542     		cmp	r5, r4
+ 307 0026 F2D0     		beq	.L36
+  87:BSP/KEYBOARD/matrix_keyboard.c ****             }
+ 308              		.loc 1 87 17 is_stmt 1 view .LVU67
+ 309 0028 0122     		movs	r2, #1
+ 310 002a 394B     		ldr	r3, .L40
+ 311 002c 33F81410 		ldrh	r1, [r3, r4, lsl #1]
+ 312 0030 3848     		ldr	r0, .L40+4
+ 313 0032 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 314              	.LVL23:
+ 315 0036 F1E7     		b	.L21
+ 316              	.L35:
+ 317              	.LBE6:
+  92:BSP/KEYBOARD/matrix_keyboard.c ****         
+ 318              		.loc 1 92 9 view .LVU68
+ 319              	.LBB7:
+  92:BSP/KEYBOARD/matrix_keyboard.c ****         
+ 320              		.loc 1 92 14 view .LVU69
+  92:BSP/KEYBOARD/matrix_keyboard.c ****         
+ 321              		.loc 1 92 32 is_stmt 0 view .LVU70
+ 322 0038 0023     		movs	r3, #0
+ 323 003a 0193     		str	r3, [sp, #4]
+  92:BSP/KEYBOARD/matrix_keyboard.c ****         
+ARM GAS  /tmp/cccVnj2H.s 			page 10
+
+
+ 324              		.loc 1 92 9 view .LVU71
+ 325 003c 02E0     		b	.L23
+ 326              	.L24:
+  92:BSP/KEYBOARD/matrix_keyboard.c ****         
+ 327              		.loc 1 92 49 is_stmt 1 discriminator 3 view .LVU72
+ 328 003e 019B     		ldr	r3, [sp, #4]
+ 329 0040 0133     		adds	r3, r3, #1
+ 330 0042 0193     		str	r3, [sp, #4]
+ 331              	.L23:
+  92:BSP/KEYBOARD/matrix_keyboard.c ****         
+ 332              		.loc 1 92 41 discriminator 1 view .LVU73
+ 333 0044 019B     		ldr	r3, [sp, #4]
+ 334 0046 632B     		cmp	r3, #99
+ 335 0048 F9D9     		bls	.L24
+ 336              	.LBE7:
+  95:BSP/KEYBOARD/matrix_keyboard.c ****             pin_state = HAL_GPIO_ReadPin(COL_PORT, col_pins[col]);
+ 337              		.loc 1 95 18 is_stmt 0 view .LVU74
+ 338 004a 0024     		movs	r4, #0
+ 339              	.LVL24:
+  95:BSP/KEYBOARD/matrix_keyboard.c ****             pin_state = HAL_GPIO_ReadPin(COL_PORT, col_pins[col]);
+ 340              		.loc 1 95 18 view .LVU75
+ 341 004c 0BE0     		b	.L25
+ 342              	.LVL25:
+ 343              	.L27:
+ 344              	.LBB8:
+ 109:BSP/KEYBOARD/matrix_keyboard.c ****                     /* State is stable, update key state */
+ 345              		.loc 1 109 17 is_stmt 1 view .LVU76
+ 109:BSP/KEYBOARD/matrix_keyboard.c ****                     /* State is stable, update key state */
+ 346              		.loc 1 109 56 is_stmt 0 view .LVU77
+ 347 004e 03EB4302 		add	r2, r3, r3, lsl #1
+ 348 0052 3A44     		add	r2, r2, r7
+ 349 0054 DFF8C0C0 		ldr	ip, .L40+8
+ 350 0058 5CF82220 		ldr	r2, [ip, r2, lsl #2]
+ 109:BSP/KEYBOARD/matrix_keyboard.c ****                     /* State is stable, update key state */
+ 351              		.loc 1 109 35 view .LVU78
+ 352 005c B21A     		subs	r2, r6, r2
+ 109:BSP/KEYBOARD/matrix_keyboard.c ****                     /* State is stable, update key state */
+ 353              		.loc 1 109 20 view .LVU79
+ 354 005e 132A     		cmp	r2, #19
+ 355 0060 24D8     		bhi	.L37
+ 356              	.LVL26:
+ 357              	.L28:
+ 109:BSP/KEYBOARD/matrix_keyboard.c ****                     /* State is stable, update key state */
+ 358              		.loc 1 109 20 view .LVU80
+ 359              	.LBE8:
+  95:BSP/KEYBOARD/matrix_keyboard.c ****             pin_state = HAL_GPIO_ReadPin(COL_PORT, col_pins[col]);
+ 360              		.loc 1 95 47 is_stmt 1 discriminator 2 view .LVU81
+ 361 0062 0134     		adds	r4, r4, #1
+ 362              	.LVL27:
+  95:BSP/KEYBOARD/matrix_keyboard.c ****             pin_state = HAL_GPIO_ReadPin(COL_PORT, col_pins[col]);
+ 363              		.loc 1 95 47 is_stmt 0 discriminator 2 view .LVU82
+ 364 0064 E4B2     		uxtb	r4, r4
+ 365              	.LVL28:
+ 366              	.L25:
+  95:BSP/KEYBOARD/matrix_keyboard.c ****             pin_state = HAL_GPIO_ReadPin(COL_PORT, col_pins[col]);
+ 367              		.loc 1 95 27 is_stmt 1 discriminator 1 view .LVU83
+ 368 0066 022C     		cmp	r4, #2
+ARM GAS  /tmp/cccVnj2H.s 			page 11
+
+
+ 369 0068 3CD8     		bhi	.L38
+ 370              	.LBB10:
+  96:BSP/KEYBOARD/matrix_keyboard.c ****             
+ 371              		.loc 1 96 13 view .LVU84
+  96:BSP/KEYBOARD/matrix_keyboard.c ****             
+ 372              		.loc 1 96 25 is_stmt 0 view .LVU85
+ 373 006a 2746     		mov	r7, r4
+ 374 006c 2B4B     		ldr	r3, .L40+12
+ 375 006e 33F81410 		ldrh	r1, [r3, r4, lsl #1]
+ 376 0072 2848     		ldr	r0, .L40+4
+ 377 0074 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 378              	.LVL29:
+  99:BSP/KEYBOARD/matrix_keyboard.c ****             
+ 379              		.loc 1 99 13 is_stmt 1 view .LVU86
+  99:BSP/KEYBOARD/matrix_keyboard.c ****             
+ 380              		.loc 1 99 71 is_stmt 0 view .LVU87
+ 381 0078 B0FA80F1 		clz	r1, r0
+ 382 007c 4909     		lsrs	r1, r1, #5
+ 383              	.LVL30:
+ 102:BSP/KEYBOARD/matrix_keyboard.c ****                 /* State changed, start debounce timer */
+ 384              		.loc 1 102 13 is_stmt 1 view .LVU88
+ 102:BSP/KEYBOARD/matrix_keyboard.c ****                 /* State changed, start debounce timer */
+ 385              		.loc 1 102 48 is_stmt 0 view .LVU89
+ 386 007e 2B46     		mov	r3, r5
+ 387 0080 05EB4500 		add	r0, r5, r5, lsl #1
+ 388              	.LVL31:
+ 102:BSP/KEYBOARD/matrix_keyboard.c ****                 /* State changed, start debounce timer */
+ 389              		.loc 1 102 48 view .LVU90
+ 390 0084 264A     		ldr	r2, .L40+16
+ 391 0086 0244     		add	r2, r2, r0
+ 392 0088 105D     		ldrb	r0, [r2, r4]	@ zero_extendqisi2
+ 102:BSP/KEYBOARD/matrix_keyboard.c ****                 /* State changed, start debounce timer */
+ 393              		.loc 1 102 16 view .LVU91
+ 394 008a 8842     		cmp	r0, r1
+ 395 008c 22D0     		beq	.L26
+ 104:BSP/KEYBOARD/matrix_keyboard.c ****                     debounce_timer[row][col] = current_time;
+ 396              		.loc 1 104 17 is_stmt 1 view .LVU92
+ 104:BSP/KEYBOARD/matrix_keyboard.c ****                     debounce_timer[row][col] = current_time;
+ 397              		.loc 1 104 40 is_stmt 0 view .LVU93
+ 398 008e 05EB4502 		add	r2, r5, r5, lsl #1
+ 399 0092 2244     		add	r2, r2, r4
+ 400 0094 DFF880C0 		ldr	ip, .L40+8
+ 401 0098 5CF82220 		ldr	r2, [ip, r2, lsl #2]
+ 104:BSP/KEYBOARD/matrix_keyboard.c ****                     debounce_timer[row][col] = current_time;
+ 402              		.loc 1 104 20 view .LVU94
+ 403 009c 002A     		cmp	r2, #0
+ 404 009e D6D1     		bne	.L27
+ 105:BSP/KEYBOARD/matrix_keyboard.c ****                 }
+ 405              		.loc 1 105 21 is_stmt 1 view .LVU95
+ 105:BSP/KEYBOARD/matrix_keyboard.c ****                 }
+ 406              		.loc 1 105 46 is_stmt 0 view .LVU96
+ 407 00a0 05EB4502 		add	r2, r5, r5, lsl #1
+ 408 00a4 2244     		add	r2, r2, r4
+ 409 00a6 4CF82260 		str	r6, [ip, r2, lsl #2]
+ 410 00aa D0E7     		b	.L27
+ 411              	.L37:
+ 111:BSP/KEYBOARD/matrix_keyboard.c ****                     key_state[row][col] = current_state;
+ARM GAS  /tmp/cccVnj2H.s 			page 12
+
+
+ 412              		.loc 1 111 21 is_stmt 1 view .LVU97
+ 111:BSP/KEYBOARD/matrix_keyboard.c ****                     key_state[row][col] = current_state;
+ 413              		.loc 1 111 46 is_stmt 0 view .LVU98
+ 414 00ac 03EB4303 		add	r3, r3, r3, lsl #1
+ 415 00b0 1C4A     		ldr	r2, .L40+20
+ 416 00b2 1A44     		add	r2, r2, r3
+ 417 00b4 D055     		strb	r0, [r2, r7]
+ 112:BSP/KEYBOARD/matrix_keyboard.c ****                     debounce_timer[row][col] = 0;
+ 418              		.loc 1 112 21 is_stmt 1 view .LVU99
+ 112:BSP/KEYBOARD/matrix_keyboard.c ****                     debounce_timer[row][col] = 0;
+ 419              		.loc 1 112 41 is_stmt 0 view .LVU100
+ 420 00b6 1A4A     		ldr	r2, .L40+16
+ 421 00b8 1A44     		add	r2, r2, r3
+ 422 00ba D155     		strb	r1, [r2, r7]
+ 113:BSP/KEYBOARD/matrix_keyboard.c ****                     
+ 423              		.loc 1 113 21 is_stmt 1 view .LVU101
+ 113:BSP/KEYBOARD/matrix_keyboard.c ****                     
+ 424              		.loc 1 113 46 is_stmt 0 view .LVU102
+ 425 00bc D819     		adds	r0, r3, r7
+ 426 00be 6246     		mov	r2, ip
+ 427 00c0 4FF0000C 		mov	ip, #0
+ 428 00c4 42F820C0 		str	ip, [r2, r0, lsl #2]
+ 116:BSP/KEYBOARD/matrix_keyboard.c ****                         uint8_t key_code = key_map[row][col];
+ 429              		.loc 1 116 21 is_stmt 1 view .LVU103
+ 430              	.LBB9:
+ 117:BSP/KEYBOARD/matrix_keyboard.c ****                         Matrix_Key_Callback(key_code, key_state[row][col]);
+ 431              		.loc 1 117 25 view .LVU104
+ 117:BSP/KEYBOARD/matrix_keyboard.c ****                         Matrix_Key_Callback(key_code, key_state[row][col]);
+ 432              		.loc 1 117 33 is_stmt 0 view .LVU105
+ 433 00c8 174A     		ldr	r2, .L40+24
+ 434 00ca 1344     		add	r3, r3, r2
+ 435              	.LVL32:
+ 118:BSP/KEYBOARD/matrix_keyboard.c ****                     }
+ 436              		.loc 1 118 25 is_stmt 1 view .LVU106
+ 437 00cc D85D     		ldrb	r0, [r3, r7]	@ zero_extendqisi2
+ 438 00ce FFF7FEFF 		bl	Matrix_Key_Callback
+ 439              	.LVL33:
+ 118:BSP/KEYBOARD/matrix_keyboard.c ****                     }
+ 440              		.loc 1 118 25 is_stmt 0 view .LVU107
+ 441 00d2 C6E7     		b	.L28
+ 442              	.LVL34:
+ 443              	.L26:
+ 118:BSP/KEYBOARD/matrix_keyboard.c ****                     }
+ 444              		.loc 1 118 25 view .LVU108
+ 445              	.LBE9:
+ 123:BSP/KEYBOARD/matrix_keyboard.c ****             }
+ 446              		.loc 1 123 17 is_stmt 1 view .LVU109
+ 123:BSP/KEYBOARD/matrix_keyboard.c ****             }
+ 447              		.loc 1 123 42 is_stmt 0 view .LVU110
+ 448 00d4 05EB4503 		add	r3, r5, r5, lsl #1
+ 449 00d8 2344     		add	r3, r3, r4
+ 450 00da 0F4A     		ldr	r2, .L40+8
+ 451 00dc 0021     		movs	r1, #0
+ 452              	.LVL35:
+ 123:BSP/KEYBOARD/matrix_keyboard.c ****             }
+ 453              		.loc 1 123 42 view .LVU111
+ 454 00de 42F82310 		str	r1, [r2, r3, lsl #2]
+ARM GAS  /tmp/cccVnj2H.s 			page 13
+
+
+ 455 00e2 BEE7     		b	.L28
+ 456              	.LVL36:
+ 457              	.L38:
+ 123:BSP/KEYBOARD/matrix_keyboard.c ****             }
+ 458              		.loc 1 123 42 view .LVU112
+ 459              	.LBE10:
+  81:BSP/KEYBOARD/matrix_keyboard.c ****         /* Set current row to LOW (activate it), others to HIGH */
+ 460              		.loc 1 81 51 is_stmt 1 discriminator 2 view .LVU113
+ 461 00e4 0135     		adds	r5, r5, #1
+ 462              	.LVL37:
+  81:BSP/KEYBOARD/matrix_keyboard.c ****         /* Set current row to LOW (activate it), others to HIGH */
+ 463              		.loc 1 81 51 is_stmt 0 discriminator 2 view .LVU114
+ 464 00e6 EDB2     		uxtb	r5, r5
+ 465              	.LVL38:
+ 466              	.L19:
+  81:BSP/KEYBOARD/matrix_keyboard.c ****         /* Set current row to LOW (activate it), others to HIGH */
+ 467              		.loc 1 81 31 is_stmt 1 discriminator 1 view .LVU115
+ 468 00e8 022D     		cmp	r5, #2
+ 469 00ea 01D8     		bhi	.L39
+ 470              	.LBB11:
+  83:BSP/KEYBOARD/matrix_keyboard.c ****             if (i == row) {
+ 471              		.loc 1 83 22 is_stmt 0 view .LVU116
+ 472 00ec 0024     		movs	r4, #0
+ 473 00ee 97E7     		b	.L30
+ 474              	.L39:
+ 475              	.LBE11:
+ 476              	.LBE5:
+ 477              	.LBB12:
+ 129:BSP/KEYBOARD/matrix_keyboard.c ****         HAL_GPIO_WritePin(ROW_PORT, row_pins[i], GPIO_PIN_SET);
+ 478              		.loc 1 129 18 view .LVU117
+ 479 00f0 0024     		movs	r4, #0
+ 480 00f2 08E0     		b	.L31
+ 481              	.LVL39:
+ 482              	.L32:
+ 130:BSP/KEYBOARD/matrix_keyboard.c ****     }
+ 483              		.loc 1 130 9 is_stmt 1 view .LVU118
+ 484 00f4 0122     		movs	r2, #1
+ 485 00f6 064B     		ldr	r3, .L40
+ 486 00f8 33F81410 		ldrh	r1, [r3, r4, lsl #1]
+ 487 00fc 0548     		ldr	r0, .L40+4
+ 488 00fe FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 489              	.LVL40:
+ 129:BSP/KEYBOARD/matrix_keyboard.c ****         HAL_GPIO_WritePin(ROW_PORT, row_pins[i], GPIO_PIN_SET);
+ 490              		.loc 1 129 45 discriminator 3 view .LVU119
+ 491 0102 0134     		adds	r4, r4, #1
+ 492              	.LVL41:
+ 129:BSP/KEYBOARD/matrix_keyboard.c ****         HAL_GPIO_WritePin(ROW_PORT, row_pins[i], GPIO_PIN_SET);
+ 493              		.loc 1 129 45 is_stmt 0 discriminator 3 view .LVU120
+ 494 0104 E4B2     		uxtb	r4, r4
+ 495              	.LVL42:
+ 496              	.L31:
+ 129:BSP/KEYBOARD/matrix_keyboard.c ****         HAL_GPIO_WritePin(ROW_PORT, row_pins[i], GPIO_PIN_SET);
+ 497              		.loc 1 129 27 is_stmt 1 discriminator 1 view .LVU121
+ 498 0106 022C     		cmp	r4, #2
+ 499 0108 F4D9     		bls	.L32
+ 500              	.LBE12:
+ 132:BSP/KEYBOARD/matrix_keyboard.c **** 
+ARM GAS  /tmp/cccVnj2H.s 			page 14
+
+
+ 501              		.loc 1 132 1 is_stmt 0 view .LVU122
+ 502 010a 03B0     		add	sp, sp, #12
+ 503              	.LCFI5:
+ 504              		.cfi_def_cfa_offset 20
+ 505              		@ sp needed
+ 506 010c F0BD     		pop	{r4, r5, r6, r7, pc}
+ 507              	.LVL43:
+ 508              	.L41:
+ 132:BSP/KEYBOARD/matrix_keyboard.c **** 
+ 509              		.loc 1 132 1 view .LVU123
+ 510 010e 00BF     		.align	2
+ 511              	.L40:
+ 512 0110 00000000 		.word	row_pins
+ 513 0114 00080140 		.word	1073809408
+ 514 0118 00000000 		.word	debounce_timer
+ 515 011c 00000000 		.word	col_pins
+ 516 0120 00000000 		.word	key_state
+ 517 0124 00000000 		.word	key_state_last
+ 518 0128 00000000 		.word	key_map
+ 519              		.cfi_endproc
+ 520              	.LFE66:
+ 522              		.section	.rodata.key_map,"a"
+ 523              		.align	2
+ 526              	key_map:
+ 527 0000 000102   		.ascii	"\000\001\002"
+ 528 0003 030405   		.ascii	"\003\004\005"
+ 529 0006 060708   		.ascii	"\006\007\010"
+ 530              		.section	.rodata.col_pins,"a"
+ 531              		.align	2
+ 534              	col_pins:
+ 535 0000 1000     		.short	16
+ 536 0002 2000     		.short	32
+ 537 0004 4000     		.short	64
+ 538              		.section	.rodata.row_pins,"a"
+ 539              		.align	2
+ 542              	row_pins:
+ 543 0000 0200     		.short	2
+ 544 0002 0400     		.short	4
+ 545 0004 0800     		.short	8
+ 546              		.section	.bss.debounce_timer,"aw",%nobits
+ 547              		.align	2
+ 550              	debounce_timer:
+ 551 0000 00000000 		.space	36
+ 551      00000000 
+ 551      00000000 
+ 551      00000000 
+ 551      00000000 
+ 552              		.section	.bss.key_state_last,"aw",%nobits
+ 553              		.align	2
+ 556              	key_state_last:
+ 557 0000 00000000 		.space	9
+ 557      00000000 
+ 557      00
+ 558              		.section	.bss.key_state,"aw",%nobits
+ 559              		.align	2
+ 562              	key_state:
+ 563 0000 00000000 		.space	9
+ARM GAS  /tmp/cccVnj2H.s 			page 15
+
+
+ 563      00000000 
+ 563      00
+ 564              		.text
+ 565              	.Letext0:
+ 566              		.file 2 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ 567              		.file 3 "Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xb.h"
+ 568              		.file 4 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_gpio.h"
+ 569              		.file 5 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h"
+ARM GAS  /tmp/cccVnj2H.s 			page 16
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 matrix_keyboard.c
+     /tmp/cccVnj2H.s:19     .text.Matrix_Keyboard_Init:00000000 $t
+     /tmp/cccVnj2H.s:25     .text.Matrix_Keyboard_Init:00000000 Matrix_Keyboard_Init
+     /tmp/cccVnj2H.s:165    .text.Matrix_Keyboard_Init:00000088 $d
+     /tmp/cccVnj2H.s:562    .bss.key_state:00000000 key_state
+     /tmp/cccVnj2H.s:556    .bss.key_state_last:00000000 key_state_last
+     /tmp/cccVnj2H.s:550    .bss.debounce_timer:00000000 debounce_timer
+     /tmp/cccVnj2H.s:173    .text.Matrix_Get_Key_Status:00000000 $t
+     /tmp/cccVnj2H.s:179    .text.Matrix_Get_Key_Status:00000000 Matrix_Get_Key_Status
+     /tmp/cccVnj2H.s:220    .text.Matrix_Get_Key_Status:0000001c $d
+     /tmp/cccVnj2H.s:225    .text.Matrix_Key_Callback:00000000 $t
+     /tmp/cccVnj2H.s:231    .text.Matrix_Key_Callback:00000000 Matrix_Key_Callback
+     /tmp/cccVnj2H.s:245    .text.Matrix_Keyboard_Scan:00000000 $t
+     /tmp/cccVnj2H.s:251    .text.Matrix_Keyboard_Scan:00000000 Matrix_Keyboard_Scan
+     /tmp/cccVnj2H.s:512    .text.Matrix_Keyboard_Scan:00000110 $d
+     /tmp/cccVnj2H.s:542    .rodata.row_pins:00000000 row_pins
+     /tmp/cccVnj2H.s:534    .rodata.col_pins:00000000 col_pins
+     /tmp/cccVnj2H.s:526    .rodata.key_map:00000000 key_map
+     /tmp/cccVnj2H.s:523    .rodata.key_map:00000000 $d
+     /tmp/cccVnj2H.s:531    .rodata.col_pins:00000000 $d
+     /tmp/cccVnj2H.s:539    .rodata.row_pins:00000000 $d
+     /tmp/cccVnj2H.s:547    .bss.debounce_timer:00000000 $d
+     /tmp/cccVnj2H.s:553    .bss.key_state_last:00000000 $d
+     /tmp/cccVnj2H.s:559    .bss.key_state:00000000 $d
+
+UNDEFINED SYMBOLS
+HAL_GPIO_Init
+HAL_GPIO_WritePin
+HAL_GetTick
+HAL_GPIO_ReadPin

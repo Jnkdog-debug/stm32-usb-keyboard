@@ -40,7 +40,8 @@ typedef enum {
     EVENT_NONE,
     EVENT_ENCODER_UP,    // 旋钮向上转
     EVENT_ENCODER_DOWN,  // 旋钮向下转
-    EVENT_ENCODER_CLICK  // 旋钮按键点击
+    EVENT_ENCODER_CLICK,  // 旋钮按键点击
+    EVENT_KEY_HIT 
 } InputEvent_t;
 
 typedef enum {

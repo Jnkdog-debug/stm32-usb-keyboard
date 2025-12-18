@@ -291,3 +291,15 @@ clean:
 -include $(wildcard $(BUILD_DIR)/*.d)
 
 # *** EOF ***
+
+# 定义变量，方便以后修改文件名或起始地址
+BIN_FILE = build/${TARGET}.bin
+START_ADDR = 0x8000000
+
+# 告诉 Makefile，'flash' 和 'clean' 不是生成文件的名字，而是动作
+.PHONY: flash clean
+
+# 烧录命令
+flash:
+	@echo "正在烧录软件到 STM32..."
+	make -j4 &&sudo st-flash write $(BIN_FILE) $(START_ADDR)

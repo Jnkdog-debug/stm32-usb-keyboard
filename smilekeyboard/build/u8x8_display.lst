@@ -1,0 +1,870 @@
+ARM GAS  /tmp/ccBcVlyh.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.arch armv7-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"u8x8_display.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.file 1 "BSP/u8g2/u8x8_display.c"
+  18              		.section	.text.u8x8_d_helper_display_setup_memory,"ax",%progbits
+  19              		.align	1
+  20              		.global	u8x8_d_helper_display_setup_memory
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  25              	u8x8_d_helper_display_setup_memory:
+  26              	.LVL0:
+  27              	.LFB0:
+   1:BSP/u8g2/u8x8_display.c **** /*
+   2:BSP/u8g2/u8x8_display.c ****   
+   3:BSP/u8g2/u8x8_display.c ****   u8x8_display.c
+   4:BSP/u8g2/u8x8_display.c ****   
+   5:BSP/u8g2/u8x8_display.c ****   Universal 8bit Graphics Library (https://github.com/olikraus/u8g2/)
+   6:BSP/u8g2/u8x8_display.c **** 
+   7:BSP/u8g2/u8x8_display.c ****   Copyright (c) 2016, olikraus@gmail.com
+   8:BSP/u8g2/u8x8_display.c ****   All rights reserved.
+   9:BSP/u8g2/u8x8_display.c **** 
+  10:BSP/u8g2/u8x8_display.c ****   Redistribution and use in source and binary forms, with or without modification, 
+  11:BSP/u8g2/u8x8_display.c ****   are permitted provided that the following conditions are met:
+  12:BSP/u8g2/u8x8_display.c **** 
+  13:BSP/u8g2/u8x8_display.c ****   * Redistributions of source code must retain the above copyright notice, this list 
+  14:BSP/u8g2/u8x8_display.c ****     of conditions and the following disclaimer.
+  15:BSP/u8g2/u8x8_display.c ****     
+  16:BSP/u8g2/u8x8_display.c ****   * Redistributions in binary form must reproduce the above copyright notice, this 
+  17:BSP/u8g2/u8x8_display.c ****     list of conditions and the following disclaimer in the documentation and/or other 
+  18:BSP/u8g2/u8x8_display.c ****     materials provided with the distribution.
+  19:BSP/u8g2/u8x8_display.c **** 
+  20:BSP/u8g2/u8x8_display.c ****   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND 
+  21:BSP/u8g2/u8x8_display.c ****   CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, 
+  22:BSP/u8g2/u8x8_display.c ****   INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF 
+  23:BSP/u8g2/u8x8_display.c ****   MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
+  24:BSP/u8g2/u8x8_display.c ****   DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR 
+  25:BSP/u8g2/u8x8_display.c ****   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+  26:BSP/u8g2/u8x8_display.c ****   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+  27:BSP/u8g2/u8x8_display.c ****   NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
+  28:BSP/u8g2/u8x8_display.c ****   LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
+  29:BSP/u8g2/u8x8_display.c ****   CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, 
+  30:BSP/u8g2/u8x8_display.c ****   STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+  31:BSP/u8g2/u8x8_display.c ****   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
+ARM GAS  /tmp/ccBcVlyh.s 			page 2
+
+
+  32:BSP/u8g2/u8x8_display.c ****   ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
+  33:BSP/u8g2/u8x8_display.c ****   
+  34:BSP/u8g2/u8x8_display.c ****   
+  35:BSP/u8g2/u8x8_display.c ****   Abstraction layer for the graphics controller.
+  36:BSP/u8g2/u8x8_display.c ****   Main goal is the placement of a 8x8 pixel block (tile) on the display.
+  37:BSP/u8g2/u8x8_display.c ****   
+  38:BSP/u8g2/u8x8_display.c **** */
+  39:BSP/u8g2/u8x8_display.c **** 
+  40:BSP/u8g2/u8x8_display.c **** 
+  41:BSP/u8g2/u8x8_display.c **** #include "u8x8.h"
+  42:BSP/u8g2/u8x8_display.c **** 
+  43:BSP/u8g2/u8x8_display.c **** 
+  44:BSP/u8g2/u8x8_display.c **** /*==========================================*/
+  45:BSP/u8g2/u8x8_display.c **** /* internal library function */
+  46:BSP/u8g2/u8x8_display.c **** 
+  47:BSP/u8g2/u8x8_display.c **** /*
+  48:BSP/u8g2/u8x8_display.c ****   this is a helper function for the U8X8_MSG_DISPLAY_SETUP_MEMORY function.
+  49:BSP/u8g2/u8x8_display.c ****   It can be called within the display callback function to carry out the usual standard tasks.
+  50:BSP/u8g2/u8x8_display.c ****   
+  51:BSP/u8g2/u8x8_display.c **** */
+  52:BSP/u8g2/u8x8_display.c **** void u8x8_d_helper_display_setup_memory(u8x8_t *u8x8, const u8x8_display_info_t *display_info)
+  53:BSP/u8g2/u8x8_display.c **** {
+  28              		.loc 1 53 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+  54:BSP/u8g2/u8x8_display.c ****       /* 1) set display info struct */
+  55:BSP/u8g2/u8x8_display.c ****       u8x8->display_info = display_info;
+  33              		.loc 1 55 7 view .LVU1
+  34              		.loc 1 55 26 is_stmt 0 view .LVU2
+  35 0000 0160     		str	r1, [r0]
+  56:BSP/u8g2/u8x8_display.c ****       u8x8->x_offset = u8x8->display_info->default_x_offset;
+  36              		.loc 1 56 7 is_stmt 1 view .LVU3
+  37              		.loc 1 56 42 is_stmt 0 view .LVU4
+  38 0002 8B7C     		ldrb	r3, [r1, #18]	@ zero_extendqisi2
+  39              		.loc 1 56 22 view .LVU5
+  40 0004 80F82230 		strb	r3, [r0, #34]
+  57:BSP/u8g2/u8x8_display.c **** }
+  41              		.loc 1 57 1 view .LVU6
+  42 0008 7047     		bx	lr
+  43              		.cfi_endproc
+  44              	.LFE0:
+  46              		.section	.text.u8x8_d_helper_display_init,"ax",%progbits
+  47              		.align	1
+  48              		.global	u8x8_d_helper_display_init
+  49              		.syntax unified
+  50              		.thumb
+  51              		.thumb_func
+  53              	u8x8_d_helper_display_init:
+  54              	.LVL1:
+  55              	.LFB1:
+  58:BSP/u8g2/u8x8_display.c **** 
+  59:BSP/u8g2/u8x8_display.c **** /*
+  60:BSP/u8g2/u8x8_display.c ****   this is a helper function for the U8X8_MSG_DISPLAY_INIT function.
+  61:BSP/u8g2/u8x8_display.c ****   It can be called within the display callback function to carry out the usual standard tasks.
+  62:BSP/u8g2/u8x8_display.c ****   
+ARM GAS  /tmp/ccBcVlyh.s 			page 3
+
+
+  63:BSP/u8g2/u8x8_display.c **** */
+  64:BSP/u8g2/u8x8_display.c **** void u8x8_d_helper_display_init(u8x8_t *u8x8)
+  65:BSP/u8g2/u8x8_display.c **** {
+  56              		.loc 1 65 1 is_stmt 1 view -0
+  57              		.cfi_startproc
+  58              		@ args = 0, pretend = 0, frame = 0
+  59              		@ frame_needed = 0, uses_anonymous_args = 0
+  60              		.loc 1 65 1 is_stmt 0 view .LVU8
+  61 0000 10B5     		push	{r4, lr}
+  62              	.LCFI0:
+  63              		.cfi_def_cfa_offset 8
+  64              		.cfi_offset 4, -8
+  65              		.cfi_offset 14, -4
+  66 0002 0446     		mov	r4, r0
+  66:BSP/u8g2/u8x8_display.c ****       /* 2) apply port directions to the GPIO lines and apply default values for the IO lines*/
+  67:BSP/u8g2/u8x8_display.c ****       u8x8_gpio_Init(u8x8);
+  67              		.loc 1 67 7 is_stmt 1 view .LVU9
+  68 0004 0023     		movs	r3, #0
+  69 0006 1A46     		mov	r2, r3
+  70 0008 2821     		movs	r1, #40
+  71 000a D0F814C0 		ldr	ip, [r0, #20]
+  72 000e E047     		blx	ip
+  73              	.LVL2:
+  68:BSP/u8g2/u8x8_display.c ****       u8x8_cad_Init(u8x8);
+  74              		.loc 1 68 7 view .LVU10
+  75 0010 0023     		movs	r3, #0
+  76 0012 1A46     		mov	r2, r3
+  77 0014 1421     		movs	r1, #20
+  78 0016 2046     		mov	r0, r4
+  79 0018 D4F80CC0 		ldr	ip, [r4, #12]
+  80 001c E047     		blx	ip
+  81              	.LVL3:
+  69:BSP/u8g2/u8x8_display.c **** 
+  70:BSP/u8g2/u8x8_display.c ****       /* 3) do reset */
+  71:BSP/u8g2/u8x8_display.c ****       u8x8_gpio_SetReset(u8x8, 1);
+  82              		.loc 1 71 7 view .LVU11
+  83 001e 0122     		movs	r2, #1
+  84 0020 4B21     		movs	r1, #75
+  85 0022 2046     		mov	r0, r4
+  86 0024 FFF7FEFF 		bl	u8x8_gpio_call
+  87              	.LVL4:
+  72:BSP/u8g2/u8x8_display.c ****       u8x8_gpio_Delay(u8x8, U8X8_MSG_DELAY_MILLI, u8x8->display_info->reset_pulse_width_ms);
+  88              		.loc 1 72 7 view .LVU12
+  89 0028 2368     		ldr	r3, [r4]
+  90 002a 1A79     		ldrb	r2, [r3, #4]	@ zero_extendqisi2
+  91 002c 2921     		movs	r1, #41
+  92 002e 2046     		mov	r0, r4
+  93 0030 FFF7FEFF 		bl	u8x8_gpio_call
+  94              	.LVL5:
+  73:BSP/u8g2/u8x8_display.c ****       u8x8_gpio_SetReset(u8x8, 0);
+  95              		.loc 1 73 7 view .LVU13
+  96 0034 0022     		movs	r2, #0
+  97 0036 4B21     		movs	r1, #75
+  98 0038 2046     		mov	r0, r4
+  99 003a FFF7FEFF 		bl	u8x8_gpio_call
+ 100              	.LVL6:
+  74:BSP/u8g2/u8x8_display.c ****       u8x8_gpio_Delay(u8x8, U8X8_MSG_DELAY_MILLI, u8x8->display_info->reset_pulse_width_ms);
+ARM GAS  /tmp/ccBcVlyh.s 			page 4
+
+
+ 101              		.loc 1 74 7 view .LVU14
+ 102 003e 2368     		ldr	r3, [r4]
+ 103 0040 1A79     		ldrb	r2, [r3, #4]	@ zero_extendqisi2
+ 104 0042 2921     		movs	r1, #41
+ 105 0044 2046     		mov	r0, r4
+ 106 0046 FFF7FEFF 		bl	u8x8_gpio_call
+ 107              	.LVL7:
+  75:BSP/u8g2/u8x8_display.c ****       u8x8_gpio_SetReset(u8x8, 1);
+ 108              		.loc 1 75 7 view .LVU15
+ 109 004a 0122     		movs	r2, #1
+ 110 004c 4B21     		movs	r1, #75
+ 111 004e 2046     		mov	r0, r4
+ 112 0050 FFF7FEFF 		bl	u8x8_gpio_call
+ 113              	.LVL8:
+  76:BSP/u8g2/u8x8_display.c ****       u8x8_gpio_Delay(u8x8, U8X8_MSG_DELAY_MILLI, u8x8->display_info->post_reset_wait_ms);
+ 114              		.loc 1 76 7 view .LVU16
+ 115 0054 2368     		ldr	r3, [r4]
+ 116 0056 5A79     		ldrb	r2, [r3, #5]	@ zero_extendqisi2
+ 117 0058 2921     		movs	r1, #41
+ 118 005a 2046     		mov	r0, r4
+ 119 005c FFF7FEFF 		bl	u8x8_gpio_call
+ 120              	.LVL9:
+  77:BSP/u8g2/u8x8_display.c **** }    
+ 121              		.loc 1 77 1 is_stmt 0 view .LVU17
+ 122 0060 10BD     		pop	{r4, pc}
+ 123              		.loc 1 77 1 view .LVU18
+ 124              		.cfi_endproc
+ 125              	.LFE1:
+ 127              		.section	.text.u8x8_DrawTile,"ax",%progbits
+ 128              		.align	1
+ 129              		.global	u8x8_DrawTile
+ 130              		.syntax unified
+ 131              		.thumb
+ 132              		.thumb_func
+ 134              	u8x8_DrawTile:
+ 135              	.LVL10:
+ 136              	.LFB2:
+  78:BSP/u8g2/u8x8_display.c **** 
+  79:BSP/u8g2/u8x8_display.c **** /*==========================================*/
+  80:BSP/u8g2/u8x8_display.c **** /* official functions */
+  81:BSP/u8g2/u8x8_display.c **** 
+  82:BSP/u8g2/u8x8_display.c **** uint8_t u8x8_DrawTile(u8x8_t *u8x8, uint8_t x, uint8_t y, uint8_t cnt, uint8_t *tile_ptr)
+  83:BSP/u8g2/u8x8_display.c **** {
+ 137              		.loc 1 83 1 is_stmt 1 view -0
+ 138              		.cfi_startproc
+ 139              		@ args = 4, pretend = 0, frame = 8
+ 140              		@ frame_needed = 0, uses_anonymous_args = 0
+ 141              		.loc 1 83 1 is_stmt 0 view .LVU20
+ 142 0000 10B5     		push	{r4, lr}
+ 143              	.LCFI1:
+ 144              		.cfi_def_cfa_offset 8
+ 145              		.cfi_offset 4, -8
+ 146              		.cfi_offset 14, -4
+ 147 0002 82B0     		sub	sp, sp, #8
+ 148              	.LCFI2:
+ 149              		.cfi_def_cfa_offset 16
+  84:BSP/u8g2/u8x8_display.c ****   u8x8_tile_t tile;
+ARM GAS  /tmp/ccBcVlyh.s 			page 5
+
+
+ 150              		.loc 1 84 3 is_stmt 1 view .LVU21
+  85:BSP/u8g2/u8x8_display.c ****   tile.x_pos = x;
+ 151              		.loc 1 85 3 view .LVU22
+ 152              		.loc 1 85 14 is_stmt 0 view .LVU23
+ 153 0004 8DF80510 		strb	r1, [sp, #5]
+  86:BSP/u8g2/u8x8_display.c ****   tile.y_pos = y;
+ 154              		.loc 1 86 3 is_stmt 1 view .LVU24
+ 155              		.loc 1 86 14 is_stmt 0 view .LVU25
+ 156 0008 8DF80620 		strb	r2, [sp, #6]
+  87:BSP/u8g2/u8x8_display.c ****   tile.cnt = cnt;
+ 157              		.loc 1 87 3 is_stmt 1 view .LVU26
+ 158              		.loc 1 87 12 is_stmt 0 view .LVU27
+ 159 000c 8DF80430 		strb	r3, [sp, #4]
+  88:BSP/u8g2/u8x8_display.c ****   tile.tile_ptr = tile_ptr;
+ 160              		.loc 1 88 3 is_stmt 1 view .LVU28
+ 161              		.loc 1 88 17 is_stmt 0 view .LVU29
+ 162 0010 049B     		ldr	r3, [sp, #16]
+ 163              	.LVL11:
+ 164              		.loc 1 88 17 view .LVU30
+ 165 0012 0093     		str	r3, [sp]
+  89:BSP/u8g2/u8x8_display.c ****   return u8x8->display_cb(u8x8, U8X8_MSG_DISPLAY_DRAW_TILE, 1, (void *)&tile);
+ 166              		.loc 1 89 3 is_stmt 1 view .LVU31
+ 167              		.loc 1 89 14 is_stmt 0 view .LVU32
+ 168 0014 8468     		ldr	r4, [r0, #8]
+ 169              		.loc 1 89 10 view .LVU33
+ 170 0016 6B46     		mov	r3, sp
+ 171 0018 0122     		movs	r2, #1
+ 172              	.LVL12:
+ 173              		.loc 1 89 10 view .LVU34
+ 174 001a 0F21     		movs	r1, #15
+ 175              	.LVL13:
+ 176              		.loc 1 89 10 view .LVU35
+ 177 001c A047     		blx	r4
+ 178              	.LVL14:
+  90:BSP/u8g2/u8x8_display.c **** }
+ 179              		.loc 1 90 1 view .LVU36
+ 180 001e 02B0     		add	sp, sp, #8
+ 181              	.LCFI3:
+ 182              		.cfi_def_cfa_offset 8
+ 183              		@ sp needed
+ 184 0020 10BD     		pop	{r4, pc}
+ 185              		.loc 1 90 1 view .LVU37
+ 186              		.cfi_endproc
+ 187              	.LFE2:
+ 189              		.section	.text.u8x8_SetupMemory,"ax",%progbits
+ 190              		.align	1
+ 191              		.global	u8x8_SetupMemory
+ 192              		.syntax unified
+ 193              		.thumb
+ 194              		.thumb_func
+ 196              	u8x8_SetupMemory:
+ 197              	.LVL15:
+ 198              	.LFB3:
+  91:BSP/u8g2/u8x8_display.c **** 
+  92:BSP/u8g2/u8x8_display.c **** /* should be implemented as macro */
+  93:BSP/u8g2/u8x8_display.c **** void u8x8_SetupMemory(u8x8_t *u8x8)
+  94:BSP/u8g2/u8x8_display.c **** {
+ARM GAS  /tmp/ccBcVlyh.s 			page 6
+
+
+ 199              		.loc 1 94 1 is_stmt 1 view -0
+ 200              		.cfi_startproc
+ 201              		@ args = 0, pretend = 0, frame = 0
+ 202              		@ frame_needed = 0, uses_anonymous_args = 0
+ 203              		.loc 1 94 1 is_stmt 0 view .LVU39
+ 204 0000 10B5     		push	{r4, lr}
+ 205              	.LCFI4:
+ 206              		.cfi_def_cfa_offset 8
+ 207              		.cfi_offset 4, -8
+ 208              		.cfi_offset 14, -4
+  95:BSP/u8g2/u8x8_display.c ****   u8x8->display_cb(u8x8, U8X8_MSG_DISPLAY_SETUP_MEMORY, 0, NULL);  
+ 209              		.loc 1 95 3 is_stmt 1 view .LVU40
+ 210              		.loc 1 95 7 is_stmt 0 view .LVU41
+ 211 0002 8468     		ldr	r4, [r0, #8]
+ 212              		.loc 1 95 3 view .LVU42
+ 213 0004 0023     		movs	r3, #0
+ 214 0006 1A46     		mov	r2, r3
+ 215 0008 0921     		movs	r1, #9
+ 216 000a A047     		blx	r4
+ 217              	.LVL16:
+  96:BSP/u8g2/u8x8_display.c **** }
+ 218              		.loc 1 96 1 view .LVU43
+ 219 000c 10BD     		pop	{r4, pc}
+ 220              		.cfi_endproc
+ 221              	.LFE3:
+ 223              		.section	.text.u8x8_InitDisplay,"ax",%progbits
+ 224              		.align	1
+ 225              		.global	u8x8_InitDisplay
+ 226              		.syntax unified
+ 227              		.thumb
+ 228              		.thumb_func
+ 230              	u8x8_InitDisplay:
+ 231              	.LVL17:
+ 232              	.LFB4:
+  97:BSP/u8g2/u8x8_display.c **** 
+  98:BSP/u8g2/u8x8_display.c **** void u8x8_InitDisplay(u8x8_t *u8x8)
+  99:BSP/u8g2/u8x8_display.c **** {
+ 233              		.loc 1 99 1 is_stmt 1 view -0
+ 234              		.cfi_startproc
+ 235              		@ args = 0, pretend = 0, frame = 0
+ 236              		@ frame_needed = 0, uses_anonymous_args = 0
+ 237              		.loc 1 99 1 is_stmt 0 view .LVU45
+ 238 0000 10B5     		push	{r4, lr}
+ 239              	.LCFI5:
+ 240              		.cfi_def_cfa_offset 8
+ 241              		.cfi_offset 4, -8
+ 242              		.cfi_offset 14, -4
+ 100:BSP/u8g2/u8x8_display.c ****   u8x8->display_cb(u8x8, U8X8_MSG_DISPLAY_INIT, 0, NULL);  
+ 243              		.loc 1 100 3 is_stmt 1 view .LVU46
+ 244              		.loc 1 100 7 is_stmt 0 view .LVU47
+ 245 0002 8468     		ldr	r4, [r0, #8]
+ 246              		.loc 1 100 3 view .LVU48
+ 247 0004 0023     		movs	r3, #0
+ 248 0006 1A46     		mov	r2, r3
+ 249 0008 0A21     		movs	r1, #10
+ 250 000a A047     		blx	r4
+ 251              	.LVL18:
+ARM GAS  /tmp/ccBcVlyh.s 			page 7
+
+
+ 101:BSP/u8g2/u8x8_display.c **** }
+ 252              		.loc 1 101 1 view .LVU49
+ 253 000c 10BD     		pop	{r4, pc}
+ 254              		.cfi_endproc
+ 255              	.LFE4:
+ 257              		.section	.text.u8x8_SetPowerSave,"ax",%progbits
+ 258              		.align	1
+ 259              		.global	u8x8_SetPowerSave
+ 260              		.syntax unified
+ 261              		.thumb
+ 262              		.thumb_func
+ 264              	u8x8_SetPowerSave:
+ 265              	.LVL19:
+ 266              	.LFB5:
+ 102:BSP/u8g2/u8x8_display.c **** 
+ 103:BSP/u8g2/u8x8_display.c **** void u8x8_SetPowerSave(u8x8_t *u8x8, uint8_t is_enable)
+ 104:BSP/u8g2/u8x8_display.c **** {
+ 267              		.loc 1 104 1 is_stmt 1 view -0
+ 268              		.cfi_startproc
+ 269              		@ args = 0, pretend = 0, frame = 0
+ 270              		@ frame_needed = 0, uses_anonymous_args = 0
+ 271              		.loc 1 104 1 is_stmt 0 view .LVU51
+ 272 0000 10B5     		push	{r4, lr}
+ 273              	.LCFI6:
+ 274              		.cfi_def_cfa_offset 8
+ 275              		.cfi_offset 4, -8
+ 276              		.cfi_offset 14, -4
+ 277 0002 0A46     		mov	r2, r1
+ 105:BSP/u8g2/u8x8_display.c ****   u8x8->display_cb(u8x8, U8X8_MSG_DISPLAY_SET_POWER_SAVE, is_enable, NULL);  
+ 278              		.loc 1 105 3 is_stmt 1 view .LVU52
+ 279              		.loc 1 105 7 is_stmt 0 view .LVU53
+ 280 0004 8468     		ldr	r4, [r0, #8]
+ 281              		.loc 1 105 3 view .LVU54
+ 282 0006 0023     		movs	r3, #0
+ 283 0008 0B21     		movs	r1, #11
+ 284              	.LVL20:
+ 285              		.loc 1 105 3 view .LVU55
+ 286 000a A047     		blx	r4
+ 287              	.LVL21:
+ 106:BSP/u8g2/u8x8_display.c **** }
+ 288              		.loc 1 106 1 view .LVU56
+ 289 000c 10BD     		pop	{r4, pc}
+ 290              		.cfi_endproc
+ 291              	.LFE5:
+ 293              		.section	.text.u8x8_SetFlipMode,"ax",%progbits
+ 294              		.align	1
+ 295              		.global	u8x8_SetFlipMode
+ 296              		.syntax unified
+ 297              		.thumb
+ 298              		.thumb_func
+ 300              	u8x8_SetFlipMode:
+ 301              	.LVL22:
+ 302              	.LFB6:
+ 107:BSP/u8g2/u8x8_display.c **** 
+ 108:BSP/u8g2/u8x8_display.c **** void u8x8_SetFlipMode(u8x8_t *u8x8, uint8_t mode)
+ 109:BSP/u8g2/u8x8_display.c **** {
+ 303              		.loc 1 109 1 is_stmt 1 view -0
+ARM GAS  /tmp/ccBcVlyh.s 			page 8
+
+
+ 304              		.cfi_startproc
+ 305              		@ args = 0, pretend = 0, frame = 0
+ 306              		@ frame_needed = 0, uses_anonymous_args = 0
+ 307              		.loc 1 109 1 is_stmt 0 view .LVU58
+ 308 0000 10B5     		push	{r4, lr}
+ 309              	.LCFI7:
+ 310              		.cfi_def_cfa_offset 8
+ 311              		.cfi_offset 4, -8
+ 312              		.cfi_offset 14, -4
+ 313 0002 0A46     		mov	r2, r1
+ 110:BSP/u8g2/u8x8_display.c ****   u8x8->display_cb(u8x8, U8X8_MSG_DISPLAY_SET_FLIP_MODE, mode, NULL);  
+ 314              		.loc 1 110 3 is_stmt 1 view .LVU59
+ 315              		.loc 1 110 7 is_stmt 0 view .LVU60
+ 316 0004 8468     		ldr	r4, [r0, #8]
+ 317              		.loc 1 110 3 view .LVU61
+ 318 0006 0023     		movs	r3, #0
+ 319 0008 0D21     		movs	r1, #13
+ 320              	.LVL23:
+ 321              		.loc 1 110 3 view .LVU62
+ 322 000a A047     		blx	r4
+ 323              	.LVL24:
+ 111:BSP/u8g2/u8x8_display.c **** }
+ 324              		.loc 1 111 1 view .LVU63
+ 325 000c 10BD     		pop	{r4, pc}
+ 326              		.cfi_endproc
+ 327              	.LFE6:
+ 329              		.section	.text.u8x8_SetContrast,"ax",%progbits
+ 330              		.align	1
+ 331              		.global	u8x8_SetContrast
+ 332              		.syntax unified
+ 333              		.thumb
+ 334              		.thumb_func
+ 336              	u8x8_SetContrast:
+ 337              	.LVL25:
+ 338              	.LFB7:
+ 112:BSP/u8g2/u8x8_display.c **** 
+ 113:BSP/u8g2/u8x8_display.c **** void u8x8_SetContrast(u8x8_t *u8x8, uint8_t value)
+ 114:BSP/u8g2/u8x8_display.c **** {
+ 339              		.loc 1 114 1 is_stmt 1 view -0
+ 340              		.cfi_startproc
+ 341              		@ args = 0, pretend = 0, frame = 0
+ 342              		@ frame_needed = 0, uses_anonymous_args = 0
+ 343              		.loc 1 114 1 is_stmt 0 view .LVU65
+ 344 0000 10B5     		push	{r4, lr}
+ 345              	.LCFI8:
+ 346              		.cfi_def_cfa_offset 8
+ 347              		.cfi_offset 4, -8
+ 348              		.cfi_offset 14, -4
+ 349 0002 0A46     		mov	r2, r1
+ 115:BSP/u8g2/u8x8_display.c ****   u8x8->display_cb(u8x8, U8X8_MSG_DISPLAY_SET_CONTRAST, value, NULL);  
+ 350              		.loc 1 115 3 is_stmt 1 view .LVU66
+ 351              		.loc 1 115 7 is_stmt 0 view .LVU67
+ 352 0004 8468     		ldr	r4, [r0, #8]
+ 353              		.loc 1 115 3 view .LVU68
+ 354 0006 0023     		movs	r3, #0
+ 355 0008 0E21     		movs	r1, #14
+ 356              	.LVL26:
+ARM GAS  /tmp/ccBcVlyh.s 			page 9
+
+
+ 357              		.loc 1 115 3 view .LVU69
+ 358 000a A047     		blx	r4
+ 359              	.LVL27:
+ 116:BSP/u8g2/u8x8_display.c **** }
+ 360              		.loc 1 116 1 view .LVU70
+ 361 000c 10BD     		pop	{r4, pc}
+ 362              		.cfi_endproc
+ 363              	.LFE7:
+ 365              		.section	.text.u8x8_RefreshDisplay,"ax",%progbits
+ 366              		.align	1
+ 367              		.global	u8x8_RefreshDisplay
+ 368              		.syntax unified
+ 369              		.thumb
+ 370              		.thumb_func
+ 372              	u8x8_RefreshDisplay:
+ 373              	.LVL28:
+ 374              	.LFB8:
+ 117:BSP/u8g2/u8x8_display.c **** 
+ 118:BSP/u8g2/u8x8_display.c **** void u8x8_RefreshDisplay(u8x8_t *u8x8)
+ 119:BSP/u8g2/u8x8_display.c **** {
+ 375              		.loc 1 119 1 is_stmt 1 view -0
+ 376              		.cfi_startproc
+ 377              		@ args = 0, pretend = 0, frame = 0
+ 378              		@ frame_needed = 0, uses_anonymous_args = 0
+ 379              		.loc 1 119 1 is_stmt 0 view .LVU72
+ 380 0000 10B5     		push	{r4, lr}
+ 381              	.LCFI9:
+ 382              		.cfi_def_cfa_offset 8
+ 383              		.cfi_offset 4, -8
+ 384              		.cfi_offset 14, -4
+ 120:BSP/u8g2/u8x8_display.c ****   u8x8->display_cb(u8x8, U8X8_MSG_DISPLAY_REFRESH, 0, NULL);  
+ 385              		.loc 1 120 3 is_stmt 1 view .LVU73
+ 386              		.loc 1 120 7 is_stmt 0 view .LVU74
+ 387 0002 8468     		ldr	r4, [r0, #8]
+ 388              		.loc 1 120 3 view .LVU75
+ 389 0004 0023     		movs	r3, #0
+ 390 0006 1A46     		mov	r2, r3
+ 391 0008 1021     		movs	r1, #16
+ 392 000a A047     		blx	r4
+ 393              	.LVL29:
+ 121:BSP/u8g2/u8x8_display.c **** }
+ 394              		.loc 1 121 1 view .LVU76
+ 395 000c 10BD     		pop	{r4, pc}
+ 396              		.cfi_endproc
+ 397              	.LFE8:
+ 399              		.section	.text.u8x8_ClearDisplayWithTile,"ax",%progbits
+ 400              		.align	1
+ 401              		.global	u8x8_ClearDisplayWithTile
+ 402              		.syntax unified
+ 403              		.thumb
+ 404              		.thumb_func
+ 406              	u8x8_ClearDisplayWithTile:
+ 407              	.LVL30:
+ 408              	.LFB9:
+ 122:BSP/u8g2/u8x8_display.c **** 
+ 123:BSP/u8g2/u8x8_display.c **** void u8x8_ClearDisplayWithTile(u8x8_t *u8x8, const uint8_t *buf)
+ 124:BSP/u8g2/u8x8_display.c **** {
+ARM GAS  /tmp/ccBcVlyh.s 			page 10
+
+
+ 409              		.loc 1 124 1 is_stmt 1 view -0
+ 410              		.cfi_startproc
+ 411              		@ args = 0, pretend = 0, frame = 8
+ 412              		@ frame_needed = 0, uses_anonymous_args = 0
+ 413              		.loc 1 124 1 is_stmt 0 view .LVU78
+ 414 0000 30B5     		push	{r4, r5, lr}
+ 415              	.LCFI10:
+ 416              		.cfi_def_cfa_offset 12
+ 417              		.cfi_offset 4, -12
+ 418              		.cfi_offset 5, -8
+ 419              		.cfi_offset 14, -4
+ 420 0002 83B0     		sub	sp, sp, #12
+ 421              	.LCFI11:
+ 422              		.cfi_def_cfa_offset 24
+ 423 0004 0446     		mov	r4, r0
+ 125:BSP/u8g2/u8x8_display.c ****   u8x8_tile_t tile;
+ 424              		.loc 1 125 3 is_stmt 1 view .LVU79
+ 126:BSP/u8g2/u8x8_display.c ****   uint8_t h;
+ 425              		.loc 1 126 3 view .LVU80
+ 127:BSP/u8g2/u8x8_display.c **** 
+ 128:BSP/u8g2/u8x8_display.c ****   tile.x_pos = 0;
+ 426              		.loc 1 128 3 view .LVU81
+ 427              		.loc 1 128 14 is_stmt 0 view .LVU82
+ 428 0006 0023     		movs	r3, #0
+ 429 0008 8DF80530 		strb	r3, [sp, #5]
+ 129:BSP/u8g2/u8x8_display.c ****   tile.cnt = 1;
+ 430              		.loc 1 129 3 is_stmt 1 view .LVU83
+ 431              		.loc 1 129 12 is_stmt 0 view .LVU84
+ 432 000c 0122     		movs	r2, #1
+ 433 000e 8DF80420 		strb	r2, [sp, #4]
+ 130:BSP/u8g2/u8x8_display.c ****   tile.tile_ptr = (uint8_t *)buf;		/* tile_ptr should be const, but isn't */
+ 434              		.loc 1 130 3 is_stmt 1 view .LVU85
+ 435              		.loc 1 130 17 is_stmt 0 view .LVU86
+ 436 0012 0091     		str	r1, [sp]
+ 131:BSP/u8g2/u8x8_display.c ****   
+ 132:BSP/u8g2/u8x8_display.c ****   h = u8x8->display_info->tile_height;
+ 437              		.loc 1 132 3 is_stmt 1 view .LVU87
+ 438              		.loc 1 132 11 is_stmt 0 view .LVU88
+ 439 0014 0268     		ldr	r2, [r0]
+ 440              		.loc 1 132 5 view .LVU89
+ 441 0016 557C     		ldrb	r5, [r2, #17]	@ zero_extendqisi2
+ 442              	.LVL31:
+ 133:BSP/u8g2/u8x8_display.c ****   tile.y_pos = 0;
+ 443              		.loc 1 133 3 is_stmt 1 view .LVU90
+ 444              		.loc 1 133 14 is_stmt 0 view .LVU91
+ 445 0018 8DF80630 		strb	r3, [sp, #6]
+ 446              	.LVL32:
+ 447              	.L19:
+ 134:BSP/u8g2/u8x8_display.c ****   do
+ 448              		.loc 1 134 3 is_stmt 1 view .LVU92
+ 135:BSP/u8g2/u8x8_display.c ****   {
+ 136:BSP/u8g2/u8x8_display.c ****     u8x8->display_cb(u8x8, U8X8_MSG_DISPLAY_DRAW_TILE, u8x8->display_info->tile_width, (void *)&til
+ 449              		.loc 1 136 5 view .LVU93
+ 450              		.loc 1 136 60 is_stmt 0 view .LVU94
+ 451 001c 2268     		ldr	r2, [r4]
+ 452              		.loc 1 136 5 view .LVU95
+ 453 001e 6B46     		mov	r3, sp
+ARM GAS  /tmp/ccBcVlyh.s 			page 11
+
+
+ 454 0020 127C     		ldrb	r2, [r2, #16]	@ zero_extendqisi2
+ 455 0022 0F21     		movs	r1, #15
+ 456 0024 2046     		mov	r0, r4
+ 457 0026 D4F808C0 		ldr	ip, [r4, #8]
+ 458 002a E047     		blx	ip
+ 459              	.LVL33:
+ 137:BSP/u8g2/u8x8_display.c ****     tile.y_pos++;
+ 460              		.loc 1 137 5 is_stmt 1 view .LVU96
+ 461              		.loc 1 137 9 is_stmt 0 view .LVU97
+ 462 002c 9DF80630 		ldrb	r3, [sp, #6]	@ zero_extendqisi2
+ 463              		.loc 1 137 15 view .LVU98
+ 464 0030 0133     		adds	r3, r3, #1
+ 465 0032 DBB2     		uxtb	r3, r3
+ 466 0034 8DF80630 		strb	r3, [sp, #6]
+ 138:BSP/u8g2/u8x8_display.c ****   } while( tile.y_pos < h );
+ 467              		.loc 1 138 23 is_stmt 1 discriminator 1 view .LVU99
+ 468 0038 AB42     		cmp	r3, r5
+ 469 003a EFD3     		bcc	.L19
+ 139:BSP/u8g2/u8x8_display.c **** }
+ 470              		.loc 1 139 1 is_stmt 0 view .LVU100
+ 471 003c 03B0     		add	sp, sp, #12
+ 472              	.LCFI12:
+ 473              		.cfi_def_cfa_offset 12
+ 474              		@ sp needed
+ 475 003e 30BD     		pop	{r4, r5, pc}
+ 476              		.loc 1 139 1 view .LVU101
+ 477              		.cfi_endproc
+ 478              	.LFE9:
+ 480              		.section	.text.u8x8_ClearDisplay,"ax",%progbits
+ 481              		.align	1
+ 482              		.global	u8x8_ClearDisplay
+ 483              		.syntax unified
+ 484              		.thumb
+ 485              		.thumb_func
+ 487              	u8x8_ClearDisplay:
+ 488              	.LVL34:
+ 489              	.LFB10:
+ 140:BSP/u8g2/u8x8_display.c **** 
+ 141:BSP/u8g2/u8x8_display.c **** void u8x8_ClearDisplay(u8x8_t *u8x8)
+ 142:BSP/u8g2/u8x8_display.c **** {
+ 490              		.loc 1 142 1 is_stmt 1 view -0
+ 491              		.cfi_startproc
+ 492              		@ args = 0, pretend = 0, frame = 8
+ 493              		@ frame_needed = 0, uses_anonymous_args = 0
+ 494              		.loc 1 142 1 is_stmt 0 view .LVU103
+ 495 0000 00B5     		push	{lr}
+ 496              	.LCFI13:
+ 497              		.cfi_def_cfa_offset 4
+ 498              		.cfi_offset 14, -4
+ 499 0002 83B0     		sub	sp, sp, #12
+ 500              	.LCFI14:
+ 501              		.cfi_def_cfa_offset 16
+ 143:BSP/u8g2/u8x8_display.c ****   uint8_t buf[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+ 502              		.loc 1 143 3 is_stmt 1 view .LVU104
+ 503              		.loc 1 143 11 is_stmt 0 view .LVU105
+ 504 0004 0023     		movs	r3, #0
+ 505 0006 0093     		str	r3, [sp]
+ARM GAS  /tmp/ccBcVlyh.s 			page 12
+
+
+ 506 0008 0193     		str	r3, [sp, #4]
+ 144:BSP/u8g2/u8x8_display.c ****   u8x8_ClearDisplayWithTile(u8x8, buf);
+ 507              		.loc 1 144 3 is_stmt 1 view .LVU106
+ 508 000a 6946     		mov	r1, sp
+ 509 000c FFF7FEFF 		bl	u8x8_ClearDisplayWithTile
+ 510              	.LVL35:
+ 145:BSP/u8g2/u8x8_display.c **** }
+ 511              		.loc 1 145 1 is_stmt 0 view .LVU107
+ 512 0010 03B0     		add	sp, sp, #12
+ 513              	.LCFI15:
+ 514              		.cfi_def_cfa_offset 4
+ 515              		@ sp needed
+ 516 0012 5DF804FB 		ldr	pc, [sp], #4
+ 517              		.cfi_endproc
+ 518              	.LFE10:
+ 520              		.section	.rodata.u8x8_FillDisplay.str1.4,"aMS",%progbits,1
+ 521              		.align	2
+ 522              	.LC0:
+ 523 0000 FFFFFFFF 		.ascii	"\377\377\377\377\377\377\377\377\000"
+ 523      FFFFFFFF 
+ 523      00
+ 524              		.section	.text.u8x8_FillDisplay,"ax",%progbits
+ 525              		.align	1
+ 526              		.global	u8x8_FillDisplay
+ 527              		.syntax unified
+ 528              		.thumb
+ 529              		.thumb_func
+ 531              	u8x8_FillDisplay:
+ 532              	.LVL36:
+ 533              	.LFB11:
+ 146:BSP/u8g2/u8x8_display.c **** 
+ 147:BSP/u8g2/u8x8_display.c **** void u8x8_FillDisplay(u8x8_t *u8x8)
+ 148:BSP/u8g2/u8x8_display.c **** {
+ 534              		.loc 1 148 1 is_stmt 1 view -0
+ 535              		.cfi_startproc
+ 536              		@ args = 0, pretend = 0, frame = 8
+ 537              		@ frame_needed = 0, uses_anonymous_args = 0
+ 538              		.loc 1 148 1 is_stmt 0 view .LVU109
+ 539 0000 00B5     		push	{lr}
+ 540              	.LCFI16:
+ 541              		.cfi_def_cfa_offset 4
+ 542              		.cfi_offset 14, -4
+ 543 0002 83B0     		sub	sp, sp, #12
+ 544              	.LCFI17:
+ 545              		.cfi_def_cfa_offset 16
+ 546 0004 8446     		mov	ip, r0
+ 149:BSP/u8g2/u8x8_display.c ****   uint8_t buf[8] = { 255, 255, 255, 255, 255, 255, 255, 255 };
+ 547              		.loc 1 149 3 is_stmt 1 view .LVU110
+ 548              		.loc 1 149 11 is_stmt 0 view .LVU111
+ 549 0006 064A     		ldr	r2, .L25
+ 550 0008 6B46     		mov	r3, sp
+ 551 000a 92E80300 		ldm	r2, {r0, r1}
+ 552              	.LVL37:
+ 553              		.loc 1 149 11 view .LVU112
+ 554 000e 83E80300 		stm	r3, {r0, r1}
+ 150:BSP/u8g2/u8x8_display.c ****   u8x8_ClearDisplayWithTile(u8x8, buf);
+ 555              		.loc 1 150 3 is_stmt 1 view .LVU113
+ARM GAS  /tmp/ccBcVlyh.s 			page 13
+
+
+ 556 0012 1946     		mov	r1, r3
+ 557 0014 6046     		mov	r0, ip
+ 558 0016 FFF7FEFF 		bl	u8x8_ClearDisplayWithTile
+ 559              	.LVL38:
+ 151:BSP/u8g2/u8x8_display.c **** }
+ 560              		.loc 1 151 1 is_stmt 0 view .LVU114
+ 561 001a 03B0     		add	sp, sp, #12
+ 562              	.LCFI18:
+ 563              		.cfi_def_cfa_offset 4
+ 564              		@ sp needed
+ 565 001c 5DF804FB 		ldr	pc, [sp], #4
+ 566              	.L26:
+ 567              		.align	2
+ 568              	.L25:
+ 569 0020 00000000 		.word	.LC0
+ 570              		.cfi_endproc
+ 571              	.LFE11:
+ 573              		.section	.text.u8x8_ClearLine,"ax",%progbits
+ 574              		.align	1
+ 575              		.global	u8x8_ClearLine
+ 576              		.syntax unified
+ 577              		.thumb
+ 578              		.thumb_func
+ 580              	u8x8_ClearLine:
+ 581              	.LVL39:
+ 582              	.LFB12:
+ 152:BSP/u8g2/u8x8_display.c **** 
+ 153:BSP/u8g2/u8x8_display.c **** void u8x8_ClearLine(u8x8_t *u8x8, uint8_t line)
+ 154:BSP/u8g2/u8x8_display.c **** {
+ 583              		.loc 1 154 1 is_stmt 1 view -0
+ 584              		.cfi_startproc
+ 585              		@ args = 0, pretend = 0, frame = 16
+ 586              		@ frame_needed = 0, uses_anonymous_args = 0
+ 587              		.loc 1 154 1 is_stmt 0 view .LVU116
+ 588 0000 10B5     		push	{r4, lr}
+ 589              	.LCFI19:
+ 590              		.cfi_def_cfa_offset 8
+ 591              		.cfi_offset 4, -8
+ 592              		.cfi_offset 14, -4
+ 593 0002 84B0     		sub	sp, sp, #16
+ 594              	.LCFI20:
+ 595              		.cfi_def_cfa_offset 24
+ 155:BSP/u8g2/u8x8_display.c ****   uint8_t buf[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+ 596              		.loc 1 155 3 is_stmt 1 view .LVU117
+ 597              		.loc 1 155 11 is_stmt 0 view .LVU118
+ 598 0004 0023     		movs	r3, #0
+ 599 0006 0293     		str	r3, [sp, #8]
+ 600 0008 0393     		str	r3, [sp, #12]
+ 156:BSP/u8g2/u8x8_display.c ****   u8x8_tile_t tile;
+ 601              		.loc 1 156 3 is_stmt 1 view .LVU119
+ 157:BSP/u8g2/u8x8_display.c ****   if ( line < u8x8->display_info->tile_height )
+ 602              		.loc 1 157 3 view .LVU120
+ 603              		.loc 1 157 19 is_stmt 0 view .LVU121
+ 604 000a 0368     		ldr	r3, [r0]
+ 605              		.loc 1 157 33 view .LVU122
+ 606 000c 5B7C     		ldrb	r3, [r3, #17]	@ zero_extendqisi2
+ 607              		.loc 1 157 6 view .LVU123
+ARM GAS  /tmp/ccBcVlyh.s 			page 14
+
+
+ 608 000e 8B42     		cmp	r3, r1
+ 609 0010 0FD9     		bls	.L27
+ 158:BSP/u8g2/u8x8_display.c ****   {
+ 159:BSP/u8g2/u8x8_display.c ****     tile.x_pos = 0;
+ 610              		.loc 1 159 5 is_stmt 1 view .LVU124
+ 611              		.loc 1 159 16 is_stmt 0 view .LVU125
+ 612 0012 0023     		movs	r3, #0
+ 613 0014 8DF80530 		strb	r3, [sp, #5]
+ 160:BSP/u8g2/u8x8_display.c ****     tile.y_pos = line;
+ 614              		.loc 1 160 5 is_stmt 1 view .LVU126
+ 615              		.loc 1 160 16 is_stmt 0 view .LVU127
+ 616 0018 8DF80610 		strb	r1, [sp, #6]
+ 161:BSP/u8g2/u8x8_display.c ****     tile.cnt = 1;
+ 617              		.loc 1 161 5 is_stmt 1 view .LVU128
+ 618              		.loc 1 161 14 is_stmt 0 view .LVU129
+ 619 001c 0123     		movs	r3, #1
+ 620 001e 8DF80430 		strb	r3, [sp, #4]
+ 162:BSP/u8g2/u8x8_display.c ****     tile.tile_ptr = (uint8_t *)buf;		/* tile_ptr should be const, but isn't */
+ 621              		.loc 1 162 5 is_stmt 1 view .LVU130
+ 622              		.loc 1 162 19 is_stmt 0 view .LVU131
+ 623 0022 02AB     		add	r3, sp, #8
+ 624 0024 0093     		str	r3, [sp]
+ 163:BSP/u8g2/u8x8_display.c ****     u8x8->display_cb(u8x8, U8X8_MSG_DISPLAY_DRAW_TILE, u8x8->display_info->tile_width, (void *)&til
+ 625              		.loc 1 163 5 is_stmt 1 view .LVU132
+ 626              		.loc 1 163 9 is_stmt 0 view .LVU133
+ 627 0026 8468     		ldr	r4, [r0, #8]
+ 628              		.loc 1 163 60 view .LVU134
+ 629 0028 0268     		ldr	r2, [r0]
+ 630              		.loc 1 163 5 view .LVU135
+ 631 002a 6B46     		mov	r3, sp
+ 632 002c 127C     		ldrb	r2, [r2, #16]	@ zero_extendqisi2
+ 633 002e 0F21     		movs	r1, #15
+ 634              	.LVL40:
+ 635              		.loc 1 163 5 view .LVU136
+ 636 0030 A047     		blx	r4
+ 637              	.LVL41:
+ 638              	.L27:
+ 164:BSP/u8g2/u8x8_display.c ****   }  
+ 165:BSP/u8g2/u8x8_display.c **** }...
+ 639              		.loc 1 165 1 view .LVU137
+ 640 0032 04B0     		add	sp, sp, #16
+ 641              	.LCFI21:
+ 642              		.cfi_def_cfa_offset 8
+ 643              		@ sp needed
+ 644 0034 10BD     		pop	{r4, pc}
+ 645              		.cfi_endproc
+ 646              	.LFE12:
+ 648              		.text
+ 649              	.Letext0:
+ 650              		.file 2 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ 651              		.file 3 "BSP/u8g2/u8x8.h"
+ARM GAS  /tmp/ccBcVlyh.s 			page 15
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 u8x8_display.c
+     /tmp/ccBcVlyh.s:19     .text.u8x8_d_helper_display_setup_memory:00000000 $t
+     /tmp/ccBcVlyh.s:25     .text.u8x8_d_helper_display_setup_memory:00000000 u8x8_d_helper_display_setup_memory
+     /tmp/ccBcVlyh.s:47     .text.u8x8_d_helper_display_init:00000000 $t
+     /tmp/ccBcVlyh.s:53     .text.u8x8_d_helper_display_init:00000000 u8x8_d_helper_display_init
+     /tmp/ccBcVlyh.s:128    .text.u8x8_DrawTile:00000000 $t
+     /tmp/ccBcVlyh.s:134    .text.u8x8_DrawTile:00000000 u8x8_DrawTile
+     /tmp/ccBcVlyh.s:190    .text.u8x8_SetupMemory:00000000 $t
+     /tmp/ccBcVlyh.s:196    .text.u8x8_SetupMemory:00000000 u8x8_SetupMemory
+     /tmp/ccBcVlyh.s:224    .text.u8x8_InitDisplay:00000000 $t
+     /tmp/ccBcVlyh.s:230    .text.u8x8_InitDisplay:00000000 u8x8_InitDisplay
+     /tmp/ccBcVlyh.s:258    .text.u8x8_SetPowerSave:00000000 $t
+     /tmp/ccBcVlyh.s:264    .text.u8x8_SetPowerSave:00000000 u8x8_SetPowerSave
+     /tmp/ccBcVlyh.s:294    .text.u8x8_SetFlipMode:00000000 $t
+     /tmp/ccBcVlyh.s:300    .text.u8x8_SetFlipMode:00000000 u8x8_SetFlipMode
+     /tmp/ccBcVlyh.s:330    .text.u8x8_SetContrast:00000000 $t
+     /tmp/ccBcVlyh.s:336    .text.u8x8_SetContrast:00000000 u8x8_SetContrast
+     /tmp/ccBcVlyh.s:366    .text.u8x8_RefreshDisplay:00000000 $t
+     /tmp/ccBcVlyh.s:372    .text.u8x8_RefreshDisplay:00000000 u8x8_RefreshDisplay
+     /tmp/ccBcVlyh.s:400    .text.u8x8_ClearDisplayWithTile:00000000 $t
+     /tmp/ccBcVlyh.s:406    .text.u8x8_ClearDisplayWithTile:00000000 u8x8_ClearDisplayWithTile
+     /tmp/ccBcVlyh.s:481    .text.u8x8_ClearDisplay:00000000 $t
+     /tmp/ccBcVlyh.s:487    .text.u8x8_ClearDisplay:00000000 u8x8_ClearDisplay
+     /tmp/ccBcVlyh.s:521    .rodata.u8x8_FillDisplay.str1.4:00000000 $d
+     /tmp/ccBcVlyh.s:525    .text.u8x8_FillDisplay:00000000 $t
+     /tmp/ccBcVlyh.s:531    .text.u8x8_FillDisplay:00000000 u8x8_FillDisplay
+     /tmp/ccBcVlyh.s:569    .text.u8x8_FillDisplay:00000020 $d
+     /tmp/ccBcVlyh.s:574    .text.u8x8_ClearLine:00000000 $t
+     /tmp/ccBcVlyh.s:580    .text.u8x8_ClearLine:00000000 u8x8_ClearLine
+
+UNDEFINED SYMBOLS
+u8x8_gpio_call

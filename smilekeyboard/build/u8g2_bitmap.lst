@@ -1,0 +1,1131 @@
+ARM GAS  /tmp/ccECjMcj.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.arch armv7-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"u8g2_bitmap.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.file 1 "BSP/u8g2/u8g2_bitmap.c"
+  18              		.section	.text.u8g2_SetBitmapMode,"ax",%progbits
+  19              		.align	1
+  20              		.global	u8g2_SetBitmapMode
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  25              	u8g2_SetBitmapMode:
+  26              	.LVL0:
+  27              	.LFB0:
+   1:BSP/u8g2/u8g2_bitmap.c **** /*
+   2:BSP/u8g2/u8g2_bitmap.c **** 
+   3:BSP/u8g2/u8g2_bitmap.c ****   u8g2_bitmap.c
+   4:BSP/u8g2/u8g2_bitmap.c **** 
+   5:BSP/u8g2/u8g2_bitmap.c ****   Universal 8bit Graphics Library (https://github.com/olikraus/u8g2/)
+   6:BSP/u8g2/u8g2_bitmap.c **** 
+   7:BSP/u8g2/u8g2_bitmap.c ****   Copyright (c) 2016, olikraus@gmail.com
+   8:BSP/u8g2/u8g2_bitmap.c ****   All rights reserved.
+   9:BSP/u8g2/u8g2_bitmap.c **** 
+  10:BSP/u8g2/u8g2_bitmap.c ****   Redistribution and use in source and binary forms, with or without modification, 
+  11:BSP/u8g2/u8g2_bitmap.c ****   are permitted provided that the following conditions are met:
+  12:BSP/u8g2/u8g2_bitmap.c **** 
+  13:BSP/u8g2/u8g2_bitmap.c ****   * Redistributions of source code must retain the above copyright notice, this list 
+  14:BSP/u8g2/u8g2_bitmap.c ****     of conditions and the following disclaimer.
+  15:BSP/u8g2/u8g2_bitmap.c ****     
+  16:BSP/u8g2/u8g2_bitmap.c ****   * Redistributions in binary form must reproduce the above copyright notice, this 
+  17:BSP/u8g2/u8g2_bitmap.c ****     list of conditions and the following disclaimer in the documentation and/or other 
+  18:BSP/u8g2/u8g2_bitmap.c ****     materials provided with the distribution.
+  19:BSP/u8g2/u8g2_bitmap.c **** 
+  20:BSP/u8g2/u8g2_bitmap.c ****   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND 
+  21:BSP/u8g2/u8g2_bitmap.c ****   CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, 
+  22:BSP/u8g2/u8g2_bitmap.c ****   INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF 
+  23:BSP/u8g2/u8g2_bitmap.c ****   MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
+  24:BSP/u8g2/u8g2_bitmap.c ****   DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR 
+  25:BSP/u8g2/u8g2_bitmap.c ****   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+  26:BSP/u8g2/u8g2_bitmap.c ****   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+  27:BSP/u8g2/u8g2_bitmap.c ****   NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
+  28:BSP/u8g2/u8g2_bitmap.c ****   LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
+  29:BSP/u8g2/u8g2_bitmap.c ****   CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, 
+  30:BSP/u8g2/u8g2_bitmap.c ****   STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+  31:BSP/u8g2/u8g2_bitmap.c ****   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
+ARM GAS  /tmp/ccECjMcj.s 			page 2
+
+
+  32:BSP/u8g2/u8g2_bitmap.c ****   ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
+  33:BSP/u8g2/u8g2_bitmap.c **** 
+  34:BSP/u8g2/u8g2_bitmap.c **** */
+  35:BSP/u8g2/u8g2_bitmap.c **** 
+  36:BSP/u8g2/u8g2_bitmap.c **** #include "u8g2.h"
+  37:BSP/u8g2/u8g2_bitmap.c **** 
+  38:BSP/u8g2/u8g2_bitmap.c **** 
+  39:BSP/u8g2/u8g2_bitmap.c **** void u8g2_SetBitmapMode(u8g2_t *u8g2, uint8_t is_transparent) {
+  28              		.loc 1 39 63 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+  40:BSP/u8g2/u8g2_bitmap.c ****   u8g2->bitmap_transparency = is_transparent;
+  33              		.loc 1 40 3 view .LVU1
+  34              		.loc 1 40 29 is_stmt 0 view .LVU2
+  35 0000 80F88510 		strb	r1, [r0, #133]
+  41:BSP/u8g2/u8g2_bitmap.c **** }
+  36              		.loc 1 41 1 view .LVU3
+  37 0004 7047     		bx	lr
+  38              		.cfi_endproc
+  39              	.LFE0:
+  41              		.section	.text.u8g2_DrawHorizontalBitmap,"ax",%progbits
+  42              		.align	1
+  43              		.global	u8g2_DrawHorizontalBitmap
+  44              		.syntax unified
+  45              		.thumb
+  46              		.thumb_func
+  48              	u8g2_DrawHorizontalBitmap:
+  49              	.LVL1:
+  50              	.LFB1:
+  42:BSP/u8g2/u8g2_bitmap.c **** 
+  43:BSP/u8g2/u8g2_bitmap.c **** /*
+  44:BSP/u8g2/u8g2_bitmap.c ****   x,y 	Position on the display
+  45:BSP/u8g2/u8g2_bitmap.c ****   len		Length of bitmap line in pixel. Note: This differs from u8glib which had a bytecount here.
+  46:BSP/u8g2/u8g2_bitmap.c ****   b		Pointer to the bitmap line.
+  47:BSP/u8g2/u8g2_bitmap.c ****   Only draw pixels which are set.
+  48:BSP/u8g2/u8g2_bitmap.c **** */
+  49:BSP/u8g2/u8g2_bitmap.c **** 
+  50:BSP/u8g2/u8g2_bitmap.c **** void u8g2_DrawHorizontalBitmap(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t len, const u
+  51:BSP/u8g2/u8g2_bitmap.c **** {
+  51              		.loc 1 51 1 is_stmt 1 view -0
+  52              		.cfi_startproc
+  53              		@ args = 4, pretend = 0, frame = 0
+  54              		@ frame_needed = 0, uses_anonymous_args = 0
+  55              		.loc 1 51 1 is_stmt 0 view .LVU5
+  56 0000 2DE9F04F 		push	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
+  57              	.LCFI0:
+  58              		.cfi_def_cfa_offset 36
+  59              		.cfi_offset 4, -36
+  60              		.cfi_offset 5, -32
+  61              		.cfi_offset 6, -28
+  62              		.cfi_offset 7, -24
+  63              		.cfi_offset 8, -20
+  64              		.cfi_offset 9, -16
+  65              		.cfi_offset 10, -12
+  66              		.cfi_offset 11, -8
+ARM GAS  /tmp/ccECjMcj.s 			page 3
+
+
+  67              		.cfi_offset 14, -4
+  68 0004 83B0     		sub	sp, sp, #12
+  69              	.LCFI1:
+  70              		.cfi_def_cfa_offset 48
+  71 0006 0746     		mov	r7, r0
+  72 0008 0D46     		mov	r5, r1
+  73 000a 9146     		mov	r9, r2
+  74 000c 1C46     		mov	r4, r3
+  75 000e DDF83080 		ldr	r8, [sp, #48]
+  52:BSP/u8g2/u8g2_bitmap.c ****   uint8_t mask;
+  76              		.loc 1 52 3 is_stmt 1 view .LVU6
+  53:BSP/u8g2/u8g2_bitmap.c ****   uint8_t color = u8g2->draw_color;
+  77              		.loc 1 53 3 view .LVU7
+  78              		.loc 1 53 11 is_stmt 0 view .LVU8
+  79 0012 90F886A0 		ldrb	r10, [r0, #134]	@ zero_extendqisi2
+  80              	.LVL2:
+  54:BSP/u8g2/u8g2_bitmap.c ****   uint8_t ncolor = (color == 0 ? 1 : 0);
+  81              		.loc 1 54 3 is_stmt 1 view .LVU9
+  55:BSP/u8g2/u8g2_bitmap.c **** 
+  56:BSP/u8g2/u8g2_bitmap.c **** #ifdef U8G2_WITH_INTERSECTION
+  57:BSP/u8g2/u8g2_bitmap.c ****   if ( u8g2_IsIntersection(u8g2, x, y, x+len, y+1) == 0 ) 
+  82              		.loc 1 57 3 view .LVU10
+  83              		.loc 1 57 8 is_stmt 0 view .LVU11
+  84 0016 CB18     		adds	r3, r1, r3
+  85              	.LVL3:
+  86              		.loc 1 57 8 view .LVU12
+  87 0018 561C     		adds	r6, r2, #1
+  88 001a F6B2     		uxtb	r6, r6
+  89 001c 0096     		str	r6, [sp]
+  90 001e DBB2     		uxtb	r3, r3
+  91 0020 FFF7FEFF 		bl	u8g2_IsIntersection
+  92              	.LVL4:
+  93              		.loc 1 57 6 discriminator 1 view .LVU13
+  94 0024 68B3     		cbz	r0, .L2
+  95 0026 BAFA8AFB 		clz	fp, r10
+  96              	.LVL5:
+  97              		.loc 1 57 6 discriminator 1 view .LVU14
+  98 002a 4FEA5B1B 		lsr	fp, fp, #5
+  99              	.LVL6:
+  58:BSP/u8g2/u8g2_bitmap.c ****     return;
+  59:BSP/u8g2/u8g2_bitmap.c **** #endif /* U8G2_WITH_INTERSECTION */
+  60:BSP/u8g2/u8g2_bitmap.c ****   
+  61:BSP/u8g2/u8g2_bitmap.c ****   mask = 128;
+ 100              		.loc 1 61 8 view .LVU15
+ 101 002e 8026     		movs	r6, #128
+ 102 0030 12E0     		b	.L4
+ 103              	.LVL7:
+ 104              	.L11:
+  62:BSP/u8g2/u8g2_bitmap.c ****   while(len > 0)
+  63:BSP/u8g2/u8g2_bitmap.c ****   {
+  64:BSP/u8g2/u8g2_bitmap.c ****     if ( *b & mask ) {
+  65:BSP/u8g2/u8g2_bitmap.c ****       u8g2->draw_color = color;
+ 105              		.loc 1 65 7 is_stmt 1 view .LVU16
+ 106              		.loc 1 65 24 is_stmt 0 view .LVU17
+ 107 0032 87F886A0 		strb	r10, [r7, #134]
+  66:BSP/u8g2/u8g2_bitmap.c ****       u8g2_DrawHVLine(u8g2, x, y, 1, 0);
+ 108              		.loc 1 66 7 is_stmt 1 view .LVU18
+ARM GAS  /tmp/ccECjMcj.s 			page 4
+
+
+ 109 0036 0023     		movs	r3, #0
+ 110 0038 0093     		str	r3, [sp]
+ 111 003a 0123     		movs	r3, #1
+ 112 003c 4A46     		mov	r2, r9
+ 113 003e 2946     		mov	r1, r5
+ 114 0040 3846     		mov	r0, r7
+ 115 0042 FFF7FEFF 		bl	u8g2_DrawHVLine
+ 116              	.LVL8:
+ 117              	.L6:
+  67:BSP/u8g2/u8g2_bitmap.c ****     } else if ( u8g2->bitmap_transparency == 0 ) {
+  68:BSP/u8g2/u8g2_bitmap.c ****       u8g2->draw_color = ncolor;
+  69:BSP/u8g2/u8g2_bitmap.c ****       u8g2_DrawHVLine(u8g2, x, y, 1, 0);
+  70:BSP/u8g2/u8g2_bitmap.c ****     }
+  71:BSP/u8g2/u8g2_bitmap.c **** 
+  72:BSP/u8g2/u8g2_bitmap.c ****     x++;
+ 118              		.loc 1 72 5 view .LVU19
+ 119              		.loc 1 72 6 is_stmt 0 view .LVU20
+ 120 0046 0135     		adds	r5, r5, #1
+ 121              	.LVL9:
+ 122              		.loc 1 72 6 view .LVU21
+ 123 0048 EDB2     		uxtb	r5, r5
+ 124              	.LVL10:
+  73:BSP/u8g2/u8g2_bitmap.c ****     mask >>= 1;
+ 125              		.loc 1 73 5 is_stmt 1 view .LVU22
+  74:BSP/u8g2/u8g2_bitmap.c ****     if ( mask == 0 )
+ 126              		.loc 1 74 5 view .LVU23
+ 127              		.loc 1 74 8 is_stmt 0 view .LVU24
+ 128 004a 7608     		lsrs	r6, r6, #1
+ 129              	.LVL11:
+ 130              		.loc 1 74 8 view .LVU25
+ 131 004c 02D1     		bne	.L7
+  75:BSP/u8g2/u8g2_bitmap.c ****     {
+  76:BSP/u8g2/u8g2_bitmap.c ****       mask = 128;
+ 132              		.loc 1 76 7 is_stmt 1 view .LVU26
+ 133              	.LVL12:
+  77:BSP/u8g2/u8g2_bitmap.c ****       b++;
+ 134              		.loc 1 77 7 view .LVU27
+ 135              		.loc 1 77 8 is_stmt 0 view .LVU28
+ 136 004e 08F10108 		add	r8, r8, #1
+ 137              	.LVL13:
+  76:BSP/u8g2/u8g2_bitmap.c ****       b++;
+ 138              		.loc 1 76 12 view .LVU29
+ 139 0052 8026     		movs	r6, #128
+ 140              	.LVL14:
+ 141              	.L7:
+  78:BSP/u8g2/u8g2_bitmap.c ****     }
+  79:BSP/u8g2/u8g2_bitmap.c ****     len--;
+ 142              		.loc 1 79 5 is_stmt 1 view .LVU30
+ 143              		.loc 1 79 8 is_stmt 0 view .LVU31
+ 144 0054 013C     		subs	r4, r4, #1
+ 145              	.LVL15:
+ 146              		.loc 1 79 8 view .LVU32
+ 147 0056 E4B2     		uxtb	r4, r4
+ 148              	.LVL16:
+ 149              	.L4:
+  62:BSP/u8g2/u8g2_bitmap.c ****   {
+ 150              		.loc 1 62 13 is_stmt 1 view .LVU33
+ARM GAS  /tmp/ccECjMcj.s 			page 5
+
+
+ 151 0058 8CB1     		cbz	r4, .L10
+  64:BSP/u8g2/u8g2_bitmap.c ****       u8g2->draw_color = color;
+ 152              		.loc 1 64 5 view .LVU34
+  64:BSP/u8g2/u8g2_bitmap.c ****       u8g2->draw_color = color;
+ 153              		.loc 1 64 10 is_stmt 0 view .LVU35
+ 154 005a 98F80030 		ldrb	r3, [r8]	@ zero_extendqisi2
+  64:BSP/u8g2/u8g2_bitmap.c ****       u8g2->draw_color = color;
+ 155              		.loc 1 64 8 view .LVU36
+ 156 005e 1E42     		tst	r6, r3
+ 157 0060 E7D1     		bne	.L11
+  67:BSP/u8g2/u8g2_bitmap.c ****       u8g2->draw_color = ncolor;
+ 158              		.loc 1 67 12 is_stmt 1 view .LVU37
+  67:BSP/u8g2/u8g2_bitmap.c ****       u8g2->draw_color = ncolor;
+ 159              		.loc 1 67 21 is_stmt 0 view .LVU38
+ 160 0062 97F88530 		ldrb	r3, [r7, #133]	@ zero_extendqisi2
+  67:BSP/u8g2/u8g2_bitmap.c ****       u8g2->draw_color = ncolor;
+ 161              		.loc 1 67 15 view .LVU39
+ 162 0066 002B     		cmp	r3, #0
+ 163 0068 EDD1     		bne	.L6
+  68:BSP/u8g2/u8g2_bitmap.c ****       u8g2_DrawHVLine(u8g2, x, y, 1, 0);
+ 164              		.loc 1 68 7 is_stmt 1 view .LVU40
+  68:BSP/u8g2/u8g2_bitmap.c ****       u8g2_DrawHVLine(u8g2, x, y, 1, 0);
+ 165              		.loc 1 68 24 is_stmt 0 view .LVU41
+ 166 006a 87F886B0 		strb	fp, [r7, #134]
+  69:BSP/u8g2/u8g2_bitmap.c ****     }
+ 167              		.loc 1 69 7 is_stmt 1 view .LVU42
+ 168 006e 0093     		str	r3, [sp]
+ 169 0070 0123     		movs	r3, #1
+ 170 0072 4A46     		mov	r2, r9
+ 171 0074 2946     		mov	r1, r5
+ 172 0076 3846     		mov	r0, r7
+ 173 0078 FFF7FEFF 		bl	u8g2_DrawHVLine
+ 174              	.LVL17:
+ 175 007c E3E7     		b	.L6
+ 176              	.L10:
+  80:BSP/u8g2/u8g2_bitmap.c ****   }
+  81:BSP/u8g2/u8g2_bitmap.c ****   u8g2->draw_color = color;
+ 177              		.loc 1 81 3 view .LVU43
+ 178              		.loc 1 81 20 is_stmt 0 view .LVU44
+ 179 007e 87F886A0 		strb	r10, [r7, #134]
+ 180              	.LVL18:
+ 181              	.L2:
+  82:BSP/u8g2/u8g2_bitmap.c **** }
+ 182              		.loc 1 82 1 view .LVU45
+ 183 0082 03B0     		add	sp, sp, #12
+ 184              	.LCFI2:
+ 185              		.cfi_def_cfa_offset 36
+ 186              		@ sp needed
+ 187 0084 BDE8F08F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 188              		.loc 1 82 1 view .LVU46
+ 189              		.cfi_endproc
+ 190              	.LFE1:
+ 192              		.section	.text.u8g2_DrawBitmap,"ax",%progbits
+ 193              		.align	1
+ 194              		.global	u8g2_DrawBitmap
+ 195              		.syntax unified
+ 196              		.thumb
+ARM GAS  /tmp/ccECjMcj.s 			page 6
+
+
+ 197              		.thumb_func
+ 199              	u8g2_DrawBitmap:
+ 200              	.LVL19:
+ 201              	.LFB2:
+  83:BSP/u8g2/u8g2_bitmap.c **** 
+  84:BSP/u8g2/u8g2_bitmap.c **** 
+  85:BSP/u8g2/u8g2_bitmap.c **** /* u8glib compatible bitmap draw function */
+  86:BSP/u8g2/u8g2_bitmap.c **** void u8g2_DrawBitmap(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t cnt, u8g2_uint_t h, co
+  87:BSP/u8g2/u8g2_bitmap.c **** {
+ 202              		.loc 1 87 1 is_stmt 1 view -0
+ 203              		.cfi_startproc
+ 204              		@ args = 8, pretend = 0, frame = 0
+ 205              		@ frame_needed = 0, uses_anonymous_args = 0
+ 206              		.loc 1 87 1 is_stmt 0 view .LVU48
+ 207 0000 2DE9F047 		push	{r4, r5, r6, r7, r8, r9, r10, lr}
+ 208              	.LCFI3:
+ 209              		.cfi_def_cfa_offset 32
+ 210              		.cfi_offset 4, -32
+ 211              		.cfi_offset 5, -28
+ 212              		.cfi_offset 6, -24
+ 213              		.cfi_offset 7, -20
+ 214              		.cfi_offset 8, -16
+ 215              		.cfi_offset 9, -12
+ 216              		.cfi_offset 10, -8
+ 217              		.cfi_offset 14, -4
+ 218 0004 82B0     		sub	sp, sp, #8
+ 219              	.LCFI4:
+ 220              		.cfi_def_cfa_offset 40
+ 221 0006 8246     		mov	r10, r0
+ 222 0008 0F46     		mov	r7, r1
+ 223 000a 1446     		mov	r4, r2
+ 224 000c 9946     		mov	r9, r3
+ 225 000e 9DF82850 		ldrb	r5, [sp, #40]	@ zero_extendqisi2
+ 226 0012 0B9E     		ldr	r6, [sp, #44]
+  88:BSP/u8g2/u8g2_bitmap.c ****   u8g2_uint_t w;
+ 227              		.loc 1 88 3 is_stmt 1 view .LVU49
+  89:BSP/u8g2/u8g2_bitmap.c ****   w = cnt;
+ 228              		.loc 1 89 3 view .LVU50
+ 229              	.LVL20:
+  90:BSP/u8g2/u8g2_bitmap.c ****   w *= 8;
+ 230              		.loc 1 90 3 view .LVU51
+ 231              		.loc 1 90 5 is_stmt 0 view .LVU52
+ 232 0014 4FEAC308 		lsl	r8, r3, #3
+ 233 0018 5FFA88F8 		uxtb	r8, r8
+ 234              	.LVL21:
+  91:BSP/u8g2/u8g2_bitmap.c **** #ifdef U8G2_WITH_INTERSECTION
+  92:BSP/u8g2/u8g2_bitmap.c ****   if ( u8g2_IsIntersection(u8g2, x, y, x+w, y+h) == 0 ) 
+ 235              		.loc 1 92 3 is_stmt 1 view .LVU53
+ 236              		.loc 1 92 8 is_stmt 0 view .LVU54
+ 237 001c 08EB010C 		add	ip, r8, r1
+ 238 0020 5319     		adds	r3, r2, r5
+ 239              	.LVL22:
+ 240              		.loc 1 92 8 view .LVU55
+ 241 0022 DBB2     		uxtb	r3, r3
+ 242 0024 0093     		str	r3, [sp]
+ 243 0026 5FFA8CF3 		uxtb	r3, ip
+ 244 002a FFF7FEFF 		bl	u8g2_IsIntersection
+ARM GAS  /tmp/ccECjMcj.s 			page 7
+
+
+ 245              	.LVL23:
+ 246              		.loc 1 92 6 discriminator 1 view .LVU56
+ 247 002e 60B9     		cbnz	r0, .L14
+ 248 0030 0DE0     		b	.L12
+ 249              	.LVL24:
+ 250              	.L15:
+  93:BSP/u8g2/u8g2_bitmap.c ****     return;
+  94:BSP/u8g2/u8g2_bitmap.c **** #endif /* U8G2_WITH_INTERSECTION */
+  95:BSP/u8g2/u8g2_bitmap.c ****   
+  96:BSP/u8g2/u8g2_bitmap.c ****   while( h > 0 )
+  97:BSP/u8g2/u8g2_bitmap.c ****   {
+  98:BSP/u8g2/u8g2_bitmap.c ****     u8g2_DrawHorizontalBitmap(u8g2, x, y, w, bitmap);
+ 251              		.loc 1 98 5 is_stmt 1 view .LVU57
+ 252 0032 0096     		str	r6, [sp]
+ 253 0034 4346     		mov	r3, r8
+ 254 0036 2246     		mov	r2, r4
+ 255 0038 3946     		mov	r1, r7
+ 256 003a 5046     		mov	r0, r10
+ 257 003c FFF7FEFF 		bl	u8g2_DrawHorizontalBitmap
+ 258              	.LVL25:
+  99:BSP/u8g2/u8g2_bitmap.c ****     bitmap += cnt;
+ 259              		.loc 1 99 5 view .LVU58
+ 260              		.loc 1 99 12 is_stmt 0 view .LVU59
+ 261 0040 4E44     		add	r6, r6, r9
+ 262              	.LVL26:
+ 100:BSP/u8g2/u8g2_bitmap.c ****     y++;
+ 263              		.loc 1 100 5 is_stmt 1 view .LVU60
+ 264              		.loc 1 100 6 is_stmt 0 view .LVU61
+ 265 0042 0134     		adds	r4, r4, #1
+ 266              	.LVL27:
+ 267              		.loc 1 100 6 view .LVU62
+ 268 0044 E4B2     		uxtb	r4, r4
+ 269              	.LVL28:
+ 101:BSP/u8g2/u8g2_bitmap.c ****     h--;
+ 270              		.loc 1 101 5 is_stmt 1 view .LVU63
+ 271              		.loc 1 101 6 is_stmt 0 view .LVU64
+ 272 0046 013D     		subs	r5, r5, #1
+ 273              	.LVL29:
+ 274              		.loc 1 101 6 view .LVU65
+ 275 0048 EDB2     		uxtb	r5, r5
+ 276              	.LVL30:
+ 277              	.L14:
+  96:BSP/u8g2/u8g2_bitmap.c ****   {
+ 278              		.loc 1 96 12 is_stmt 1 view .LVU66
+ 279 004a 002D     		cmp	r5, #0
+ 280 004c F1D1     		bne	.L15
+ 281              	.LVL31:
+ 282              	.L12:
+ 102:BSP/u8g2/u8g2_bitmap.c ****   }
+ 103:BSP/u8g2/u8g2_bitmap.c **** }
+ 283              		.loc 1 103 1 is_stmt 0 view .LVU67
+ 284 004e 02B0     		add	sp, sp, #8
+ 285              	.LCFI5:
+ 286              		.cfi_def_cfa_offset 32
+ 287              		@ sp needed
+ 288 0050 BDE8F087 		pop	{r4, r5, r6, r7, r8, r9, r10, pc}
+ 289              		.loc 1 103 1 view .LVU68
+ARM GAS  /tmp/ccECjMcj.s 			page 8
+
+
+ 290              		.cfi_endproc
+ 291              	.LFE2:
+ 293              		.section	.text.u8g2_DrawHXBM,"ax",%progbits
+ 294              		.align	1
+ 295              		.global	u8g2_DrawHXBM
+ 296              		.syntax unified
+ 297              		.thumb
+ 298              		.thumb_func
+ 300              	u8g2_DrawHXBM:
+ 301              	.LVL32:
+ 302              	.LFB3:
+ 104:BSP/u8g2/u8g2_bitmap.c **** 
+ 105:BSP/u8g2/u8g2_bitmap.c **** 
+ 106:BSP/u8g2/u8g2_bitmap.c **** 
+ 107:BSP/u8g2/u8g2_bitmap.c **** void u8g2_DrawHXBM(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t len, const uint8_t *b)
+ 108:BSP/u8g2/u8g2_bitmap.c **** {
+ 303              		.loc 1 108 1 is_stmt 1 view -0
+ 304              		.cfi_startproc
+ 305              		@ args = 4, pretend = 0, frame = 0
+ 306              		@ frame_needed = 0, uses_anonymous_args = 0
+ 307              		.loc 1 108 1 is_stmt 0 view .LVU70
+ 308 0000 2DE9F04F 		push	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
+ 309              	.LCFI6:
+ 310              		.cfi_def_cfa_offset 36
+ 311              		.cfi_offset 4, -36
+ 312              		.cfi_offset 5, -32
+ 313              		.cfi_offset 6, -28
+ 314              		.cfi_offset 7, -24
+ 315              		.cfi_offset 8, -20
+ 316              		.cfi_offset 9, -16
+ 317              		.cfi_offset 10, -12
+ 318              		.cfi_offset 11, -8
+ 319              		.cfi_offset 14, -4
+ 320 0004 83B0     		sub	sp, sp, #12
+ 321              	.LCFI7:
+ 322              		.cfi_def_cfa_offset 48
+ 323 0006 0746     		mov	r7, r0
+ 324 0008 0E46     		mov	r6, r1
+ 325 000a 9146     		mov	r9, r2
+ 326 000c 1D46     		mov	r5, r3
+ 327 000e DDF83080 		ldr	r8, [sp, #48]
+ 109:BSP/u8g2/u8g2_bitmap.c ****   uint8_t mask;
+ 328              		.loc 1 109 3 is_stmt 1 view .LVU71
+ 110:BSP/u8g2/u8g2_bitmap.c ****   uint8_t color = u8g2->draw_color;
+ 329              		.loc 1 110 3 view .LVU72
+ 330              		.loc 1 110 11 is_stmt 0 view .LVU73
+ 331 0012 90F886A0 		ldrb	r10, [r0, #134]	@ zero_extendqisi2
+ 332              	.LVL33:
+ 111:BSP/u8g2/u8g2_bitmap.c ****   uint8_t ncolor = (color == 0 ? 1 : 0);
+ 333              		.loc 1 111 3 is_stmt 1 view .LVU74
+ 112:BSP/u8g2/u8g2_bitmap.c **** #ifdef U8G2_WITH_INTERSECTION
+ 113:BSP/u8g2/u8g2_bitmap.c ****   if ( u8g2_IsIntersection(u8g2, x, y, x+len, y+1) == 0 ) 
+ 334              		.loc 1 113 3 view .LVU75
+ 335              		.loc 1 113 8 is_stmt 0 view .LVU76
+ 336 0016 CB18     		adds	r3, r1, r3
+ 337              	.LVL34:
+ 338              		.loc 1 113 8 view .LVU77
+ARM GAS  /tmp/ccECjMcj.s 			page 9
+
+
+ 339 0018 541C     		adds	r4, r2, #1
+ 340 001a E4B2     		uxtb	r4, r4
+ 341 001c 0094     		str	r4, [sp]
+ 342 001e DBB2     		uxtb	r3, r3
+ 343 0020 FFF7FEFF 		bl	u8g2_IsIntersection
+ 344              	.LVL35:
+ 345              		.loc 1 113 6 discriminator 1 view .LVU78
+ 346 0024 78B3     		cbz	r0, .L17
+ 347 0026 BAFA8AFB 		clz	fp, r10
+ 348              	.LVL36:
+ 349              		.loc 1 113 6 discriminator 1 view .LVU79
+ 350 002a 4FEA5B1B 		lsr	fp, fp, #5
+ 351              	.LVL37:
+ 114:BSP/u8g2/u8g2_bitmap.c ****     return;
+ 115:BSP/u8g2/u8g2_bitmap.c **** #endif /* U8G2_WITH_INTERSECTION */
+ 116:BSP/u8g2/u8g2_bitmap.c ****   
+ 117:BSP/u8g2/u8g2_bitmap.c ****   mask = 1;
+ 352              		.loc 1 117 8 view .LVU80
+ 353 002e 0124     		movs	r4, #1
+ 354 0030 14E0     		b	.L19
+ 355              	.LVL38:
+ 356              	.L26:
+ 118:BSP/u8g2/u8g2_bitmap.c ****   while(len > 0) {
+ 119:BSP/u8g2/u8g2_bitmap.c ****     if ( *b & mask ) {
+ 120:BSP/u8g2/u8g2_bitmap.c ****       u8g2->draw_color = color;
+ 357              		.loc 1 120 7 is_stmt 1 view .LVU81
+ 358              		.loc 1 120 24 is_stmt 0 view .LVU82
+ 359 0032 87F886A0 		strb	r10, [r7, #134]
+ 121:BSP/u8g2/u8g2_bitmap.c ****       u8g2_DrawHVLine(u8g2, x, y, 1, 0);
+ 360              		.loc 1 121 7 is_stmt 1 view .LVU83
+ 361 0036 0023     		movs	r3, #0
+ 362 0038 0093     		str	r3, [sp]
+ 363 003a 0123     		movs	r3, #1
+ 364 003c 4A46     		mov	r2, r9
+ 365 003e 3146     		mov	r1, r6
+ 366 0040 3846     		mov	r0, r7
+ 367 0042 FFF7FEFF 		bl	u8g2_DrawHVLine
+ 368              	.LVL39:
+ 369              	.L21:
+ 122:BSP/u8g2/u8g2_bitmap.c ****     } else if ( u8g2->bitmap_transparency == 0 ) {
+ 123:BSP/u8g2/u8g2_bitmap.c ****       u8g2->draw_color = ncolor;
+ 124:BSP/u8g2/u8g2_bitmap.c ****       u8g2_DrawHVLine(u8g2, x, y, 1, 0);
+ 125:BSP/u8g2/u8g2_bitmap.c ****     }
+ 126:BSP/u8g2/u8g2_bitmap.c ****     x++;
+ 370              		.loc 1 126 5 view .LVU84
+ 371              		.loc 1 126 6 is_stmt 0 view .LVU85
+ 372 0046 0136     		adds	r6, r6, #1
+ 373              	.LVL40:
+ 374              		.loc 1 126 6 view .LVU86
+ 375 0048 F6B2     		uxtb	r6, r6
+ 376              	.LVL41:
+ 127:BSP/u8g2/u8g2_bitmap.c ****     mask <<= 1;
+ 377              		.loc 1 127 5 is_stmt 1 view .LVU87
+ 378              		.loc 1 127 10 is_stmt 0 view .LVU88
+ 379 004a 6400     		lsls	r4, r4, #1
+ 380              	.LVL42:
+ 128:BSP/u8g2/u8g2_bitmap.c ****     if ( mask == 0 )
+ARM GAS  /tmp/ccECjMcj.s 			page 10
+
+
+ 381              		.loc 1 128 5 is_stmt 1 view .LVU89
+ 382              		.loc 1 128 8 is_stmt 0 view .LVU90
+ 383 004c 14F0FF04 		ands	r4, r4, #255
+ 384              	.LVL43:
+ 385              		.loc 1 128 8 view .LVU91
+ 386 0050 02D1     		bne	.L22
+ 129:BSP/u8g2/u8g2_bitmap.c ****     {
+ 130:BSP/u8g2/u8g2_bitmap.c ****       mask = 1;
+ 387              		.loc 1 130 7 is_stmt 1 view .LVU92
+ 388              	.LVL44:
+ 131:BSP/u8g2/u8g2_bitmap.c ****       b++;
+ 389              		.loc 1 131 7 view .LVU93
+ 390              		.loc 1 131 8 is_stmt 0 view .LVU94
+ 391 0052 08F10108 		add	r8, r8, #1
+ 392              	.LVL45:
+ 130:BSP/u8g2/u8g2_bitmap.c ****       b++;
+ 393              		.loc 1 130 12 view .LVU95
+ 394 0056 0124     		movs	r4, #1
+ 395              	.LVL46:
+ 396              	.L22:
+ 132:BSP/u8g2/u8g2_bitmap.c ****     }
+ 133:BSP/u8g2/u8g2_bitmap.c ****     len--;
+ 397              		.loc 1 133 5 is_stmt 1 view .LVU96
+ 398              		.loc 1 133 8 is_stmt 0 view .LVU97
+ 399 0058 013D     		subs	r5, r5, #1
+ 400              	.LVL47:
+ 401              		.loc 1 133 8 view .LVU98
+ 402 005a EDB2     		uxtb	r5, r5
+ 403              	.LVL48:
+ 404              	.L19:
+ 118:BSP/u8g2/u8g2_bitmap.c ****     if ( *b & mask ) {
+ 405              		.loc 1 118 13 is_stmt 1 view .LVU99
+ 406 005c 8DB1     		cbz	r5, .L25
+ 119:BSP/u8g2/u8g2_bitmap.c ****       u8g2->draw_color = color;
+ 407              		.loc 1 119 5 view .LVU100
+ 119:BSP/u8g2/u8g2_bitmap.c ****       u8g2->draw_color = color;
+ 408              		.loc 1 119 10 is_stmt 0 view .LVU101
+ 409 005e 98F80030 		ldrb	r3, [r8]	@ zero_extendqisi2
+ 119:BSP/u8g2/u8g2_bitmap.c ****       u8g2->draw_color = color;
+ 410              		.loc 1 119 8 view .LVU102
+ 411 0062 1C42     		tst	r4, r3
+ 412 0064 E5D1     		bne	.L26
+ 122:BSP/u8g2/u8g2_bitmap.c ****       u8g2->draw_color = ncolor;
+ 413              		.loc 1 122 12 is_stmt 1 view .LVU103
+ 122:BSP/u8g2/u8g2_bitmap.c ****       u8g2->draw_color = ncolor;
+ 414              		.loc 1 122 21 is_stmt 0 view .LVU104
+ 415 0066 97F88530 		ldrb	r3, [r7, #133]	@ zero_extendqisi2
+ 122:BSP/u8g2/u8g2_bitmap.c ****       u8g2->draw_color = ncolor;
+ 416              		.loc 1 122 15 view .LVU105
+ 417 006a 002B     		cmp	r3, #0
+ 418 006c EBD1     		bne	.L21
+ 123:BSP/u8g2/u8g2_bitmap.c ****       u8g2_DrawHVLine(u8g2, x, y, 1, 0);
+ 419              		.loc 1 123 7 is_stmt 1 view .LVU106
+ 123:BSP/u8g2/u8g2_bitmap.c ****       u8g2_DrawHVLine(u8g2, x, y, 1, 0);
+ 420              		.loc 1 123 24 is_stmt 0 view .LVU107
+ 421 006e 87F886B0 		strb	fp, [r7, #134]
+ 124:BSP/u8g2/u8g2_bitmap.c ****     }
+ARM GAS  /tmp/ccECjMcj.s 			page 11
+
+
+ 422              		.loc 1 124 7 is_stmt 1 view .LVU108
+ 423 0072 0093     		str	r3, [sp]
+ 424 0074 0123     		movs	r3, #1
+ 425 0076 4A46     		mov	r2, r9
+ 426 0078 3146     		mov	r1, r6
+ 427 007a 3846     		mov	r0, r7
+ 428 007c FFF7FEFF 		bl	u8g2_DrawHVLine
+ 429              	.LVL49:
+ 430 0080 E1E7     		b	.L21
+ 431              	.L25:
+ 134:BSP/u8g2/u8g2_bitmap.c ****   }
+ 135:BSP/u8g2/u8g2_bitmap.c ****   u8g2->draw_color = color;
+ 432              		.loc 1 135 3 view .LVU109
+ 433              		.loc 1 135 20 is_stmt 0 view .LVU110
+ 434 0082 87F886A0 		strb	r10, [r7, #134]
+ 435              	.LVL50:
+ 436              	.L17:
+ 136:BSP/u8g2/u8g2_bitmap.c **** }
+ 437              		.loc 1 136 1 view .LVU111
+ 438 0086 03B0     		add	sp, sp, #12
+ 439              	.LCFI8:
+ 440              		.cfi_def_cfa_offset 36
+ 441              		@ sp needed
+ 442 0088 BDE8F08F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 443              		.loc 1 136 1 view .LVU112
+ 444              		.cfi_endproc
+ 445              	.LFE3:
+ 447              		.section	.text.u8g2_DrawXBM,"ax",%progbits
+ 448              		.align	1
+ 449              		.global	u8g2_DrawXBM
+ 450              		.syntax unified
+ 451              		.thumb
+ 452              		.thumb_func
+ 454              	u8g2_DrawXBM:
+ 455              	.LVL51:
+ 456              	.LFB4:
+ 137:BSP/u8g2/u8g2_bitmap.c **** 
+ 138:BSP/u8g2/u8g2_bitmap.c **** 
+ 139:BSP/u8g2/u8g2_bitmap.c **** void u8g2_DrawXBM(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t w, u8g2_uint_t h, const u
+ 140:BSP/u8g2/u8g2_bitmap.c **** {
+ 457              		.loc 1 140 1 is_stmt 1 view -0
+ 458              		.cfi_startproc
+ 459              		@ args = 8, pretend = 0, frame = 0
+ 460              		@ frame_needed = 0, uses_anonymous_args = 0
+ 461              		.loc 1 140 1 is_stmt 0 view .LVU114
+ 462 0000 2DE9F047 		push	{r4, r5, r6, r7, r8, r9, r10, lr}
+ 463              	.LCFI9:
+ 464              		.cfi_def_cfa_offset 32
+ 465              		.cfi_offset 4, -32
+ 466              		.cfi_offset 5, -28
+ 467              		.cfi_offset 6, -24
+ 468              		.cfi_offset 7, -20
+ 469              		.cfi_offset 8, -16
+ 470              		.cfi_offset 9, -12
+ 471              		.cfi_offset 10, -8
+ 472              		.cfi_offset 14, -4
+ 473 0004 82B0     		sub	sp, sp, #8
+ARM GAS  /tmp/ccECjMcj.s 			page 12
+
+
+ 474              	.LCFI10:
+ 475              		.cfi_def_cfa_offset 40
+ 476 0006 8246     		mov	r10, r0
+ 477 0008 8846     		mov	r8, r1
+ 478 000a 1446     		mov	r4, r2
+ 479 000c 1F46     		mov	r7, r3
+ 480 000e 9DF82850 		ldrb	r5, [sp, #40]	@ zero_extendqisi2
+ 481 0012 0B9E     		ldr	r6, [sp, #44]
+ 141:BSP/u8g2/u8g2_bitmap.c ****   u8g2_uint_t blen;
+ 482              		.loc 1 141 3 is_stmt 1 view .LVU115
+ 142:BSP/u8g2/u8g2_bitmap.c ****   blen = w;
+ 483              		.loc 1 142 3 view .LVU116
+ 484              	.LVL52:
+ 143:BSP/u8g2/u8g2_bitmap.c ****   blen += 7;
+ 485              		.loc 1 143 3 view .LVU117
+ 486              		.loc 1 143 8 is_stmt 0 view .LVU118
+ 487 0014 03F10709 		add	r9, r3, #7
+ 488              	.LVL53:
+ 144:BSP/u8g2/u8g2_bitmap.c ****   blen >>= 3;
+ 489              		.loc 1 144 3 is_stmt 1 view .LVU119
+ 490              		.loc 1 144 8 is_stmt 0 view .LVU120
+ 491 0018 C9F3C409 		ubfx	r9, r9, #3, #5
+ 492              	.LVL54:
+ 145:BSP/u8g2/u8g2_bitmap.c **** #ifdef U8G2_WITH_INTERSECTION
+ 146:BSP/u8g2/u8g2_bitmap.c ****   if ( u8g2_IsIntersection(u8g2, x, y, x+w, y+h) == 0 ) 
+ 493              		.loc 1 146 3 is_stmt 1 view .LVU121
+ 494              		.loc 1 146 8 is_stmt 0 view .LVU122
+ 495 001c 03EB010C 		add	ip, r3, r1
+ 496 0020 5319     		adds	r3, r2, r5
+ 497              	.LVL55:
+ 498              		.loc 1 146 8 view .LVU123
+ 499 0022 DBB2     		uxtb	r3, r3
+ 500 0024 0093     		str	r3, [sp]
+ 501 0026 5FFA8CF3 		uxtb	r3, ip
+ 502 002a FFF7FEFF 		bl	u8g2_IsIntersection
+ 503              	.LVL56:
+ 504              		.loc 1 146 6 discriminator 1 view .LVU124
+ 505 002e 60B9     		cbnz	r0, .L29
+ 506 0030 0DE0     		b	.L27
+ 507              	.LVL57:
+ 508              	.L30:
+ 147:BSP/u8g2/u8g2_bitmap.c ****     return;
+ 148:BSP/u8g2/u8g2_bitmap.c **** #endif /* U8G2_WITH_INTERSECTION */
+ 149:BSP/u8g2/u8g2_bitmap.c ****   
+ 150:BSP/u8g2/u8g2_bitmap.c ****   while( h > 0 )
+ 151:BSP/u8g2/u8g2_bitmap.c ****   {
+ 152:BSP/u8g2/u8g2_bitmap.c ****     u8g2_DrawHXBM(u8g2, x, y, w, bitmap);
+ 509              		.loc 1 152 5 is_stmt 1 view .LVU125
+ 510 0032 0096     		str	r6, [sp]
+ 511 0034 3B46     		mov	r3, r7
+ 512 0036 2246     		mov	r2, r4
+ 513 0038 4146     		mov	r1, r8
+ 514 003a 5046     		mov	r0, r10
+ 515 003c FFF7FEFF 		bl	u8g2_DrawHXBM
+ 516              	.LVL58:
+ 153:BSP/u8g2/u8g2_bitmap.c ****     bitmap += blen;
+ 517              		.loc 1 153 5 view .LVU126
+ARM GAS  /tmp/ccECjMcj.s 			page 13
+
+
+ 518              		.loc 1 153 12 is_stmt 0 view .LVU127
+ 519 0040 4E44     		add	r6, r6, r9
+ 520              	.LVL59:
+ 154:BSP/u8g2/u8g2_bitmap.c ****     y++;
+ 521              		.loc 1 154 5 is_stmt 1 view .LVU128
+ 522              		.loc 1 154 6 is_stmt 0 view .LVU129
+ 523 0042 0134     		adds	r4, r4, #1
+ 524              	.LVL60:
+ 525              		.loc 1 154 6 view .LVU130
+ 526 0044 E4B2     		uxtb	r4, r4
+ 527              	.LVL61:
+ 155:BSP/u8g2/u8g2_bitmap.c ****     h--;
+ 528              		.loc 1 155 5 is_stmt 1 view .LVU131
+ 529              		.loc 1 155 6 is_stmt 0 view .LVU132
+ 530 0046 013D     		subs	r5, r5, #1
+ 531              	.LVL62:
+ 532              		.loc 1 155 6 view .LVU133
+ 533 0048 EDB2     		uxtb	r5, r5
+ 534              	.LVL63:
+ 535              	.L29:
+ 150:BSP/u8g2/u8g2_bitmap.c ****   {
+ 536              		.loc 1 150 12 is_stmt 1 view .LVU134
+ 537 004a 002D     		cmp	r5, #0
+ 538 004c F1D1     		bne	.L30
+ 539              	.LVL64:
+ 540              	.L27:
+ 156:BSP/u8g2/u8g2_bitmap.c ****   }
+ 157:BSP/u8g2/u8g2_bitmap.c **** }
+ 541              		.loc 1 157 1 is_stmt 0 view .LVU135
+ 542 004e 02B0     		add	sp, sp, #8
+ 543              	.LCFI11:
+ 544              		.cfi_def_cfa_offset 32
+ 545              		@ sp needed
+ 546 0050 BDE8F087 		pop	{r4, r5, r6, r7, r8, r9, r10, pc}
+ 547              		.loc 1 157 1 view .LVU136
+ 548              		.cfi_endproc
+ 549              	.LFE4:
+ 551              		.section	.text.u8g2_DrawHXBMP,"ax",%progbits
+ 552              		.align	1
+ 553              		.global	u8g2_DrawHXBMP
+ 554              		.syntax unified
+ 555              		.thumb
+ 556              		.thumb_func
+ 558              	u8g2_DrawHXBMP:
+ 559              	.LVL65:
+ 560              	.LFB5:
+ 158:BSP/u8g2/u8g2_bitmap.c **** 
+ 159:BSP/u8g2/u8g2_bitmap.c **** 
+ 160:BSP/u8g2/u8g2_bitmap.c **** 
+ 161:BSP/u8g2/u8g2_bitmap.c **** 
+ 162:BSP/u8g2/u8g2_bitmap.c **** 
+ 163:BSP/u8g2/u8g2_bitmap.c **** 
+ 164:BSP/u8g2/u8g2_bitmap.c **** void u8g2_DrawHXBMP(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t len, const uint8_t *b)
+ 165:BSP/u8g2/u8g2_bitmap.c **** {
+ 561              		.loc 1 165 1 is_stmt 1 view -0
+ 562              		.cfi_startproc
+ 563              		@ args = 4, pretend = 0, frame = 0
+ARM GAS  /tmp/ccECjMcj.s 			page 14
+
+
+ 564              		@ frame_needed = 0, uses_anonymous_args = 0
+ 565              		.loc 1 165 1 is_stmt 0 view .LVU138
+ 566 0000 2DE9F04F 		push	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
+ 567              	.LCFI12:
+ 568              		.cfi_def_cfa_offset 36
+ 569              		.cfi_offset 4, -36
+ 570              		.cfi_offset 5, -32
+ 571              		.cfi_offset 6, -28
+ 572              		.cfi_offset 7, -24
+ 573              		.cfi_offset 8, -20
+ 574              		.cfi_offset 9, -16
+ 575              		.cfi_offset 10, -12
+ 576              		.cfi_offset 11, -8
+ 577              		.cfi_offset 14, -4
+ 578 0004 83B0     		sub	sp, sp, #12
+ 579              	.LCFI13:
+ 580              		.cfi_def_cfa_offset 48
+ 581 0006 0746     		mov	r7, r0
+ 582 0008 0E46     		mov	r6, r1
+ 583 000a 9146     		mov	r9, r2
+ 584 000c 1D46     		mov	r5, r3
+ 585 000e DDF83080 		ldr	r8, [sp, #48]
+ 166:BSP/u8g2/u8g2_bitmap.c ****   uint8_t mask;
+ 586              		.loc 1 166 3 is_stmt 1 view .LVU139
+ 167:BSP/u8g2/u8g2_bitmap.c ****   uint8_t color = u8g2->draw_color;
+ 587              		.loc 1 167 3 view .LVU140
+ 588              		.loc 1 167 11 is_stmt 0 view .LVU141
+ 589 0012 90F886A0 		ldrb	r10, [r0, #134]	@ zero_extendqisi2
+ 590              	.LVL66:
+ 168:BSP/u8g2/u8g2_bitmap.c ****   uint8_t ncolor = (color == 0 ? 1 : 0);
+ 591              		.loc 1 168 3 is_stmt 1 view .LVU142
+ 169:BSP/u8g2/u8g2_bitmap.c **** #ifdef U8G2_WITH_INTERSECTION
+ 170:BSP/u8g2/u8g2_bitmap.c ****   if ( u8g2_IsIntersection(u8g2, x, y, x+len, y+1) == 0 ) 
+ 592              		.loc 1 170 3 view .LVU143
+ 593              		.loc 1 170 8 is_stmt 0 view .LVU144
+ 594 0016 CB18     		adds	r3, r1, r3
+ 595              	.LVL67:
+ 596              		.loc 1 170 8 view .LVU145
+ 597 0018 541C     		adds	r4, r2, #1
+ 598 001a E4B2     		uxtb	r4, r4
+ 599 001c 0094     		str	r4, [sp]
+ 600 001e DBB2     		uxtb	r3, r3
+ 601 0020 FFF7FEFF 		bl	u8g2_IsIntersection
+ 602              	.LVL68:
+ 603              		.loc 1 170 6 discriminator 1 view .LVU146
+ 604 0024 78B3     		cbz	r0, .L32
+ 605 0026 BAFA8AFB 		clz	fp, r10
+ 606              	.LVL69:
+ 607              		.loc 1 170 6 discriminator 1 view .LVU147
+ 608 002a 4FEA5B1B 		lsr	fp, fp, #5
+ 609              	.LVL70:
+ 171:BSP/u8g2/u8g2_bitmap.c ****     return;
+ 172:BSP/u8g2/u8g2_bitmap.c **** #endif /* U8G2_WITH_INTERSECTION */
+ 173:BSP/u8g2/u8g2_bitmap.c ****   
+ 174:BSP/u8g2/u8g2_bitmap.c ****   mask = 1;
+ 610              		.loc 1 174 8 view .LVU148
+ 611 002e 0124     		movs	r4, #1
+ARM GAS  /tmp/ccECjMcj.s 			page 15
+
+
+ 612 0030 14E0     		b	.L34
+ 613              	.LVL71:
+ 614              	.L41:
+ 175:BSP/u8g2/u8g2_bitmap.c ****   while(len > 0)
+ 176:BSP/u8g2/u8g2_bitmap.c ****   {
+ 177:BSP/u8g2/u8g2_bitmap.c ****     if( u8x8_pgm_read(b) & mask ) {
+ 178:BSP/u8g2/u8g2_bitmap.c ****       u8g2->draw_color = color;
+ 615              		.loc 1 178 7 is_stmt 1 view .LVU149
+ 616              		.loc 1 178 24 is_stmt 0 view .LVU150
+ 617 0032 87F886A0 		strb	r10, [r7, #134]
+ 179:BSP/u8g2/u8g2_bitmap.c ****       u8g2_DrawHVLine(u8g2, x, y, 1, 0);
+ 618              		.loc 1 179 7 is_stmt 1 view .LVU151
+ 619 0036 0023     		movs	r3, #0
+ 620 0038 0093     		str	r3, [sp]
+ 621 003a 0123     		movs	r3, #1
+ 622 003c 4A46     		mov	r2, r9
+ 623 003e 3146     		mov	r1, r6
+ 624 0040 3846     		mov	r0, r7
+ 625 0042 FFF7FEFF 		bl	u8g2_DrawHVLine
+ 626              	.LVL72:
+ 627              	.L36:
+ 180:BSP/u8g2/u8g2_bitmap.c ****     } else if( u8g2->bitmap_transparency == 0 ) {
+ 181:BSP/u8g2/u8g2_bitmap.c ****       u8g2->draw_color = ncolor;
+ 182:BSP/u8g2/u8g2_bitmap.c ****       u8g2_DrawHVLine(u8g2, x, y, 1, 0);
+ 183:BSP/u8g2/u8g2_bitmap.c ****     }
+ 184:BSP/u8g2/u8g2_bitmap.c ****    
+ 185:BSP/u8g2/u8g2_bitmap.c ****     x++;
+ 628              		.loc 1 185 5 view .LVU152
+ 629              		.loc 1 185 6 is_stmt 0 view .LVU153
+ 630 0046 0136     		adds	r6, r6, #1
+ 631              	.LVL73:
+ 632              		.loc 1 185 6 view .LVU154
+ 633 0048 F6B2     		uxtb	r6, r6
+ 634              	.LVL74:
+ 186:BSP/u8g2/u8g2_bitmap.c ****     mask <<= 1;
+ 635              		.loc 1 186 5 is_stmt 1 view .LVU155
+ 636              		.loc 1 186 10 is_stmt 0 view .LVU156
+ 637 004a 6400     		lsls	r4, r4, #1
+ 638              	.LVL75:
+ 187:BSP/u8g2/u8g2_bitmap.c ****     if ( mask == 0 )
+ 639              		.loc 1 187 5 is_stmt 1 view .LVU157
+ 640              		.loc 1 187 8 is_stmt 0 view .LVU158
+ 641 004c 14F0FF04 		ands	r4, r4, #255
+ 642              	.LVL76:
+ 643              		.loc 1 187 8 view .LVU159
+ 644 0050 02D1     		bne	.L37
+ 188:BSP/u8g2/u8g2_bitmap.c ****     {
+ 189:BSP/u8g2/u8g2_bitmap.c ****       mask = 1;
+ 645              		.loc 1 189 7 is_stmt 1 view .LVU160
+ 646              	.LVL77:
+ 190:BSP/u8g2/u8g2_bitmap.c ****       b++;
+ 647              		.loc 1 190 7 view .LVU161
+ 648              		.loc 1 190 8 is_stmt 0 view .LVU162
+ 649 0052 08F10108 		add	r8, r8, #1
+ 650              	.LVL78:
+ 189:BSP/u8g2/u8g2_bitmap.c ****       b++;
+ 651              		.loc 1 189 12 view .LVU163
+ARM GAS  /tmp/ccECjMcj.s 			page 16
+
+
+ 652 0056 0124     		movs	r4, #1
+ 653              	.LVL79:
+ 654              	.L37:
+ 191:BSP/u8g2/u8g2_bitmap.c ****     }
+ 192:BSP/u8g2/u8g2_bitmap.c ****     len--;
+ 655              		.loc 1 192 5 is_stmt 1 view .LVU164
+ 656              		.loc 1 192 8 is_stmt 0 view .LVU165
+ 657 0058 013D     		subs	r5, r5, #1
+ 658              	.LVL80:
+ 659              		.loc 1 192 8 view .LVU166
+ 660 005a EDB2     		uxtb	r5, r5
+ 661              	.LVL81:
+ 662              	.L34:
+ 175:BSP/u8g2/u8g2_bitmap.c ****   {
+ 663              		.loc 1 175 13 is_stmt 1 view .LVU167
+ 664 005c 8DB1     		cbz	r5, .L40
+ 177:BSP/u8g2/u8g2_bitmap.c ****       u8g2->draw_color = color;
+ 665              		.loc 1 177 5 view .LVU168
+ 177:BSP/u8g2/u8g2_bitmap.c ****       u8g2->draw_color = color;
+ 666              		.loc 1 177 9 is_stmt 0 view .LVU169
+ 667 005e 98F80030 		ldrb	r3, [r8]	@ zero_extendqisi2
+ 177:BSP/u8g2/u8g2_bitmap.c ****       u8g2->draw_color = color;
+ 668              		.loc 1 177 7 view .LVU170
+ 669 0062 2342     		tst	r3, r4
+ 670 0064 E5D1     		bne	.L41
+ 180:BSP/u8g2/u8g2_bitmap.c ****       u8g2->draw_color = ncolor;
+ 671              		.loc 1 180 12 is_stmt 1 view .LVU171
+ 180:BSP/u8g2/u8g2_bitmap.c ****       u8g2->draw_color = ncolor;
+ 672              		.loc 1 180 20 is_stmt 0 view .LVU172
+ 673 0066 97F88530 		ldrb	r3, [r7, #133]	@ zero_extendqisi2
+ 180:BSP/u8g2/u8g2_bitmap.c ****       u8g2->draw_color = ncolor;
+ 674              		.loc 1 180 14 view .LVU173
+ 675 006a 002B     		cmp	r3, #0
+ 676 006c EBD1     		bne	.L36
+ 181:BSP/u8g2/u8g2_bitmap.c ****       u8g2_DrawHVLine(u8g2, x, y, 1, 0);
+ 677              		.loc 1 181 7 is_stmt 1 view .LVU174
+ 181:BSP/u8g2/u8g2_bitmap.c ****       u8g2_DrawHVLine(u8g2, x, y, 1, 0);
+ 678              		.loc 1 181 24 is_stmt 0 view .LVU175
+ 679 006e 87F886B0 		strb	fp, [r7, #134]
+ 182:BSP/u8g2/u8g2_bitmap.c ****     }
+ 680              		.loc 1 182 7 is_stmt 1 view .LVU176
+ 681 0072 0093     		str	r3, [sp]
+ 682 0074 0123     		movs	r3, #1
+ 683 0076 4A46     		mov	r2, r9
+ 684 0078 3146     		mov	r1, r6
+ 685 007a 3846     		mov	r0, r7
+ 686 007c FFF7FEFF 		bl	u8g2_DrawHVLine
+ 687              	.LVL82:
+ 688 0080 E1E7     		b	.L36
+ 689              	.L40:
+ 193:BSP/u8g2/u8g2_bitmap.c ****   }
+ 194:BSP/u8g2/u8g2_bitmap.c ****   u8g2->draw_color = color;
+ 690              		.loc 1 194 3 view .LVU177
+ 691              		.loc 1 194 20 is_stmt 0 view .LVU178
+ 692 0082 87F886A0 		strb	r10, [r7, #134]
+ 693              	.LVL83:
+ 694              	.L32:
+ARM GAS  /tmp/ccECjMcj.s 			page 17
+
+
+ 195:BSP/u8g2/u8g2_bitmap.c **** }
+ 695              		.loc 1 195 1 view .LVU179
+ 696 0086 03B0     		add	sp, sp, #12
+ 697              	.LCFI14:
+ 698              		.cfi_def_cfa_offset 36
+ 699              		@ sp needed
+ 700 0088 BDE8F08F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 701              		.loc 1 195 1 view .LVU180
+ 702              		.cfi_endproc
+ 703              	.LFE5:
+ 705              		.section	.text.u8g2_DrawXBMP,"ax",%progbits
+ 706              		.align	1
+ 707              		.global	u8g2_DrawXBMP
+ 708              		.syntax unified
+ 709              		.thumb
+ 710              		.thumb_func
+ 712              	u8g2_DrawXBMP:
+ 713              	.LVL84:
+ 714              	.LFB6:
+ 196:BSP/u8g2/u8g2_bitmap.c **** 
+ 197:BSP/u8g2/u8g2_bitmap.c **** 
+ 198:BSP/u8g2/u8g2_bitmap.c **** void u8g2_DrawXBMP(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t w, u8g2_uint_t h, const 
+ 199:BSP/u8g2/u8g2_bitmap.c **** {
+ 715              		.loc 1 199 1 is_stmt 1 view -0
+ 716              		.cfi_startproc
+ 717              		@ args = 8, pretend = 0, frame = 0
+ 718              		@ frame_needed = 0, uses_anonymous_args = 0
+ 719              		.loc 1 199 1 is_stmt 0 view .LVU182
+ 720 0000 2DE9F047 		push	{r4, r5, r6, r7, r8, r9, r10, lr}
+ 721              	.LCFI15:
+ 722              		.cfi_def_cfa_offset 32
+ 723              		.cfi_offset 4, -32
+ 724              		.cfi_offset 5, -28
+ 725              		.cfi_offset 6, -24
+ 726              		.cfi_offset 7, -20
+ 727              		.cfi_offset 8, -16
+ 728              		.cfi_offset 9, -12
+ 729              		.cfi_offset 10, -8
+ 730              		.cfi_offset 14, -4
+ 731 0004 82B0     		sub	sp, sp, #8
+ 732              	.LCFI16:
+ 733              		.cfi_def_cfa_offset 40
+ 734 0006 8246     		mov	r10, r0
+ 735 0008 8846     		mov	r8, r1
+ 736 000a 1446     		mov	r4, r2
+ 737 000c 1F46     		mov	r7, r3
+ 738 000e 9DF82850 		ldrb	r5, [sp, #40]	@ zero_extendqisi2
+ 739 0012 0B9E     		ldr	r6, [sp, #44]
+ 200:BSP/u8g2/u8g2_bitmap.c ****   u8g2_uint_t blen;
+ 740              		.loc 1 200 3 is_stmt 1 view .LVU183
+ 201:BSP/u8g2/u8g2_bitmap.c ****   blen = w;
+ 741              		.loc 1 201 3 view .LVU184
+ 742              	.LVL85:
+ 202:BSP/u8g2/u8g2_bitmap.c ****   blen += 7;
+ 743              		.loc 1 202 3 view .LVU185
+ 744              		.loc 1 202 8 is_stmt 0 view .LVU186
+ 745 0014 03F10709 		add	r9, r3, #7
+ARM GAS  /tmp/ccECjMcj.s 			page 18
+
+
+ 746              	.LVL86:
+ 203:BSP/u8g2/u8g2_bitmap.c ****   blen >>= 3;
+ 747              		.loc 1 203 3 is_stmt 1 view .LVU187
+ 748              		.loc 1 203 8 is_stmt 0 view .LVU188
+ 749 0018 C9F3C409 		ubfx	r9, r9, #3, #5
+ 750              	.LVL87:
+ 204:BSP/u8g2/u8g2_bitmap.c **** #ifdef U8G2_WITH_INTERSECTION
+ 205:BSP/u8g2/u8g2_bitmap.c ****   if ( u8g2_IsIntersection(u8g2, x, y, x+w, y+h) == 0 ) 
+ 751              		.loc 1 205 3 is_stmt 1 view .LVU189
+ 752              		.loc 1 205 8 is_stmt 0 view .LVU190
+ 753 001c 03EB010C 		add	ip, r3, r1
+ 754 0020 5319     		adds	r3, r2, r5
+ 755              	.LVL88:
+ 756              		.loc 1 205 8 view .LVU191
+ 757 0022 DBB2     		uxtb	r3, r3
+ 758 0024 0093     		str	r3, [sp]
+ 759 0026 5FFA8CF3 		uxtb	r3, ip
+ 760 002a FFF7FEFF 		bl	u8g2_IsIntersection
+ 761              	.LVL89:
+ 762              		.loc 1 205 6 discriminator 1 view .LVU192
+ 763 002e 60B9     		cbnz	r0, .L44
+ 764 0030 0DE0     		b	.L42
+ 765              	.LVL90:
+ 766              	.L45:
+ 206:BSP/u8g2/u8g2_bitmap.c ****     return;
+ 207:BSP/u8g2/u8g2_bitmap.c **** #endif /* U8G2_WITH_INTERSECTION */
+ 208:BSP/u8g2/u8g2_bitmap.c ****   
+ 209:BSP/u8g2/u8g2_bitmap.c ****   while( h > 0 )
+ 210:BSP/u8g2/u8g2_bitmap.c ****   {
+ 211:BSP/u8g2/u8g2_bitmap.c ****     u8g2_DrawHXBMP(u8g2, x, y, w, bitmap);
+ 767              		.loc 1 211 5 is_stmt 1 view .LVU193
+ 768 0032 0096     		str	r6, [sp]
+ 769 0034 3B46     		mov	r3, r7
+ 770 0036 2246     		mov	r2, r4
+ 771 0038 4146     		mov	r1, r8
+ 772 003a 5046     		mov	r0, r10
+ 773 003c FFF7FEFF 		bl	u8g2_DrawHXBMP
+ 774              	.LVL91:
+ 212:BSP/u8g2/u8g2_bitmap.c ****     bitmap += blen;
+ 775              		.loc 1 212 5 view .LVU194
+ 776              		.loc 1 212 12 is_stmt 0 view .LVU195
+ 777 0040 4E44     		add	r6, r6, r9
+ 778              	.LVL92:
+ 213:BSP/u8g2/u8g2_bitmap.c ****     y++;
+ 779              		.loc 1 213 5 is_stmt 1 view .LVU196
+ 780              		.loc 1 213 6 is_stmt 0 view .LVU197
+ 781 0042 0134     		adds	r4, r4, #1
+ 782              	.LVL93:
+ 783              		.loc 1 213 6 view .LVU198
+ 784 0044 E4B2     		uxtb	r4, r4
+ 785              	.LVL94:
+ 214:BSP/u8g2/u8g2_bitmap.c ****     h--;
+ 786              		.loc 1 214 5 is_stmt 1 view .LVU199
+ 787              		.loc 1 214 6 is_stmt 0 view .LVU200
+ 788 0046 013D     		subs	r5, r5, #1
+ 789              	.LVL95:
+ 790              		.loc 1 214 6 view .LVU201
+ARM GAS  /tmp/ccECjMcj.s 			page 19
+
+
+ 791 0048 EDB2     		uxtb	r5, r5
+ 792              	.LVL96:
+ 793              	.L44:
+ 209:BSP/u8g2/u8g2_bitmap.c ****   {
+ 794              		.loc 1 209 12 is_stmt 1 view .LVU202
+ 795 004a 002D     		cmp	r5, #0
+ 796 004c F1D1     		bne	.L45
+ 797              	.LVL97:
+ 798              	.L42:
+ 215:BSP/u8g2/u8g2_bitmap.c ****   }
+ 216:BSP/u8g2/u8g2_bitmap.c **** }
+ 799              		.loc 1 216 1 is_stmt 0 view .LVU203
+ 800 004e 02B0     		add	sp, sp, #8
+ 801              	.LCFI17:
+ 802              		.cfi_def_cfa_offset 32
+ 803              		@ sp needed
+ 804 0050 BDE8F087 		pop	{r4, r5, r6, r7, r8, r9, r10, pc}
+ 805              		.loc 1 216 1 view .LVU204
+ 806              		.cfi_endproc
+ 807              	.LFE6:
+ 809              		.text
+ 810              	.Letext0:
+ 811              		.file 2 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ 812              		.file 3 "BSP/u8g2/u8x8.h"
+ 813              		.file 4 "BSP/u8g2/u8g2.h"
+ARM GAS  /tmp/ccECjMcj.s 			page 20
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 u8g2_bitmap.c
+     /tmp/ccECjMcj.s:19     .text.u8g2_SetBitmapMode:00000000 $t
+     /tmp/ccECjMcj.s:25     .text.u8g2_SetBitmapMode:00000000 u8g2_SetBitmapMode
+     /tmp/ccECjMcj.s:42     .text.u8g2_DrawHorizontalBitmap:00000000 $t
+     /tmp/ccECjMcj.s:48     .text.u8g2_DrawHorizontalBitmap:00000000 u8g2_DrawHorizontalBitmap
+     /tmp/ccECjMcj.s:193    .text.u8g2_DrawBitmap:00000000 $t
+     /tmp/ccECjMcj.s:199    .text.u8g2_DrawBitmap:00000000 u8g2_DrawBitmap
+     /tmp/ccECjMcj.s:294    .text.u8g2_DrawHXBM:00000000 $t
+     /tmp/ccECjMcj.s:300    .text.u8g2_DrawHXBM:00000000 u8g2_DrawHXBM
+     /tmp/ccECjMcj.s:448    .text.u8g2_DrawXBM:00000000 $t
+     /tmp/ccECjMcj.s:454    .text.u8g2_DrawXBM:00000000 u8g2_DrawXBM
+     /tmp/ccECjMcj.s:552    .text.u8g2_DrawHXBMP:00000000 $t
+     /tmp/ccECjMcj.s:558    .text.u8g2_DrawHXBMP:00000000 u8g2_DrawHXBMP
+     /tmp/ccECjMcj.s:706    .text.u8g2_DrawXBMP:00000000 $t
+     /tmp/ccECjMcj.s:712    .text.u8g2_DrawXBMP:00000000 u8g2_DrawXBMP
+
+UNDEFINED SYMBOLS
+u8g2_IsIntersection
+u8g2_DrawHVLine

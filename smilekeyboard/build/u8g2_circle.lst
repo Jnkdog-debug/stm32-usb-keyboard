@@ -1,0 +1,2618 @@
+ARM GAS  /tmp/ccT14lel.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.arch armv7-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"u8g2_circle.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.file 1 "BSP/u8g2/u8g2_circle.c"
+  18              		.section	.text.u8g2_draw_circle_section,"ax",%progbits
+  19              		.align	1
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  24              	u8g2_draw_circle_section:
+  25              	.LVL0:
+  26              	.LFB0:
+   1:BSP/u8g2/u8g2_circle.c **** /*
+   2:BSP/u8g2/u8g2_circle.c **** 
+   3:BSP/u8g2/u8g2_circle.c ****   u8g2_box.c
+   4:BSP/u8g2/u8g2_circle.c **** 
+   5:BSP/u8g2/u8g2_circle.c ****   Universal 8bit Graphics Library (https://github.com/olikraus/u8g2/)
+   6:BSP/u8g2/u8g2_circle.c **** 
+   7:BSP/u8g2/u8g2_circle.c ****   Copyright (c) 2016, olikraus@gmail.com
+   8:BSP/u8g2/u8g2_circle.c ****   All rights reserved.
+   9:BSP/u8g2/u8g2_circle.c **** 
+  10:BSP/u8g2/u8g2_circle.c ****   Redistribution and use in source and binary forms, with or without modification, 
+  11:BSP/u8g2/u8g2_circle.c ****   are permitted provided that the following conditions are met:
+  12:BSP/u8g2/u8g2_circle.c **** 
+  13:BSP/u8g2/u8g2_circle.c ****   * Redistributions of source code must retain the above copyright notice, this list 
+  14:BSP/u8g2/u8g2_circle.c ****     of conditions and the following disclaimer.
+  15:BSP/u8g2/u8g2_circle.c ****     
+  16:BSP/u8g2/u8g2_circle.c ****   * Redistributions in binary form must reproduce the above copyright notice, this 
+  17:BSP/u8g2/u8g2_circle.c ****     list of conditions and the following disclaimer in the documentation and/or other 
+  18:BSP/u8g2/u8g2_circle.c ****     materials provided with the distribution.
+  19:BSP/u8g2/u8g2_circle.c **** 
+  20:BSP/u8g2/u8g2_circle.c ****   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND 
+  21:BSP/u8g2/u8g2_circle.c ****   CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, 
+  22:BSP/u8g2/u8g2_circle.c ****   INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF 
+  23:BSP/u8g2/u8g2_circle.c ****   MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
+  24:BSP/u8g2/u8g2_circle.c ****   DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR 
+  25:BSP/u8g2/u8g2_circle.c ****   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+  26:BSP/u8g2/u8g2_circle.c ****   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+  27:BSP/u8g2/u8g2_circle.c ****   NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
+  28:BSP/u8g2/u8g2_circle.c ****   LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
+  29:BSP/u8g2/u8g2_circle.c ****   CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, 
+  30:BSP/u8g2/u8g2_circle.c ****   STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+  31:BSP/u8g2/u8g2_circle.c ****   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
+  32:BSP/u8g2/u8g2_circle.c ****   ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
+ARM GAS  /tmp/ccT14lel.s 			page 2
+
+
+  33:BSP/u8g2/u8g2_circle.c **** 
+  34:BSP/u8g2/u8g2_circle.c **** */
+  35:BSP/u8g2/u8g2_circle.c **** 
+  36:BSP/u8g2/u8g2_circle.c **** #include "u8g2.h"
+  37:BSP/u8g2/u8g2_circle.c **** 
+  38:BSP/u8g2/u8g2_circle.c **** /*==============================================*/
+  39:BSP/u8g2/u8g2_circle.c **** /* Circle */
+  40:BSP/u8g2/u8g2_circle.c **** 
+  41:BSP/u8g2/u8g2_circle.c **** static void u8g2_draw_circle_section(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t x0, u8
+  42:BSP/u8g2/u8g2_circle.c **** 
+  43:BSP/u8g2/u8g2_circle.c **** static void u8g2_draw_circle_section(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t x0, u8
+  44:BSP/u8g2/u8g2_circle.c **** {
+  27              		.loc 1 44 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 8, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		.loc 1 44 1 is_stmt 0 view .LVU1
+  32 0000 2DE9F843 		push	{r3, r4, r5, r6, r7, r8, r9, lr}
+  33              	.LCFI0:
+  34              		.cfi_def_cfa_offset 32
+  35              		.cfi_offset 3, -32
+  36              		.cfi_offset 4, -28
+  37              		.cfi_offset 5, -24
+  38              		.cfi_offset 6, -20
+  39              		.cfi_offset 7, -16
+  40              		.cfi_offset 8, -12
+  41              		.cfi_offset 9, -8
+  42              		.cfi_offset 14, -4
+  43 0004 8046     		mov	r8, r0
+  44 0006 0F46     		mov	r7, r1
+  45 0008 9146     		mov	r9, r2
+  46 000a 1C46     		mov	r4, r3
+  47 000c 9DF82060 		ldrb	r6, [sp, #32]	@ zero_extendqisi2
+  48 0010 9DF82450 		ldrb	r5, [sp, #36]	@ zero_extendqisi2
+  45:BSP/u8g2/u8g2_circle.c ****     /* upper right */
+  46:BSP/u8g2/u8g2_circle.c ****     if ( option & U8G2_DRAW_UPPER_RIGHT )
+  49              		.loc 1 46 5 is_stmt 1 view .LVU2
+  50              		.loc 1 46 8 is_stmt 0 view .LVU3
+  51 0014 15F0010F 		tst	r5, #1
+  52 0018 0AD1     		bne	.L7
+  53              	.LVL1:
+  54              	.L2:
+  47:BSP/u8g2/u8g2_circle.c ****     {
+  48:BSP/u8g2/u8g2_circle.c ****       u8g2_DrawPixel(u8g2, x0 + x, y0 - y);
+  49:BSP/u8g2/u8g2_circle.c ****       u8g2_DrawPixel(u8g2, x0 + y, y0 - x);
+  50:BSP/u8g2/u8g2_circle.c ****     }
+  51:BSP/u8g2/u8g2_circle.c ****     
+  52:BSP/u8g2/u8g2_circle.c ****     /* upper left */
+  53:BSP/u8g2/u8g2_circle.c ****     if ( option & U8G2_DRAW_UPPER_LEFT )
+  55              		.loc 1 53 5 is_stmt 1 view .LVU4
+  56              		.loc 1 53 8 is_stmt 0 view .LVU5
+  57 001a 15F0020F 		tst	r5, #2
+  58 001e 16D1     		bne	.L8
+  59              	.L3:
+  54:BSP/u8g2/u8g2_circle.c ****     {
+  55:BSP/u8g2/u8g2_circle.c ****       u8g2_DrawPixel(u8g2, x0 - x, y0 - y);
+  56:BSP/u8g2/u8g2_circle.c ****       u8g2_DrawPixel(u8g2, x0 - y, y0 - x);
+ARM GAS  /tmp/ccT14lel.s 			page 3
+
+
+  57:BSP/u8g2/u8g2_circle.c ****     }
+  58:BSP/u8g2/u8g2_circle.c ****     
+  59:BSP/u8g2/u8g2_circle.c ****     /* lower right */
+  60:BSP/u8g2/u8g2_circle.c ****     if ( option & U8G2_DRAW_LOWER_RIGHT )
+  60              		.loc 1 60 5 is_stmt 1 view .LVU6
+  61              		.loc 1 60 8 is_stmt 0 view .LVU7
+  62 0020 15F0080F 		tst	r5, #8
+  63 0024 24D1     		bne	.L9
+  64              	.L4:
+  61:BSP/u8g2/u8g2_circle.c ****     {
+  62:BSP/u8g2/u8g2_circle.c ****       u8g2_DrawPixel(u8g2, x0 + x, y0 + y);
+  63:BSP/u8g2/u8g2_circle.c ****       u8g2_DrawPixel(u8g2, x0 + y, y0 + x);
+  64:BSP/u8g2/u8g2_circle.c ****     }
+  65:BSP/u8g2/u8g2_circle.c ****     
+  66:BSP/u8g2/u8g2_circle.c ****     /* lower left */
+  67:BSP/u8g2/u8g2_circle.c ****     if ( option & U8G2_DRAW_LOWER_LEFT )
+  65              		.loc 1 67 5 is_stmt 1 view .LVU8
+  66              		.loc 1 67 8 is_stmt 0 view .LVU9
+  67 0026 15F0040F 		tst	r5, #4
+  68 002a 32D1     		bne	.L10
+  69              	.L1:
+  68:BSP/u8g2/u8g2_circle.c ****     {
+  69:BSP/u8g2/u8g2_circle.c ****       u8g2_DrawPixel(u8g2, x0 - x, y0 + y);
+  70:BSP/u8g2/u8g2_circle.c ****       u8g2_DrawPixel(u8g2, x0 - y, y0 + x);
+  71:BSP/u8g2/u8g2_circle.c ****     }
+  72:BSP/u8g2/u8g2_circle.c **** }
+  70              		.loc 1 72 1 view .LVU10
+  71 002c BDE8F883 		pop	{r3, r4, r5, r6, r7, r8, r9, pc}
+  72              	.LVL2:
+  73              	.L7:
+  48:BSP/u8g2/u8g2_circle.c ****       u8g2_DrawPixel(u8g2, x0 + y, y0 - x);
+  74              		.loc 1 48 7 is_stmt 1 view .LVU11
+  75 0030 B21A     		subs	r2, r6, r2
+  76              	.LVL3:
+  48:BSP/u8g2/u8g2_circle.c ****       u8g2_DrawPixel(u8g2, x0 + y, y0 - x);
+  77              		.loc 1 48 7 is_stmt 0 view .LVU12
+  78 0032 5918     		adds	r1, r3, r1
+  79              	.LVL4:
+  48:BSP/u8g2/u8g2_circle.c ****       u8g2_DrawPixel(u8g2, x0 + y, y0 - x);
+  80              		.loc 1 48 7 view .LVU13
+  81 0034 D2B2     		uxtb	r2, r2
+  82 0036 C9B2     		uxtb	r1, r1
+  83 0038 FFF7FEFF 		bl	u8g2_DrawPixel
+  84              	.LVL5:
+  49:BSP/u8g2/u8g2_circle.c ****     }
+  85              		.loc 1 49 7 is_stmt 1 view .LVU14
+  86 003c F21B     		subs	r2, r6, r7
+  87 003e 04EB0901 		add	r1, r4, r9
+  88 0042 D2B2     		uxtb	r2, r2
+  89 0044 C9B2     		uxtb	r1, r1
+  90 0046 4046     		mov	r0, r8
+  91 0048 FFF7FEFF 		bl	u8g2_DrawPixel
+  92              	.LVL6:
+  93 004c E5E7     		b	.L2
+  94              	.L8:
+  55:BSP/u8g2/u8g2_circle.c ****       u8g2_DrawPixel(u8g2, x0 - y, y0 - x);
+  95              		.loc 1 55 7 view .LVU15
+ARM GAS  /tmp/ccT14lel.s 			page 4
+
+
+  96 004e A6EB0902 		sub	r2, r6, r9
+  97 0052 E11B     		subs	r1, r4, r7
+  98 0054 D2B2     		uxtb	r2, r2
+  99 0056 C9B2     		uxtb	r1, r1
+ 100 0058 4046     		mov	r0, r8
+ 101 005a FFF7FEFF 		bl	u8g2_DrawPixel
+ 102              	.LVL7:
+  56:BSP/u8g2/u8g2_circle.c ****     }
+ 103              		.loc 1 56 7 view .LVU16
+ 104 005e F21B     		subs	r2, r6, r7
+ 105 0060 A4EB0901 		sub	r1, r4, r9
+ 106 0064 D2B2     		uxtb	r2, r2
+ 107 0066 C9B2     		uxtb	r1, r1
+ 108 0068 4046     		mov	r0, r8
+ 109 006a FFF7FEFF 		bl	u8g2_DrawPixel
+ 110              	.LVL8:
+ 111 006e D7E7     		b	.L3
+ 112              	.L9:
+  62:BSP/u8g2/u8g2_circle.c ****       u8g2_DrawPixel(u8g2, x0 + y, y0 + x);
+ 113              		.loc 1 62 7 view .LVU17
+ 114 0070 06EB0902 		add	r2, r6, r9
+ 115 0074 E119     		adds	r1, r4, r7
+ 116 0076 D2B2     		uxtb	r2, r2
+ 117 0078 C9B2     		uxtb	r1, r1
+ 118 007a 4046     		mov	r0, r8
+ 119 007c FFF7FEFF 		bl	u8g2_DrawPixel
+ 120              	.LVL9:
+  63:BSP/u8g2/u8g2_circle.c ****     }
+ 121              		.loc 1 63 7 view .LVU18
+ 122 0080 BA19     		adds	r2, r7, r6
+ 123 0082 04EB0901 		add	r1, r4, r9
+ 124 0086 D2B2     		uxtb	r2, r2
+ 125 0088 C9B2     		uxtb	r1, r1
+ 126 008a 4046     		mov	r0, r8
+ 127 008c FFF7FEFF 		bl	u8g2_DrawPixel
+ 128              	.LVL10:
+ 129 0090 C9E7     		b	.L4
+ 130              	.L10:
+  69:BSP/u8g2/u8g2_circle.c ****       u8g2_DrawPixel(u8g2, x0 - y, y0 + x);
+ 131              		.loc 1 69 7 view .LVU19
+ 132 0092 06EB0902 		add	r2, r6, r9
+ 133 0096 E11B     		subs	r1, r4, r7
+ 134 0098 D2B2     		uxtb	r2, r2
+ 135 009a C9B2     		uxtb	r1, r1
+ 136 009c 4046     		mov	r0, r8
+ 137 009e FFF7FEFF 		bl	u8g2_DrawPixel
+ 138              	.LVL11:
+  70:BSP/u8g2/u8g2_circle.c ****     }
+ 139              		.loc 1 70 7 view .LVU20
+ 140 00a2 BA19     		adds	r2, r7, r6
+ 141 00a4 A4EB0901 		sub	r1, r4, r9
+ 142 00a8 D2B2     		uxtb	r2, r2
+ 143 00aa C9B2     		uxtb	r1, r1
+ 144 00ac 4046     		mov	r0, r8
+ 145 00ae FFF7FEFF 		bl	u8g2_DrawPixel
+ 146              	.LVL12:
+ 147              		.loc 1 72 1 is_stmt 0 view .LVU21
+ARM GAS  /tmp/ccT14lel.s 			page 5
+
+
+ 148 00b2 BBE7     		b	.L1
+ 149              		.cfi_endproc
+ 150              	.LFE0:
+ 152              		.section	.text.u8g2_draw_circle,"ax",%progbits
+ 153              		.align	1
+ 154              		.syntax unified
+ 155              		.thumb
+ 156              		.thumb_func
+ 158              	u8g2_draw_circle:
+ 159              	.LVL13:
+ 160              	.LFB1:
+  73:BSP/u8g2/u8g2_circle.c **** 
+  74:BSP/u8g2/u8g2_circle.c **** static void u8g2_draw_circle(u8g2_t *u8g2, u8g2_uint_t x0, u8g2_uint_t y0, u8g2_uint_t rad, uint8_t
+  75:BSP/u8g2/u8g2_circle.c **** {
+ 161              		.loc 1 75 1 is_stmt 1 view -0
+ 162              		.cfi_startproc
+ 163              		@ args = 4, pretend = 0, frame = 8
+ 164              		@ frame_needed = 0, uses_anonymous_args = 0
+ 165              		.loc 1 75 1 is_stmt 0 view .LVU23
+ 166 0000 2DE9F04F 		push	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
+ 167              	.LCFI1:
+ 168              		.cfi_def_cfa_offset 36
+ 169              		.cfi_offset 4, -36
+ 170              		.cfi_offset 5, -32
+ 171              		.cfi_offset 6, -28
+ 172              		.cfi_offset 7, -24
+ 173              		.cfi_offset 8, -20
+ 174              		.cfi_offset 9, -16
+ 175              		.cfi_offset 10, -12
+ 176              		.cfi_offset 11, -8
+ 177              		.cfi_offset 14, -4
+ 178 0004 85B0     		sub	sp, sp, #20
+ 179              	.LCFI2:
+ 180              		.cfi_def_cfa_offset 56
+ 181 0006 0390     		str	r0, [sp, #12]
+ 182 0008 8946     		mov	r9, r1
+ 183 000a 9246     		mov	r10, r2
+ 184 000c 1E46     		mov	r6, r3
+ 185 000e 9DF838B0 		ldrb	fp, [sp, #56]	@ zero_extendqisi2
+  76:BSP/u8g2/u8g2_circle.c ****     u8g2_int_t f;
+ 186              		.loc 1 76 5 is_stmt 1 view .LVU24
+  77:BSP/u8g2/u8g2_circle.c ****     u8g2_int_t ddF_x;
+ 187              		.loc 1 77 5 view .LVU25
+  78:BSP/u8g2/u8g2_circle.c ****     u8g2_int_t ddF_y;
+ 188              		.loc 1 78 5 view .LVU26
+  79:BSP/u8g2/u8g2_circle.c ****     u8g2_uint_t x;
+ 189              		.loc 1 79 5 view .LVU27
+  80:BSP/u8g2/u8g2_circle.c ****     u8g2_uint_t y;
+ 190              		.loc 1 80 5 view .LVU28
+  81:BSP/u8g2/u8g2_circle.c **** 
+  82:BSP/u8g2/u8g2_circle.c ****     f = 1;
+ 191              		.loc 1 82 5 view .LVU29
+ 192              	.LVL14:
+  83:BSP/u8g2/u8g2_circle.c ****     f -= rad;
+ 193              		.loc 1 83 5 view .LVU30
+ 194              		.loc 1 83 7 is_stmt 0 view .LVU31
+ 195 0012 C3F10104 		rsb	r4, r3, #1
+ARM GAS  /tmp/ccT14lel.s 			page 6
+
+
+ 196 0016 64B2     		sxtb	r4, r4
+ 197              	.LVL15:
+  84:BSP/u8g2/u8g2_circle.c ****     ddF_x = 1;
+ 198              		.loc 1 84 5 is_stmt 1 view .LVU32
+  85:BSP/u8g2/u8g2_circle.c ****     ddF_y = 0;
+ 199              		.loc 1 85 5 view .LVU33
+  86:BSP/u8g2/u8g2_circle.c ****     ddF_y -= rad;
+ 200              		.loc 1 86 5 view .LVU34
+  87:BSP/u8g2/u8g2_circle.c ****     ddF_y *= 2;
+ 201              		.loc 1 87 5 view .LVU35
+ 202              		.loc 1 87 11 is_stmt 0 view .LVU36
+ 203 0018 C3EBC318 		rsb	r8, r3, r3, lsl #7
+ 204 001c 4FEA4808 		lsl	r8, r8, #1
+ 205 0020 4FFA88F8 		sxtb	r8, r8
+ 206              	.LVL16:
+  88:BSP/u8g2/u8g2_circle.c ****     x = 0;
+ 207              		.loc 1 88 5 is_stmt 1 view .LVU37
+  89:BSP/u8g2/u8g2_circle.c ****     y = rad;
+ 208              		.loc 1 89 5 view .LVU38
+  90:BSP/u8g2/u8g2_circle.c **** 
+  91:BSP/u8g2/u8g2_circle.c ****     u8g2_draw_circle_section(u8g2, x, y, x0, y0, option);
+ 209              		.loc 1 91 5 view .LVU39
+ 210 0024 CDF804B0 		str	fp, [sp, #4]
+ 211 0028 0092     		str	r2, [sp]
+ 212 002a 0B46     		mov	r3, r1
+ 213              	.LVL17:
+ 214              		.loc 1 91 5 is_stmt 0 view .LVU40
+ 215 002c 3246     		mov	r2, r6
+ 216              	.LVL18:
+ 217              		.loc 1 91 5 view .LVU41
+ 218 002e 0021     		movs	r1, #0
+ 219              	.LVL19:
+ 220              		.loc 1 91 5 view .LVU42
+ 221 0030 FFF7FEFF 		bl	u8g2_draw_circle_section
+ 222              	.LVL20:
+  92:BSP/u8g2/u8g2_circle.c ****     
+  93:BSP/u8g2/u8g2_circle.c ****     while ( x < y )
+ 223              		.loc 1 93 5 is_stmt 1 view .LVU43
+  88:BSP/u8g2/u8g2_circle.c ****     y = rad;
+ 224              		.loc 1 88 7 is_stmt 0 view .LVU44
+ 225 0034 0025     		movs	r5, #0
+  84:BSP/u8g2/u8g2_circle.c ****     ddF_y = 0;
+ 226              		.loc 1 84 11 view .LVU45
+ 227 0036 0127     		movs	r7, #1
+ 228              		.loc 1 93 11 view .LVU46
+ 229 0038 1AE0     		b	.L12
+ 230              	.LVL21:
+ 231              	.L17:
+  94:BSP/u8g2/u8g2_circle.c ****     {
+  95:BSP/u8g2/u8g2_circle.c ****       if (f >= 0) 
+  96:BSP/u8g2/u8g2_circle.c ****       {
+  97:BSP/u8g2/u8g2_circle.c ****         y--;
+ 232              		.loc 1 97 9 is_stmt 1 view .LVU47
+ 233              		.loc 1 97 10 is_stmt 0 view .LVU48
+ 234 003a 013E     		subs	r6, r6, #1
+ 235              	.LVL22:
+ 236              		.loc 1 97 10 view .LVU49
+ARM GAS  /tmp/ccT14lel.s 			page 7
+
+
+ 237 003c F6B2     		uxtb	r6, r6
+ 238              	.LVL23:
+  98:BSP/u8g2/u8g2_circle.c ****         ddF_y += 2;
+ 239              		.loc 1 98 9 is_stmt 1 view .LVU50
+ 240              		.loc 1 98 15 is_stmt 0 view .LVU51
+ 241 003e 08F10208 		add	r8, r8, #2
+ 242              	.LVL24:
+ 243              		.loc 1 98 15 view .LVU52
+ 244 0042 5FFA88F3 		uxtb	r3, r8
+ 245 0046 4FFA88F8 		sxtb	r8, r8
+ 246              	.LVL25:
+  99:BSP/u8g2/u8g2_circle.c ****         f += ddF_y;
+ 247              		.loc 1 99 9 is_stmt 1 view .LVU53
+ 248              		.loc 1 99 11 is_stmt 0 view .LVU54
+ 249 004a 2344     		add	r3, r3, r4
+ 250 004c 5CB2     		sxtb	r4, r3
+ 251              	.LVL26:
+ 252              	.L13:
+ 100:BSP/u8g2/u8g2_circle.c ****       }
+ 101:BSP/u8g2/u8g2_circle.c ****       x++;
+ 253              		.loc 1 101 7 is_stmt 1 view .LVU55
+ 254              		.loc 1 101 8 is_stmt 0 view .LVU56
+ 255 004e 0135     		adds	r5, r5, #1
+ 256              	.LVL27:
+ 257              		.loc 1 101 8 view .LVU57
+ 258 0050 EDB2     		uxtb	r5, r5
+ 259              	.LVL28:
+ 102:BSP/u8g2/u8g2_circle.c ****       ddF_x += 2;
+ 260              		.loc 1 102 7 is_stmt 1 view .LVU58
+ 261              		.loc 1 102 13 is_stmt 0 view .LVU59
+ 262 0052 0237     		adds	r7, r7, #2
+ 263              	.LVL29:
+ 264              		.loc 1 102 13 view .LVU60
+ 265 0054 FBB2     		uxtb	r3, r7
+ 266 0056 7FB2     		sxtb	r7, r7
+ 267              	.LVL30:
+ 103:BSP/u8g2/u8g2_circle.c ****       f += ddF_x;
+ 268              		.loc 1 103 7 is_stmt 1 view .LVU61
+ 269              		.loc 1 103 9 is_stmt 0 view .LVU62
+ 270 0058 2344     		add	r3, r3, r4
+ 271 005a 5CB2     		sxtb	r4, r3
+ 272              	.LVL31:
+ 104:BSP/u8g2/u8g2_circle.c **** 
+ 105:BSP/u8g2/u8g2_circle.c ****       u8g2_draw_circle_section(u8g2, x, y, x0, y0, option);    
+ 273              		.loc 1 105 7 is_stmt 1 view .LVU63
+ 274 005c CDF804B0 		str	fp, [sp, #4]
+ 275 0060 CDF800A0 		str	r10, [sp]
+ 276 0064 4B46     		mov	r3, r9
+ 277 0066 3246     		mov	r2, r6
+ 278 0068 2946     		mov	r1, r5
+ 279 006a 0398     		ldr	r0, [sp, #12]
+ 280 006c FFF7FEFF 		bl	u8g2_draw_circle_section
+ 281              	.LVL32:
+ 282              	.L12:
+  93:BSP/u8g2/u8g2_circle.c ****     {
+ 283              		.loc 1 93 15 view .LVU64
+ 284 0070 B542     		cmp	r5, r6
+ARM GAS  /tmp/ccT14lel.s 			page 8
+
+
+ 285 0072 02D2     		bcs	.L16
+  95:BSP/u8g2/u8g2_circle.c ****       {
+ 286              		.loc 1 95 7 view .LVU65
+  95:BSP/u8g2/u8g2_circle.c ****       {
+ 287              		.loc 1 95 10 is_stmt 0 view .LVU66
+ 288 0074 002C     		cmp	r4, #0
+ 289 0076 E0DA     		bge	.L17
+ 290 0078 E9E7     		b	.L13
+ 291              	.L16:
+ 106:BSP/u8g2/u8g2_circle.c ****     }
+ 107:BSP/u8g2/u8g2_circle.c **** }
+ 292              		.loc 1 107 1 view .LVU67
+ 293 007a 05B0     		add	sp, sp, #20
+ 294              	.LCFI3:
+ 295              		.cfi_def_cfa_offset 36
+ 296              		@ sp needed
+ 297 007c BDE8F08F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 298              		.loc 1 107 1 view .LVU68
+ 299              		.cfi_endproc
+ 300              	.LFE1:
+ 302              		.section	.text.u8g2_draw_ellipse_section,"ax",%progbits
+ 303              		.align	1
+ 304              		.syntax unified
+ 305              		.thumb
+ 306              		.thumb_func
+ 308              	u8g2_draw_ellipse_section:
+ 309              	.LVL33:
+ 310              	.LFB6:
+ 108:BSP/u8g2/u8g2_circle.c **** 
+ 109:BSP/u8g2/u8g2_circle.c **** void u8g2_DrawCircle(u8g2_t *u8g2, u8g2_uint_t x0, u8g2_uint_t y0, u8g2_uint_t rad, uint8_t option)
+ 110:BSP/u8g2/u8g2_circle.c **** {
+ 111:BSP/u8g2/u8g2_circle.c ****   /* check for bounding box */
+ 112:BSP/u8g2/u8g2_circle.c **** #ifdef U8G2_WITH_INTERSECTION
+ 113:BSP/u8g2/u8g2_circle.c ****   {
+ 114:BSP/u8g2/u8g2_circle.c ****     if ( u8g2_IsIntersection(u8g2, x0-rad, y0-rad, x0+rad+1, y0+rad+1) == 0 ) 
+ 115:BSP/u8g2/u8g2_circle.c ****       return;
+ 116:BSP/u8g2/u8g2_circle.c ****   }
+ 117:BSP/u8g2/u8g2_circle.c **** #endif /* U8G2_WITH_INTERSECTION */
+ 118:BSP/u8g2/u8g2_circle.c ****   
+ 119:BSP/u8g2/u8g2_circle.c ****   
+ 120:BSP/u8g2/u8g2_circle.c ****   /* draw circle */
+ 121:BSP/u8g2/u8g2_circle.c ****   u8g2_draw_circle(u8g2, x0, y0, rad, option);
+ 122:BSP/u8g2/u8g2_circle.c **** }
+ 123:BSP/u8g2/u8g2_circle.c **** 
+ 124:BSP/u8g2/u8g2_circle.c **** /*==============================================*/
+ 125:BSP/u8g2/u8g2_circle.c **** /* Disk */
+ 126:BSP/u8g2/u8g2_circle.c **** 
+ 127:BSP/u8g2/u8g2_circle.c **** static void u8g2_draw_disc_section(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t x0, u8g2
+ 128:BSP/u8g2/u8g2_circle.c **** 
+ 129:BSP/u8g2/u8g2_circle.c **** static void u8g2_draw_disc_section(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t x0, u8g2
+ 130:BSP/u8g2/u8g2_circle.c **** {
+ 131:BSP/u8g2/u8g2_circle.c ****     /* upper right */
+ 132:BSP/u8g2/u8g2_circle.c ****     if ( option & U8G2_DRAW_UPPER_RIGHT )
+ 133:BSP/u8g2/u8g2_circle.c ****     {
+ 134:BSP/u8g2/u8g2_circle.c ****       u8g2_DrawVLine(u8g2, x0+x, y0-y, y+1);
+ 135:BSP/u8g2/u8g2_circle.c ****       u8g2_DrawVLine(u8g2, x0+y, y0-x, x+1);
+ 136:BSP/u8g2/u8g2_circle.c ****     }
+ARM GAS  /tmp/ccT14lel.s 			page 9
+
+
+ 137:BSP/u8g2/u8g2_circle.c ****     
+ 138:BSP/u8g2/u8g2_circle.c ****     /* upper left */
+ 139:BSP/u8g2/u8g2_circle.c ****     if ( option & U8G2_DRAW_UPPER_LEFT )
+ 140:BSP/u8g2/u8g2_circle.c ****     {
+ 141:BSP/u8g2/u8g2_circle.c ****       u8g2_DrawVLine(u8g2, x0-x, y0-y, y+1);
+ 142:BSP/u8g2/u8g2_circle.c ****       u8g2_DrawVLine(u8g2, x0-y, y0-x, x+1);
+ 143:BSP/u8g2/u8g2_circle.c ****     }
+ 144:BSP/u8g2/u8g2_circle.c ****     
+ 145:BSP/u8g2/u8g2_circle.c ****     /* lower right */
+ 146:BSP/u8g2/u8g2_circle.c ****     if ( option & U8G2_DRAW_LOWER_RIGHT )
+ 147:BSP/u8g2/u8g2_circle.c ****     {
+ 148:BSP/u8g2/u8g2_circle.c ****       u8g2_DrawVLine(u8g2, x0+x, y0, y+1);
+ 149:BSP/u8g2/u8g2_circle.c ****       u8g2_DrawVLine(u8g2, x0+y, y0, x+1);
+ 150:BSP/u8g2/u8g2_circle.c ****     }
+ 151:BSP/u8g2/u8g2_circle.c ****     
+ 152:BSP/u8g2/u8g2_circle.c ****     /* lower left */
+ 153:BSP/u8g2/u8g2_circle.c ****     if ( option & U8G2_DRAW_LOWER_LEFT )
+ 154:BSP/u8g2/u8g2_circle.c ****     {
+ 155:BSP/u8g2/u8g2_circle.c ****       u8g2_DrawVLine(u8g2, x0-x, y0, y+1);
+ 156:BSP/u8g2/u8g2_circle.c ****       u8g2_DrawVLine(u8g2, x0-y, y0, x+1);
+ 157:BSP/u8g2/u8g2_circle.c ****     }
+ 158:BSP/u8g2/u8g2_circle.c **** }
+ 159:BSP/u8g2/u8g2_circle.c **** 
+ 160:BSP/u8g2/u8g2_circle.c **** static void u8g2_draw_disc(u8g2_t *u8g2, u8g2_uint_t x0, u8g2_uint_t y0, u8g2_uint_t rad, uint8_t o
+ 161:BSP/u8g2/u8g2_circle.c **** {
+ 162:BSP/u8g2/u8g2_circle.c ****   u8g2_int_t f;
+ 163:BSP/u8g2/u8g2_circle.c ****   u8g2_int_t ddF_x;
+ 164:BSP/u8g2/u8g2_circle.c ****   u8g2_int_t ddF_y;
+ 165:BSP/u8g2/u8g2_circle.c ****   u8g2_uint_t x;
+ 166:BSP/u8g2/u8g2_circle.c ****   u8g2_uint_t y;
+ 167:BSP/u8g2/u8g2_circle.c **** 
+ 168:BSP/u8g2/u8g2_circle.c ****   f = 1;
+ 169:BSP/u8g2/u8g2_circle.c ****   f -= rad;
+ 170:BSP/u8g2/u8g2_circle.c ****   ddF_x = 1;
+ 171:BSP/u8g2/u8g2_circle.c ****   ddF_y = 0;
+ 172:BSP/u8g2/u8g2_circle.c ****   ddF_y -= rad;
+ 173:BSP/u8g2/u8g2_circle.c ****   ddF_y *= 2;
+ 174:BSP/u8g2/u8g2_circle.c ****   x = 0;
+ 175:BSP/u8g2/u8g2_circle.c ****   y = rad;
+ 176:BSP/u8g2/u8g2_circle.c **** 
+ 177:BSP/u8g2/u8g2_circle.c ****   u8g2_draw_disc_section(u8g2, x, y, x0, y0, option);
+ 178:BSP/u8g2/u8g2_circle.c ****   
+ 179:BSP/u8g2/u8g2_circle.c ****   while ( x < y )
+ 180:BSP/u8g2/u8g2_circle.c ****   {
+ 181:BSP/u8g2/u8g2_circle.c ****     if (f >= 0) 
+ 182:BSP/u8g2/u8g2_circle.c ****     {
+ 183:BSP/u8g2/u8g2_circle.c ****       y--;
+ 184:BSP/u8g2/u8g2_circle.c ****       ddF_y += 2;
+ 185:BSP/u8g2/u8g2_circle.c ****       f += ddF_y;
+ 186:BSP/u8g2/u8g2_circle.c ****     }
+ 187:BSP/u8g2/u8g2_circle.c ****     x++;
+ 188:BSP/u8g2/u8g2_circle.c ****     ddF_x += 2;
+ 189:BSP/u8g2/u8g2_circle.c ****     f += ddF_x;
+ 190:BSP/u8g2/u8g2_circle.c **** 
+ 191:BSP/u8g2/u8g2_circle.c ****     u8g2_draw_disc_section(u8g2, x, y, x0, y0, option);    
+ 192:BSP/u8g2/u8g2_circle.c ****   }
+ 193:BSP/u8g2/u8g2_circle.c **** }
+ARM GAS  /tmp/ccT14lel.s 			page 10
+
+
+ 194:BSP/u8g2/u8g2_circle.c **** 
+ 195:BSP/u8g2/u8g2_circle.c **** void u8g2_DrawDisc(u8g2_t *u8g2, u8g2_uint_t x0, u8g2_uint_t y0, u8g2_uint_t rad, uint8_t option)
+ 196:BSP/u8g2/u8g2_circle.c **** {
+ 197:BSP/u8g2/u8g2_circle.c ****   /* check for bounding box */
+ 198:BSP/u8g2/u8g2_circle.c **** #ifdef U8G2_WITH_INTERSECTION
+ 199:BSP/u8g2/u8g2_circle.c ****   {
+ 200:BSP/u8g2/u8g2_circle.c ****     if ( u8g2_IsIntersection(u8g2, x0-rad, y0-rad, x0+rad+1, y0+rad+1) == 0 ) 
+ 201:BSP/u8g2/u8g2_circle.c ****       return;
+ 202:BSP/u8g2/u8g2_circle.c ****   }
+ 203:BSP/u8g2/u8g2_circle.c **** #endif /* U8G2_WITH_INTERSECTION */
+ 204:BSP/u8g2/u8g2_circle.c ****   
+ 205:BSP/u8g2/u8g2_circle.c ****   /* draw disc */
+ 206:BSP/u8g2/u8g2_circle.c ****   u8g2_draw_disc(u8g2, x0, y0, rad, option);
+ 207:BSP/u8g2/u8g2_circle.c **** }
+ 208:BSP/u8g2/u8g2_circle.c **** 
+ 209:BSP/u8g2/u8g2_circle.c **** /*==============================================*/
+ 210:BSP/u8g2/u8g2_circle.c **** /* Ellipse */
+ 211:BSP/u8g2/u8g2_circle.c **** 
+ 212:BSP/u8g2/u8g2_circle.c **** /*
+ 213:BSP/u8g2/u8g2_circle.c ****   Source: 
+ 214:BSP/u8g2/u8g2_circle.c ****     Foley, Computer Graphics, p 90
+ 215:BSP/u8g2/u8g2_circle.c **** */
+ 216:BSP/u8g2/u8g2_circle.c **** static void u8g2_draw_ellipse_section(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t x0, u
+ 217:BSP/u8g2/u8g2_circle.c **** static void u8g2_draw_ellipse_section(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t x0, u
+ 218:BSP/u8g2/u8g2_circle.c **** {
+ 311              		.loc 1 218 1 is_stmt 1 view -0
+ 312              		.cfi_startproc
+ 313              		@ args = 8, pretend = 0, frame = 0
+ 314              		@ frame_needed = 0, uses_anonymous_args = 0
+ 315              		.loc 1 218 1 is_stmt 0 view .LVU70
+ 316 0000 2DE9F843 		push	{r3, r4, r5, r6, r7, r8, r9, lr}
+ 317              	.LCFI4:
+ 318              		.cfi_def_cfa_offset 32
+ 319              		.cfi_offset 3, -32
+ 320              		.cfi_offset 4, -28
+ 321              		.cfi_offset 5, -24
+ 322              		.cfi_offset 6, -20
+ 323              		.cfi_offset 7, -16
+ 324              		.cfi_offset 8, -12
+ 325              		.cfi_offset 9, -8
+ 326              		.cfi_offset 14, -4
+ 327 0004 0746     		mov	r7, r0
+ 328 0006 8846     		mov	r8, r1
+ 329 0008 9146     		mov	r9, r2
+ 330 000a 1D46     		mov	r5, r3
+ 331 000c 9DF82060 		ldrb	r6, [sp, #32]	@ zero_extendqisi2
+ 332 0010 9DF82440 		ldrb	r4, [sp, #36]	@ zero_extendqisi2
+ 219:BSP/u8g2/u8g2_circle.c ****     /* upper right */
+ 220:BSP/u8g2/u8g2_circle.c ****     if ( option & U8G2_DRAW_UPPER_RIGHT )
+ 333              		.loc 1 220 5 is_stmt 1 view .LVU71
+ 334              		.loc 1 220 8 is_stmt 0 view .LVU72
+ 335 0014 14F0010F 		tst	r4, #1
+ 336 0018 0AD1     		bne	.L24
+ 337              	.LVL34:
+ 338              	.L19:
+ 221:BSP/u8g2/u8g2_circle.c ****     {
+ 222:BSP/u8g2/u8g2_circle.c ****       u8g2_DrawPixel(u8g2, x0 + x, y0 - y);
+ARM GAS  /tmp/ccT14lel.s 			page 11
+
+
+ 223:BSP/u8g2/u8g2_circle.c ****     }
+ 224:BSP/u8g2/u8g2_circle.c ****     
+ 225:BSP/u8g2/u8g2_circle.c ****     /* upper left */
+ 226:BSP/u8g2/u8g2_circle.c ****     if ( option & U8G2_DRAW_UPPER_LEFT )
+ 339              		.loc 1 226 5 is_stmt 1 view .LVU73
+ 340              		.loc 1 226 8 is_stmt 0 view .LVU74
+ 341 001a 14F0020F 		tst	r4, #2
+ 342 001e 0ED1     		bne	.L25
+ 343              	.L20:
+ 227:BSP/u8g2/u8g2_circle.c ****     {
+ 228:BSP/u8g2/u8g2_circle.c ****       u8g2_DrawPixel(u8g2, x0 - x, y0 - y);
+ 229:BSP/u8g2/u8g2_circle.c ****     }
+ 230:BSP/u8g2/u8g2_circle.c ****     
+ 231:BSP/u8g2/u8g2_circle.c ****     /* lower right */
+ 232:BSP/u8g2/u8g2_circle.c ****     if ( option & U8G2_DRAW_LOWER_RIGHT )
+ 344              		.loc 1 232 5 is_stmt 1 view .LVU75
+ 345              		.loc 1 232 8 is_stmt 0 view .LVU76
+ 346 0020 14F0080F 		tst	r4, #8
+ 347 0024 15D1     		bne	.L26
+ 348              	.L21:
+ 233:BSP/u8g2/u8g2_circle.c ****     {
+ 234:BSP/u8g2/u8g2_circle.c ****       u8g2_DrawPixel(u8g2, x0 + x, y0 + y);
+ 235:BSP/u8g2/u8g2_circle.c ****     }
+ 236:BSP/u8g2/u8g2_circle.c ****     
+ 237:BSP/u8g2/u8g2_circle.c ****     /* lower left */
+ 238:BSP/u8g2/u8g2_circle.c ****     if ( option & U8G2_DRAW_LOWER_LEFT )
+ 349              		.loc 1 238 5 is_stmt 1 view .LVU77
+ 350              		.loc 1 238 8 is_stmt 0 view .LVU78
+ 351 0026 14F0040F 		tst	r4, #4
+ 352 002a 1CD1     		bne	.L27
+ 353              	.L18:
+ 239:BSP/u8g2/u8g2_circle.c ****     {
+ 240:BSP/u8g2/u8g2_circle.c ****       u8g2_DrawPixel(u8g2, x0 - x, y0 + y);
+ 241:BSP/u8g2/u8g2_circle.c ****     }
+ 242:BSP/u8g2/u8g2_circle.c **** }
+ 354              		.loc 1 242 1 view .LVU79
+ 355 002c BDE8F883 		pop	{r3, r4, r5, r6, r7, r8, r9, pc}
+ 356              	.LVL35:
+ 357              	.L24:
+ 222:BSP/u8g2/u8g2_circle.c ****     }
+ 358              		.loc 1 222 7 is_stmt 1 view .LVU80
+ 359 0030 B21A     		subs	r2, r6, r2
+ 360              	.LVL36:
+ 222:BSP/u8g2/u8g2_circle.c ****     }
+ 361              		.loc 1 222 7 is_stmt 0 view .LVU81
+ 362 0032 5918     		adds	r1, r3, r1
+ 363              	.LVL37:
+ 222:BSP/u8g2/u8g2_circle.c ****     }
+ 364              		.loc 1 222 7 view .LVU82
+ 365 0034 D2B2     		uxtb	r2, r2
+ 366 0036 C9B2     		uxtb	r1, r1
+ 367 0038 FFF7FEFF 		bl	u8g2_DrawPixel
+ 368              	.LVL38:
+ 222:BSP/u8g2/u8g2_circle.c ****     }
+ 369              		.loc 1 222 7 view .LVU83
+ 370 003c EDE7     		b	.L19
+ 371              	.L25:
+ARM GAS  /tmp/ccT14lel.s 			page 12
+
+
+ 228:BSP/u8g2/u8g2_circle.c ****     }
+ 372              		.loc 1 228 7 is_stmt 1 view .LVU84
+ 373 003e A6EB0902 		sub	r2, r6, r9
+ 374 0042 A5EB0801 		sub	r1, r5, r8
+ 375 0046 D2B2     		uxtb	r2, r2
+ 376 0048 C9B2     		uxtb	r1, r1
+ 377 004a 3846     		mov	r0, r7
+ 378 004c FFF7FEFF 		bl	u8g2_DrawPixel
+ 379              	.LVL39:
+ 380 0050 E6E7     		b	.L20
+ 381              	.L26:
+ 234:BSP/u8g2/u8g2_circle.c ****     }
+ 382              		.loc 1 234 7 view .LVU85
+ 383 0052 06EB0902 		add	r2, r6, r9
+ 384 0056 05EB0801 		add	r1, r5, r8
+ 385 005a D2B2     		uxtb	r2, r2
+ 386 005c C9B2     		uxtb	r1, r1
+ 387 005e 3846     		mov	r0, r7
+ 388 0060 FFF7FEFF 		bl	u8g2_DrawPixel
+ 389              	.LVL40:
+ 390 0064 DFE7     		b	.L21
+ 391              	.L27:
+ 240:BSP/u8g2/u8g2_circle.c ****     }
+ 392              		.loc 1 240 7 view .LVU86
+ 393 0066 06EB0902 		add	r2, r6, r9
+ 394 006a A5EB0801 		sub	r1, r5, r8
+ 395 006e D2B2     		uxtb	r2, r2
+ 396 0070 C9B2     		uxtb	r1, r1
+ 397 0072 3846     		mov	r0, r7
+ 398 0074 FFF7FEFF 		bl	u8g2_DrawPixel
+ 399              	.LVL41:
+ 400              		.loc 1 242 1 is_stmt 0 view .LVU87
+ 401 0078 D8E7     		b	.L18
+ 402              		.cfi_endproc
+ 403              	.LFE6:
+ 405              		.section	.text.u8g2_draw_ellipse,"ax",%progbits
+ 406              		.align	1
+ 407              		.syntax unified
+ 408              		.thumb
+ 409              		.thumb_func
+ 411              	u8g2_draw_ellipse:
+ 412              	.LVL42:
+ 413              	.LFB7:
+ 243:BSP/u8g2/u8g2_circle.c **** 
+ 244:BSP/u8g2/u8g2_circle.c **** static void u8g2_draw_ellipse(u8g2_t *u8g2, u8g2_uint_t x0, u8g2_uint_t y0, u8g2_uint_t rx, u8g2_ui
+ 245:BSP/u8g2/u8g2_circle.c **** {
+ 414              		.loc 1 245 1 is_stmt 1 view -0
+ 415              		.cfi_startproc
+ 416              		@ args = 8, pretend = 0, frame = 40
+ 417              		@ frame_needed = 0, uses_anonymous_args = 0
+ 418              		.loc 1 245 1 is_stmt 0 view .LVU89
+ 419 0000 2DE9F04F 		push	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
+ 420              	.LCFI5:
+ 421              		.cfi_def_cfa_offset 36
+ 422              		.cfi_offset 4, -36
+ 423              		.cfi_offset 5, -32
+ 424              		.cfi_offset 6, -28
+ARM GAS  /tmp/ccT14lel.s 			page 13
+
+
+ 425              		.cfi_offset 7, -24
+ 426              		.cfi_offset 8, -20
+ 427              		.cfi_offset 9, -16
+ 428              		.cfi_offset 10, -12
+ 429              		.cfi_offset 11, -8
+ 430              		.cfi_offset 14, -4
+ 431 0004 8DB0     		sub	sp, sp, #52
+ 432              	.LCFI6:
+ 433              		.cfi_def_cfa_offset 88
+ 434 0006 0590     		str	r0, [sp, #20]
+ 435 0008 0691     		str	r1, [sp, #24]
+ 436 000a 0792     		str	r2, [sp, #28]
+ 437 000c 1F46     		mov	r7, r3
+ 438 000e 9DF85810 		ldrb	r1, [sp, #88]	@ zero_extendqisi2
+ 439              	.LVL43:
+ 440              		.loc 1 245 1 view .LVU90
+ 441 0012 0391     		str	r1, [sp, #12]
+ 442 0014 9DF85C30 		ldrb	r3, [sp, #92]	@ zero_extendqisi2
+ 443              	.LVL44:
+ 444              		.loc 1 245 1 view .LVU91
+ 445 0018 0893     		str	r3, [sp, #32]
+ 246:BSP/u8g2/u8g2_circle.c ****   u8g2_uint_t x, y;
+ 446              		.loc 1 246 3 is_stmt 1 view .LVU92
+ 247:BSP/u8g2/u8g2_circle.c ****   u8g2_long_t xchg, ychg;
+ 447              		.loc 1 247 3 view .LVU93
+ 248:BSP/u8g2/u8g2_circle.c ****   u8g2_long_t err;
+ 448              		.loc 1 248 3 view .LVU94
+ 249:BSP/u8g2/u8g2_circle.c ****   u8g2_long_t rxrx2;
+ 449              		.loc 1 249 3 view .LVU95
+ 250:BSP/u8g2/u8g2_circle.c ****   u8g2_long_t ryry2;
+ 450              		.loc 1 250 3 view .LVU96
+ 251:BSP/u8g2/u8g2_circle.c ****   u8g2_long_t stopx, stopy;
+ 451              		.loc 1 251 3 view .LVU97
+ 252:BSP/u8g2/u8g2_circle.c ****   
+ 253:BSP/u8g2/u8g2_circle.c ****   rxrx2 = rx;
+ 452              		.loc 1 253 3 view .LVU98
+ 453              	.LVL45:
+ 254:BSP/u8g2/u8g2_circle.c ****   rxrx2 *= rx;
+ 454              		.loc 1 254 3 view .LVU99
+ 455              		.loc 1 254 9 is_stmt 0 view .LVU100
+ 456 001a 0997     		str	r7, [sp, #36]
+ 457 001c 07FB07F2 		mul	r2, r7, r7
+ 458              	.LVL46:
+ 255:BSP/u8g2/u8g2_circle.c ****   rxrx2 *= 2;
+ 459              		.loc 1 255 3 is_stmt 1 view .LVU101
+ 460              		.loc 1 255 9 is_stmt 0 view .LVU102
+ 461 0020 4FEA420A 		lsl	r10, r2, #1
+ 462 0024 1FFA8AFA 		uxth	r10, r10
+ 463              	.LVL47:
+ 256:BSP/u8g2/u8g2_circle.c ****   
+ 257:BSP/u8g2/u8g2_circle.c ****   ryry2 = ry;
+ 464              		.loc 1 257 3 is_stmt 1 view .LVU103
+ 258:BSP/u8g2/u8g2_circle.c ****   ryry2 *= ry;
+ 465              		.loc 1 258 3 view .LVU104
+ 466              		.loc 1 258 9 is_stmt 0 view .LVU105
+ 467 0028 0A91     		str	r1, [sp, #40]
+ 468 002a 01FB01F3 		mul	r3, r1, r1
+ARM GAS  /tmp/ccT14lel.s 			page 14
+
+
+ 469 002e 0B93     		str	r3, [sp, #44]
+ 470              	.LVL48:
+ 259:BSP/u8g2/u8g2_circle.c ****   ryry2 *= 2;
+ 471              		.loc 1 259 3 is_stmt 1 view .LVU106
+ 472              		.loc 1 259 9 is_stmt 0 view .LVU107
+ 473 0030 4FEA430B 		lsl	fp, r3, #1
+ 474 0034 1FFA8BFB 		uxth	fp, fp
+ 475              	.LVL49:
+ 260:BSP/u8g2/u8g2_circle.c ****   
+ 261:BSP/u8g2/u8g2_circle.c ****   x = rx;
+ 476              		.loc 1 261 3 is_stmt 1 view .LVU108
+ 262:BSP/u8g2/u8g2_circle.c ****   y = 0;
+ 477              		.loc 1 262 3 view .LVU109
+ 263:BSP/u8g2/u8g2_circle.c ****   
+ 264:BSP/u8g2/u8g2_circle.c ****   xchg = 1;
+ 478              		.loc 1 264 3 view .LVU110
+ 265:BSP/u8g2/u8g2_circle.c ****   xchg -= rx;
+ 479              		.loc 1 265 3 view .LVU111
+ 480              		.loc 1 265 8 is_stmt 0 view .LVU112
+ 481 0038 C7F10103 		rsb	r3, r7, #1
+ 482 003c 9BB2     		uxth	r3, r3
+ 483              	.LVL50:
+ 266:BSP/u8g2/u8g2_circle.c ****   xchg -= rx;
+ 484              		.loc 1 266 3 is_stmt 1 view .LVU113
+ 485              		.loc 1 266 8 is_stmt 0 view .LVU114
+ 486 003e DB1B     		subs	r3, r3, r7
+ 487              	.LVL51:
+ 488              		.loc 1 266 8 view .LVU115
+ 489 0040 9BB2     		uxth	r3, r3
+ 490              	.LVL52:
+ 267:BSP/u8g2/u8g2_circle.c ****   xchg *= ry;
+ 491              		.loc 1 267 3 is_stmt 1 view .LVU116
+ 492              		.loc 1 267 8 is_stmt 0 view .LVU117
+ 493 0042 01FB03F3 		mul	r3, r1, r3
+ 494              	.LVL53:
+ 495              		.loc 1 267 8 view .LVU118
+ 496 0046 9BB2     		uxth	r3, r3
+ 497              	.LVL54:
+ 268:BSP/u8g2/u8g2_circle.c ****   xchg *= ry;
+ 498              		.loc 1 268 3 is_stmt 1 view .LVU119
+ 499              		.loc 1 268 8 is_stmt 0 view .LVU120
+ 500 0048 01FB03F3 		mul	r3, r1, r3
+ 501              	.LVL55:
+ 502              		.loc 1 268 8 view .LVU121
+ 503 004c 0FFA83F9 		sxth	r9, r3
+ 504              	.LVL56:
+ 269:BSP/u8g2/u8g2_circle.c ****   
+ 270:BSP/u8g2/u8g2_circle.c ****   ychg = rx;
+ 505              		.loc 1 270 3 is_stmt 1 view .LVU122
+ 271:BSP/u8g2/u8g2_circle.c ****   ychg *= rx;
+ 506              		.loc 1 271 3 view .LVU123
+ 507              		.loc 1 271 8 is_stmt 0 view .LVU124
+ 508 0050 13B2     		sxth	r3, r2
+ 509 0052 0493     		str	r3, [sp, #16]
+ 510              	.LVL57:
+ 272:BSP/u8g2/u8g2_circle.c ****   
+ 273:BSP/u8g2/u8g2_circle.c ****   err = 0;
+ARM GAS  /tmp/ccT14lel.s 			page 15
+
+
+ 511              		.loc 1 273 3 is_stmt 1 view .LVU125
+ 274:BSP/u8g2/u8g2_circle.c ****   
+ 275:BSP/u8g2/u8g2_circle.c ****   stopx = ryry2;
+ 512              		.loc 1 275 3 view .LVU126
+ 276:BSP/u8g2/u8g2_circle.c ****   stopx *= rx;
+ 513              		.loc 1 276 3 view .LVU127
+ 514              		.loc 1 276 9 is_stmt 0 view .LVU128
+ 515 0054 0BFB07F8 		mul	r8, fp, r7
+ 516 0058 0FFA88F8 		sxth	r8, r8
+ 517              	.LVL58:
+ 277:BSP/u8g2/u8g2_circle.c ****   stopy = 0;
+ 518              		.loc 1 277 3 is_stmt 1 view .LVU129
+ 278:BSP/u8g2/u8g2_circle.c ****   
+ 279:BSP/u8g2/u8g2_circle.c ****   while( stopx >= stopy )
+ 519              		.loc 1 279 3 view .LVU130
+ 277:BSP/u8g2/u8g2_circle.c ****   stopy = 0;
+ 520              		.loc 1 277 9 is_stmt 0 view .LVU131
+ 521 005c 0025     		movs	r5, #0
+ 273:BSP/u8g2/u8g2_circle.c ****   
+ 522              		.loc 1 273 7 view .LVU132
+ 523 005e 2C46     		mov	r4, r5
+ 262:BSP/u8g2/u8g2_circle.c ****   
+ 524              		.loc 1 262 5 view .LVU133
+ 525 0060 2E46     		mov	r6, r5
+ 526              	.LVL59:
+ 527              	.L29:
+ 528              		.loc 1 279 16 is_stmt 1 view .LVU134
+ 529 0062 A845     		cmp	r8, r5
+ 530 0064 27DB     		blt	.L36
+ 280:BSP/u8g2/u8g2_circle.c ****   {
+ 281:BSP/u8g2/u8g2_circle.c ****     u8g2_draw_ellipse_section(u8g2, x, y, x0, y0, option);
+ 531              		.loc 1 281 5 view .LVU135
+ 532 0066 089B     		ldr	r3, [sp, #32]
+ 533 0068 0193     		str	r3, [sp, #4]
+ 534 006a 079B     		ldr	r3, [sp, #28]
+ 535 006c 0093     		str	r3, [sp]
+ 536 006e 069B     		ldr	r3, [sp, #24]
+ 537 0070 3246     		mov	r2, r6
+ 538 0072 3946     		mov	r1, r7
+ 539 0074 0598     		ldr	r0, [sp, #20]
+ 540 0076 FFF7FEFF 		bl	u8g2_draw_ellipse_section
+ 541              	.LVL60:
+ 282:BSP/u8g2/u8g2_circle.c ****     y++;
+ 542              		.loc 1 282 5 view .LVU136
+ 543              		.loc 1 282 6 is_stmt 0 view .LVU137
+ 544 007a 0136     		adds	r6, r6, #1
+ 545              	.LVL61:
+ 546              		.loc 1 282 6 view .LVU138
+ 547 007c F6B2     		uxtb	r6, r6
+ 548              	.LVL62:
+ 283:BSP/u8g2/u8g2_circle.c ****     stopy += rxrx2;
+ 549              		.loc 1 283 5 is_stmt 1 view .LVU139
+ 550              		.loc 1 283 11 is_stmt 0 view .LVU140
+ 551 007e 5544     		add	r5, r5, r10
+ 552              	.LVL63:
+ 553              		.loc 1 283 11 view .LVU141
+ 554 0080 2DB2     		sxth	r5, r5
+ARM GAS  /tmp/ccT14lel.s 			page 16
+
+
+ 555              	.LVL64:
+ 284:BSP/u8g2/u8g2_circle.c ****     err += ychg;
+ 556              		.loc 1 284 5 is_stmt 1 view .LVU142
+ 557              		.loc 1 284 9 is_stmt 0 view .LVU143
+ 558 0082 BDF81030 		ldrh	r3, [sp, #16]
+ 559 0086 1C44     		add	r4, r4, r3
+ 560              	.LVL65:
+ 561              		.loc 1 284 9 view .LVU144
+ 562 0088 A2B2     		uxth	r2, r4
+ 563 008a 24B2     		sxth	r4, r4
+ 564              	.LVL66:
+ 285:BSP/u8g2/u8g2_circle.c ****     ychg += rxrx2;
+ 565              		.loc 1 285 5 is_stmt 1 view .LVU145
+ 566              		.loc 1 285 10 is_stmt 0 view .LVU146
+ 567 008c 5344     		add	r3, r3, r10
+ 568 008e 1BB2     		sxth	r3, r3
+ 569 0090 0493     		str	r3, [sp, #16]
+ 570              	.LVL67:
+ 286:BSP/u8g2/u8g2_circle.c ****     if ( 2*err+xchg > 0 )
+ 571              		.loc 1 286 5 is_stmt 1 view .LVU147
+ 572              		.loc 1 286 15 is_stmt 0 view .LVU148
+ 573 0092 09EB4403 		add	r3, r9, r4, lsl #1
+ 574              		.loc 1 286 8 view .LVU149
+ 575 0096 002B     		cmp	r3, #0
+ 576 0098 E3DD     		ble	.L29
+ 287:BSP/u8g2/u8g2_circle.c ****     {
+ 288:BSP/u8g2/u8g2_circle.c ****       x--;
+ 577              		.loc 1 288 7 is_stmt 1 view .LVU150
+ 578              		.loc 1 288 8 is_stmt 0 view .LVU151
+ 579 009a 013F     		subs	r7, r7, #1
+ 580              	.LVL68:
+ 581              		.loc 1 288 8 view .LVU152
+ 582 009c FFB2     		uxtb	r7, r7
+ 583              	.LVL69:
+ 289:BSP/u8g2/u8g2_circle.c ****       stopx -= ryry2;
+ 584              		.loc 1 289 7 is_stmt 1 view .LVU153
+ 585              		.loc 1 289 13 is_stmt 0 view .LVU154
+ 586 009e A8EB0B08 		sub	r8, r8, fp
+ 587              	.LVL70:
+ 588              		.loc 1 289 13 view .LVU155
+ 589 00a2 0FFA88F8 		sxth	r8, r8
+ 590              	.LVL71:
+ 290:BSP/u8g2/u8g2_circle.c ****       err += xchg;
+ 591              		.loc 1 290 7 is_stmt 1 view .LVU156
+ 592              		.loc 1 290 11 is_stmt 0 view .LVU157
+ 593 00a6 1FFA89F9 		uxth	r9, r9
+ 594              		.loc 1 290 11 view .LVU158
+ 595 00aa 4A44     		add	r2, r2, r9
+ 596 00ac 14B2     		sxth	r4, r2
+ 597              	.LVL72:
+ 291:BSP/u8g2/u8g2_circle.c ****       xchg += ryry2;      
+ 598              		.loc 1 291 7 is_stmt 1 view .LVU159
+ 599              		.loc 1 291 12 is_stmt 0 view .LVU160
+ 600 00ae D944     		add	r9, r9, fp
+ 601              	.LVL73:
+ 602              		.loc 1 291 12 view .LVU161
+ 603 00b0 0FFA89F9 		sxth	r9, r9
+ARM GAS  /tmp/ccT14lel.s 			page 17
+
+
+ 604              	.LVL74:
+ 605              		.loc 1 291 12 view .LVU162
+ 606 00b4 D5E7     		b	.L29
+ 607              	.L36:
+ 292:BSP/u8g2/u8g2_circle.c ****     }
+ 293:BSP/u8g2/u8g2_circle.c ****   }
+ 294:BSP/u8g2/u8g2_circle.c **** 
+ 295:BSP/u8g2/u8g2_circle.c ****   x = 0;
+ 608              		.loc 1 295 3 is_stmt 1 view .LVU163
+ 609              	.LVL75:
+ 296:BSP/u8g2/u8g2_circle.c ****   y = ry;
+ 610              		.loc 1 296 3 view .LVU164
+ 297:BSP/u8g2/u8g2_circle.c ****   
+ 298:BSP/u8g2/u8g2_circle.c ****   xchg = ry;
+ 611              		.loc 1 298 3 view .LVU165
+ 299:BSP/u8g2/u8g2_circle.c ****   xchg *= ry;
+ 612              		.loc 1 299 3 view .LVU166
+ 613              		.loc 1 299 8 is_stmt 0 view .LVU167
+ 614 00b6 BDF92C40 		ldrsh	r4, [sp, #44]
+ 615              	.LVL76:
+ 300:BSP/u8g2/u8g2_circle.c ****   
+ 301:BSP/u8g2/u8g2_circle.c ****   ychg = 1;
+ 616              		.loc 1 301 3 is_stmt 1 view .LVU168
+ 302:BSP/u8g2/u8g2_circle.c ****   ychg -= ry;
+ 617              		.loc 1 302 3 view .LVU169
+ 618              		.loc 1 302 8 is_stmt 0 view .LVU170
+ 619 00ba 0A9A     		ldr	r2, [sp, #40]
+ 620 00bc C2F10103 		rsb	r3, r2, #1
+ 621 00c0 9BB2     		uxth	r3, r3
+ 622              	.LVL77:
+ 303:BSP/u8g2/u8g2_circle.c ****   ychg -= ry;
+ 623              		.loc 1 303 3 is_stmt 1 view .LVU171
+ 624              		.loc 1 303 8 is_stmt 0 view .LVU172
+ 625 00c2 9B1A     		subs	r3, r3, r2
+ 626              	.LVL78:
+ 627              		.loc 1 303 8 view .LVU173
+ 628 00c4 9BB2     		uxth	r3, r3
+ 629              	.LVL79:
+ 304:BSP/u8g2/u8g2_circle.c ****   ychg *= rx;
+ 630              		.loc 1 304 3 is_stmt 1 view .LVU174
+ 631              		.loc 1 304 8 is_stmt 0 view .LVU175
+ 632 00c6 0999     		ldr	r1, [sp, #36]
+ 633 00c8 01FB03F3 		mul	r3, r1, r3
+ 634              	.LVL80:
+ 635              		.loc 1 304 8 view .LVU176
+ 636 00cc 9BB2     		uxth	r3, r3
+ 637              	.LVL81:
+ 305:BSP/u8g2/u8g2_circle.c ****   ychg *= rx;
+ 638              		.loc 1 305 3 is_stmt 1 view .LVU177
+ 639              		.loc 1 305 8 is_stmt 0 view .LVU178
+ 640 00ce 03FB01F6 		mul	r6, r3, r1
+ 641 00d2 36B2     		sxth	r6, r6
+ 642              	.LVL82:
+ 306:BSP/u8g2/u8g2_circle.c ****   
+ 307:BSP/u8g2/u8g2_circle.c ****   err = 0;
+ 643              		.loc 1 307 3 is_stmt 1 view .LVU179
+ 308:BSP/u8g2/u8g2_circle.c ****   
+ARM GAS  /tmp/ccT14lel.s 			page 18
+
+
+ 309:BSP/u8g2/u8g2_circle.c ****   stopx = 0;
+ 644              		.loc 1 309 3 view .LVU180
+ 310:BSP/u8g2/u8g2_circle.c **** 
+ 311:BSP/u8g2/u8g2_circle.c ****   stopy = rxrx2;
+ 645              		.loc 1 311 3 view .LVU181
+ 312:BSP/u8g2/u8g2_circle.c ****   stopy *= ry;
+ 646              		.loc 1 312 3 view .LVU182
+ 647              		.loc 1 312 9 is_stmt 0 view .LVU183
+ 648 00d4 02FB0AF9 		mul	r9, r2, r10
+ 649 00d8 0FFA89F9 		sxth	r9, r9
+ 650              	.LVL83:
+ 313:BSP/u8g2/u8g2_circle.c ****   
+ 314:BSP/u8g2/u8g2_circle.c **** 
+ 315:BSP/u8g2/u8g2_circle.c ****   while( stopx <= stopy )
+ 651              		.loc 1 315 3 is_stmt 1 view .LVU184
+ 309:BSP/u8g2/u8g2_circle.c **** 
+ 652              		.loc 1 309 9 is_stmt 0 view .LVU185
+ 653 00dc 0027     		movs	r7, #0
+ 307:BSP/u8g2/u8g2_circle.c ****   
+ 654              		.loc 1 307 7 view .LVU186
+ 655 00de 3D46     		mov	r5, r7
+ 295:BSP/u8g2/u8g2_circle.c ****   y = ry;
+ 656              		.loc 1 295 5 view .LVU187
+ 657 00e0 B846     		mov	r8, r7
+ 658              	.LVL84:
+ 659              	.L32:
+ 660              		.loc 1 315 16 is_stmt 1 view .LVU188
+ 661 00e2 4F45     		cmp	r7, r9
+ 662 00e4 27DC     		bgt	.L37
+ 316:BSP/u8g2/u8g2_circle.c ****   {
+ 317:BSP/u8g2/u8g2_circle.c ****     u8g2_draw_ellipse_section(u8g2, x, y, x0, y0, option);
+ 663              		.loc 1 317 5 view .LVU189
+ 664 00e6 089B     		ldr	r3, [sp, #32]
+ 665 00e8 0193     		str	r3, [sp, #4]
+ 666 00ea 079B     		ldr	r3, [sp, #28]
+ 667 00ec 0093     		str	r3, [sp]
+ 668 00ee 069B     		ldr	r3, [sp, #24]
+ 669 00f0 039A     		ldr	r2, [sp, #12]
+ 670 00f2 4146     		mov	r1, r8
+ 671 00f4 0598     		ldr	r0, [sp, #20]
+ 672 00f6 FFF7FEFF 		bl	u8g2_draw_ellipse_section
+ 673              	.LVL85:
+ 318:BSP/u8g2/u8g2_circle.c ****     x++;
+ 674              		.loc 1 318 5 view .LVU190
+ 675              		.loc 1 318 6 is_stmt 0 view .LVU191
+ 676 00fa 08F10108 		add	r8, r8, #1
+ 677              	.LVL86:
+ 678              		.loc 1 318 6 view .LVU192
+ 679 00fe 5FFA88F8 		uxtb	r8, r8
+ 680              	.LVL87:
+ 319:BSP/u8g2/u8g2_circle.c ****     stopx += ryry2;
+ 681              		.loc 1 319 5 is_stmt 1 view .LVU193
+ 682              		.loc 1 319 11 is_stmt 0 view .LVU194
+ 683 0102 5F44     		add	r7, r7, fp
+ 684              	.LVL88:
+ 685              		.loc 1 319 11 view .LVU195
+ 686 0104 3FB2     		sxth	r7, r7
+ARM GAS  /tmp/ccT14lel.s 			page 19
+
+
+ 687              	.LVL89:
+ 320:BSP/u8g2/u8g2_circle.c ****     err += xchg;
+ 688              		.loc 1 320 5 is_stmt 1 view .LVU196
+ 689              		.loc 1 320 9 is_stmt 0 view .LVU197
+ 690 0106 A4B2     		uxth	r4, r4
+ 691              		.loc 1 320 9 view .LVU198
+ 692 0108 2544     		add	r5, r5, r4
+ 693              	.LVL90:
+ 694              		.loc 1 320 9 view .LVU199
+ 695 010a ABB2     		uxth	r3, r5
+ 696 010c 2DB2     		sxth	r5, r5
+ 697              	.LVL91:
+ 321:BSP/u8g2/u8g2_circle.c ****     xchg += ryry2;
+ 698              		.loc 1 321 5 is_stmt 1 view .LVU200
+ 699              		.loc 1 321 10 is_stmt 0 view .LVU201
+ 700 010e 5C44     		add	r4, r4, fp
+ 701              	.LVL92:
+ 702              		.loc 1 321 10 view .LVU202
+ 703 0110 24B2     		sxth	r4, r4
+ 704              	.LVL93:
+ 322:BSP/u8g2/u8g2_circle.c ****     if ( 2*err+ychg > 0 )
+ 705              		.loc 1 322 5 is_stmt 1 view .LVU203
+ 706              		.loc 1 322 15 is_stmt 0 view .LVU204
+ 707 0112 06EB4502 		add	r2, r6, r5, lsl #1
+ 708              		.loc 1 322 8 view .LVU205
+ 709 0116 002A     		cmp	r2, #0
+ 710 0118 E3DD     		ble	.L32
+ 323:BSP/u8g2/u8g2_circle.c ****     {
+ 324:BSP/u8g2/u8g2_circle.c ****       y--;
+ 711              		.loc 1 324 7 is_stmt 1 view .LVU206
+ 712              		.loc 1 324 8 is_stmt 0 view .LVU207
+ 713 011a 039A     		ldr	r2, [sp, #12]
+ 714 011c 013A     		subs	r2, r2, #1
+ 715 011e D2B2     		uxtb	r2, r2
+ 716 0120 0392     		str	r2, [sp, #12]
+ 717              	.LVL94:
+ 325:BSP/u8g2/u8g2_circle.c ****       stopy -= rxrx2;
+ 718              		.loc 1 325 7 is_stmt 1 view .LVU208
+ 719              		.loc 1 325 13 is_stmt 0 view .LVU209
+ 720 0122 A9EB0A09 		sub	r9, r9, r10
+ 721              	.LVL95:
+ 722              		.loc 1 325 13 view .LVU210
+ 723 0126 0FFA89F9 		sxth	r9, r9
+ 724              	.LVL96:
+ 326:BSP/u8g2/u8g2_circle.c ****       err += ychg;
+ 725              		.loc 1 326 7 is_stmt 1 view .LVU211
+ 726              		.loc 1 326 11 is_stmt 0 view .LVU212
+ 727 012a B6B2     		uxth	r6, r6
+ 728              		.loc 1 326 11 view .LVU213
+ 729 012c 3344     		add	r3, r3, r6
+ 730 012e 1DB2     		sxth	r5, r3
+ 731              	.LVL97:
+ 327:BSP/u8g2/u8g2_circle.c ****       ychg += rxrx2;
+ 732              		.loc 1 327 7 is_stmt 1 view .LVU214
+ 733              		.loc 1 327 12 is_stmt 0 view .LVU215
+ 734 0130 5644     		add	r6, r6, r10
+ 735              	.LVL98:
+ARM GAS  /tmp/ccT14lel.s 			page 20
+
+
+ 736              		.loc 1 327 12 view .LVU216
+ 737 0132 36B2     		sxth	r6, r6
+ 738              	.LVL99:
+ 739              		.loc 1 327 12 view .LVU217
+ 740 0134 D5E7     		b	.L32
+ 741              	.L37:
+ 328:BSP/u8g2/u8g2_circle.c ****     }
+ 329:BSP/u8g2/u8g2_circle.c ****   }
+ 330:BSP/u8g2/u8g2_circle.c ****   
+ 331:BSP/u8g2/u8g2_circle.c **** }
+ 742              		.loc 1 331 1 view .LVU218
+ 743 0136 0DB0     		add	sp, sp, #52
+ 744              	.LCFI7:
+ 745              		.cfi_def_cfa_offset 36
+ 746              		@ sp needed
+ 747 0138 BDE8F08F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 748              		.loc 1 331 1 view .LVU219
+ 749              		.cfi_endproc
+ 750              	.LFE7:
+ 752              		.section	.text.u8g2_draw_disc_section,"ax",%progbits
+ 753              		.align	1
+ 754              		.syntax unified
+ 755              		.thumb
+ 756              		.thumb_func
+ 758              	u8g2_draw_disc_section:
+ 759              	.LVL100:
+ 760              	.LFB3:
+ 130:BSP/u8g2/u8g2_circle.c ****     /* upper right */
+ 761              		.loc 1 130 1 is_stmt 1 view -0
+ 762              		.cfi_startproc
+ 763              		@ args = 8, pretend = 0, frame = 0
+ 764              		@ frame_needed = 0, uses_anonymous_args = 0
+ 130:BSP/u8g2/u8g2_circle.c ****     /* upper right */
+ 765              		.loc 1 130 1 is_stmt 0 view .LVU221
+ 766 0000 2DE9F843 		push	{r3, r4, r5, r6, r7, r8, r9, lr}
+ 767              	.LCFI8:
+ 768              		.cfi_def_cfa_offset 32
+ 769              		.cfi_offset 3, -32
+ 770              		.cfi_offset 4, -28
+ 771              		.cfi_offset 5, -24
+ 772              		.cfi_offset 6, -20
+ 773              		.cfi_offset 7, -16
+ 774              		.cfi_offset 8, -12
+ 775              		.cfi_offset 9, -8
+ 776              		.cfi_offset 14, -4
+ 777 0004 8046     		mov	r8, r0
+ 778 0006 0C46     		mov	r4, r1
+ 779 0008 1746     		mov	r7, r2
+ 780 000a 1D46     		mov	r5, r3
+ 781 000c 9DF82090 		ldrb	r9, [sp, #32]	@ zero_extendqisi2
+ 782 0010 9DF82460 		ldrb	r6, [sp, #36]	@ zero_extendqisi2
+ 132:BSP/u8g2/u8g2_circle.c ****     {
+ 783              		.loc 1 132 5 is_stmt 1 view .LVU222
+ 132:BSP/u8g2/u8g2_circle.c ****     {
+ 784              		.loc 1 132 8 is_stmt 0 view .LVU223
+ 785 0014 16F0010F 		tst	r6, #1
+ 786 0018 0AD1     		bne	.L44
+ARM GAS  /tmp/ccT14lel.s 			page 21
+
+
+ 787              	.LVL101:
+ 788              	.L39:
+ 139:BSP/u8g2/u8g2_circle.c ****     {
+ 789              		.loc 1 139 5 is_stmt 1 view .LVU224
+ 139:BSP/u8g2/u8g2_circle.c ****     {
+ 790              		.loc 1 139 8 is_stmt 0 view .LVU225
+ 791 001a 16F0020F 		tst	r6, #2
+ 792 001e 1BD1     		bne	.L45
+ 793              	.L40:
+ 146:BSP/u8g2/u8g2_circle.c ****     {
+ 794              		.loc 1 146 5 is_stmt 1 view .LVU226
+ 146:BSP/u8g2/u8g2_circle.c ****     {
+ 795              		.loc 1 146 8 is_stmt 0 view .LVU227
+ 796 0020 16F0080F 		tst	r6, #8
+ 797 0024 2DD1     		bne	.L46
+ 798              	.L41:
+ 153:BSP/u8g2/u8g2_circle.c ****     {
+ 799              		.loc 1 153 5 is_stmt 1 view .LVU228
+ 153:BSP/u8g2/u8g2_circle.c ****     {
+ 800              		.loc 1 153 8 is_stmt 0 view .LVU229
+ 801 0026 16F0040F 		tst	r6, #4
+ 802 002a 3BD1     		bne	.L47
+ 803              	.L38:
+ 158:BSP/u8g2/u8g2_circle.c **** 
+ 804              		.loc 1 158 1 view .LVU230
+ 805 002c BDE8F883 		pop	{r3, r4, r5, r6, r7, r8, r9, pc}
+ 806              	.LVL102:
+ 807              	.L44:
+ 134:BSP/u8g2/u8g2_circle.c ****       u8g2_DrawVLine(u8g2, x0+y, y0-x, x+1);
+ 808              		.loc 1 134 7 is_stmt 1 view .LVU231
+ 809 0030 531C     		adds	r3, r2, #1
+ 810              	.LVL103:
+ 134:BSP/u8g2/u8g2_circle.c ****       u8g2_DrawVLine(u8g2, x0+y, y0-x, x+1);
+ 811              		.loc 1 134 7 is_stmt 0 view .LVU232
+ 812 0032 A9EB0202 		sub	r2, r9, r2
+ 813              	.LVL104:
+ 134:BSP/u8g2/u8g2_circle.c ****       u8g2_DrawVLine(u8g2, x0+y, y0-x, x+1);
+ 814              		.loc 1 134 7 view .LVU233
+ 815 0036 6918     		adds	r1, r5, r1
+ 816              	.LVL105:
+ 134:BSP/u8g2/u8g2_circle.c ****       u8g2_DrawVLine(u8g2, x0+y, y0-x, x+1);
+ 817              		.loc 1 134 7 view .LVU234
+ 818 0038 DBB2     		uxtb	r3, r3
+ 819 003a D2B2     		uxtb	r2, r2
+ 820 003c C9B2     		uxtb	r1, r1
+ 821 003e FFF7FEFF 		bl	u8g2_DrawVLine
+ 822              	.LVL106:
+ 135:BSP/u8g2/u8g2_circle.c ****     }
+ 823              		.loc 1 135 7 is_stmt 1 view .LVU235
+ 824 0042 631C     		adds	r3, r4, #1
+ 825 0044 A9EB0402 		sub	r2, r9, r4
+ 826 0048 E919     		adds	r1, r5, r7
+ 827 004a DBB2     		uxtb	r3, r3
+ 828 004c D2B2     		uxtb	r2, r2
+ 829 004e C9B2     		uxtb	r1, r1
+ 830 0050 4046     		mov	r0, r8
+ 831 0052 FFF7FEFF 		bl	u8g2_DrawVLine
+ARM GAS  /tmp/ccT14lel.s 			page 22
+
+
+ 832              	.LVL107:
+ 833 0056 E0E7     		b	.L39
+ 834              	.L45:
+ 141:BSP/u8g2/u8g2_circle.c ****       u8g2_DrawVLine(u8g2, x0-y, y0-x, x+1);
+ 835              		.loc 1 141 7 view .LVU236
+ 836 0058 7B1C     		adds	r3, r7, #1
+ 837 005a A9EB0702 		sub	r2, r9, r7
+ 838 005e 291B     		subs	r1, r5, r4
+ 839 0060 DBB2     		uxtb	r3, r3
+ 840 0062 D2B2     		uxtb	r2, r2
+ 841 0064 C9B2     		uxtb	r1, r1
+ 842 0066 4046     		mov	r0, r8
+ 843 0068 FFF7FEFF 		bl	u8g2_DrawVLine
+ 844              	.LVL108:
+ 142:BSP/u8g2/u8g2_circle.c ****     }
+ 845              		.loc 1 142 7 view .LVU237
+ 846 006c 631C     		adds	r3, r4, #1
+ 847 006e A9EB0402 		sub	r2, r9, r4
+ 848 0072 E91B     		subs	r1, r5, r7
+ 849 0074 DBB2     		uxtb	r3, r3
+ 850 0076 D2B2     		uxtb	r2, r2
+ 851 0078 C9B2     		uxtb	r1, r1
+ 852 007a 4046     		mov	r0, r8
+ 853 007c FFF7FEFF 		bl	u8g2_DrawVLine
+ 854              	.LVL109:
+ 855 0080 CEE7     		b	.L40
+ 856              	.L46:
+ 148:BSP/u8g2/u8g2_circle.c ****       u8g2_DrawVLine(u8g2, x0+y, y0, x+1);
+ 857              		.loc 1 148 7 view .LVU238
+ 858 0082 7B1C     		adds	r3, r7, #1
+ 859 0084 2919     		adds	r1, r5, r4
+ 860 0086 DBB2     		uxtb	r3, r3
+ 861 0088 4A46     		mov	r2, r9
+ 862 008a C9B2     		uxtb	r1, r1
+ 863 008c 4046     		mov	r0, r8
+ 864 008e FFF7FEFF 		bl	u8g2_DrawVLine
+ 865              	.LVL110:
+ 149:BSP/u8g2/u8g2_circle.c ****     }
+ 866              		.loc 1 149 7 view .LVU239
+ 867 0092 631C     		adds	r3, r4, #1
+ 868 0094 E919     		adds	r1, r5, r7
+ 869 0096 DBB2     		uxtb	r3, r3
+ 870 0098 4A46     		mov	r2, r9
+ 871 009a C9B2     		uxtb	r1, r1
+ 872 009c 4046     		mov	r0, r8
+ 873 009e FFF7FEFF 		bl	u8g2_DrawVLine
+ 874              	.LVL111:
+ 875 00a2 C0E7     		b	.L41
+ 876              	.L47:
+ 155:BSP/u8g2/u8g2_circle.c ****       u8g2_DrawVLine(u8g2, x0-y, y0, x+1);
+ 877              		.loc 1 155 7 view .LVU240
+ 878 00a4 7B1C     		adds	r3, r7, #1
+ 879 00a6 291B     		subs	r1, r5, r4
+ 880 00a8 DBB2     		uxtb	r3, r3
+ 881 00aa 4A46     		mov	r2, r9
+ 882 00ac C9B2     		uxtb	r1, r1
+ 883 00ae 4046     		mov	r0, r8
+ARM GAS  /tmp/ccT14lel.s 			page 23
+
+
+ 884 00b0 FFF7FEFF 		bl	u8g2_DrawVLine
+ 885              	.LVL112:
+ 156:BSP/u8g2/u8g2_circle.c ****     }
+ 886              		.loc 1 156 7 view .LVU241
+ 887 00b4 631C     		adds	r3, r4, #1
+ 888 00b6 E91B     		subs	r1, r5, r7
+ 889 00b8 DBB2     		uxtb	r3, r3
+ 890 00ba 4A46     		mov	r2, r9
+ 891 00bc C9B2     		uxtb	r1, r1
+ 892 00be 4046     		mov	r0, r8
+ 893 00c0 FFF7FEFF 		bl	u8g2_DrawVLine
+ 894              	.LVL113:
+ 158:BSP/u8g2/u8g2_circle.c **** 
+ 895              		.loc 1 158 1 is_stmt 0 view .LVU242
+ 896 00c4 B2E7     		b	.L38
+ 897              		.cfi_endproc
+ 898              	.LFE3:
+ 900              		.section	.text.u8g2_draw_disc,"ax",%progbits
+ 901              		.align	1
+ 902              		.syntax unified
+ 903              		.thumb
+ 904              		.thumb_func
+ 906              	u8g2_draw_disc:
+ 907              	.LVL114:
+ 908              	.LFB4:
+ 161:BSP/u8g2/u8g2_circle.c ****   u8g2_int_t f;
+ 909              		.loc 1 161 1 is_stmt 1 view -0
+ 910              		.cfi_startproc
+ 911              		@ args = 4, pretend = 0, frame = 8
+ 912              		@ frame_needed = 0, uses_anonymous_args = 0
+ 161:BSP/u8g2/u8g2_circle.c ****   u8g2_int_t f;
+ 913              		.loc 1 161 1 is_stmt 0 view .LVU244
+ 914 0000 2DE9F04F 		push	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
+ 915              	.LCFI9:
+ 916              		.cfi_def_cfa_offset 36
+ 917              		.cfi_offset 4, -36
+ 918              		.cfi_offset 5, -32
+ 919              		.cfi_offset 6, -28
+ 920              		.cfi_offset 7, -24
+ 921              		.cfi_offset 8, -20
+ 922              		.cfi_offset 9, -16
+ 923              		.cfi_offset 10, -12
+ 924              		.cfi_offset 11, -8
+ 925              		.cfi_offset 14, -4
+ 926 0004 85B0     		sub	sp, sp, #20
+ 927              	.LCFI10:
+ 928              		.cfi_def_cfa_offset 56
+ 929 0006 0390     		str	r0, [sp, #12]
+ 930 0008 8946     		mov	r9, r1
+ 931 000a 9246     		mov	r10, r2
+ 932 000c 1E46     		mov	r6, r3
+ 933 000e 9DF838B0 		ldrb	fp, [sp, #56]	@ zero_extendqisi2
+ 162:BSP/u8g2/u8g2_circle.c ****   u8g2_int_t ddF_x;
+ 934              		.loc 1 162 3 is_stmt 1 view .LVU245
+ 163:BSP/u8g2/u8g2_circle.c ****   u8g2_int_t ddF_y;
+ 935              		.loc 1 163 3 view .LVU246
+ 164:BSP/u8g2/u8g2_circle.c ****   u8g2_uint_t x;
+ARM GAS  /tmp/ccT14lel.s 			page 24
+
+
+ 936              		.loc 1 164 3 view .LVU247
+ 165:BSP/u8g2/u8g2_circle.c ****   u8g2_uint_t y;
+ 937              		.loc 1 165 3 view .LVU248
+ 166:BSP/u8g2/u8g2_circle.c **** 
+ 938              		.loc 1 166 3 view .LVU249
+ 168:BSP/u8g2/u8g2_circle.c ****   f -= rad;
+ 939              		.loc 1 168 3 view .LVU250
+ 940              	.LVL115:
+ 169:BSP/u8g2/u8g2_circle.c ****   ddF_x = 1;
+ 941              		.loc 1 169 3 view .LVU251
+ 169:BSP/u8g2/u8g2_circle.c ****   ddF_x = 1;
+ 942              		.loc 1 169 5 is_stmt 0 view .LVU252
+ 943 0012 C3F10104 		rsb	r4, r3, #1
+ 944 0016 64B2     		sxtb	r4, r4
+ 945              	.LVL116:
+ 170:BSP/u8g2/u8g2_circle.c ****   ddF_y = 0;
+ 946              		.loc 1 170 3 is_stmt 1 view .LVU253
+ 171:BSP/u8g2/u8g2_circle.c ****   ddF_y -= rad;
+ 947              		.loc 1 171 3 view .LVU254
+ 172:BSP/u8g2/u8g2_circle.c ****   ddF_y *= 2;
+ 948              		.loc 1 172 3 view .LVU255
+ 173:BSP/u8g2/u8g2_circle.c ****   x = 0;
+ 949              		.loc 1 173 3 view .LVU256
+ 173:BSP/u8g2/u8g2_circle.c ****   x = 0;
+ 950              		.loc 1 173 9 is_stmt 0 view .LVU257
+ 951 0018 C3EBC318 		rsb	r8, r3, r3, lsl #7
+ 952 001c 4FEA4808 		lsl	r8, r8, #1
+ 953 0020 4FFA88F8 		sxtb	r8, r8
+ 954              	.LVL117:
+ 174:BSP/u8g2/u8g2_circle.c ****   y = rad;
+ 955              		.loc 1 174 3 is_stmt 1 view .LVU258
+ 175:BSP/u8g2/u8g2_circle.c **** 
+ 956              		.loc 1 175 3 view .LVU259
+ 177:BSP/u8g2/u8g2_circle.c ****   
+ 957              		.loc 1 177 3 view .LVU260
+ 958 0024 CDF804B0 		str	fp, [sp, #4]
+ 959 0028 0092     		str	r2, [sp]
+ 960 002a 0B46     		mov	r3, r1
+ 961              	.LVL118:
+ 177:BSP/u8g2/u8g2_circle.c ****   
+ 962              		.loc 1 177 3 is_stmt 0 view .LVU261
+ 963 002c 3246     		mov	r2, r6
+ 964              	.LVL119:
+ 177:BSP/u8g2/u8g2_circle.c ****   
+ 965              		.loc 1 177 3 view .LVU262
+ 966 002e 0021     		movs	r1, #0
+ 967              	.LVL120:
+ 177:BSP/u8g2/u8g2_circle.c ****   
+ 968              		.loc 1 177 3 view .LVU263
+ 969 0030 FFF7FEFF 		bl	u8g2_draw_disc_section
+ 970              	.LVL121:
+ 179:BSP/u8g2/u8g2_circle.c ****   {
+ 971              		.loc 1 179 3 is_stmt 1 view .LVU264
+ 174:BSP/u8g2/u8g2_circle.c ****   y = rad;
+ 972              		.loc 1 174 5 is_stmt 0 view .LVU265
+ 973 0034 0025     		movs	r5, #0
+ 170:BSP/u8g2/u8g2_circle.c ****   ddF_y = 0;
+ARM GAS  /tmp/ccT14lel.s 			page 25
+
+
+ 974              		.loc 1 170 9 view .LVU266
+ 975 0036 0127     		movs	r7, #1
+ 179:BSP/u8g2/u8g2_circle.c ****   {
+ 976              		.loc 1 179 9 view .LVU267
+ 977 0038 1AE0     		b	.L49
+ 978              	.LVL122:
+ 979              	.L54:
+ 183:BSP/u8g2/u8g2_circle.c ****       ddF_y += 2;
+ 980              		.loc 1 183 7 is_stmt 1 view .LVU268
+ 183:BSP/u8g2/u8g2_circle.c ****       ddF_y += 2;
+ 981              		.loc 1 183 8 is_stmt 0 view .LVU269
+ 982 003a 013E     		subs	r6, r6, #1
+ 983              	.LVL123:
+ 183:BSP/u8g2/u8g2_circle.c ****       ddF_y += 2;
+ 984              		.loc 1 183 8 view .LVU270
+ 985 003c F6B2     		uxtb	r6, r6
+ 986              	.LVL124:
+ 184:BSP/u8g2/u8g2_circle.c ****       f += ddF_y;
+ 987              		.loc 1 184 7 is_stmt 1 view .LVU271
+ 184:BSP/u8g2/u8g2_circle.c ****       f += ddF_y;
+ 988              		.loc 1 184 13 is_stmt 0 view .LVU272
+ 989 003e 08F10208 		add	r8, r8, #2
+ 990              	.LVL125:
+ 184:BSP/u8g2/u8g2_circle.c ****       f += ddF_y;
+ 991              		.loc 1 184 13 view .LVU273
+ 992 0042 5FFA88F3 		uxtb	r3, r8
+ 993 0046 4FFA88F8 		sxtb	r8, r8
+ 994              	.LVL126:
+ 185:BSP/u8g2/u8g2_circle.c ****     }
+ 995              		.loc 1 185 7 is_stmt 1 view .LVU274
+ 185:BSP/u8g2/u8g2_circle.c ****     }
+ 996              		.loc 1 185 9 is_stmt 0 view .LVU275
+ 997 004a 2344     		add	r3, r3, r4
+ 998 004c 5CB2     		sxtb	r4, r3
+ 999              	.LVL127:
+ 1000              	.L50:
+ 187:BSP/u8g2/u8g2_circle.c ****     ddF_x += 2;
+ 1001              		.loc 1 187 5 is_stmt 1 view .LVU276
+ 187:BSP/u8g2/u8g2_circle.c ****     ddF_x += 2;
+ 1002              		.loc 1 187 6 is_stmt 0 view .LVU277
+ 1003 004e 0135     		adds	r5, r5, #1
+ 1004              	.LVL128:
+ 187:BSP/u8g2/u8g2_circle.c ****     ddF_x += 2;
+ 1005              		.loc 1 187 6 view .LVU278
+ 1006 0050 EDB2     		uxtb	r5, r5
+ 1007              	.LVL129:
+ 188:BSP/u8g2/u8g2_circle.c ****     f += ddF_x;
+ 1008              		.loc 1 188 5 is_stmt 1 view .LVU279
+ 188:BSP/u8g2/u8g2_circle.c ****     f += ddF_x;
+ 1009              		.loc 1 188 11 is_stmt 0 view .LVU280
+ 1010 0052 0237     		adds	r7, r7, #2
+ 1011              	.LVL130:
+ 188:BSP/u8g2/u8g2_circle.c ****     f += ddF_x;
+ 1012              		.loc 1 188 11 view .LVU281
+ 1013 0054 FBB2     		uxtb	r3, r7
+ 1014 0056 7FB2     		sxtb	r7, r7
+ 1015              	.LVL131:
+ARM GAS  /tmp/ccT14lel.s 			page 26
+
+
+ 189:BSP/u8g2/u8g2_circle.c **** 
+ 1016              		.loc 1 189 5 is_stmt 1 view .LVU282
+ 189:BSP/u8g2/u8g2_circle.c **** 
+ 1017              		.loc 1 189 7 is_stmt 0 view .LVU283
+ 1018 0058 2344     		add	r3, r3, r4
+ 1019 005a 5CB2     		sxtb	r4, r3
+ 1020              	.LVL132:
+ 191:BSP/u8g2/u8g2_circle.c ****   }
+ 1021              		.loc 1 191 5 is_stmt 1 view .LVU284
+ 1022 005c CDF804B0 		str	fp, [sp, #4]
+ 1023 0060 CDF800A0 		str	r10, [sp]
+ 1024 0064 4B46     		mov	r3, r9
+ 1025 0066 3246     		mov	r2, r6
+ 1026 0068 2946     		mov	r1, r5
+ 1027 006a 0398     		ldr	r0, [sp, #12]
+ 1028 006c FFF7FEFF 		bl	u8g2_draw_disc_section
+ 1029              	.LVL133:
+ 1030              	.L49:
+ 179:BSP/u8g2/u8g2_circle.c ****   {
+ 1031              		.loc 1 179 13 view .LVU285
+ 1032 0070 B542     		cmp	r5, r6
+ 1033 0072 02D2     		bcs	.L53
+ 181:BSP/u8g2/u8g2_circle.c ****     {
+ 1034              		.loc 1 181 5 view .LVU286
+ 181:BSP/u8g2/u8g2_circle.c ****     {
+ 1035              		.loc 1 181 8 is_stmt 0 view .LVU287
+ 1036 0074 002C     		cmp	r4, #0
+ 1037 0076 E0DA     		bge	.L54
+ 1038 0078 E9E7     		b	.L50
+ 1039              	.L53:
+ 193:BSP/u8g2/u8g2_circle.c **** 
+ 1040              		.loc 1 193 1 view .LVU288
+ 1041 007a 05B0     		add	sp, sp, #20
+ 1042              	.LCFI11:
+ 1043              		.cfi_def_cfa_offset 36
+ 1044              		@ sp needed
+ 1045 007c BDE8F08F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 193:BSP/u8g2/u8g2_circle.c **** 
+ 1046              		.loc 1 193 1 view .LVU289
+ 1047              		.cfi_endproc
+ 1048              	.LFE4:
+ 1050              		.section	.text.u8g2_draw_filled_ellipse_section,"ax",%progbits
+ 1051              		.align	1
+ 1052              		.syntax unified
+ 1053              		.thumb
+ 1054              		.thumb_func
+ 1056              	u8g2_draw_filled_ellipse_section:
+ 1057              	.LVL134:
+ 1058              	.LFB9:
+ 332:BSP/u8g2/u8g2_circle.c **** 
+ 333:BSP/u8g2/u8g2_circle.c **** void u8g2_DrawEllipse(u8g2_t *u8g2, u8g2_uint_t x0, u8g2_uint_t y0, u8g2_uint_t rx, u8g2_uint_t ry,
+ 334:BSP/u8g2/u8g2_circle.c **** {
+ 335:BSP/u8g2/u8g2_circle.c ****   /* check for bounding box */
+ 336:BSP/u8g2/u8g2_circle.c **** #ifdef U8G2_WITH_INTERSECTION
+ 337:BSP/u8g2/u8g2_circle.c ****   {
+ 338:BSP/u8g2/u8g2_circle.c ****     if ( u8g2_IsIntersection(u8g2, x0-rx, y0-ry, x0+rx+1, y0+ry+1) == 0 ) 
+ 339:BSP/u8g2/u8g2_circle.c ****       return;
+ARM GAS  /tmp/ccT14lel.s 			page 27
+
+
+ 340:BSP/u8g2/u8g2_circle.c ****   }
+ 341:BSP/u8g2/u8g2_circle.c **** #endif /* U8G2_WITH_INTERSECTION */
+ 342:BSP/u8g2/u8g2_circle.c ****   
+ 343:BSP/u8g2/u8g2_circle.c ****   u8g2_draw_ellipse(u8g2, x0, y0, rx, ry, option);
+ 344:BSP/u8g2/u8g2_circle.c **** }
+ 345:BSP/u8g2/u8g2_circle.c **** 
+ 346:BSP/u8g2/u8g2_circle.c **** /*==============================================*/
+ 347:BSP/u8g2/u8g2_circle.c **** /* Filled Ellipse */
+ 348:BSP/u8g2/u8g2_circle.c **** 
+ 349:BSP/u8g2/u8g2_circle.c **** static void u8g2_draw_filled_ellipse_section(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_
+ 350:BSP/u8g2/u8g2_circle.c **** static void u8g2_draw_filled_ellipse_section(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_
+ 351:BSP/u8g2/u8g2_circle.c **** {
+ 1059              		.loc 1 351 1 is_stmt 1 view -0
+ 1060              		.cfi_startproc
+ 1061              		@ args = 8, pretend = 0, frame = 0
+ 1062              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1063              		.loc 1 351 1 is_stmt 0 view .LVU291
+ 1064 0000 2DE9F843 		push	{r3, r4, r5, r6, r7, r8, r9, lr}
+ 1065              	.LCFI12:
+ 1066              		.cfi_def_cfa_offset 32
+ 1067              		.cfi_offset 3, -32
+ 1068              		.cfi_offset 4, -28
+ 1069              		.cfi_offset 5, -24
+ 1070              		.cfi_offset 6, -20
+ 1071              		.cfi_offset 7, -16
+ 1072              		.cfi_offset 8, -12
+ 1073              		.cfi_offset 9, -8
+ 1074              		.cfi_offset 14, -4
+ 1075 0004 0746     		mov	r7, r0
+ 1076 0006 8846     		mov	r8, r1
+ 1077 0008 1446     		mov	r4, r2
+ 1078 000a 1E46     		mov	r6, r3
+ 1079 000c 9DF82090 		ldrb	r9, [sp, #32]	@ zero_extendqisi2
+ 1080 0010 9DF82450 		ldrb	r5, [sp, #36]	@ zero_extendqisi2
+ 352:BSP/u8g2/u8g2_circle.c ****     /* upper right */
+ 353:BSP/u8g2/u8g2_circle.c ****     if ( option & U8G2_DRAW_UPPER_RIGHT )
+ 1081              		.loc 1 353 5 is_stmt 1 view .LVU292
+ 1082              		.loc 1 353 8 is_stmt 0 view .LVU293
+ 1083 0014 15F0010F 		tst	r5, #1
+ 1084 0018 0AD1     		bne	.L61
+ 1085              	.LVL135:
+ 1086              	.L56:
+ 354:BSP/u8g2/u8g2_circle.c ****     {
+ 355:BSP/u8g2/u8g2_circle.c ****       u8g2_DrawVLine(u8g2, x0+x, y0-y, y+1);
+ 356:BSP/u8g2/u8g2_circle.c ****     }
+ 357:BSP/u8g2/u8g2_circle.c ****     
+ 358:BSP/u8g2/u8g2_circle.c ****     /* upper left */
+ 359:BSP/u8g2/u8g2_circle.c ****     if ( option & U8G2_DRAW_UPPER_LEFT )
+ 1087              		.loc 1 359 5 is_stmt 1 view .LVU294
+ 1088              		.loc 1 359 8 is_stmt 0 view .LVU295
+ 1089 001a 15F0020F 		tst	r5, #2
+ 1090 001e 11D1     		bne	.L62
+ 1091              	.L57:
+ 360:BSP/u8g2/u8g2_circle.c ****     {
+ 361:BSP/u8g2/u8g2_circle.c ****       u8g2_DrawVLine(u8g2, x0-x, y0-y, y+1);
+ 362:BSP/u8g2/u8g2_circle.c ****     }
+ 363:BSP/u8g2/u8g2_circle.c ****     
+ARM GAS  /tmp/ccT14lel.s 			page 28
+
+
+ 364:BSP/u8g2/u8g2_circle.c ****     /* lower right */
+ 365:BSP/u8g2/u8g2_circle.c ****     if ( option & U8G2_DRAW_LOWER_RIGHT )
+ 1092              		.loc 1 365 5 is_stmt 1 view .LVU296
+ 1093              		.loc 1 365 8 is_stmt 0 view .LVU297
+ 1094 0020 15F0080F 		tst	r5, #8
+ 1095 0024 1AD1     		bne	.L63
+ 1096              	.L58:
+ 366:BSP/u8g2/u8g2_circle.c ****     {
+ 367:BSP/u8g2/u8g2_circle.c ****       u8g2_DrawVLine(u8g2, x0+x, y0, y+1);
+ 368:BSP/u8g2/u8g2_circle.c ****     }
+ 369:BSP/u8g2/u8g2_circle.c ****     
+ 370:BSP/u8g2/u8g2_circle.c ****     /* lower left */
+ 371:BSP/u8g2/u8g2_circle.c ****     if ( option & U8G2_DRAW_LOWER_LEFT )
+ 1097              		.loc 1 371 5 is_stmt 1 view .LVU298
+ 1098              		.loc 1 371 8 is_stmt 0 view .LVU299
+ 1099 0026 15F0040F 		tst	r5, #4
+ 1100 002a 21D1     		bne	.L64
+ 1101              	.L55:
+ 372:BSP/u8g2/u8g2_circle.c ****     {
+ 373:BSP/u8g2/u8g2_circle.c ****       u8g2_DrawVLine(u8g2, x0-x, y0, y+1);
+ 374:BSP/u8g2/u8g2_circle.c ****     }
+ 375:BSP/u8g2/u8g2_circle.c **** }
+ 1102              		.loc 1 375 1 view .LVU300
+ 1103 002c BDE8F883 		pop	{r3, r4, r5, r6, r7, r8, r9, pc}
+ 1104              	.LVL136:
+ 1105              	.L61:
+ 355:BSP/u8g2/u8g2_circle.c ****     }
+ 1106              		.loc 1 355 7 is_stmt 1 view .LVU301
+ 1107 0030 531C     		adds	r3, r2, #1
+ 1108              	.LVL137:
+ 355:BSP/u8g2/u8g2_circle.c ****     }
+ 1109              		.loc 1 355 7 is_stmt 0 view .LVU302
+ 1110 0032 A9EB0202 		sub	r2, r9, r2
+ 1111              	.LVL138:
+ 355:BSP/u8g2/u8g2_circle.c ****     }
+ 1112              		.loc 1 355 7 view .LVU303
+ 1113 0036 7118     		adds	r1, r6, r1
+ 1114              	.LVL139:
+ 355:BSP/u8g2/u8g2_circle.c ****     }
+ 1115              		.loc 1 355 7 view .LVU304
+ 1116 0038 DBB2     		uxtb	r3, r3
+ 1117 003a D2B2     		uxtb	r2, r2
+ 1118 003c C9B2     		uxtb	r1, r1
+ 1119 003e FFF7FEFF 		bl	u8g2_DrawVLine
+ 1120              	.LVL140:
+ 355:BSP/u8g2/u8g2_circle.c ****     }
+ 1121              		.loc 1 355 7 view .LVU305
+ 1122 0042 EAE7     		b	.L56
+ 1123              	.L62:
+ 361:BSP/u8g2/u8g2_circle.c ****     }
+ 1124              		.loc 1 361 7 is_stmt 1 view .LVU306
+ 1125 0044 631C     		adds	r3, r4, #1
+ 1126 0046 A9EB0402 		sub	r2, r9, r4
+ 1127 004a A6EB0801 		sub	r1, r6, r8
+ 1128 004e DBB2     		uxtb	r3, r3
+ 1129 0050 D2B2     		uxtb	r2, r2
+ 1130 0052 C9B2     		uxtb	r1, r1
+ARM GAS  /tmp/ccT14lel.s 			page 29
+
+
+ 1131 0054 3846     		mov	r0, r7
+ 1132 0056 FFF7FEFF 		bl	u8g2_DrawVLine
+ 1133              	.LVL141:
+ 1134 005a E1E7     		b	.L57
+ 1135              	.L63:
+ 367:BSP/u8g2/u8g2_circle.c ****     }
+ 1136              		.loc 1 367 7 view .LVU307
+ 1137 005c 631C     		adds	r3, r4, #1
+ 1138 005e 06EB0801 		add	r1, r6, r8
+ 1139 0062 DBB2     		uxtb	r3, r3
+ 1140 0064 4A46     		mov	r2, r9
+ 1141 0066 C9B2     		uxtb	r1, r1
+ 1142 0068 3846     		mov	r0, r7
+ 1143 006a FFF7FEFF 		bl	u8g2_DrawVLine
+ 1144              	.LVL142:
+ 1145 006e DAE7     		b	.L58
+ 1146              	.L64:
+ 373:BSP/u8g2/u8g2_circle.c ****     }
+ 1147              		.loc 1 373 7 view .LVU308
+ 1148 0070 631C     		adds	r3, r4, #1
+ 1149 0072 A6EB0801 		sub	r1, r6, r8
+ 1150 0076 DBB2     		uxtb	r3, r3
+ 1151 0078 4A46     		mov	r2, r9
+ 1152 007a C9B2     		uxtb	r1, r1
+ 1153 007c 3846     		mov	r0, r7
+ 1154 007e FFF7FEFF 		bl	u8g2_DrawVLine
+ 1155              	.LVL143:
+ 1156              		.loc 1 375 1 is_stmt 0 view .LVU309
+ 1157 0082 D3E7     		b	.L55
+ 1158              		.cfi_endproc
+ 1159              	.LFE9:
+ 1161              		.section	.text.u8g2_draw_filled_ellipse,"ax",%progbits
+ 1162              		.align	1
+ 1163              		.syntax unified
+ 1164              		.thumb
+ 1165              		.thumb_func
+ 1167              	u8g2_draw_filled_ellipse:
+ 1168              	.LVL144:
+ 1169              	.LFB10:
+ 376:BSP/u8g2/u8g2_circle.c **** 
+ 377:BSP/u8g2/u8g2_circle.c **** static void u8g2_draw_filled_ellipse(u8g2_t *u8g2, u8g2_uint_t x0, u8g2_uint_t y0, u8g2_uint_t rx, 
+ 378:BSP/u8g2/u8g2_circle.c **** {
+ 1170              		.loc 1 378 1 is_stmt 1 view -0
+ 1171              		.cfi_startproc
+ 1172              		@ args = 8, pretend = 0, frame = 40
+ 1173              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1174              		.loc 1 378 1 is_stmt 0 view .LVU311
+ 1175 0000 2DE9F04F 		push	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
+ 1176              	.LCFI13:
+ 1177              		.cfi_def_cfa_offset 36
+ 1178              		.cfi_offset 4, -36
+ 1179              		.cfi_offset 5, -32
+ 1180              		.cfi_offset 6, -28
+ 1181              		.cfi_offset 7, -24
+ 1182              		.cfi_offset 8, -20
+ 1183              		.cfi_offset 9, -16
+ 1184              		.cfi_offset 10, -12
+ARM GAS  /tmp/ccT14lel.s 			page 30
+
+
+ 1185              		.cfi_offset 11, -8
+ 1186              		.cfi_offset 14, -4
+ 1187 0004 8DB0     		sub	sp, sp, #52
+ 1188              	.LCFI14:
+ 1189              		.cfi_def_cfa_offset 88
+ 1190 0006 0590     		str	r0, [sp, #20]
+ 1191 0008 0691     		str	r1, [sp, #24]
+ 1192 000a 0792     		str	r2, [sp, #28]
+ 1193 000c 1F46     		mov	r7, r3
+ 1194 000e 9DF85810 		ldrb	r1, [sp, #88]	@ zero_extendqisi2
+ 1195              	.LVL145:
+ 1196              		.loc 1 378 1 view .LVU312
+ 1197 0012 0391     		str	r1, [sp, #12]
+ 1198 0014 9DF85C30 		ldrb	r3, [sp, #92]	@ zero_extendqisi2
+ 1199              	.LVL146:
+ 1200              		.loc 1 378 1 view .LVU313
+ 1201 0018 0893     		str	r3, [sp, #32]
+ 379:BSP/u8g2/u8g2_circle.c ****   u8g2_uint_t x, y;
+ 1202              		.loc 1 379 3 is_stmt 1 view .LVU314
+ 380:BSP/u8g2/u8g2_circle.c ****   u8g2_long_t xchg, ychg;
+ 1203              		.loc 1 380 3 view .LVU315
+ 381:BSP/u8g2/u8g2_circle.c ****   u8g2_long_t err;
+ 1204              		.loc 1 381 3 view .LVU316
+ 382:BSP/u8g2/u8g2_circle.c ****   u8g2_long_t rxrx2;
+ 1205              		.loc 1 382 3 view .LVU317
+ 383:BSP/u8g2/u8g2_circle.c ****   u8g2_long_t ryry2;
+ 1206              		.loc 1 383 3 view .LVU318
+ 384:BSP/u8g2/u8g2_circle.c ****   u8g2_long_t stopx, stopy;
+ 1207              		.loc 1 384 3 view .LVU319
+ 385:BSP/u8g2/u8g2_circle.c ****   
+ 386:BSP/u8g2/u8g2_circle.c ****   rxrx2 = rx;
+ 1208              		.loc 1 386 3 view .LVU320
+ 1209              	.LVL147:
+ 387:BSP/u8g2/u8g2_circle.c ****   rxrx2 *= rx;
+ 1210              		.loc 1 387 3 view .LVU321
+ 1211              		.loc 1 387 9 is_stmt 0 view .LVU322
+ 1212 001a 0997     		str	r7, [sp, #36]
+ 1213 001c 07FB07F2 		mul	r2, r7, r7
+ 1214              	.LVL148:
+ 388:BSP/u8g2/u8g2_circle.c ****   rxrx2 *= 2;
+ 1215              		.loc 1 388 3 is_stmt 1 view .LVU323
+ 1216              		.loc 1 388 9 is_stmt 0 view .LVU324
+ 1217 0020 4FEA420A 		lsl	r10, r2, #1
+ 1218 0024 1FFA8AFA 		uxth	r10, r10
+ 1219              	.LVL149:
+ 389:BSP/u8g2/u8g2_circle.c ****   
+ 390:BSP/u8g2/u8g2_circle.c ****   ryry2 = ry;
+ 1220              		.loc 1 390 3 is_stmt 1 view .LVU325
+ 391:BSP/u8g2/u8g2_circle.c ****   ryry2 *= ry;
+ 1221              		.loc 1 391 3 view .LVU326
+ 1222              		.loc 1 391 9 is_stmt 0 view .LVU327
+ 1223 0028 0A91     		str	r1, [sp, #40]
+ 1224 002a 01FB01F3 		mul	r3, r1, r1
+ 1225 002e 0B93     		str	r3, [sp, #44]
+ 1226              	.LVL150:
+ 392:BSP/u8g2/u8g2_circle.c ****   ryry2 *= 2;
+ 1227              		.loc 1 392 3 is_stmt 1 view .LVU328
+ARM GAS  /tmp/ccT14lel.s 			page 31
+
+
+ 1228              		.loc 1 392 9 is_stmt 0 view .LVU329
+ 1229 0030 4FEA430B 		lsl	fp, r3, #1
+ 1230 0034 1FFA8BFB 		uxth	fp, fp
+ 1231              	.LVL151:
+ 393:BSP/u8g2/u8g2_circle.c ****   
+ 394:BSP/u8g2/u8g2_circle.c ****   x = rx;
+ 1232              		.loc 1 394 3 is_stmt 1 view .LVU330
+ 395:BSP/u8g2/u8g2_circle.c ****   y = 0;
+ 1233              		.loc 1 395 3 view .LVU331
+ 396:BSP/u8g2/u8g2_circle.c ****   
+ 397:BSP/u8g2/u8g2_circle.c ****   xchg = 1;
+ 1234              		.loc 1 397 3 view .LVU332
+ 398:BSP/u8g2/u8g2_circle.c ****   xchg -= rx;
+ 1235              		.loc 1 398 3 view .LVU333
+ 1236              		.loc 1 398 8 is_stmt 0 view .LVU334
+ 1237 0038 C7F10103 		rsb	r3, r7, #1
+ 1238 003c 9BB2     		uxth	r3, r3
+ 1239              	.LVL152:
+ 399:BSP/u8g2/u8g2_circle.c ****   xchg -= rx;
+ 1240              		.loc 1 399 3 is_stmt 1 view .LVU335
+ 1241              		.loc 1 399 8 is_stmt 0 view .LVU336
+ 1242 003e DB1B     		subs	r3, r3, r7
+ 1243              	.LVL153:
+ 1244              		.loc 1 399 8 view .LVU337
+ 1245 0040 9BB2     		uxth	r3, r3
+ 1246              	.LVL154:
+ 400:BSP/u8g2/u8g2_circle.c ****   xchg *= ry;
+ 1247              		.loc 1 400 3 is_stmt 1 view .LVU338
+ 1248              		.loc 1 400 8 is_stmt 0 view .LVU339
+ 1249 0042 01FB03F3 		mul	r3, r1, r3
+ 1250              	.LVL155:
+ 1251              		.loc 1 400 8 view .LVU340
+ 1252 0046 9BB2     		uxth	r3, r3
+ 1253              	.LVL156:
+ 401:BSP/u8g2/u8g2_circle.c ****   xchg *= ry;
+ 1254              		.loc 1 401 3 is_stmt 1 view .LVU341
+ 1255              		.loc 1 401 8 is_stmt 0 view .LVU342
+ 1256 0048 01FB03F3 		mul	r3, r1, r3
+ 1257              	.LVL157:
+ 1258              		.loc 1 401 8 view .LVU343
+ 1259 004c 0FFA83F9 		sxth	r9, r3
+ 1260              	.LVL158:
+ 402:BSP/u8g2/u8g2_circle.c ****   
+ 403:BSP/u8g2/u8g2_circle.c ****   ychg = rx;
+ 1261              		.loc 1 403 3 is_stmt 1 view .LVU344
+ 404:BSP/u8g2/u8g2_circle.c ****   ychg *= rx;
+ 1262              		.loc 1 404 3 view .LVU345
+ 1263              		.loc 1 404 8 is_stmt 0 view .LVU346
+ 1264 0050 13B2     		sxth	r3, r2
+ 1265 0052 0493     		str	r3, [sp, #16]
+ 1266              	.LVL159:
+ 405:BSP/u8g2/u8g2_circle.c ****   
+ 406:BSP/u8g2/u8g2_circle.c ****   err = 0;
+ 1267              		.loc 1 406 3 is_stmt 1 view .LVU347
+ 407:BSP/u8g2/u8g2_circle.c ****   
+ 408:BSP/u8g2/u8g2_circle.c ****   stopx = ryry2;
+ 1268              		.loc 1 408 3 view .LVU348
+ARM GAS  /tmp/ccT14lel.s 			page 32
+
+
+ 409:BSP/u8g2/u8g2_circle.c ****   stopx *= rx;
+ 1269              		.loc 1 409 3 view .LVU349
+ 1270              		.loc 1 409 9 is_stmt 0 view .LVU350
+ 1271 0054 0BFB07F8 		mul	r8, fp, r7
+ 1272 0058 0FFA88F8 		sxth	r8, r8
+ 1273              	.LVL160:
+ 410:BSP/u8g2/u8g2_circle.c ****   stopy = 0;
+ 1274              		.loc 1 410 3 is_stmt 1 view .LVU351
+ 411:BSP/u8g2/u8g2_circle.c ****   
+ 412:BSP/u8g2/u8g2_circle.c ****   while( stopx >= stopy )
+ 1275              		.loc 1 412 3 view .LVU352
+ 410:BSP/u8g2/u8g2_circle.c ****   stopy = 0;
+ 1276              		.loc 1 410 9 is_stmt 0 view .LVU353
+ 1277 005c 0025     		movs	r5, #0
+ 406:BSP/u8g2/u8g2_circle.c ****   
+ 1278              		.loc 1 406 7 view .LVU354
+ 1279 005e 2C46     		mov	r4, r5
+ 395:BSP/u8g2/u8g2_circle.c ****   
+ 1280              		.loc 1 395 5 view .LVU355
+ 1281 0060 2E46     		mov	r6, r5
+ 1282              	.LVL161:
+ 1283              	.L66:
+ 1284              		.loc 1 412 16 is_stmt 1 view .LVU356
+ 1285 0062 A845     		cmp	r8, r5
+ 1286 0064 27DB     		blt	.L73
+ 413:BSP/u8g2/u8g2_circle.c ****   {
+ 414:BSP/u8g2/u8g2_circle.c ****     u8g2_draw_filled_ellipse_section(u8g2, x, y, x0, y0, option);
+ 1287              		.loc 1 414 5 view .LVU357
+ 1288 0066 089B     		ldr	r3, [sp, #32]
+ 1289 0068 0193     		str	r3, [sp, #4]
+ 1290 006a 079B     		ldr	r3, [sp, #28]
+ 1291 006c 0093     		str	r3, [sp]
+ 1292 006e 069B     		ldr	r3, [sp, #24]
+ 1293 0070 3246     		mov	r2, r6
+ 1294 0072 3946     		mov	r1, r7
+ 1295 0074 0598     		ldr	r0, [sp, #20]
+ 1296 0076 FFF7FEFF 		bl	u8g2_draw_filled_ellipse_section
+ 1297              	.LVL162:
+ 415:BSP/u8g2/u8g2_circle.c ****     y++;
+ 1298              		.loc 1 415 5 view .LVU358
+ 1299              		.loc 1 415 6 is_stmt 0 view .LVU359
+ 1300 007a 0136     		adds	r6, r6, #1
+ 1301              	.LVL163:
+ 1302              		.loc 1 415 6 view .LVU360
+ 1303 007c F6B2     		uxtb	r6, r6
+ 1304              	.LVL164:
+ 416:BSP/u8g2/u8g2_circle.c ****     stopy += rxrx2;
+ 1305              		.loc 1 416 5 is_stmt 1 view .LVU361
+ 1306              		.loc 1 416 11 is_stmt 0 view .LVU362
+ 1307 007e 5544     		add	r5, r5, r10
+ 1308              	.LVL165:
+ 1309              		.loc 1 416 11 view .LVU363
+ 1310 0080 2DB2     		sxth	r5, r5
+ 1311              	.LVL166:
+ 417:BSP/u8g2/u8g2_circle.c ****     err += ychg;
+ 1312              		.loc 1 417 5 is_stmt 1 view .LVU364
+ 1313              		.loc 1 417 9 is_stmt 0 view .LVU365
+ARM GAS  /tmp/ccT14lel.s 			page 33
+
+
+ 1314 0082 BDF81030 		ldrh	r3, [sp, #16]
+ 1315 0086 1C44     		add	r4, r4, r3
+ 1316              	.LVL167:
+ 1317              		.loc 1 417 9 view .LVU366
+ 1318 0088 A2B2     		uxth	r2, r4
+ 1319 008a 24B2     		sxth	r4, r4
+ 1320              	.LVL168:
+ 418:BSP/u8g2/u8g2_circle.c ****     ychg += rxrx2;
+ 1321              		.loc 1 418 5 is_stmt 1 view .LVU367
+ 1322              		.loc 1 418 10 is_stmt 0 view .LVU368
+ 1323 008c 5344     		add	r3, r3, r10
+ 1324 008e 1BB2     		sxth	r3, r3
+ 1325 0090 0493     		str	r3, [sp, #16]
+ 1326              	.LVL169:
+ 419:BSP/u8g2/u8g2_circle.c ****     if ( 2*err+xchg > 0 )
+ 1327              		.loc 1 419 5 is_stmt 1 view .LVU369
+ 1328              		.loc 1 419 15 is_stmt 0 view .LVU370
+ 1329 0092 09EB4403 		add	r3, r9, r4, lsl #1
+ 1330              		.loc 1 419 8 view .LVU371
+ 1331 0096 002B     		cmp	r3, #0
+ 1332 0098 E3DD     		ble	.L66
+ 420:BSP/u8g2/u8g2_circle.c ****     {
+ 421:BSP/u8g2/u8g2_circle.c ****       x--;
+ 1333              		.loc 1 421 7 is_stmt 1 view .LVU372
+ 1334              		.loc 1 421 8 is_stmt 0 view .LVU373
+ 1335 009a 013F     		subs	r7, r7, #1
+ 1336              	.LVL170:
+ 1337              		.loc 1 421 8 view .LVU374
+ 1338 009c FFB2     		uxtb	r7, r7
+ 1339              	.LVL171:
+ 422:BSP/u8g2/u8g2_circle.c ****       stopx -= ryry2;
+ 1340              		.loc 1 422 7 is_stmt 1 view .LVU375
+ 1341              		.loc 1 422 13 is_stmt 0 view .LVU376
+ 1342 009e A8EB0B08 		sub	r8, r8, fp
+ 1343              	.LVL172:
+ 1344              		.loc 1 422 13 view .LVU377
+ 1345 00a2 0FFA88F8 		sxth	r8, r8
+ 1346              	.LVL173:
+ 423:BSP/u8g2/u8g2_circle.c ****       err += xchg;
+ 1347              		.loc 1 423 7 is_stmt 1 view .LVU378
+ 1348              		.loc 1 423 11 is_stmt 0 view .LVU379
+ 1349 00a6 1FFA89F9 		uxth	r9, r9
+ 1350              		.loc 1 423 11 view .LVU380
+ 1351 00aa 4A44     		add	r2, r2, r9
+ 1352 00ac 14B2     		sxth	r4, r2
+ 1353              	.LVL174:
+ 424:BSP/u8g2/u8g2_circle.c ****       xchg += ryry2;      
+ 1354              		.loc 1 424 7 is_stmt 1 view .LVU381
+ 1355              		.loc 1 424 12 is_stmt 0 view .LVU382
+ 1356 00ae D944     		add	r9, r9, fp
+ 1357              	.LVL175:
+ 1358              		.loc 1 424 12 view .LVU383
+ 1359 00b0 0FFA89F9 		sxth	r9, r9
+ 1360              	.LVL176:
+ 1361              		.loc 1 424 12 view .LVU384
+ 1362 00b4 D5E7     		b	.L66
+ 1363              	.L73:
+ARM GAS  /tmp/ccT14lel.s 			page 34
+
+
+ 425:BSP/u8g2/u8g2_circle.c ****     }
+ 426:BSP/u8g2/u8g2_circle.c ****   }
+ 427:BSP/u8g2/u8g2_circle.c **** 
+ 428:BSP/u8g2/u8g2_circle.c ****   x = 0;
+ 1364              		.loc 1 428 3 is_stmt 1 view .LVU385
+ 1365              	.LVL177:
+ 429:BSP/u8g2/u8g2_circle.c ****   y = ry;
+ 1366              		.loc 1 429 3 view .LVU386
+ 430:BSP/u8g2/u8g2_circle.c ****   
+ 431:BSP/u8g2/u8g2_circle.c ****   xchg = ry;
+ 1367              		.loc 1 431 3 view .LVU387
+ 432:BSP/u8g2/u8g2_circle.c ****   xchg *= ry;
+ 1368              		.loc 1 432 3 view .LVU388
+ 1369              		.loc 1 432 8 is_stmt 0 view .LVU389
+ 1370 00b6 BDF92C40 		ldrsh	r4, [sp, #44]
+ 1371              	.LVL178:
+ 433:BSP/u8g2/u8g2_circle.c ****   
+ 434:BSP/u8g2/u8g2_circle.c ****   ychg = 1;
+ 1372              		.loc 1 434 3 is_stmt 1 view .LVU390
+ 435:BSP/u8g2/u8g2_circle.c ****   ychg -= ry;
+ 1373              		.loc 1 435 3 view .LVU391
+ 1374              		.loc 1 435 8 is_stmt 0 view .LVU392
+ 1375 00ba 0A9A     		ldr	r2, [sp, #40]
+ 1376 00bc C2F10103 		rsb	r3, r2, #1
+ 1377 00c0 9BB2     		uxth	r3, r3
+ 1378              	.LVL179:
+ 436:BSP/u8g2/u8g2_circle.c ****   ychg -= ry;
+ 1379              		.loc 1 436 3 is_stmt 1 view .LVU393
+ 1380              		.loc 1 436 8 is_stmt 0 view .LVU394
+ 1381 00c2 9B1A     		subs	r3, r3, r2
+ 1382              	.LVL180:
+ 1383              		.loc 1 436 8 view .LVU395
+ 1384 00c4 9BB2     		uxth	r3, r3
+ 1385              	.LVL181:
+ 437:BSP/u8g2/u8g2_circle.c ****   ychg *= rx;
+ 1386              		.loc 1 437 3 is_stmt 1 view .LVU396
+ 1387              		.loc 1 437 8 is_stmt 0 view .LVU397
+ 1388 00c6 0999     		ldr	r1, [sp, #36]
+ 1389 00c8 01FB03F3 		mul	r3, r1, r3
+ 1390              	.LVL182:
+ 1391              		.loc 1 437 8 view .LVU398
+ 1392 00cc 9BB2     		uxth	r3, r3
+ 1393              	.LVL183:
+ 438:BSP/u8g2/u8g2_circle.c ****   ychg *= rx;
+ 1394              		.loc 1 438 3 is_stmt 1 view .LVU399
+ 1395              		.loc 1 438 8 is_stmt 0 view .LVU400
+ 1396 00ce 03FB01F6 		mul	r6, r3, r1
+ 1397 00d2 36B2     		sxth	r6, r6
+ 1398              	.LVL184:
+ 439:BSP/u8g2/u8g2_circle.c ****   
+ 440:BSP/u8g2/u8g2_circle.c ****   err = 0;
+ 1399              		.loc 1 440 3 is_stmt 1 view .LVU401
+ 441:BSP/u8g2/u8g2_circle.c ****   
+ 442:BSP/u8g2/u8g2_circle.c ****   stopx = 0;
+ 1400              		.loc 1 442 3 view .LVU402
+ 443:BSP/u8g2/u8g2_circle.c **** 
+ 444:BSP/u8g2/u8g2_circle.c ****   stopy = rxrx2;
+ARM GAS  /tmp/ccT14lel.s 			page 35
+
+
+ 1401              		.loc 1 444 3 view .LVU403
+ 445:BSP/u8g2/u8g2_circle.c ****   stopy *= ry;
+ 1402              		.loc 1 445 3 view .LVU404
+ 1403              		.loc 1 445 9 is_stmt 0 view .LVU405
+ 1404 00d4 02FB0AF9 		mul	r9, r2, r10
+ 1405 00d8 0FFA89F9 		sxth	r9, r9
+ 1406              	.LVL185:
+ 446:BSP/u8g2/u8g2_circle.c ****   
+ 447:BSP/u8g2/u8g2_circle.c **** 
+ 448:BSP/u8g2/u8g2_circle.c ****   while( stopx <= stopy )
+ 1407              		.loc 1 448 3 is_stmt 1 view .LVU406
+ 442:BSP/u8g2/u8g2_circle.c **** 
+ 1408              		.loc 1 442 9 is_stmt 0 view .LVU407
+ 1409 00dc 0027     		movs	r7, #0
+ 440:BSP/u8g2/u8g2_circle.c ****   
+ 1410              		.loc 1 440 7 view .LVU408
+ 1411 00de 3D46     		mov	r5, r7
+ 428:BSP/u8g2/u8g2_circle.c ****   y = ry;
+ 1412              		.loc 1 428 5 view .LVU409
+ 1413 00e0 B846     		mov	r8, r7
+ 1414              	.LVL186:
+ 1415              	.L69:
+ 1416              		.loc 1 448 16 is_stmt 1 view .LVU410
+ 1417 00e2 4F45     		cmp	r7, r9
+ 1418 00e4 27DC     		bgt	.L74
+ 449:BSP/u8g2/u8g2_circle.c ****   {
+ 450:BSP/u8g2/u8g2_circle.c ****     u8g2_draw_filled_ellipse_section(u8g2, x, y, x0, y0, option);
+ 1419              		.loc 1 450 5 view .LVU411
+ 1420 00e6 089B     		ldr	r3, [sp, #32]
+ 1421 00e8 0193     		str	r3, [sp, #4]
+ 1422 00ea 079B     		ldr	r3, [sp, #28]
+ 1423 00ec 0093     		str	r3, [sp]
+ 1424 00ee 069B     		ldr	r3, [sp, #24]
+ 1425 00f0 039A     		ldr	r2, [sp, #12]
+ 1426 00f2 4146     		mov	r1, r8
+ 1427 00f4 0598     		ldr	r0, [sp, #20]
+ 1428 00f6 FFF7FEFF 		bl	u8g2_draw_filled_ellipse_section
+ 1429              	.LVL187:
+ 451:BSP/u8g2/u8g2_circle.c ****     x++;
+ 1430              		.loc 1 451 5 view .LVU412
+ 1431              		.loc 1 451 6 is_stmt 0 view .LVU413
+ 1432 00fa 08F10108 		add	r8, r8, #1
+ 1433              	.LVL188:
+ 1434              		.loc 1 451 6 view .LVU414
+ 1435 00fe 5FFA88F8 		uxtb	r8, r8
+ 1436              	.LVL189:
+ 452:BSP/u8g2/u8g2_circle.c ****     stopx += ryry2;
+ 1437              		.loc 1 452 5 is_stmt 1 view .LVU415
+ 1438              		.loc 1 452 11 is_stmt 0 view .LVU416
+ 1439 0102 5F44     		add	r7, r7, fp
+ 1440              	.LVL190:
+ 1441              		.loc 1 452 11 view .LVU417
+ 1442 0104 3FB2     		sxth	r7, r7
+ 1443              	.LVL191:
+ 453:BSP/u8g2/u8g2_circle.c ****     err += xchg;
+ 1444              		.loc 1 453 5 is_stmt 1 view .LVU418
+ 1445              		.loc 1 453 9 is_stmt 0 view .LVU419
+ARM GAS  /tmp/ccT14lel.s 			page 36
+
+
+ 1446 0106 A4B2     		uxth	r4, r4
+ 1447              		.loc 1 453 9 view .LVU420
+ 1448 0108 2544     		add	r5, r5, r4
+ 1449              	.LVL192:
+ 1450              		.loc 1 453 9 view .LVU421
+ 1451 010a ABB2     		uxth	r3, r5
+ 1452 010c 2DB2     		sxth	r5, r5
+ 1453              	.LVL193:
+ 454:BSP/u8g2/u8g2_circle.c ****     xchg += ryry2;
+ 1454              		.loc 1 454 5 is_stmt 1 view .LVU422
+ 1455              		.loc 1 454 10 is_stmt 0 view .LVU423
+ 1456 010e 5C44     		add	r4, r4, fp
+ 1457              	.LVL194:
+ 1458              		.loc 1 454 10 view .LVU424
+ 1459 0110 24B2     		sxth	r4, r4
+ 1460              	.LVL195:
+ 455:BSP/u8g2/u8g2_circle.c ****     if ( 2*err+ychg > 0 )
+ 1461              		.loc 1 455 5 is_stmt 1 view .LVU425
+ 1462              		.loc 1 455 15 is_stmt 0 view .LVU426
+ 1463 0112 06EB4502 		add	r2, r6, r5, lsl #1
+ 1464              		.loc 1 455 8 view .LVU427
+ 1465 0116 002A     		cmp	r2, #0
+ 1466 0118 E3DD     		ble	.L69
+ 456:BSP/u8g2/u8g2_circle.c ****     {
+ 457:BSP/u8g2/u8g2_circle.c ****       y--;
+ 1467              		.loc 1 457 7 is_stmt 1 view .LVU428
+ 1468              		.loc 1 457 8 is_stmt 0 view .LVU429
+ 1469 011a 039A     		ldr	r2, [sp, #12]
+ 1470 011c 013A     		subs	r2, r2, #1
+ 1471 011e D2B2     		uxtb	r2, r2
+ 1472 0120 0392     		str	r2, [sp, #12]
+ 1473              	.LVL196:
+ 458:BSP/u8g2/u8g2_circle.c ****       stopy -= rxrx2;
+ 1474              		.loc 1 458 7 is_stmt 1 view .LVU430
+ 1475              		.loc 1 458 13 is_stmt 0 view .LVU431
+ 1476 0122 A9EB0A09 		sub	r9, r9, r10
+ 1477              	.LVL197:
+ 1478              		.loc 1 458 13 view .LVU432
+ 1479 0126 0FFA89F9 		sxth	r9, r9
+ 1480              	.LVL198:
+ 459:BSP/u8g2/u8g2_circle.c ****       err += ychg;
+ 1481              		.loc 1 459 7 is_stmt 1 view .LVU433
+ 1482              		.loc 1 459 11 is_stmt 0 view .LVU434
+ 1483 012a B6B2     		uxth	r6, r6
+ 1484              		.loc 1 459 11 view .LVU435
+ 1485 012c 3344     		add	r3, r3, r6
+ 1486 012e 1DB2     		sxth	r5, r3
+ 1487              	.LVL199:
+ 460:BSP/u8g2/u8g2_circle.c ****       ychg += rxrx2;
+ 1488              		.loc 1 460 7 is_stmt 1 view .LVU436
+ 1489              		.loc 1 460 12 is_stmt 0 view .LVU437
+ 1490 0130 5644     		add	r6, r6, r10
+ 1491              	.LVL200:
+ 1492              		.loc 1 460 12 view .LVU438
+ 1493 0132 36B2     		sxth	r6, r6
+ 1494              	.LVL201:
+ 1495              		.loc 1 460 12 view .LVU439
+ARM GAS  /tmp/ccT14lel.s 			page 37
+
+
+ 1496 0134 D5E7     		b	.L69
+ 1497              	.L74:
+ 461:BSP/u8g2/u8g2_circle.c ****     }
+ 462:BSP/u8g2/u8g2_circle.c ****   }
+ 463:BSP/u8g2/u8g2_circle.c ****   
+ 464:BSP/u8g2/u8g2_circle.c **** }
+ 1498              		.loc 1 464 1 view .LVU440
+ 1499 0136 0DB0     		add	sp, sp, #52
+ 1500              	.LCFI15:
+ 1501              		.cfi_def_cfa_offset 36
+ 1502              		@ sp needed
+ 1503 0138 BDE8F08F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 1504              		.loc 1 464 1 view .LVU441
+ 1505              		.cfi_endproc
+ 1506              	.LFE10:
+ 1508              		.section	.text.u8g2_DrawCircle,"ax",%progbits
+ 1509              		.align	1
+ 1510              		.global	u8g2_DrawCircle
+ 1511              		.syntax unified
+ 1512              		.thumb
+ 1513              		.thumb_func
+ 1515              	u8g2_DrawCircle:
+ 1516              	.LVL202:
+ 1517              	.LFB2:
+ 110:BSP/u8g2/u8g2_circle.c ****   /* check for bounding box */
+ 1518              		.loc 1 110 1 is_stmt 1 view -0
+ 1519              		.cfi_startproc
+ 1520              		@ args = 4, pretend = 0, frame = 0
+ 1521              		@ frame_needed = 0, uses_anonymous_args = 0
+ 110:BSP/u8g2/u8g2_circle.c ****   /* check for bounding box */
+ 1522              		.loc 1 110 1 is_stmt 0 view .LVU443
+ 1523 0000 2DE9F041 		push	{r4, r5, r6, r7, r8, lr}
+ 1524              	.LCFI16:
+ 1525              		.cfi_def_cfa_offset 24
+ 1526              		.cfi_offset 4, -24
+ 1527              		.cfi_offset 5, -20
+ 1528              		.cfi_offset 6, -16
+ 1529              		.cfi_offset 7, -12
+ 1530              		.cfi_offset 8, -8
+ 1531              		.cfi_offset 14, -4
+ 1532 0004 82B0     		sub	sp, sp, #8
+ 1533              	.LCFI17:
+ 1534              		.cfi_def_cfa_offset 32
+ 1535 0006 8046     		mov	r8, r0
+ 1536 0008 0E46     		mov	r6, r1
+ 1537 000a 1746     		mov	r7, r2
+ 1538 000c 1D46     		mov	r5, r3
+ 114:BSP/u8g2/u8g2_circle.c ****       return;
+ 1539              		.loc 1 114 5 is_stmt 1 view .LVU444
+ 114:BSP/u8g2/u8g2_circle.c ****       return;
+ 1540              		.loc 1 114 54 is_stmt 0 view .LVU445
+ 1541 000e CB18     		adds	r3, r1, r3
+ 1542              	.LVL203:
+ 114:BSP/u8g2/u8g2_circle.c ****       return;
+ 1543              		.loc 1 114 54 view .LVU446
+ 1544 0010 DBB2     		uxtb	r3, r3
+ 114:BSP/u8g2/u8g2_circle.c ****       return;
+ARM GAS  /tmp/ccT14lel.s 			page 38
+
+
+ 1545              		.loc 1 114 64 view .LVU447
+ 1546 0012 AC18     		adds	r4, r5, r2
+ 1547 0014 E4B2     		uxtb	r4, r4
+ 114:BSP/u8g2/u8g2_circle.c ****       return;
+ 1548              		.loc 1 114 10 view .LVU448
+ 1549 0016 0133     		adds	r3, r3, #1
+ 1550 0018 521B     		subs	r2, r2, r5
+ 1551              	.LVL204:
+ 114:BSP/u8g2/u8g2_circle.c ****       return;
+ 1552              		.loc 1 114 10 view .LVU449
+ 1553 001a 491B     		subs	r1, r1, r5
+ 1554              	.LVL205:
+ 114:BSP/u8g2/u8g2_circle.c ****       return;
+ 1555              		.loc 1 114 10 view .LVU450
+ 1556 001c 0134     		adds	r4, r4, #1
+ 1557 001e E4B2     		uxtb	r4, r4
+ 1558 0020 0094     		str	r4, [sp]
+ 1559 0022 DBB2     		uxtb	r3, r3
+ 1560 0024 D2B2     		uxtb	r2, r2
+ 1561 0026 C9B2     		uxtb	r1, r1
+ 1562 0028 FFF7FEFF 		bl	u8g2_IsIntersection
+ 1563              	.LVL206:
+ 114:BSP/u8g2/u8g2_circle.c ****       return;
+ 1564              		.loc 1 114 8 discriminator 1 view .LVU451
+ 1565 002c 10B9     		cbnz	r0, .L78
+ 1566              	.L75:
+ 122:BSP/u8g2/u8g2_circle.c **** 
+ 1567              		.loc 1 122 1 view .LVU452
+ 1568 002e 02B0     		add	sp, sp, #8
+ 1569              	.LCFI18:
+ 1570              		.cfi_remember_state
+ 1571              		.cfi_def_cfa_offset 24
+ 1572              		@ sp needed
+ 1573 0030 BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
+ 1574              	.LVL207:
+ 1575              	.L78:
+ 1576              	.LCFI19:
+ 1577              		.cfi_restore_state
+ 121:BSP/u8g2/u8g2_circle.c **** }
+ 1578              		.loc 1 121 3 is_stmt 1 view .LVU453
+ 1579 0034 9DF82030 		ldrb	r3, [sp, #32]	@ zero_extendqisi2
+ 1580 0038 0093     		str	r3, [sp]
+ 1581 003a 2B46     		mov	r3, r5
+ 1582 003c 3A46     		mov	r2, r7
+ 1583 003e 3146     		mov	r1, r6
+ 1584 0040 4046     		mov	r0, r8
+ 1585 0042 FFF7FEFF 		bl	u8g2_draw_circle
+ 1586              	.LVL208:
+ 1587 0046 F2E7     		b	.L75
+ 1588              		.cfi_endproc
+ 1589              	.LFE2:
+ 1591              		.section	.text.u8g2_DrawDisc,"ax",%progbits
+ 1592              		.align	1
+ 1593              		.global	u8g2_DrawDisc
+ 1594              		.syntax unified
+ 1595              		.thumb
+ 1596              		.thumb_func
+ARM GAS  /tmp/ccT14lel.s 			page 39
+
+
+ 1598              	u8g2_DrawDisc:
+ 1599              	.LVL209:
+ 1600              	.LFB5:
+ 196:BSP/u8g2/u8g2_circle.c ****   /* check for bounding box */
+ 1601              		.loc 1 196 1 view -0
+ 1602              		.cfi_startproc
+ 1603              		@ args = 4, pretend = 0, frame = 0
+ 1604              		@ frame_needed = 0, uses_anonymous_args = 0
+ 196:BSP/u8g2/u8g2_circle.c ****   /* check for bounding box */
+ 1605              		.loc 1 196 1 is_stmt 0 view .LVU455
+ 1606 0000 2DE9F041 		push	{r4, r5, r6, r7, r8, lr}
+ 1607              	.LCFI20:
+ 1608              		.cfi_def_cfa_offset 24
+ 1609              		.cfi_offset 4, -24
+ 1610              		.cfi_offset 5, -20
+ 1611              		.cfi_offset 6, -16
+ 1612              		.cfi_offset 7, -12
+ 1613              		.cfi_offset 8, -8
+ 1614              		.cfi_offset 14, -4
+ 1615 0004 82B0     		sub	sp, sp, #8
+ 1616              	.LCFI21:
+ 1617              		.cfi_def_cfa_offset 32
+ 1618 0006 8046     		mov	r8, r0
+ 1619 0008 0E46     		mov	r6, r1
+ 1620 000a 1746     		mov	r7, r2
+ 1621 000c 1D46     		mov	r5, r3
+ 200:BSP/u8g2/u8g2_circle.c ****       return;
+ 1622              		.loc 1 200 5 is_stmt 1 view .LVU456
+ 200:BSP/u8g2/u8g2_circle.c ****       return;
+ 1623              		.loc 1 200 54 is_stmt 0 view .LVU457
+ 1624 000e CB18     		adds	r3, r1, r3
+ 1625              	.LVL210:
+ 200:BSP/u8g2/u8g2_circle.c ****       return;
+ 1626              		.loc 1 200 54 view .LVU458
+ 1627 0010 DBB2     		uxtb	r3, r3
+ 200:BSP/u8g2/u8g2_circle.c ****       return;
+ 1628              		.loc 1 200 64 view .LVU459
+ 1629 0012 AC18     		adds	r4, r5, r2
+ 1630 0014 E4B2     		uxtb	r4, r4
+ 200:BSP/u8g2/u8g2_circle.c ****       return;
+ 1631              		.loc 1 200 10 view .LVU460
+ 1632 0016 0133     		adds	r3, r3, #1
+ 1633 0018 521B     		subs	r2, r2, r5
+ 1634              	.LVL211:
+ 200:BSP/u8g2/u8g2_circle.c ****       return;
+ 1635              		.loc 1 200 10 view .LVU461
+ 1636 001a 491B     		subs	r1, r1, r5
+ 1637              	.LVL212:
+ 200:BSP/u8g2/u8g2_circle.c ****       return;
+ 1638              		.loc 1 200 10 view .LVU462
+ 1639 001c 0134     		adds	r4, r4, #1
+ 1640 001e E4B2     		uxtb	r4, r4
+ 1641 0020 0094     		str	r4, [sp]
+ 1642 0022 DBB2     		uxtb	r3, r3
+ 1643 0024 D2B2     		uxtb	r2, r2
+ 1644 0026 C9B2     		uxtb	r1, r1
+ 1645 0028 FFF7FEFF 		bl	u8g2_IsIntersection
+ARM GAS  /tmp/ccT14lel.s 			page 40
+
+
+ 1646              	.LVL213:
+ 200:BSP/u8g2/u8g2_circle.c ****       return;
+ 1647              		.loc 1 200 8 discriminator 1 view .LVU463
+ 1648 002c 10B9     		cbnz	r0, .L82
+ 1649              	.L79:
+ 207:BSP/u8g2/u8g2_circle.c **** 
+ 1650              		.loc 1 207 1 view .LVU464
+ 1651 002e 02B0     		add	sp, sp, #8
+ 1652              	.LCFI22:
+ 1653              		.cfi_remember_state
+ 1654              		.cfi_def_cfa_offset 24
+ 1655              		@ sp needed
+ 1656 0030 BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
+ 1657              	.LVL214:
+ 1658              	.L82:
+ 1659              	.LCFI23:
+ 1660              		.cfi_restore_state
+ 206:BSP/u8g2/u8g2_circle.c **** }
+ 1661              		.loc 1 206 3 is_stmt 1 view .LVU465
+ 1662 0034 9DF82030 		ldrb	r3, [sp, #32]	@ zero_extendqisi2
+ 1663 0038 0093     		str	r3, [sp]
+ 1664 003a 2B46     		mov	r3, r5
+ 1665 003c 3A46     		mov	r2, r7
+ 1666 003e 3146     		mov	r1, r6
+ 1667 0040 4046     		mov	r0, r8
+ 1668 0042 FFF7FEFF 		bl	u8g2_draw_disc
+ 1669              	.LVL215:
+ 1670 0046 F2E7     		b	.L79
+ 1671              		.cfi_endproc
+ 1672              	.LFE5:
+ 1674              		.section	.text.u8g2_DrawEllipse,"ax",%progbits
+ 1675              		.align	1
+ 1676              		.global	u8g2_DrawEllipse
+ 1677              		.syntax unified
+ 1678              		.thumb
+ 1679              		.thumb_func
+ 1681              	u8g2_DrawEllipse:
+ 1682              	.LVL216:
+ 1683              	.LFB8:
+ 334:BSP/u8g2/u8g2_circle.c ****   /* check for bounding box */
+ 1684              		.loc 1 334 1 view -0
+ 1685              		.cfi_startproc
+ 1686              		@ args = 8, pretend = 0, frame = 0
+ 1687              		@ frame_needed = 0, uses_anonymous_args = 0
+ 334:BSP/u8g2/u8g2_circle.c ****   /* check for bounding box */
+ 1688              		.loc 1 334 1 is_stmt 0 view .LVU467
+ 1689 0000 2DE9F043 		push	{r4, r5, r6, r7, r8, r9, lr}
+ 1690              	.LCFI24:
+ 1691              		.cfi_def_cfa_offset 28
+ 1692              		.cfi_offset 4, -28
+ 1693              		.cfi_offset 5, -24
+ 1694              		.cfi_offset 6, -20
+ 1695              		.cfi_offset 7, -16
+ 1696              		.cfi_offset 8, -12
+ 1697              		.cfi_offset 9, -8
+ 1698              		.cfi_offset 14, -4
+ 1699 0004 83B0     		sub	sp, sp, #12
+ARM GAS  /tmp/ccT14lel.s 			page 41
+
+
+ 1700              	.LCFI25:
+ 1701              		.cfi_def_cfa_offset 40
+ 1702 0006 8046     		mov	r8, r0
+ 1703 0008 0D46     		mov	r5, r1
+ 1704 000a 1646     		mov	r6, r2
+ 1705 000c 1F46     		mov	r7, r3
+ 1706 000e 9DF82890 		ldrb	r9, [sp, #40]	@ zero_extendqisi2
+ 338:BSP/u8g2/u8g2_circle.c ****       return;
+ 1707              		.loc 1 338 5 is_stmt 1 view .LVU468
+ 338:BSP/u8g2/u8g2_circle.c ****       return;
+ 1708              		.loc 1 338 52 is_stmt 0 view .LVU469
+ 1709 0012 CB18     		adds	r3, r1, r3
+ 1710              	.LVL217:
+ 338:BSP/u8g2/u8g2_circle.c ****       return;
+ 1711              		.loc 1 338 52 view .LVU470
+ 1712 0014 DBB2     		uxtb	r3, r3
+ 338:BSP/u8g2/u8g2_circle.c ****       return;
+ 1713              		.loc 1 338 61 view .LVU471
+ 1714 0016 02EB0904 		add	r4, r2, r9
+ 1715 001a E4B2     		uxtb	r4, r4
+ 338:BSP/u8g2/u8g2_circle.c ****       return;
+ 1716              		.loc 1 338 10 view .LVU472
+ 1717 001c 0133     		adds	r3, r3, #1
+ 1718 001e A2EB0902 		sub	r2, r2, r9
+ 1719              	.LVL218:
+ 338:BSP/u8g2/u8g2_circle.c ****       return;
+ 1720              		.loc 1 338 10 view .LVU473
+ 1721 0022 C91B     		subs	r1, r1, r7
+ 1722              	.LVL219:
+ 338:BSP/u8g2/u8g2_circle.c ****       return;
+ 1723              		.loc 1 338 10 view .LVU474
+ 1724 0024 0134     		adds	r4, r4, #1
+ 1725 0026 E4B2     		uxtb	r4, r4
+ 1726 0028 0094     		str	r4, [sp]
+ 1727 002a DBB2     		uxtb	r3, r3
+ 1728 002c D2B2     		uxtb	r2, r2
+ 1729 002e C9B2     		uxtb	r1, r1
+ 1730 0030 FFF7FEFF 		bl	u8g2_IsIntersection
+ 1731              	.LVL220:
+ 338:BSP/u8g2/u8g2_circle.c ****       return;
+ 1732              		.loc 1 338 8 discriminator 1 view .LVU475
+ 1733 0034 10B9     		cbnz	r0, .L86
+ 1734              	.L83:
+ 344:BSP/u8g2/u8g2_circle.c **** 
+ 1735              		.loc 1 344 1 view .LVU476
+ 1736 0036 03B0     		add	sp, sp, #12
+ 1737              	.LCFI26:
+ 1738              		.cfi_remember_state
+ 1739              		.cfi_def_cfa_offset 28
+ 1740              		@ sp needed
+ 1741 0038 BDE8F083 		pop	{r4, r5, r6, r7, r8, r9, pc}
+ 1742              	.LVL221:
+ 1743              	.L86:
+ 1744              	.LCFI27:
+ 1745              		.cfi_restore_state
+ 343:BSP/u8g2/u8g2_circle.c **** }
+ 1746              		.loc 1 343 3 is_stmt 1 view .LVU477
+ARM GAS  /tmp/ccT14lel.s 			page 42
+
+
+ 1747 003c 9DF82C30 		ldrb	r3, [sp, #44]	@ zero_extendqisi2
+ 1748 0040 0193     		str	r3, [sp, #4]
+ 1749 0042 CDF80090 		str	r9, [sp]
+ 1750 0046 3B46     		mov	r3, r7
+ 1751 0048 3246     		mov	r2, r6
+ 1752 004a 2946     		mov	r1, r5
+ 1753 004c 4046     		mov	r0, r8
+ 1754 004e FFF7FEFF 		bl	u8g2_draw_ellipse
+ 1755              	.LVL222:
+ 1756 0052 F0E7     		b	.L83
+ 1757              		.cfi_endproc
+ 1758              	.LFE8:
+ 1760              		.section	.text.u8g2_DrawFilledEllipse,"ax",%progbits
+ 1761              		.align	1
+ 1762              		.global	u8g2_DrawFilledEllipse
+ 1763              		.syntax unified
+ 1764              		.thumb
+ 1765              		.thumb_func
+ 1767              	u8g2_DrawFilledEllipse:
+ 1768              	.LVL223:
+ 1769              	.LFB11:
+ 465:BSP/u8g2/u8g2_circle.c **** 
+ 466:BSP/u8g2/u8g2_circle.c **** void u8g2_DrawFilledEllipse(u8g2_t *u8g2, u8g2_uint_t x0, u8g2_uint_t y0, u8g2_uint_t rx, u8g2_uint
+ 467:BSP/u8g2/u8g2_circle.c **** {
+ 1770              		.loc 1 467 1 view -0
+ 1771              		.cfi_startproc
+ 1772              		@ args = 8, pretend = 0, frame = 0
+ 1773              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1774              		.loc 1 467 1 is_stmt 0 view .LVU479
+ 1775 0000 2DE9F043 		push	{r4, r5, r6, r7, r8, r9, lr}
+ 1776              	.LCFI28:
+ 1777              		.cfi_def_cfa_offset 28
+ 1778              		.cfi_offset 4, -28
+ 1779              		.cfi_offset 5, -24
+ 1780              		.cfi_offset 6, -20
+ 1781              		.cfi_offset 7, -16
+ 1782              		.cfi_offset 8, -12
+ 1783              		.cfi_offset 9, -8
+ 1784              		.cfi_offset 14, -4
+ 1785 0004 83B0     		sub	sp, sp, #12
+ 1786              	.LCFI29:
+ 1787              		.cfi_def_cfa_offset 40
+ 1788 0006 8046     		mov	r8, r0
+ 1789 0008 0D46     		mov	r5, r1
+ 1790 000a 1646     		mov	r6, r2
+ 1791 000c 1F46     		mov	r7, r3
+ 1792 000e 9DF82890 		ldrb	r9, [sp, #40]	@ zero_extendqisi2
+ 468:BSP/u8g2/u8g2_circle.c ****   /* check for bounding box */
+ 469:BSP/u8g2/u8g2_circle.c **** #ifdef U8G2_WITH_INTERSECTION
+ 470:BSP/u8g2/u8g2_circle.c ****   {
+ 471:BSP/u8g2/u8g2_circle.c ****     if ( u8g2_IsIntersection(u8g2, x0-rx, y0-ry, x0+rx+1, y0+ry+1) == 0 ) 
+ 1793              		.loc 1 471 5 is_stmt 1 view .LVU480
+ 1794              		.loc 1 471 52 is_stmt 0 view .LVU481
+ 1795 0012 CB18     		adds	r3, r1, r3
+ 1796              	.LVL224:
+ 1797              		.loc 1 471 52 view .LVU482
+ 1798 0014 DBB2     		uxtb	r3, r3
+ARM GAS  /tmp/ccT14lel.s 			page 43
+
+
+ 1799              		.loc 1 471 61 view .LVU483
+ 1800 0016 02EB0904 		add	r4, r2, r9
+ 1801 001a E4B2     		uxtb	r4, r4
+ 1802              		.loc 1 471 10 view .LVU484
+ 1803 001c 0133     		adds	r3, r3, #1
+ 1804 001e A2EB0902 		sub	r2, r2, r9
+ 1805              	.LVL225:
+ 1806              		.loc 1 471 10 view .LVU485
+ 1807 0022 C91B     		subs	r1, r1, r7
+ 1808              	.LVL226:
+ 1809              		.loc 1 471 10 view .LVU486
+ 1810 0024 0134     		adds	r4, r4, #1
+ 1811 0026 E4B2     		uxtb	r4, r4
+ 1812 0028 0094     		str	r4, [sp]
+ 1813 002a DBB2     		uxtb	r3, r3
+ 1814 002c D2B2     		uxtb	r2, r2
+ 1815 002e C9B2     		uxtb	r1, r1
+ 1816 0030 FFF7FEFF 		bl	u8g2_IsIntersection
+ 1817              	.LVL227:
+ 1818              		.loc 1 471 8 discriminator 1 view .LVU487
+ 1819 0034 10B9     		cbnz	r0, .L90
+ 1820              	.L87:
+ 472:BSP/u8g2/u8g2_circle.c ****       return;
+ 473:BSP/u8g2/u8g2_circle.c ****   }
+ 474:BSP/u8g2/u8g2_circle.c **** #endif /* U8G2_WITH_INTERSECTION */
+ 475:BSP/u8g2/u8g2_circle.c ****   
+ 476:BSP/u8g2/u8g2_circle.c ****   u8g2_draw_filled_ellipse(u8g2, x0, y0, rx, ry, option);
+ 477:BSP/u8g2/u8g2_circle.c **** }
+ 1821              		.loc 1 477 1 view .LVU488
+ 1822 0036 03B0     		add	sp, sp, #12
+ 1823              	.LCFI30:
+ 1824              		.cfi_remember_state
+ 1825              		.cfi_def_cfa_offset 28
+ 1826              		@ sp needed
+ 1827 0038 BDE8F083 		pop	{r4, r5, r6, r7, r8, r9, pc}
+ 1828              	.LVL228:
+ 1829              	.L90:
+ 1830              	.LCFI31:
+ 1831              		.cfi_restore_state
+ 476:BSP/u8g2/u8g2_circle.c **** }
+ 1832              		.loc 1 476 3 is_stmt 1 view .LVU489
+ 1833 003c 9DF82C30 		ldrb	r3, [sp, #44]	@ zero_extendqisi2
+ 1834 0040 0193     		str	r3, [sp, #4]
+ 1835 0042 CDF80090 		str	r9, [sp]
+ 1836 0046 3B46     		mov	r3, r7
+ 1837 0048 3246     		mov	r2, r6
+ 1838 004a 2946     		mov	r1, r5
+ 1839 004c 4046     		mov	r0, r8
+ 1840 004e FFF7FEFF 		bl	u8g2_draw_filled_ellipse
+ 1841              	.LVL229:
+ 1842 0052 F0E7     		b	.L87
+ 1843              		.cfi_endproc
+ 1844              	.LFE11:
+ 1846              		.text
+ 1847              	.Letext0:
+ 1848              		.file 2 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ 1849              		.file 3 "BSP/u8g2/u8x8.h"
+ARM GAS  /tmp/ccT14lel.s 			page 44
+
+
+ 1850              		.file 4 "BSP/u8g2/u8g2.h"
+ARM GAS  /tmp/ccT14lel.s 			page 45
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 u8g2_circle.c
+     /tmp/ccT14lel.s:19     .text.u8g2_draw_circle_section:00000000 $t
+     /tmp/ccT14lel.s:24     .text.u8g2_draw_circle_section:00000000 u8g2_draw_circle_section
+     /tmp/ccT14lel.s:153    .text.u8g2_draw_circle:00000000 $t
+     /tmp/ccT14lel.s:158    .text.u8g2_draw_circle:00000000 u8g2_draw_circle
+     /tmp/ccT14lel.s:303    .text.u8g2_draw_ellipse_section:00000000 $t
+     /tmp/ccT14lel.s:308    .text.u8g2_draw_ellipse_section:00000000 u8g2_draw_ellipse_section
+     /tmp/ccT14lel.s:406    .text.u8g2_draw_ellipse:00000000 $t
+     /tmp/ccT14lel.s:411    .text.u8g2_draw_ellipse:00000000 u8g2_draw_ellipse
+     /tmp/ccT14lel.s:753    .text.u8g2_draw_disc_section:00000000 $t
+     /tmp/ccT14lel.s:758    .text.u8g2_draw_disc_section:00000000 u8g2_draw_disc_section
+     /tmp/ccT14lel.s:901    .text.u8g2_draw_disc:00000000 $t
+     /tmp/ccT14lel.s:906    .text.u8g2_draw_disc:00000000 u8g2_draw_disc
+     /tmp/ccT14lel.s:1051   .text.u8g2_draw_filled_ellipse_section:00000000 $t
+     /tmp/ccT14lel.s:1056   .text.u8g2_draw_filled_ellipse_section:00000000 u8g2_draw_filled_ellipse_section
+     /tmp/ccT14lel.s:1162   .text.u8g2_draw_filled_ellipse:00000000 $t
+     /tmp/ccT14lel.s:1167   .text.u8g2_draw_filled_ellipse:00000000 u8g2_draw_filled_ellipse
+     /tmp/ccT14lel.s:1509   .text.u8g2_DrawCircle:00000000 $t
+     /tmp/ccT14lel.s:1515   .text.u8g2_DrawCircle:00000000 u8g2_DrawCircle
+     /tmp/ccT14lel.s:1592   .text.u8g2_DrawDisc:00000000 $t
+     /tmp/ccT14lel.s:1598   .text.u8g2_DrawDisc:00000000 u8g2_DrawDisc
+     /tmp/ccT14lel.s:1675   .text.u8g2_DrawEllipse:00000000 $t
+     /tmp/ccT14lel.s:1681   .text.u8g2_DrawEllipse:00000000 u8g2_DrawEllipse
+     /tmp/ccT14lel.s:1761   .text.u8g2_DrawFilledEllipse:00000000 $t
+     /tmp/ccT14lel.s:1767   .text.u8g2_DrawFilledEllipse:00000000 u8g2_DrawFilledEllipse
+
+UNDEFINED SYMBOLS
+u8g2_DrawPixel
+u8g2_DrawVLine
+u8g2_IsIntersection

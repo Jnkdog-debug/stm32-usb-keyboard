@@ -1,0 +1,402 @@
+ARM GAS  /tmp/ccd4dzaT.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.arch armv7-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"u8g2_kerning.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.file 1 "BSP/u8g2/u8g2_kerning.c"
+  18              		.section	.text.u8g2_GetKerning,"ax",%progbits
+  19              		.align	1
+  20              		.global	u8g2_GetKerning
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  25              	u8g2_GetKerning:
+  26              	.LVL0:
+  27              	.LFB0:
+   1:BSP/u8g2/u8g2_kerning.c **** /*
+   2:BSP/u8g2/u8g2_kerning.c **** 
+   3:BSP/u8g2/u8g2_kerning.c ****   u8g2_kerning.c
+   4:BSP/u8g2/u8g2_kerning.c **** 
+   5:BSP/u8g2/u8g2_kerning.c ****   Universal 8bit Graphics Library (https://github.com/olikraus/u8g2/)
+   6:BSP/u8g2/u8g2_kerning.c **** 
+   7:BSP/u8g2/u8g2_kerning.c ****   Copyright (c) 2016, olikraus@gmail.com
+   8:BSP/u8g2/u8g2_kerning.c ****   All rights reserved.
+   9:BSP/u8g2/u8g2_kerning.c **** 
+  10:BSP/u8g2/u8g2_kerning.c ****   Redistribution and use in source and binary forms, with or without modification, 
+  11:BSP/u8g2/u8g2_kerning.c ****   are permitted provided that the following conditions are met:
+  12:BSP/u8g2/u8g2_kerning.c **** 
+  13:BSP/u8g2/u8g2_kerning.c ****   * Redistributions of source code must retain the above copyright notice, this list 
+  14:BSP/u8g2/u8g2_kerning.c ****     of conditions and the following disclaimer.
+  15:BSP/u8g2/u8g2_kerning.c ****     
+  16:BSP/u8g2/u8g2_kerning.c ****   * Redistributions in binary form must reproduce the above copyright notice, this 
+  17:BSP/u8g2/u8g2_kerning.c ****     list of conditions and the following disclaimer in the documentation and/or other 
+  18:BSP/u8g2/u8g2_kerning.c ****     materials provided with the distribution.
+  19:BSP/u8g2/u8g2_kerning.c **** 
+  20:BSP/u8g2/u8g2_kerning.c ****   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND 
+  21:BSP/u8g2/u8g2_kerning.c ****   CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, 
+  22:BSP/u8g2/u8g2_kerning.c ****   INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF 
+  23:BSP/u8g2/u8g2_kerning.c ****   MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
+  24:BSP/u8g2/u8g2_kerning.c ****   DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR 
+  25:BSP/u8g2/u8g2_kerning.c ****   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+  26:BSP/u8g2/u8g2_kerning.c ****   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+  27:BSP/u8g2/u8g2_kerning.c ****   NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
+  28:BSP/u8g2/u8g2_kerning.c ****   LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
+  29:BSP/u8g2/u8g2_kerning.c ****   CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, 
+  30:BSP/u8g2/u8g2_kerning.c ****   STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+  31:BSP/u8g2/u8g2_kerning.c ****   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
+ARM GAS  /tmp/ccd4dzaT.s 			page 2
+
+
+  32:BSP/u8g2/u8g2_kerning.c ****   ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
+  33:BSP/u8g2/u8g2_kerning.c **** 
+  34:BSP/u8g2/u8g2_kerning.c **** */
+  35:BSP/u8g2/u8g2_kerning.c **** 
+  36:BSP/u8g2/u8g2_kerning.c **** #include "u8g2.h"
+  37:BSP/u8g2/u8g2_kerning.c **** 
+  38:BSP/u8g2/u8g2_kerning.c **** /* this function is used as "u8g2_get_kerning_cb" */
+  39:BSP/u8g2/u8g2_kerning.c **** /*
+  40:BSP/u8g2/u8g2_kerning.c **** uint8_t u8g2_GetNullKerning(u8g2_t *u8g2, uint16_t e1, uint16_t e2)
+  41:BSP/u8g2/u8g2_kerning.c **** {
+  42:BSP/u8g2/u8g2_kerning.c ****   return 0;
+  43:BSP/u8g2/u8g2_kerning.c **** }
+  44:BSP/u8g2/u8g2_kerning.c **** */
+  45:BSP/u8g2/u8g2_kerning.c **** 
+  46:BSP/u8g2/u8g2_kerning.c **** /* this function is used as "u8g2_get_kerning_cb" */
+  47:BSP/u8g2/u8g2_kerning.c **** uint8_t u8g2_GetKerning(U8X8_UNUSED u8g2_t *u8g2, u8g2_kerning_t *kerning, uint16_t e1, uint16_t e2
+  48:BSP/u8g2/u8g2_kerning.c **** {
+  28              		.loc 1 48 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  49:BSP/u8g2/u8g2_kerning.c ****   uint16_t i1, i2, cnt, end;
+  32              		.loc 1 49 3 view .LVU1
+  50:BSP/u8g2/u8g2_kerning.c ****   if ( kerning == NULL )
+  33              		.loc 1 50 3 view .LVU2
+  34              		.loc 1 50 6 is_stmt 0 view .LVU3
+  35 0000 61B3     		cbz	r1, .L9
+  48:BSP/u8g2/u8g2_kerning.c ****   uint16_t i1, i2, cnt, end;
+  36              		.loc 1 48 1 view .LVU4
+  37 0002 00B5     		push	{lr}
+  38              	.LCFI0:
+  39              		.cfi_def_cfa_offset 4
+  40              		.cfi_offset 14, -4
+  41 0004 0846     		mov	r0, r1
+  42              	.LVL1:
+  51:BSP/u8g2/u8g2_kerning.c ****     return 0;
+  52:BSP/u8g2/u8g2_kerning.c ****   
+  53:BSP/u8g2/u8g2_kerning.c ****   /* search for the encoding in the first table */
+  54:BSP/u8g2/u8g2_kerning.c ****   cnt = kerning->first_table_cnt;
+  43              		.loc 1 54 3 is_stmt 1 view .LVU5
+  44              		.loc 1 54 7 is_stmt 0 view .LVU6
+  45 0006 B1F800E0 		ldrh	lr, [r1]
+  46              	.LVL2:
+  55:BSP/u8g2/u8g2_kerning.c ****   cnt--;	/* ignore the last element of the table, which is 0x0ffff */
+  47              		.loc 1 55 3 is_stmt 1 view .LVU7
+  48              		.loc 1 55 6 is_stmt 0 view .LVU8
+  49 000a 0EF1FF3E 		add	lr, lr, #-1
+  50 000e 1FFA8EFE 		uxth	lr, lr
+  51              	.LVL3:
+  56:BSP/u8g2/u8g2_kerning.c ****   for( i1 = 0; i1 < cnt; i1++ )
+  52              		.loc 1 56 3 is_stmt 1 view .LVU9
+  53              		.loc 1 56 11 is_stmt 0 view .LVU10
+  54 0012 0021     		movs	r1, #0
+  55              	.LVL4:
+  56              	.L3:
+  57              		.loc 1 56 19 is_stmt 1 discriminator 1 view .LVU11
+  58 0014 7145     		cmp	r1, lr
+ARM GAS  /tmp/ccd4dzaT.s 			page 3
+
+
+  59 0016 08D2     		bcs	.L4
+  57:BSP/u8g2/u8g2_kerning.c ****   {
+  58:BSP/u8g2/u8g2_kerning.c ****     if ( kerning->first_encoding_table[i1] == e1 )
+  60              		.loc 1 58 5 view .LVU12
+  61              		.loc 1 58 39 is_stmt 0 view .LVU13
+  62 0018 D0F804C0 		ldr	ip, [r0, #4]
+  63 001c 3CF811C0 		ldrh	ip, [ip, r1, lsl #1]
+  64              		.loc 1 58 8 view .LVU14
+  65 0020 9445     		cmp	ip, r2
+  66 0022 02D0     		beq	.L4
+  56:BSP/u8g2/u8g2_kerning.c ****   for( i1 = 0; i1 < cnt; i1++ )
+  67              		.loc 1 56 28 is_stmt 1 discriminator 2 view .LVU15
+  68 0024 0131     		adds	r1, r1, #1
+  69              	.LVL5:
+  56:BSP/u8g2/u8g2_kerning.c ****   for( i1 = 0; i1 < cnt; i1++ )
+  70              		.loc 1 56 28 is_stmt 0 discriminator 2 view .LVU16
+  71 0026 89B2     		uxth	r1, r1
+  72              	.LVL6:
+  56:BSP/u8g2/u8g2_kerning.c ****   for( i1 = 0; i1 < cnt; i1++ )
+  73              		.loc 1 56 28 discriminator 2 view .LVU17
+  74 0028 F4E7     		b	.L3
+  75              	.L4:
+  59:BSP/u8g2/u8g2_kerning.c ****       break;
+  60:BSP/u8g2/u8g2_kerning.c ****   }
+  61:BSP/u8g2/u8g2_kerning.c ****   if ( i1 >= cnt )
+  76              		.loc 1 61 3 is_stmt 1 view .LVU18
+  77              		.loc 1 61 6 is_stmt 0 view .LVU19
+  78 002a 7145     		cmp	r1, lr
+  79 002c 18D2     		bcs	.L10
+  62:BSP/u8g2/u8g2_kerning.c ****     return 0;	/* e1 not part of the kerning table, return 0 */
+  63:BSP/u8g2/u8g2_kerning.c **** 
+  64:BSP/u8g2/u8g2_kerning.c ****   /* get the upper index for i2 */
+  65:BSP/u8g2/u8g2_kerning.c ****   end = kerning->index_to_second_table[i1+1];
+  80              		.loc 1 65 3 is_stmt 1 view .LVU20
+  81              		.loc 1 65 16 is_stmt 0 view .LVU21
+  82 002e 8268     		ldr	r2, [r0, #8]
+  83              	.LVL7:
+  84              		.loc 1 65 39 view .LVU22
+  85 0030 01F1010C 		add	ip, r1, #1
+  86              		.loc 1 65 7 view .LVU23
+  87 0034 32F81CC0 		ldrh	ip, [r2, ip, lsl #1]
+  88              	.LVL8:
+  66:BSP/u8g2/u8g2_kerning.c ****   for( i2 = kerning->index_to_second_table[i1]; i2 < end; i2++ )
+  89              		.loc 1 66 3 is_stmt 1 view .LVU24
+  90              		.loc 1 66 11 is_stmt 0 view .LVU25
+  91 0038 32F81120 		ldrh	r2, [r2, r1, lsl #1]
+  92              	.LVL9:
+  93              	.L6:
+  94              		.loc 1 66 52 is_stmt 1 discriminator 1 view .LVU26
+  95 003c 6245     		cmp	r2, ip
+  96 003e 07D2     		bcs	.L7
+  67:BSP/u8g2/u8g2_kerning.c ****   {
+  68:BSP/u8g2/u8g2_kerning.c ****     if ( kerning->second_encoding_table[i2] == e2 )
+  97              		.loc 1 68 5 view .LVU27
+  98              		.loc 1 68 17 is_stmt 0 view .LVU28
+  99 0040 C168     		ldr	r1, [r0, #12]
+ 100              		.loc 1 68 40 view .LVU29
+ARM GAS  /tmp/ccd4dzaT.s 			page 4
+
+
+ 101 0042 31F81210 		ldrh	r1, [r1, r2, lsl #1]
+ 102              		.loc 1 68 8 view .LVU30
+ 103 0046 9942     		cmp	r1, r3
+ 104 0048 02D0     		beq	.L7
+  66:BSP/u8g2/u8g2_kerning.c ****   for( i2 = kerning->index_to_second_table[i1]; i2 < end; i2++ )
+ 105              		.loc 1 66 61 is_stmt 1 discriminator 2 view .LVU31
+ 106 004a 0132     		adds	r2, r2, #1
+ 107              	.LVL10:
+  66:BSP/u8g2/u8g2_kerning.c ****   for( i2 = kerning->index_to_second_table[i1]; i2 < end; i2++ )
+ 108              		.loc 1 66 61 is_stmt 0 discriminator 2 view .LVU32
+ 109 004c 92B2     		uxth	r2, r2
+ 110              	.LVL11:
+  66:BSP/u8g2/u8g2_kerning.c ****   for( i2 = kerning->index_to_second_table[i1]; i2 < end; i2++ )
+ 111              		.loc 1 66 61 discriminator 2 view .LVU33
+ 112 004e F5E7     		b	.L6
+ 113              	.L7:
+  69:BSP/u8g2/u8g2_kerning.c ****       break;
+  70:BSP/u8g2/u8g2_kerning.c ****   }
+  71:BSP/u8g2/u8g2_kerning.c ****   
+  72:BSP/u8g2/u8g2_kerning.c ****   if ( i2 >= end )
+ 114              		.loc 1 72 3 is_stmt 1 view .LVU34
+ 115              		.loc 1 72 6 is_stmt 0 view .LVU35
+ 116 0050 6245     		cmp	r2, ip
+ 117 0052 07D2     		bcs	.L11
+  73:BSP/u8g2/u8g2_kerning.c ****     return 0;	/* e2 not part of any pair with e1, return 0 */
+  74:BSP/u8g2/u8g2_kerning.c ****   
+  75:BSP/u8g2/u8g2_kerning.c ****   return kerning->kerning_values[i2];
+ 118              		.loc 1 75 3 is_stmt 1 view .LVU36
+ 119              		.loc 1 75 17 is_stmt 0 view .LVU37
+ 120 0054 0369     		ldr	r3, [r0, #16]
+ 121              	.LVL12:
+ 122              		.loc 1 75 33 view .LVU38
+ 123 0056 985C     		ldrb	r0, [r3, r2]	@ zero_extendqisi2
+ 124              	.LVL13:
+ 125              	.L2:
+  76:BSP/u8g2/u8g2_kerning.c **** }
+ 126              		.loc 1 76 1 view .LVU39
+ 127 0058 5DF804FB 		ldr	pc, [sp], #4
+ 128              	.LVL14:
+ 129              	.L9:
+ 130              	.LCFI1:
+ 131              		.cfi_def_cfa_offset 0
+ 132              		.cfi_restore 14
+  51:BSP/u8g2/u8g2_kerning.c ****   
+ 133              		.loc 1 51 12 view .LVU40
+ 134 005c 0020     		movs	r0, #0
+ 135              	.LVL15:
+ 136              		.loc 1 76 1 view .LVU41
+ 137 005e 7047     		bx	lr
+ 138              	.LVL16:
+ 139              	.L10:
+ 140              	.LCFI2:
+ 141              		.cfi_def_cfa_offset 4
+ 142              		.cfi_offset 14, -4
+  62:BSP/u8g2/u8g2_kerning.c **** 
+ 143              		.loc 1 62 12 view .LVU42
+ 144 0060 0020     		movs	r0, #0
+ARM GAS  /tmp/ccd4dzaT.s 			page 5
+
+
+ 145              	.LVL17:
+  62:BSP/u8g2/u8g2_kerning.c **** 
+ 146              		.loc 1 62 12 view .LVU43
+ 147 0062 F9E7     		b	.L2
+ 148              	.LVL18:
+ 149              	.L11:
+  73:BSP/u8g2/u8g2_kerning.c ****   
+ 150              		.loc 1 73 12 view .LVU44
+ 151 0064 0020     		movs	r0, #0
+ 152              	.LVL19:
+  73:BSP/u8g2/u8g2_kerning.c ****   
+ 153              		.loc 1 73 12 view .LVU45
+ 154 0066 F7E7     		b	.L2
+ 155              		.cfi_endproc
+ 156              	.LFE0:
+ 158              		.section	.text.u8g2_GetKerningByTable,"ax",%progbits
+ 159              		.align	1
+ 160              		.global	u8g2_GetKerningByTable
+ 161              		.syntax unified
+ 162              		.thumb
+ 163              		.thumb_func
+ 165              	u8g2_GetKerningByTable:
+ 166              	.LVL20:
+ 167              	.LFB1:
+  77:BSP/u8g2/u8g2_kerning.c **** 
+  78:BSP/u8g2/u8g2_kerning.c **** uint8_t u8g2_GetKerningByTable(U8X8_UNUSED u8g2_t *u8g2, const uint16_t *kt, uint16_t e1, uint16_t 
+  79:BSP/u8g2/u8g2_kerning.c **** {
+ 168              		.loc 1 79 1 is_stmt 1 view -0
+ 169              		.cfi_startproc
+ 170              		@ args = 0, pretend = 0, frame = 0
+ 171              		@ frame_needed = 0, uses_anonymous_args = 0
+  80:BSP/u8g2/u8g2_kerning.c ****   uint16_t i;
+ 172              		.loc 1 80 3 view .LVU47
+  81:BSP/u8g2/u8g2_kerning.c ****   i = 0;
+ 173              		.loc 1 81 3 view .LVU48
+  82:BSP/u8g2/u8g2_kerning.c ****   if ( kt == NULL )
+ 174              		.loc 1 82 3 view .LVU49
+ 175              		.loc 1 82 6 is_stmt 0 view .LVU50
+ 176 0000 B9B1     		cbz	r1, .L20
+  79:BSP/u8g2/u8g2_kerning.c ****   uint16_t i;
+ 177              		.loc 1 79 1 view .LVU51
+ 178 0002 10B5     		push	{r4, lr}
+ 179              	.LCFI3:
+ 180              		.cfi_def_cfa_offset 8
+ 181              		.cfi_offset 4, -8
+ 182              		.cfi_offset 14, -4
+ 183 0004 8E46     		mov	lr, r1
+  81:BSP/u8g2/u8g2_kerning.c ****   i = 0;
+ 184              		.loc 1 81 5 view .LVU52
+ 185 0006 0021     		movs	r1, #0
+ 186              	.LVL21:
+  81:BSP/u8g2/u8g2_kerning.c ****   i = 0;
+ 187              		.loc 1 81 5 view .LVU53
+ 188 0008 01E0     		b	.L19
+ 189              	.LVL22:
+ 190              	.L18:
+  83:BSP/u8g2/u8g2_kerning.c ****     return 0;
+ARM GAS  /tmp/ccd4dzaT.s 			page 6
+
+
+  84:BSP/u8g2/u8g2_kerning.c ****   for(;;)
+  85:BSP/u8g2/u8g2_kerning.c ****   {
+  86:BSP/u8g2/u8g2_kerning.c ****     if ( kt[i] == 0x0ffff )
+  87:BSP/u8g2/u8g2_kerning.c ****       break;
+  88:BSP/u8g2/u8g2_kerning.c ****     if ( kt[i] == e1 && kt[i+1] == e2 )
+  89:BSP/u8g2/u8g2_kerning.c ****       return kt[i+2];
+  90:BSP/u8g2/u8g2_kerning.c ****     i+=3;
+ 191              		.loc 1 90 5 is_stmt 1 view .LVU54
+ 192              		.loc 1 90 6 is_stmt 0 view .LVU55
+ 193 000a 0331     		adds	r1, r1, #3
+ 194              	.LVL23:
+ 195              		.loc 1 90 6 view .LVU56
+ 196 000c 89B2     		uxth	r1, r1
+ 197              	.LVL24:
+  84:BSP/u8g2/u8g2_kerning.c ****   {
+ 198              		.loc 1 84 3 is_stmt 1 view .LVU57
+ 199              	.L19:
+  84:BSP/u8g2/u8g2_kerning.c ****   {
+ 200              		.loc 1 84 3 view .LVU58
+  86:BSP/u8g2/u8g2_kerning.c ****       break;
+ 201              		.loc 1 86 5 view .LVU59
+  86:BSP/u8g2/u8g2_kerning.c ****       break;
+ 202              		.loc 1 86 12 is_stmt 0 view .LVU60
+ 203 000e 0C46     		mov	r4, r1
+ 204 0010 3EF81100 		ldrh	r0, [lr, r1, lsl #1]
+  86:BSP/u8g2/u8g2_kerning.c ****       break;
+ 205              		.loc 1 86 8 view .LVU61
+ 206 0014 4FF6FF7C 		movw	ip, #65535
+ 207 0018 6045     		cmp	r0, ip
+ 208 001a 0CD0     		beq	.L21
+  88:BSP/u8g2/u8g2_kerning.c ****       return kt[i+2];
+ 209              		.loc 1 88 5 is_stmt 1 view .LVU62
+  88:BSP/u8g2/u8g2_kerning.c ****       return kt[i+2];
+ 210              		.loc 1 88 8 is_stmt 0 view .LVU63
+ 211 001c 9042     		cmp	r0, r2
+ 212 001e F4D1     		bne	.L18
+  88:BSP/u8g2/u8g2_kerning.c ****       return kt[i+2];
+ 213              		.loc 1 88 27 discriminator 1 view .LVU64
+ 214 0020 481C     		adds	r0, r1, #1
+ 215 0022 3EF81000 		ldrh	r0, [lr, r0, lsl #1]
+  88:BSP/u8g2/u8g2_kerning.c ****       return kt[i+2];
+ 216              		.loc 1 88 22 discriminator 1 view .LVU65
+ 217 0026 9842     		cmp	r0, r3
+ 218 0028 EFD1     		bne	.L18
+  89:BSP/u8g2/u8g2_kerning.c ****     i+=3;
+ 219              		.loc 1 89 7 is_stmt 1 view .LVU66
+  89:BSP/u8g2/u8g2_kerning.c ****     i+=3;
+ 220              		.loc 1 89 16 is_stmt 0 view .LVU67
+ 221 002a 0234     		adds	r4, r4, #2
+ 222 002c 1EF81400 		ldrb	r0, [lr, r4, lsl #1]	@ zero_extendqisi2
+ 223 0030 02E0     		b	.L17
+ 224              	.LVL25:
+ 225              	.L20:
+ 226              	.LCFI4:
+ 227              		.cfi_def_cfa_offset 0
+ 228              		.cfi_restore 4
+ 229              		.cfi_restore 14
+ARM GAS  /tmp/ccd4dzaT.s 			page 7
+
+
+  83:BSP/u8g2/u8g2_kerning.c ****   for(;;)
+ 230              		.loc 1 83 12 view .LVU68
+ 231 0032 0020     		movs	r0, #0
+ 232              	.LVL26:
+  91:BSP/u8g2/u8g2_kerning.c ****   }
+  92:BSP/u8g2/u8g2_kerning.c ****   return 0;
+  93:BSP/u8g2/u8g2_kerning.c **** }
+ 233              		.loc 1 93 1 view .LVU69
+ 234 0034 7047     		bx	lr
+ 235              	.LVL27:
+ 236              	.L21:
+ 237              	.LCFI5:
+ 238              		.cfi_def_cfa_offset 8
+ 239              		.cfi_offset 4, -8
+ 240              		.cfi_offset 14, -4
+  92:BSP/u8g2/u8g2_kerning.c **** }
+ 241              		.loc 1 92 10 view .LVU70
+ 242 0036 0020     		movs	r0, #0
+ 243              	.L17:
+ 244              		.loc 1 93 1 view .LVU71
+ 245 0038 10BD     		pop	{r4, pc}
+ 246              		.cfi_endproc
+ 247              	.LFE1:
+ 249              		.text
+ 250              	.Letext0:
+ 251              		.file 2 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ 252              		.file 3 "BSP/u8g2/u8x8.h"
+ 253              		.file 4 "BSP/u8g2/u8g2.h"
+ARM GAS  /tmp/ccd4dzaT.s 			page 8
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 u8g2_kerning.c
+     /tmp/ccd4dzaT.s:19     .text.u8g2_GetKerning:00000000 $t
+     /tmp/ccd4dzaT.s:25     .text.u8g2_GetKerning:00000000 u8g2_GetKerning
+     /tmp/ccd4dzaT.s:159    .text.u8g2_GetKerningByTable:00000000 $t
+     /tmp/ccd4dzaT.s:165    .text.u8g2_GetKerningByTable:00000000 u8g2_GetKerningByTable
+
+NO UNDEFINED SYMBOLS

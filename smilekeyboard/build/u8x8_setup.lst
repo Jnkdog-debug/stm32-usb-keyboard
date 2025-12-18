@@ -1,0 +1,416 @@
+ARM GAS  /tmp/ccdyZUY5.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.arch armv7-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"u8x8_setup.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.file 1 "BSP/u8g2/u8x8_setup.c"
+  18              		.section	.text.u8x8_dummy_cb,"ax",%progbits
+  19              		.align	1
+  20              		.global	u8x8_dummy_cb
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  25              	u8x8_dummy_cb:
+  26              	.LVL0:
+  27              	.LFB0:
+   1:BSP/u8g2/u8x8_setup.c **** /*
+   2:BSP/u8g2/u8x8_setup.c **** 
+   3:BSP/u8g2/u8x8_setup.c ****   u8x8_setup.c
+   4:BSP/u8g2/u8x8_setup.c **** 
+   5:BSP/u8g2/u8x8_setup.c ****   Universal 8bit Graphics Library (https://github.com/olikraus/u8g2/)
+   6:BSP/u8g2/u8x8_setup.c **** 
+   7:BSP/u8g2/u8x8_setup.c ****   Copyright (c) 2016, olikraus@gmail.com
+   8:BSP/u8g2/u8x8_setup.c ****   All rights reserved.
+   9:BSP/u8g2/u8x8_setup.c **** 
+  10:BSP/u8g2/u8x8_setup.c ****   Redistribution and use in source and binary forms, with or without modification, 
+  11:BSP/u8g2/u8x8_setup.c ****   are permitted provided that the following conditions are met:
+  12:BSP/u8g2/u8x8_setup.c **** 
+  13:BSP/u8g2/u8x8_setup.c ****   * Redistributions of source code must retain the above copyright notice, this list 
+  14:BSP/u8g2/u8x8_setup.c ****     of conditions and the following disclaimer.
+  15:BSP/u8g2/u8x8_setup.c ****     
+  16:BSP/u8g2/u8x8_setup.c ****   * Redistributions in binary form must reproduce the above copyright notice, this 
+  17:BSP/u8g2/u8x8_setup.c ****     list of conditions and the following disclaimer in the documentation and/or other 
+  18:BSP/u8g2/u8x8_setup.c ****     materials provided with the distribution.
+  19:BSP/u8g2/u8x8_setup.c **** 
+  20:BSP/u8g2/u8x8_setup.c ****   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND 
+  21:BSP/u8g2/u8x8_setup.c ****   CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, 
+  22:BSP/u8g2/u8x8_setup.c ****   INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF 
+  23:BSP/u8g2/u8x8_setup.c ****   MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
+  24:BSP/u8g2/u8x8_setup.c ****   DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR 
+  25:BSP/u8g2/u8x8_setup.c ****   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+  26:BSP/u8g2/u8x8_setup.c ****   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+  27:BSP/u8g2/u8x8_setup.c ****   NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
+  28:BSP/u8g2/u8x8_setup.c ****   LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
+  29:BSP/u8g2/u8x8_setup.c ****   CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, 
+  30:BSP/u8g2/u8x8_setup.c ****   STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+  31:BSP/u8g2/u8x8_setup.c ****   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
+ARM GAS  /tmp/ccdyZUY5.s 			page 2
+
+
+  32:BSP/u8g2/u8x8_setup.c ****   ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
+  33:BSP/u8g2/u8x8_setup.c **** 
+  34:BSP/u8g2/u8x8_setup.c **** */
+  35:BSP/u8g2/u8x8_setup.c **** 
+  36:BSP/u8g2/u8x8_setup.c **** 
+  37:BSP/u8g2/u8x8_setup.c **** #include "u8x8.h"
+  38:BSP/u8g2/u8x8_setup.c **** 
+  39:BSP/u8g2/u8x8_setup.c **** /* universal dummy callback, which will be default for all callbacks */
+  40:BSP/u8g2/u8x8_setup.c **** uint8_t u8x8_dummy_cb(U8X8_UNUSED u8x8_t *u8x8, U8X8_UNUSED uint8_t msg, U8X8_UNUSED uint8_t arg_in
+  41:BSP/u8g2/u8x8_setup.c **** {
+  28              		.loc 1 41 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+  42:BSP/u8g2/u8x8_setup.c ****   /* the dummy callback will not handle any message and will fail for all messages */
+  43:BSP/u8g2/u8x8_setup.c ****   return 0;
+  33              		.loc 1 43 3 view .LVU1
+  44:BSP/u8g2/u8x8_setup.c **** }
+  34              		.loc 1 44 1 is_stmt 0 view .LVU2
+  35 0000 0020     		movs	r0, #0
+  36              	.LVL1:
+  37              		.loc 1 44 1 view .LVU3
+  38 0002 7047     		bx	lr
+  39              		.cfi_endproc
+  40              	.LFE0:
+  42              		.section	.text.u8x8_d_null_cb,"ax",%progbits
+  43              		.align	1
+  44              		.global	u8x8_d_null_cb
+  45              		.syntax unified
+  46              		.thumb
+  47              		.thumb_func
+  49              	u8x8_d_null_cb:
+  50              	.LVL2:
+  51              	.LFB1:
+  45:BSP/u8g2/u8x8_setup.c **** 
+  46:BSP/u8g2/u8x8_setup.c **** 
+  47:BSP/u8g2/u8x8_setup.c **** static const u8x8_display_info_t u8x8_null_display_info =
+  48:BSP/u8g2/u8x8_setup.c **** {
+  49:BSP/u8g2/u8x8_setup.c ****   /* chip_enable_level = */ 0,
+  50:BSP/u8g2/u8x8_setup.c ****   /* chip_disable_level = */ 1,
+  51:BSP/u8g2/u8x8_setup.c ****   
+  52:BSP/u8g2/u8x8_setup.c ****   /* post_chip_enable_wait_ns = */ 0,
+  53:BSP/u8g2/u8x8_setup.c ****   /* pre_chip_disable_wait_ns = */ 0,
+  54:BSP/u8g2/u8x8_setup.c ****   /* reset_pulse_width_ms = */ 0, 
+  55:BSP/u8g2/u8x8_setup.c ****   /* post_reset_wait_ms = */ 0, 
+  56:BSP/u8g2/u8x8_setup.c ****   /* sda_setup_time_ns = */ 0,		
+  57:BSP/u8g2/u8x8_setup.c ****   /* sck_pulse_width_ns = */ 0,	/* half of cycle time (100ns according to datasheet), AVR: below 70
+  58:BSP/u8g2/u8x8_setup.c ****   /* sck_clock_hz = */ 4000000UL,	/* since Arduino 1.6.0, the SPI bus speed in Hz. Should be  10000
+  59:BSP/u8g2/u8x8_setup.c ****   /* spi_mode = */ 0,		/* active high, rising edge */
+  60:BSP/u8g2/u8x8_setup.c ****   /* i2c_bus_clock_100kHz = */ 4,
+  61:BSP/u8g2/u8x8_setup.c ****   /* data_setup_time_ns = */ 0,
+  62:BSP/u8g2/u8x8_setup.c ****   /* write_pulse_width_ns = */ 0,
+  63:BSP/u8g2/u8x8_setup.c ****   /* tile_width = */ 1,		/* 8x8 */
+  64:BSP/u8g2/u8x8_setup.c ****   /* tile_hight = */ 1,
+  65:BSP/u8g2/u8x8_setup.c ****   /* default_x_offset = */ 0,
+  66:BSP/u8g2/u8x8_setup.c ****   /* flipmode_x_offset = */ 0,
+ARM GAS  /tmp/ccdyZUY5.s 			page 3
+
+
+  67:BSP/u8g2/u8x8_setup.c ****   /* pixel_width = */ 8,
+  68:BSP/u8g2/u8x8_setup.c ****   /* pixel_height = */ 8
+  69:BSP/u8g2/u8x8_setup.c **** };
+  70:BSP/u8g2/u8x8_setup.c **** 
+  71:BSP/u8g2/u8x8_setup.c **** 
+  72:BSP/u8g2/u8x8_setup.c **** /* a special null device */
+  73:BSP/u8g2/u8x8_setup.c **** uint8_t u8x8_d_null_cb(u8x8_t *u8x8, uint8_t msg, U8X8_UNUSED uint8_t arg_int, U8X8_UNUSED void *ar
+  74:BSP/u8g2/u8x8_setup.c **** {
+  52              		.loc 1 74 1 is_stmt 1 view -0
+  53              		.cfi_startproc
+  54              		@ args = 0, pretend = 0, frame = 0
+  55              		@ frame_needed = 0, uses_anonymous_args = 0
+  56              		.loc 1 74 1 is_stmt 0 view .LVU5
+  57 0000 08B5     		push	{r3, lr}
+  58              	.LCFI0:
+  59              		.cfi_def_cfa_offset 8
+  60              		.cfi_offset 3, -8
+  61              		.cfi_offset 14, -4
+  75:BSP/u8g2/u8x8_setup.c ****   switch(msg)
+  62              		.loc 1 75 3 is_stmt 1 view .LVU6
+  63 0002 0929     		cmp	r1, #9
+  64 0004 04D0     		beq	.L3
+  65 0006 0A29     		cmp	r1, #10
+  66 0008 05D1     		bne	.L5
+  76:BSP/u8g2/u8x8_setup.c ****   {
+  77:BSP/u8g2/u8x8_setup.c ****     case U8X8_MSG_DISPLAY_SETUP_MEMORY:
+  78:BSP/u8g2/u8x8_setup.c ****       u8x8_d_helper_display_setup_memory(u8x8, &u8x8_null_display_info);
+  79:BSP/u8g2/u8x8_setup.c ****       break;
+  80:BSP/u8g2/u8x8_setup.c ****     case U8X8_MSG_DISPLAY_INIT:
+  81:BSP/u8g2/u8x8_setup.c ****       u8x8_d_helper_display_init(u8x8);
+  67              		.loc 1 81 7 view .LVU7
+  68 000a FFF7FEFF 		bl	u8x8_d_helper_display_init
+  69              	.LVL3:
+  82:BSP/u8g2/u8x8_setup.c ****       break;
+  70              		.loc 1 82 7 view .LVU8
+  71 000e 02E0     		b	.L5
+  72              	.LVL4:
+  73              	.L3:
+  78:BSP/u8g2/u8x8_setup.c ****       break;
+  74              		.loc 1 78 7 view .LVU9
+  75 0010 0249     		ldr	r1, .L7
+  76              	.LVL5:
+  78:BSP/u8g2/u8x8_setup.c ****       break;
+  77              		.loc 1 78 7 is_stmt 0 view .LVU10
+  78 0012 FFF7FEFF 		bl	u8x8_d_helper_display_setup_memory
+  79              	.LVL6:
+  79:BSP/u8g2/u8x8_setup.c ****     case U8X8_MSG_DISPLAY_INIT:
+  80              		.loc 1 79 7 is_stmt 1 view .LVU11
+  81              	.L5:
+  83:BSP/u8g2/u8x8_setup.c ****   }
+  84:BSP/u8g2/u8x8_setup.c ****   /* the null device callback will succeed for all messages */
+  85:BSP/u8g2/u8x8_setup.c ****   return 1;
+  82              		.loc 1 85 3 view .LVU12
+  86:BSP/u8g2/u8x8_setup.c **** }
+  83              		.loc 1 86 1 is_stmt 0 view .LVU13
+  84 0016 0120     		movs	r0, #1
+  85 0018 08BD     		pop	{r3, pc}
+ARM GAS  /tmp/ccdyZUY5.s 			page 4
+
+
+  86              	.L8:
+  87 001a 00BF     		.align	2
+  88              	.L7:
+  89 001c 00000000 		.word	u8x8_null_display_info
+  90              		.cfi_endproc
+  91              	.LFE1:
+  93              		.section	.text.u8x8_SetupDefaults,"ax",%progbits
+  94              		.align	1
+  95              		.global	u8x8_SetupDefaults
+  96              		.syntax unified
+  97              		.thumb
+  98              		.thumb_func
+ 100              	u8x8_SetupDefaults:
+ 101              	.LVL7:
+ 102              	.LFB2:
+  87:BSP/u8g2/u8x8_setup.c **** 
+  88:BSP/u8g2/u8x8_setup.c **** 
+  89:BSP/u8g2/u8x8_setup.c **** /*
+  90:BSP/u8g2/u8x8_setup.c ****   Description:
+  91:BSP/u8g2/u8x8_setup.c ****     Setup u8x8
+  92:BSP/u8g2/u8x8_setup.c ****   Args:
+  93:BSP/u8g2/u8x8_setup.c ****     u8x8	An empty u8x8 structure
+  94:BSP/u8g2/u8x8_setup.c **** */
+  95:BSP/u8g2/u8x8_setup.c **** void u8x8_SetupDefaults(u8x8_t *u8x8)
+  96:BSP/u8g2/u8x8_setup.c **** {
+ 103              		.loc 1 96 1 is_stmt 1 view -0
+ 104              		.cfi_startproc
+ 105              		@ args = 0, pretend = 0, frame = 0
+ 106              		@ frame_needed = 0, uses_anonymous_args = 0
+ 107              		@ link register save eliminated.
+  97:BSP/u8g2/u8x8_setup.c ****     u8x8->display_info = NULL;
+ 108              		.loc 1 97 5 view .LVU15
+ 109              		.loc 1 97 24 is_stmt 0 view .LVU16
+ 110 0000 0023     		movs	r3, #0
+ 111 0002 0360     		str	r3, [r0]
+  98:BSP/u8g2/u8x8_setup.c ****     u8x8->display_cb = u8x8_dummy_cb;
+ 112              		.loc 1 98 5 is_stmt 1 view .LVU17
+ 113              		.loc 1 98 22 is_stmt 0 view .LVU18
+ 114 0004 084A     		ldr	r2, .L10
+ 115 0006 8260     		str	r2, [r0, #8]
+  99:BSP/u8g2/u8x8_setup.c ****     u8x8->cad_cb = u8x8_dummy_cb;
+ 116              		.loc 1 99 5 is_stmt 1 view .LVU19
+ 117              		.loc 1 99 18 is_stmt 0 view .LVU20
+ 118 0008 C260     		str	r2, [r0, #12]
+ 100:BSP/u8g2/u8x8_setup.c ****     u8x8->byte_cb = u8x8_dummy_cb;
+ 119              		.loc 1 100 5 is_stmt 1 view .LVU21
+ 120              		.loc 1 100 19 is_stmt 0 view .LVU22
+ 121 000a 0261     		str	r2, [r0, #16]
+ 101:BSP/u8g2/u8x8_setup.c ****     u8x8->gpio_and_delay_cb = u8x8_dummy_cb;
+ 122              		.loc 1 101 5 is_stmt 1 view .LVU23
+ 123              		.loc 1 101 29 is_stmt 0 view .LVU24
+ 124 000c 4261     		str	r2, [r0, #20]
+ 102:BSP/u8g2/u8x8_setup.c ****     u8x8->is_font_inverse_mode = 0;
+ 125              		.loc 1 102 5 is_stmt 1 view .LVU25
+ 126              		.loc 1 102 32 is_stmt 0 view .LVU26
+ 127 000e 80F82330 		strb	r3, [r0, #35]
+ 103:BSP/u8g2/u8x8_setup.c ****     u8x8->device_address = 0;
+ARM GAS  /tmp/ccdyZUY5.s 			page 5
+
+
+ 128              		.loc 1 103 5 is_stmt 1 view .LVU27
+ 129              		.loc 1 103 26 is_stmt 0 view .LVU28
+ 130 0012 80F82630 		strb	r3, [r0, #38]
+ 104:BSP/u8g2/u8x8_setup.c ****     u8x8->utf8_state = 0;		/* also reset by u8x8_utf8_init */
+ 131              		.loc 1 104 5 is_stmt 1 view .LVU29
+ 132              		.loc 1 104 22 is_stmt 0 view .LVU30
+ 133 0016 80F82730 		strb	r3, [r0, #39]
+ 105:BSP/u8g2/u8x8_setup.c ****     u8x8->bus_clock = 0;		/* issue 769 */
+ 134              		.loc 1 105 5 is_stmt 1 view .LVU31
+ 135              		.loc 1 105 21 is_stmt 0 view .LVU32
+ 136 001a 8361     		str	r3, [r0, #24]
+ 106:BSP/u8g2/u8x8_setup.c ****     u8x8->i2c_address = 255;
+ 137              		.loc 1 106 5 is_stmt 1 view .LVU33
+ 138              		.loc 1 106 23 is_stmt 0 view .LVU34
+ 139 001c FF23     		movs	r3, #255
+ 140 001e 80F82430 		strb	r3, [r0, #36]
+ 107:BSP/u8g2/u8x8_setup.c ****     u8x8->debounce_default_pin_state = 255;	/* assume all low active buttons */
+ 141              		.loc 1 107 5 is_stmt 1 view .LVU35
+ 142              		.loc 1 107 38 is_stmt 0 view .LVU36
+ 143 0022 80F82930 		strb	r3, [r0, #41]
+ 108:BSP/u8g2/u8x8_setup.c ****   
+ 109:BSP/u8g2/u8x8_setup.c **** #ifdef U8X8_USE_PINS 
+ 110:BSP/u8g2/u8x8_setup.c ****   {
+ 111:BSP/u8g2/u8x8_setup.c ****     uint8_t i;
+ 112:BSP/u8g2/u8x8_setup.c ****     for( i = 0; i < U8X8_PIN_CNT; i++ )
+ 113:BSP/u8g2/u8x8_setup.c ****       u8x8->pins[i] = U8X8_PIN_NONE;
+ 114:BSP/u8g2/u8x8_setup.c ****   }
+ 115:BSP/u8g2/u8x8_setup.c **** #endif
+ 116:BSP/u8g2/u8x8_setup.c **** }
+ 144              		.loc 1 116 1 view .LVU37
+ 145 0026 7047     		bx	lr
+ 146              	.L11:
+ 147              		.align	2
+ 148              	.L10:
+ 149 0028 00000000 		.word	u8x8_dummy_cb
+ 150              		.cfi_endproc
+ 151              	.LFE2:
+ 153              		.section	.text.u8x8_Setup,"ax",%progbits
+ 154              		.align	1
+ 155              		.global	u8x8_Setup
+ 156              		.syntax unified
+ 157              		.thumb
+ 158              		.thumb_func
+ 160              	u8x8_Setup:
+ 161              	.LVL8:
+ 162              	.LFB3:
+ 117:BSP/u8g2/u8x8_setup.c **** 
+ 118:BSP/u8g2/u8x8_setup.c **** 
+ 119:BSP/u8g2/u8x8_setup.c **** /*
+ 120:BSP/u8g2/u8x8_setup.c ****   Description:
+ 121:BSP/u8g2/u8x8_setup.c ****     Setup u8x8 and assign the callback function. The dummy 
+ 122:BSP/u8g2/u8x8_setup.c ****     callback "u8x8_dummy_cb" can be used, if no callback is required.
+ 123:BSP/u8g2/u8x8_setup.c ****     This setup will not communicate with the display itself.
+ 124:BSP/u8g2/u8x8_setup.c ****     Use u8x8_InitDisplay() to send the startup code to the Display.
+ 125:BSP/u8g2/u8x8_setup.c ****   Args:
+ 126:BSP/u8g2/u8x8_setup.c ****     u8x8				An empty u8x8 structure
+ 127:BSP/u8g2/u8x8_setup.c ****     display_cb			Display/controller specific callback function
+ARM GAS  /tmp/ccdyZUY5.s 			page 6
+
+
+ 128:BSP/u8g2/u8x8_setup.c ****     cad_cb				Display controller specific communication callback function
+ 129:BSP/u8g2/u8x8_setup.c ****     byte_cb			Display controller/communication specific callback funtion
+ 130:BSP/u8g2/u8x8_setup.c ****     gpio_and_delay_cb	Environment specific callback function
+ 131:BSP/u8g2/u8x8_setup.c **** 
+ 132:BSP/u8g2/u8x8_setup.c **** */
+ 133:BSP/u8g2/u8x8_setup.c **** void u8x8_Setup(u8x8_t *u8x8, u8x8_msg_cb display_cb, u8x8_msg_cb cad_cb, u8x8_msg_cb byte_cb, u8x8
+ 134:BSP/u8g2/u8x8_setup.c **** {
+ 163              		.loc 1 134 1 is_stmt 1 view -0
+ 164              		.cfi_startproc
+ 165              		@ args = 4, pretend = 0, frame = 0
+ 166              		@ frame_needed = 0, uses_anonymous_args = 0
+ 167              		.loc 1 134 1 is_stmt 0 view .LVU39
+ 168 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 169              	.LCFI1:
+ 170              		.cfi_def_cfa_offset 24
+ 171              		.cfi_offset 3, -24
+ 172              		.cfi_offset 4, -20
+ 173              		.cfi_offset 5, -16
+ 174              		.cfi_offset 6, -12
+ 175              		.cfi_offset 7, -8
+ 176              		.cfi_offset 14, -4
+ 177 0002 0446     		mov	r4, r0
+ 178 0004 0F46     		mov	r7, r1
+ 179 0006 1646     		mov	r6, r2
+ 180 0008 1D46     		mov	r5, r3
+ 135:BSP/u8g2/u8x8_setup.c ****   /* setup defaults and reset pins to U8X8_PIN_NONE */
+ 136:BSP/u8g2/u8x8_setup.c ****   u8x8_SetupDefaults(u8x8);
+ 181              		.loc 1 136 3 is_stmt 1 view .LVU40
+ 182 000a FFF7FEFF 		bl	u8x8_SetupDefaults
+ 183              	.LVL9:
+ 137:BSP/u8g2/u8x8_setup.c **** 
+ 138:BSP/u8g2/u8x8_setup.c ****   /* setup specific callbacks */
+ 139:BSP/u8g2/u8x8_setup.c ****   u8x8->display_cb = display_cb;
+ 184              		.loc 1 139 3 view .LVU41
+ 185              		.loc 1 139 20 is_stmt 0 view .LVU42
+ 186 000e A760     		str	r7, [r4, #8]
+ 140:BSP/u8g2/u8x8_setup.c ****   u8x8->cad_cb = cad_cb;
+ 187              		.loc 1 140 3 is_stmt 1 view .LVU43
+ 188              		.loc 1 140 16 is_stmt 0 view .LVU44
+ 189 0010 E660     		str	r6, [r4, #12]
+ 141:BSP/u8g2/u8x8_setup.c ****   u8x8->byte_cb = byte_cb;
+ 190              		.loc 1 141 3 is_stmt 1 view .LVU45
+ 191              		.loc 1 141 17 is_stmt 0 view .LVU46
+ 192 0012 2561     		str	r5, [r4, #16]
+ 142:BSP/u8g2/u8x8_setup.c ****   u8x8->gpio_and_delay_cb = gpio_and_delay_cb;
+ 193              		.loc 1 142 3 is_stmt 1 view .LVU47
+ 194              		.loc 1 142 27 is_stmt 0 view .LVU48
+ 195 0014 069B     		ldr	r3, [sp, #24]
+ 196 0016 6361     		str	r3, [r4, #20]
+ 143:BSP/u8g2/u8x8_setup.c **** 
+ 144:BSP/u8g2/u8x8_setup.c ****   /* setup display info */
+ 145:BSP/u8g2/u8x8_setup.c ****   u8x8_SetupMemory(u8x8);
+ 197              		.loc 1 145 3 is_stmt 1 view .LVU49
+ 198 0018 2046     		mov	r0, r4
+ 199 001a FFF7FEFF 		bl	u8x8_SetupMemory
+ 200              	.LVL10:
+ 146:BSP/u8g2/u8x8_setup.c **** }
+ARM GAS  /tmp/ccdyZUY5.s 			page 7
+
+
+ 201              		.loc 1 146 1 is_stmt 0 view .LVU50
+ 202 001e F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 203              		.loc 1 146 1 view .LVU51
+ 204              		.cfi_endproc
+ 205              	.LFE3:
+ 207              		.section	.rodata.u8x8_null_display_info,"a"
+ 208              		.align	2
+ 211              	u8x8_null_display_info:
+ 212 0000 00       		.byte	0
+ 213 0001 01       		.byte	1
+ 214 0002 00       		.byte	0
+ 215 0003 00       		.byte	0
+ 216 0004 00       		.byte	0
+ 217 0005 00       		.byte	0
+ 218 0006 00       		.byte	0
+ 219 0007 00       		.byte	0
+ 220 0008 00093D00 		.word	4000000
+ 221 000c 00       		.byte	0
+ 222 000d 04       		.byte	4
+ 223 000e 00       		.byte	0
+ 224 000f 00       		.byte	0
+ 225 0010 01       		.byte	1
+ 226 0011 01       		.byte	1
+ 227 0012 00       		.byte	0
+ 228 0013 00       		.byte	0
+ 229 0014 0800     		.short	8
+ 230 0016 0800     		.short	8
+ 231              		.text
+ 232              	.Letext0:
+ 233              		.file 2 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ 234              		.file 3 "BSP/u8g2/u8x8.h"
+ARM GAS  /tmp/ccdyZUY5.s 			page 8
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 u8x8_setup.c
+     /tmp/ccdyZUY5.s:19     .text.u8x8_dummy_cb:00000000 $t
+     /tmp/ccdyZUY5.s:25     .text.u8x8_dummy_cb:00000000 u8x8_dummy_cb
+     /tmp/ccdyZUY5.s:43     .text.u8x8_d_null_cb:00000000 $t
+     /tmp/ccdyZUY5.s:49     .text.u8x8_d_null_cb:00000000 u8x8_d_null_cb
+     /tmp/ccdyZUY5.s:89     .text.u8x8_d_null_cb:0000001c $d
+     /tmp/ccdyZUY5.s:211    .rodata.u8x8_null_display_info:00000000 u8x8_null_display_info
+     /tmp/ccdyZUY5.s:94     .text.u8x8_SetupDefaults:00000000 $t
+     /tmp/ccdyZUY5.s:100    .text.u8x8_SetupDefaults:00000000 u8x8_SetupDefaults
+     /tmp/ccdyZUY5.s:149    .text.u8x8_SetupDefaults:00000028 $d
+     /tmp/ccdyZUY5.s:154    .text.u8x8_Setup:00000000 $t
+     /tmp/ccdyZUY5.s:160    .text.u8x8_Setup:00000000 u8x8_Setup
+     /tmp/ccdyZUY5.s:208    .rodata.u8x8_null_display_info:00000000 $d
+
+UNDEFINED SYMBOLS
+u8x8_d_helper_display_init
+u8x8_d_helper_display_setup_memory
+u8x8_SetupMemory

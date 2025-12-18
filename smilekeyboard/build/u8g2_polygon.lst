@@ -1,0 +1,1734 @@
+ARM GAS  /tmp/ccy9HRO0.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.arch armv7-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"u8g2_polygon.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.file 1 "BSP/u8g2/u8g2_polygon.c"
+  18              		.section	.text.pge_Next,"ax",%progbits
+  19              		.align	1
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  24              	pge_Next:
+  25              	.LVL0:
+  26              	.LFB0:
+   1:BSP/u8g2/u8g2_polygon.c **** /*
+   2:BSP/u8g2/u8g2_polygon.c **** 
+   3:BSP/u8g2/u8g2_polygon.c ****   u8g22_polygon.c
+   4:BSP/u8g2/u8g2_polygon.c **** 
+   5:BSP/u8g2/u8g2_polygon.c **** */	
+   6:BSP/u8g2/u8g2_polygon.c **** 
+   7:BSP/u8g2/u8g2_polygon.c **** 
+   8:BSP/u8g2/u8g2_polygon.c **** #include "u8g2.h"
+   9:BSP/u8g2/u8g2_polygon.c **** 
+  10:BSP/u8g2/u8g2_polygon.c **** 
+  11:BSP/u8g2/u8g2_polygon.c **** 
+  12:BSP/u8g2/u8g2_polygon.c **** 
+  13:BSP/u8g2/u8g2_polygon.c **** /*===========================================*/
+  14:BSP/u8g2/u8g2_polygon.c **** /* local definitions */
+  15:BSP/u8g2/u8g2_polygon.c **** 
+  16:BSP/u8g2/u8g2_polygon.c **** typedef int16_t pg_word_t;
+  17:BSP/u8g2/u8g2_polygon.c **** 
+  18:BSP/u8g2/u8g2_polygon.c **** 
+  19:BSP/u8g2/u8g2_polygon.c **** struct pg_point_struct
+  20:BSP/u8g2/u8g2_polygon.c **** {
+  21:BSP/u8g2/u8g2_polygon.c ****   pg_word_t x;
+  22:BSP/u8g2/u8g2_polygon.c ****   pg_word_t y;
+  23:BSP/u8g2/u8g2_polygon.c **** };
+  24:BSP/u8g2/u8g2_polygon.c **** 
+  25:BSP/u8g2/u8g2_polygon.c **** typedef struct _pg_struct pg_struct;	/* forward declaration */
+  26:BSP/u8g2/u8g2_polygon.c **** 
+  27:BSP/u8g2/u8g2_polygon.c **** struct pg_edge_struct
+  28:BSP/u8g2/u8g2_polygon.c **** {
+  29:BSP/u8g2/u8g2_polygon.c ****   pg_word_t x_direction;	/* 1, if x2 is greater than x1, -1 otherwise */
+  30:BSP/u8g2/u8g2_polygon.c ****   pg_word_t height;
+  31:BSP/u8g2/u8g2_polygon.c ****   pg_word_t current_x_offset;
+  32:BSP/u8g2/u8g2_polygon.c ****   pg_word_t error_offset;
+ARM GAS  /tmp/ccy9HRO0.s 			page 2
+
+
+  33:BSP/u8g2/u8g2_polygon.c ****   
+  34:BSP/u8g2/u8g2_polygon.c ****   /* --- line loop --- */
+  35:BSP/u8g2/u8g2_polygon.c ****   pg_word_t current_y;
+  36:BSP/u8g2/u8g2_polygon.c ****   pg_word_t max_y;
+  37:BSP/u8g2/u8g2_polygon.c ****   pg_word_t current_x;
+  38:BSP/u8g2/u8g2_polygon.c ****   pg_word_t error;
+  39:BSP/u8g2/u8g2_polygon.c **** 
+  40:BSP/u8g2/u8g2_polygon.c ****   /* --- outer loop --- */
+  41:BSP/u8g2/u8g2_polygon.c ****   uint8_t (*next_idx_fn)(pg_struct *pg, uint8_t i);
+  42:BSP/u8g2/u8g2_polygon.c ****   uint8_t curr_idx;
+  43:BSP/u8g2/u8g2_polygon.c **** };
+  44:BSP/u8g2/u8g2_polygon.c **** 
+  45:BSP/u8g2/u8g2_polygon.c **** /* maximum number of points in the polygon */
+  46:BSP/u8g2/u8g2_polygon.c **** /* can be redefined, but highest possible value is 254 */
+  47:BSP/u8g2/u8g2_polygon.c **** #define PG_MAX_POINTS 6
+  48:BSP/u8g2/u8g2_polygon.c **** 
+  49:BSP/u8g2/u8g2_polygon.c **** /* index numbers for the pge structures below */
+  50:BSP/u8g2/u8g2_polygon.c **** #define PG_LEFT 0
+  51:BSP/u8g2/u8g2_polygon.c **** #define PG_RIGHT 1
+  52:BSP/u8g2/u8g2_polygon.c **** 
+  53:BSP/u8g2/u8g2_polygon.c **** 
+  54:BSP/u8g2/u8g2_polygon.c **** struct _pg_struct
+  55:BSP/u8g2/u8g2_polygon.c **** {
+  56:BSP/u8g2/u8g2_polygon.c ****   struct pg_point_struct list[PG_MAX_POINTS];
+  57:BSP/u8g2/u8g2_polygon.c ****   uint8_t cnt;
+  58:BSP/u8g2/u8g2_polygon.c ****   uint8_t is_min_y_not_flat;
+  59:BSP/u8g2/u8g2_polygon.c ****   pg_word_t total_scan_line_cnt;
+  60:BSP/u8g2/u8g2_polygon.c ****   struct pg_edge_struct pge[2];	/* left and right line draw structures */
+  61:BSP/u8g2/u8g2_polygon.c **** };
+  62:BSP/u8g2/u8g2_polygon.c **** 
+  63:BSP/u8g2/u8g2_polygon.c **** 
+  64:BSP/u8g2/u8g2_polygon.c **** /*===========================================*/
+  65:BSP/u8g2/u8g2_polygon.c **** /* procedures, which should not be inlined (save as much flash ROM as possible */
+  66:BSP/u8g2/u8g2_polygon.c **** 
+  67:BSP/u8g2/u8g2_polygon.c **** #define PG_NOINLINE U8G2_NOINLINE
+  68:BSP/u8g2/u8g2_polygon.c **** 
+  69:BSP/u8g2/u8g2_polygon.c **** static uint8_t pge_Next(struct pg_edge_struct *pge) PG_NOINLINE;
+  70:BSP/u8g2/u8g2_polygon.c **** static uint8_t pg_inc(pg_struct *pg, uint8_t i) PG_NOINLINE;
+  71:BSP/u8g2/u8g2_polygon.c **** static uint8_t pg_dec(pg_struct *pg, uint8_t i) PG_NOINLINE;
+  72:BSP/u8g2/u8g2_polygon.c **** static void pg_expand_min_y(pg_struct *pg, pg_word_t min_y, uint8_t pge_idx) PG_NOINLINE;
+  73:BSP/u8g2/u8g2_polygon.c **** static void pg_line_init(pg_struct * const pg, uint8_t pge_index) PG_NOINLINE;
+  74:BSP/u8g2/u8g2_polygon.c **** 
+  75:BSP/u8g2/u8g2_polygon.c **** /*===========================================*/
+  76:BSP/u8g2/u8g2_polygon.c **** /* line draw algorithm */
+  77:BSP/u8g2/u8g2_polygon.c **** 
+  78:BSP/u8g2/u8g2_polygon.c **** static uint8_t pge_Next(struct pg_edge_struct *pge)
+  79:BSP/u8g2/u8g2_polygon.c **** {
+  27              		.loc 1 79 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+  80:BSP/u8g2/u8g2_polygon.c ****   if ( pge->current_y >= pge->max_y )
+  32              		.loc 1 80 3 view .LVU1
+  33              		.loc 1 80 11 is_stmt 0 view .LVU2
+  34 0000 B0F90810 		ldrsh	r1, [r0, #8]
+  35              		.loc 1 80 29 view .LVU3
+ARM GAS  /tmp/ccy9HRO0.s 			page 3
+
+
+  36 0004 B0F90A30 		ldrsh	r3, [r0, #10]
+  37              		.loc 1 80 6 view .LVU4
+  38 0008 9942     		cmp	r1, r3
+  39 000a 1ADA     		bge	.L4
+  81:BSP/u8g2/u8g2_polygon.c ****     return 0;
+  82:BSP/u8g2/u8g2_polygon.c ****   
+  83:BSP/u8g2/u8g2_polygon.c ****   pge->current_x += pge->current_x_offset;
+  40              		.loc 1 83 3 is_stmt 1 view .LVU5
+  41              		.loc 1 83 6 is_stmt 0 view .LVU6
+  42 000c 8289     		ldrh	r2, [r0, #12]
+  43              		.loc 1 83 24 view .LVU7
+  44 000e 8388     		ldrh	r3, [r0, #4]
+  45              		.loc 1 83 18 view .LVU8
+  46 0010 1A44     		add	r2, r2, r3
+  47 0012 92B2     		uxth	r2, r2
+  48 0014 8281     		strh	r2, [r0, #12]	@ movhi
+  84:BSP/u8g2/u8g2_polygon.c ****   pge->error += pge->error_offset;
+  49              		.loc 1 84 3 is_stmt 1 view .LVU9
+  50              		.loc 1 84 6 is_stmt 0 view .LVU10
+  51 0016 C389     		ldrh	r3, [r0, #14]
+  52              		.loc 1 84 20 view .LVU11
+  53 0018 B0F806C0 		ldrh	ip, [r0, #6]
+  54              		.loc 1 84 14 view .LVU12
+  55 001c 6344     		add	r3, r3, ip
+  56 001e 1FFA83FC 		uxth	ip, r3
+  57 0022 1BB2     		sxth	r3, r3
+  58 0024 C381     		strh	r3, [r0, #14]	@ movhi
+  85:BSP/u8g2/u8g2_polygon.c ****   if ( pge->error > 0 )
+  59              		.loc 1 85 3 is_stmt 1 view .LVU13
+  60              		.loc 1 85 6 is_stmt 0 view .LVU14
+  61 0026 002B     		cmp	r3, #0
+  62 0028 07DD     		ble	.L3
+  86:BSP/u8g2/u8g2_polygon.c ****   {
+  87:BSP/u8g2/u8g2_polygon.c ****     pge->current_x += pge->x_direction;
+  63              		.loc 1 87 5 is_stmt 1 view .LVU15
+  64              		.loc 1 87 26 is_stmt 0 view .LVU16
+  65 002a 0388     		ldrh	r3, [r0]
+  66              		.loc 1 87 20 view .LVU17
+  67 002c 1A44     		add	r2, r2, r3
+  68 002e 8281     		strh	r2, [r0, #12]	@ movhi
+  88:BSP/u8g2/u8g2_polygon.c ****     pge->error -= pge->height;
+  69              		.loc 1 88 5 is_stmt 1 view .LVU18
+  70              		.loc 1 88 22 is_stmt 0 view .LVU19
+  71 0030 4388     		ldrh	r3, [r0, #2]
+  72              		.loc 1 88 16 view .LVU20
+  73 0032 ACEB030C 		sub	ip, ip, r3
+  74 0036 A0F80EC0 		strh	ip, [r0, #14]	@ movhi
+  75              	.L3:
+  89:BSP/u8g2/u8g2_polygon.c ****   }  
+  90:BSP/u8g2/u8g2_polygon.c ****   
+  91:BSP/u8g2/u8g2_polygon.c ****   pge->current_y++;
+  76              		.loc 1 91 3 is_stmt 1 view .LVU21
+  77              		.loc 1 91 17 is_stmt 0 view .LVU22
+  78 003a 0131     		adds	r1, r1, #1
+  79 003c 0181     		strh	r1, [r0, #8]	@ movhi
+  92:BSP/u8g2/u8g2_polygon.c ****   return 1;
+  80              		.loc 1 92 3 is_stmt 1 view .LVU23
+ARM GAS  /tmp/ccy9HRO0.s 			page 4
+
+
+  81              		.loc 1 92 10 is_stmt 0 view .LVU24
+  82 003e 0120     		movs	r0, #1
+  83              	.LVL1:
+  84              		.loc 1 92 10 view .LVU25
+  85 0040 7047     		bx	lr
+  86              	.LVL2:
+  87              	.L4:
+  81:BSP/u8g2/u8g2_polygon.c ****   
+  88              		.loc 1 81 12 view .LVU26
+  89 0042 0020     		movs	r0, #0
+  90              	.LVL3:
+  93:BSP/u8g2/u8g2_polygon.c **** }
+  91              		.loc 1 93 1 view .LVU27
+  92 0044 7047     		bx	lr
+  93              		.cfi_endproc
+  94              	.LFE0:
+  96              		.section	.text.pge_Init,"ax",%progbits
+  97              		.align	1
+  98              		.syntax unified
+  99              		.thumb
+ 100              		.thumb_func
+ 102              	pge_Init:
+ 103              	.LVL4:
+ 104              	.LFB1:
+  94:BSP/u8g2/u8g2_polygon.c **** 
+  95:BSP/u8g2/u8g2_polygon.c **** /* assumes y2 > y1 */
+  96:BSP/u8g2/u8g2_polygon.c **** static void pge_Init(struct pg_edge_struct *pge, pg_word_t x1, pg_word_t y1, pg_word_t x2, pg_word_
+  97:BSP/u8g2/u8g2_polygon.c **** {
+ 105              		.loc 1 97 1 is_stmt 1 view -0
+ 106              		.cfi_startproc
+ 107              		@ args = 4, pretend = 0, frame = 0
+ 108              		@ frame_needed = 0, uses_anonymous_args = 0
+ 109              		.loc 1 97 1 is_stmt 0 view .LVU29
+ 110 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 111              	.LCFI0:
+ 112              		.cfi_def_cfa_offset 20
+ 113              		.cfi_offset 4, -20
+ 114              		.cfi_offset 5, -16
+ 115              		.cfi_offset 6, -12
+ 116              		.cfi_offset 7, -8
+ 117              		.cfi_offset 14, -4
+ 118 0002 BDF91460 		ldrsh	r6, [sp, #20]
+  98:BSP/u8g2/u8g2_polygon.c ****   pg_word_t dx = x2 - x1;
+ 119              		.loc 1 98 3 is_stmt 1 view .LVU30
+ 120              		.loc 1 98 21 is_stmt 0 view .LVU31
+ 121 0006 9BB2     		uxth	r3, r3
+ 122              		.loc 1 98 21 view .LVU32
+ 123 0008 1FFA81FC 		uxth	ip, r1
+ 124 000c A3EB0C0E 		sub	lr, r3, ip
+ 125              		.loc 1 98 13 view .LVU33
+ 126 0010 0FFA8EFE 		sxth	lr, lr
+ 127              	.LVL5:
+  99:BSP/u8g2/u8g2_polygon.c ****   pg_word_t width;
+ 128              		.loc 1 99 3 is_stmt 1 view .LVU34
+ 100:BSP/u8g2/u8g2_polygon.c **** 
+ 101:BSP/u8g2/u8g2_polygon.c ****   pge->height = y2 - y1;
+ 129              		.loc 1 101 3 view .LVU35
+ARM GAS  /tmp/ccy9HRO0.s 			page 5
+
+
+ 130              		.loc 1 101 20 is_stmt 0 view .LVU36
+ 131 0014 B7B2     		uxth	r7, r6
+ 132 0016 95B2     		uxth	r5, r2
+ 133 0018 7C1B     		subs	r4, r7, r5
+ 134 001a 24B2     		sxth	r4, r4
+ 135              		.loc 1 101 15 view .LVU37
+ 136 001c 4480     		strh	r4, [r0, #2]	@ movhi
+ 102:BSP/u8g2/u8g2_polygon.c ****   pge->max_y = y2;
+ 137              		.loc 1 102 3 is_stmt 1 view .LVU38
+ 138              		.loc 1 102 14 is_stmt 0 view .LVU39
+ 139 001e 4681     		strh	r6, [r0, #10]	@ movhi
+ 103:BSP/u8g2/u8g2_polygon.c ****   pge->current_y = y1;
+ 140              		.loc 1 103 3 is_stmt 1 view .LVU40
+ 141              		.loc 1 103 18 is_stmt 0 view .LVU41
+ 142 0020 0281     		strh	r2, [r0, #8]	@ movhi
+ 104:BSP/u8g2/u8g2_polygon.c ****   pge->current_x = x1;
+ 143              		.loc 1 104 3 is_stmt 1 view .LVU42
+ 144              		.loc 1 104 18 is_stmt 0 view .LVU43
+ 145 0022 8181     		strh	r1, [r0, #12]	@ movhi
+ 105:BSP/u8g2/u8g2_polygon.c **** 
+ 106:BSP/u8g2/u8g2_polygon.c ****   if ( dx >= 0 )
+ 146              		.loc 1 106 3 is_stmt 1 view .LVU44
+ 147              		.loc 1 106 6 is_stmt 0 view .LVU45
+ 148 0024 BEF1000F 		cmp	lr, #0
+ 149 0028 0EDB     		blt	.L6
+ 107:BSP/u8g2/u8g2_polygon.c ****   {
+ 108:BSP/u8g2/u8g2_polygon.c ****     pge->x_direction = 1;
+ 150              		.loc 1 108 5 is_stmt 1 view .LVU46
+ 151              		.loc 1 108 22 is_stmt 0 view .LVU47
+ 152 002a 0123     		movs	r3, #1
+ 153              	.LVL6:
+ 154              		.loc 1 108 22 view .LVU48
+ 155 002c 0380     		strh	r3, [r0]	@ movhi
+ 109:BSP/u8g2/u8g2_polygon.c ****     width = dx;
+ 156              		.loc 1 109 5 is_stmt 1 view .LVU49
+ 157              	.LVL7:
+ 110:BSP/u8g2/u8g2_polygon.c ****     pge->error = 0;
+ 158              		.loc 1 110 5 view .LVU50
+ 159              		.loc 1 110 16 is_stmt 0 view .LVU51
+ 160 002e 0023     		movs	r3, #0
+ 161 0030 C381     		strh	r3, [r0, #14]	@ movhi
+ 109:BSP/u8g2/u8g2_polygon.c ****     width = dx;
+ 162              		.loc 1 109 11 view .LVU52
+ 163 0032 7346     		mov	r3, lr
+ 164              	.LVL8:
+ 165              	.L7:
+ 111:BSP/u8g2/u8g2_polygon.c ****   }
+ 112:BSP/u8g2/u8g2_polygon.c ****   else
+ 113:BSP/u8g2/u8g2_polygon.c ****   {
+ 114:BSP/u8g2/u8g2_polygon.c ****     pge->x_direction = -1;
+ 115:BSP/u8g2/u8g2_polygon.c ****     width = -dx;
+ 116:BSP/u8g2/u8g2_polygon.c ****     pge->error = 1 - pge->height;
+ 117:BSP/u8g2/u8g2_polygon.c ****   }
+ 118:BSP/u8g2/u8g2_polygon.c ****   
+ 119:BSP/u8g2/u8g2_polygon.c ****   pge->current_x_offset = dx / pge->height;
+ 166              		.loc 1 119 3 is_stmt 1 view .LVU53
+ 167              		.loc 1 119 30 is_stmt 0 view .LVU54
+ARM GAS  /tmp/ccy9HRO0.s 			page 6
+
+
+ 168 0034 9EFBF4FE 		sdiv	lr, lr, r4
+ 169              	.LVL9:
+ 170              		.loc 1 119 25 view .LVU55
+ 171 0038 A0F804E0 		strh	lr, [r0, #4]	@ movhi
+ 120:BSP/u8g2/u8g2_polygon.c ****   pge->error_offset = width % pge->height;
+ 172              		.loc 1 120 3 is_stmt 1 view .LVU56
+ 173              		.loc 1 120 29 is_stmt 0 view .LVU57
+ 174 003c 93FBF4F2 		sdiv	r2, r3, r4
+ 175 0040 04FB1233 		mls	r3, r4, r2, r3
+ 176              	.LVL10:
+ 177              		.loc 1 120 21 view .LVU58
+ 178 0044 C380     		strh	r3, [r0, #6]	@ movhi
+ 121:BSP/u8g2/u8g2_polygon.c **** }
+ 179              		.loc 1 121 1 view .LVU59
+ 180 0046 F0BD     		pop	{r4, r5, r6, r7, pc}
+ 181              	.LVL11:
+ 182              	.L6:
+ 114:BSP/u8g2/u8g2_polygon.c ****     width = -dx;
+ 183              		.loc 1 114 5 is_stmt 1 view .LVU60
+ 114:BSP/u8g2/u8g2_polygon.c ****     width = -dx;
+ 184              		.loc 1 114 22 is_stmt 0 view .LVU61
+ 185 0048 4FF6FF72 		movw	r2, #65535
+ 186              	.LVL12:
+ 114:BSP/u8g2/u8g2_polygon.c ****     width = -dx;
+ 187              		.loc 1 114 22 view .LVU62
+ 188 004c 0280     		strh	r2, [r0]	@ movhi
+ 115:BSP/u8g2/u8g2_polygon.c ****     pge->error = 1 - pge->height;
+ 189              		.loc 1 115 5 is_stmt 1 view .LVU63
+ 115:BSP/u8g2/u8g2_polygon.c ****     pge->error = 1 - pge->height;
+ 190              		.loc 1 115 11 is_stmt 0 view .LVU64
+ 191 004e ACEB0303 		sub	r3, ip, r3
+ 192 0052 1BB2     		sxth	r3, r3
+ 193              	.LVL13:
+ 116:BSP/u8g2/u8g2_polygon.c ****   }
+ 194              		.loc 1 116 5 is_stmt 1 view .LVU65
+ 116:BSP/u8g2/u8g2_polygon.c ****   }
+ 195              		.loc 1 116 20 is_stmt 0 view .LVU66
+ 196 0054 ED1B     		subs	r5, r5, r7
+ 197 0056 0135     		adds	r5, r5, #1
+ 116:BSP/u8g2/u8g2_polygon.c ****   }
+ 198              		.loc 1 116 16 view .LVU67
+ 199 0058 C581     		strh	r5, [r0, #14]	@ movhi
+ 200 005a EBE7     		b	.L7
+ 201              		.cfi_endproc
+ 202              	.LFE1:
+ 204              		.section	.text.pg_inc,"ax",%progbits
+ 205              		.align	1
+ 206              		.syntax unified
+ 207              		.thumb
+ 208              		.thumb_func
+ 210              	pg_inc:
+ 211              	.LVL14:
+ 212              	.LFB2:
+ 122:BSP/u8g2/u8g2_polygon.c **** 
+ 123:BSP/u8g2/u8g2_polygon.c **** /*===========================================*/
+ 124:BSP/u8g2/u8g2_polygon.c **** /* convex polygon algorithm */
+ 125:BSP/u8g2/u8g2_polygon.c **** 
+ARM GAS  /tmp/ccy9HRO0.s 			page 7
+
+
+ 126:BSP/u8g2/u8g2_polygon.c **** static uint8_t pg_inc(pg_struct *pg, uint8_t i)
+ 127:BSP/u8g2/u8g2_polygon.c **** {
+ 213              		.loc 1 127 1 is_stmt 1 view -0
+ 214              		.cfi_startproc
+ 215              		@ args = 0, pretend = 0, frame = 0
+ 216              		@ frame_needed = 0, uses_anonymous_args = 0
+ 217              		@ link register save eliminated.
+ 128:BSP/u8g2/u8g2_polygon.c ****     i++;
+ 218              		.loc 1 128 5 view .LVU69
+ 219              		.loc 1 128 6 is_stmt 0 view .LVU70
+ 220 0000 0131     		adds	r1, r1, #1
+ 221              	.LVL15:
+ 222              		.loc 1 128 6 view .LVU71
+ 223 0002 C9B2     		uxtb	r1, r1
+ 224              	.LVL16:
+ 129:BSP/u8g2/u8g2_polygon.c ****     if ( i >= pg->cnt )
+ 225              		.loc 1 129 5 is_stmt 1 view .LVU72
+ 226              		.loc 1 129 17 is_stmt 0 view .LVU73
+ 227 0004 037E     		ldrb	r3, [r0, #24]	@ zero_extendqisi2
+ 228              		.loc 1 129 8 view .LVU74
+ 229 0006 8B42     		cmp	r3, r1
+ 230 0008 00D8     		bhi	.L10
+ 130:BSP/u8g2/u8g2_polygon.c ****       i = 0;
+ 231              		.loc 1 130 9 view .LVU75
+ 232 000a 0021     		movs	r1, #0
+ 233              	.LVL17:
+ 234              	.L10:
+ 131:BSP/u8g2/u8g2_polygon.c ****     return i;
+ 235              		.loc 1 131 5 is_stmt 1 view .LVU76
+ 132:BSP/u8g2/u8g2_polygon.c **** }
+ 236              		.loc 1 132 1 is_stmt 0 view .LVU77
+ 237 000c 0846     		mov	r0, r1
+ 238              	.LVL18:
+ 239              		.loc 1 132 1 view .LVU78
+ 240 000e 7047     		bx	lr
+ 241              		.cfi_endproc
+ 242              	.LFE2:
+ 244              		.section	.text.pg_dec,"ax",%progbits
+ 245              		.align	1
+ 246              		.syntax unified
+ 247              		.thumb
+ 248              		.thumb_func
+ 250              	pg_dec:
+ 251              	.LVL19:
+ 252              	.LFB3:
+ 133:BSP/u8g2/u8g2_polygon.c **** 
+ 134:BSP/u8g2/u8g2_polygon.c **** static uint8_t pg_dec(pg_struct *pg, uint8_t i)
+ 135:BSP/u8g2/u8g2_polygon.c **** {
+ 253              		.loc 1 135 1 is_stmt 1 view -0
+ 254              		.cfi_startproc
+ 255              		@ args = 0, pretend = 0, frame = 0
+ 256              		@ frame_needed = 0, uses_anonymous_args = 0
+ 257              		@ link register save eliminated.
+ 136:BSP/u8g2/u8g2_polygon.c ****     i--;
+ 258              		.loc 1 136 5 view .LVU80
+ 259              		.loc 1 136 6 is_stmt 0 view .LVU81
+ 260 0000 0139     		subs	r1, r1, #1
+ARM GAS  /tmp/ccy9HRO0.s 			page 8
+
+
+ 261              	.LVL20:
+ 262              		.loc 1 136 6 view .LVU82
+ 263 0002 C9B2     		uxtb	r1, r1
+ 264              	.LVL21:
+ 137:BSP/u8g2/u8g2_polygon.c ****     if ( i >= pg->cnt )
+ 265              		.loc 1 137 5 is_stmt 1 view .LVU83
+ 266              		.loc 1 137 17 is_stmt 0 view .LVU84
+ 267 0004 037E     		ldrb	r3, [r0, #24]	@ zero_extendqisi2
+ 268              		.loc 1 137 8 view .LVU85
+ 269 0006 8B42     		cmp	r3, r1
+ 270 0008 01D8     		bhi	.L13
+ 138:BSP/u8g2/u8g2_polygon.c ****       i = pg->cnt-1;
+ 271              		.loc 1 138 7 is_stmt 1 view .LVU86
+ 272              		.loc 1 138 9 is_stmt 0 view .LVU87
+ 273 000a 013B     		subs	r3, r3, #1
+ 274 000c D9B2     		uxtb	r1, r3
+ 275              	.LVL22:
+ 276              	.L13:
+ 139:BSP/u8g2/u8g2_polygon.c ****     return i;
+ 277              		.loc 1 139 5 is_stmt 1 view .LVU88
+ 140:BSP/u8g2/u8g2_polygon.c **** }
+ 278              		.loc 1 140 1 is_stmt 0 view .LVU89
+ 279 000e 0846     		mov	r0, r1
+ 280              	.LVL23:
+ 281              		.loc 1 140 1 view .LVU90
+ 282 0010 7047     		bx	lr
+ 283              		.cfi_endproc
+ 284              	.LFE3:
+ 286              		.section	.text.pg_expand_min_y,"ax",%progbits
+ 287              		.align	1
+ 288              		.syntax unified
+ 289              		.thumb
+ 290              		.thumb_func
+ 292              	pg_expand_min_y:
+ 293              	.LVL24:
+ 294              	.LFB4:
+ 141:BSP/u8g2/u8g2_polygon.c **** 
+ 142:BSP/u8g2/u8g2_polygon.c **** static void pg_expand_min_y(pg_struct *pg, pg_word_t min_y, uint8_t pge_idx)
+ 143:BSP/u8g2/u8g2_polygon.c **** {
+ 295              		.loc 1 143 1 is_stmt 1 view -0
+ 296              		.cfi_startproc
+ 297              		@ args = 0, pretend = 0, frame = 0
+ 298              		@ frame_needed = 0, uses_anonymous_args = 0
+ 299              		.loc 1 143 1 is_stmt 0 view .LVU92
+ 300 0000 70B5     		push	{r4, r5, r6, lr}
+ 301              	.LCFI1:
+ 302              		.cfi_def_cfa_offset 16
+ 303              		.cfi_offset 4, -16
+ 304              		.cfi_offset 5, -12
+ 305              		.cfi_offset 6, -8
+ 306              		.cfi_offset 14, -4
+ 307 0002 0446     		mov	r4, r0
+ 308 0004 0E46     		mov	r6, r1
+ 309 0006 1546     		mov	r5, r2
+ 144:BSP/u8g2/u8g2_polygon.c ****   uint8_t i = pg->pge[pge_idx].curr_idx;
+ 310              		.loc 1 144 3 is_stmt 1 view .LVU93
+ 311              		.loc 1 144 11 is_stmt 0 view .LVU94
+ARM GAS  /tmp/ccy9HRO0.s 			page 9
+
+
+ 312 0008 02EB4203 		add	r3, r2, r2, lsl #1
+ 313 000c 00EBC303 		add	r3, r0, r3, lsl #3
+ 314 0010 93F83010 		ldrb	r1, [r3, #48]	@ zero_extendqisi2
+ 315              	.LVL25:
+ 316              		.loc 1 144 11 view .LVU95
+ 317 0014 05E0     		b	.L16
+ 318              	.LVL26:
+ 319              	.L18:
+ 145:BSP/u8g2/u8g2_polygon.c ****   for(;;)
+ 146:BSP/u8g2/u8g2_polygon.c ****   {
+ 147:BSP/u8g2/u8g2_polygon.c ****     i = pg->pge[pge_idx].next_idx_fn(pg, i);
+ 148:BSP/u8g2/u8g2_polygon.c ****     if ( pg->list[i].y != min_y )
+ 149:BSP/u8g2/u8g2_polygon.c ****       break;	
+ 150:BSP/u8g2/u8g2_polygon.c ****     pg->pge[pge_idx].curr_idx = i;
+ 320              		.loc 1 150 5 is_stmt 1 view .LVU96
+ 321              		.loc 1 150 31 is_stmt 0 view .LVU97
+ 322 0016 05EB4503 		add	r3, r5, r5, lsl #1
+ 323 001a 04EBC303 		add	r3, r4, r3, lsl #3
+ 324 001e 83F83000 		strb	r0, [r3, #48]
+ 145:BSP/u8g2/u8g2_polygon.c ****   for(;;)
+ 325              		.loc 1 145 3 is_stmt 1 view .LVU98
+ 326              	.LVL27:
+ 327              	.L16:
+ 145:BSP/u8g2/u8g2_polygon.c ****   for(;;)
+ 328              		.loc 1 145 3 view .LVU99
+ 147:BSP/u8g2/u8g2_polygon.c ****     if ( pg->list[i].y != min_y )
+ 329              		.loc 1 147 5 view .LVU100
+ 147:BSP/u8g2/u8g2_polygon.c ****     if ( pg->list[i].y != min_y )
+ 330              		.loc 1 147 25 is_stmt 0 view .LVU101
+ 331 0022 05EB4503 		add	r3, r5, r5, lsl #1
+ 332 0026 04EBC303 		add	r3, r4, r3, lsl #3
+ 333 002a DB6A     		ldr	r3, [r3, #44]
+ 147:BSP/u8g2/u8g2_polygon.c ****     if ( pg->list[i].y != min_y )
+ 334              		.loc 1 147 9 view .LVU102
+ 335 002c 2046     		mov	r0, r4
+ 336 002e 9847     		blx	r3
+ 337              	.LVL28:
+ 147:BSP/u8g2/u8g2_polygon.c ****     if ( pg->list[i].y != min_y )
+ 338              		.loc 1 147 9 view .LVU103
+ 339 0030 0146     		mov	r1, r0
+ 340              	.LVL29:
+ 148:BSP/u8g2/u8g2_polygon.c ****       break;	
+ 341              		.loc 1 148 5 is_stmt 1 view .LVU104
+ 148:BSP/u8g2/u8g2_polygon.c ****       break;	
+ 342              		.loc 1 148 21 is_stmt 0 view .LVU105
+ 343 0032 04EB8003 		add	r3, r4, r0, lsl #2
+ 344 0036 B3F90230 		ldrsh	r3, [r3, #2]
+ 148:BSP/u8g2/u8g2_polygon.c ****       break;	
+ 345              		.loc 1 148 8 view .LVU106
+ 346 003a B342     		cmp	r3, r6
+ 347 003c EBD0     		beq	.L18
+ 151:BSP/u8g2/u8g2_polygon.c ****   }
+ 152:BSP/u8g2/u8g2_polygon.c **** }
+ 348              		.loc 1 152 1 view .LVU107
+ 349 003e 70BD     		pop	{r4, r5, r6, pc}
+ 350              		.loc 1 152 1 view .LVU108
+ 351              		.cfi_endproc
+ARM GAS  /tmp/ccy9HRO0.s 			page 10
+
+
+ 352              	.LFE4:
+ 354              		.section	.text.pg_prepare,"ax",%progbits
+ 355              		.align	1
+ 356              		.syntax unified
+ 357              		.thumb
+ 358              		.thumb_func
+ 360              	pg_prepare:
+ 361              	.LVL30:
+ 362              	.LFB5:
+ 153:BSP/u8g2/u8g2_polygon.c **** 
+ 154:BSP/u8g2/u8g2_polygon.c **** static uint8_t pg_prepare(pg_struct *pg)
+ 155:BSP/u8g2/u8g2_polygon.c **** {
+ 363              		.loc 1 155 1 is_stmt 1 view -0
+ 364              		.cfi_startproc
+ 365              		@ args = 0, pretend = 0, frame = 0
+ 366              		@ frame_needed = 0, uses_anonymous_args = 0
+ 367              		.loc 1 155 1 is_stmt 0 view .LVU110
+ 368 0000 38B5     		push	{r3, r4, r5, lr}
+ 369              	.LCFI2:
+ 370              		.cfi_def_cfa_offset 16
+ 371              		.cfi_offset 3, -16
+ 372              		.cfi_offset 4, -12
+ 373              		.cfi_offset 5, -8
+ 374              		.cfi_offset 14, -4
+ 375 0002 0446     		mov	r4, r0
+ 156:BSP/u8g2/u8g2_polygon.c ****   pg_word_t max_y;
+ 376              		.loc 1 156 3 is_stmt 1 view .LVU111
+ 157:BSP/u8g2/u8g2_polygon.c ****   pg_word_t min_y;
+ 377              		.loc 1 157 3 view .LVU112
+ 158:BSP/u8g2/u8g2_polygon.c ****   uint8_t i;
+ 378              		.loc 1 158 3 view .LVU113
+ 159:BSP/u8g2/u8g2_polygon.c **** 
+ 160:BSP/u8g2/u8g2_polygon.c ****   /* setup the next index procedures */
+ 161:BSP/u8g2/u8g2_polygon.c ****   pg->pge[PG_RIGHT].next_idx_fn = pg_inc;
+ 379              		.loc 1 161 3 view .LVU114
+ 380              		.loc 1 161 33 is_stmt 0 view .LVU115
+ 381 0004 264B     		ldr	r3, .L32
+ 382 0006 4364     		str	r3, [r0, #68]
+ 162:BSP/u8g2/u8g2_polygon.c ****   pg->pge[PG_LEFT].next_idx_fn = pg_dec;
+ 383              		.loc 1 162 3 is_stmt 1 view .LVU116
+ 384              		.loc 1 162 32 is_stmt 0 view .LVU117
+ 385 0008 264B     		ldr	r3, .L32+4
+ 386 000a C362     		str	r3, [r0, #44]
+ 163:BSP/u8g2/u8g2_polygon.c ****   
+ 164:BSP/u8g2/u8g2_polygon.c ****   /* search for highest and lowest point */
+ 165:BSP/u8g2/u8g2_polygon.c ****   max_y = pg->list[0].y;
+ 387              		.loc 1 165 3 is_stmt 1 view .LVU118
+ 388              		.loc 1 165 9 is_stmt 0 view .LVU119
+ 389 000c B0F90210 		ldrsh	r1, [r0, #2]
+ 390              	.LVL31:
+ 166:BSP/u8g2/u8g2_polygon.c ****   min_y = pg->list[0].y;
+ 391              		.loc 1 166 3 is_stmt 1 view .LVU120
+ 167:BSP/u8g2/u8g2_polygon.c ****   pg->pge[PG_LEFT].curr_idx = 0;
+ 392              		.loc 1 167 3 view .LVU121
+ 393              		.loc 1 167 29 is_stmt 0 view .LVU122
+ 394 0010 0023     		movs	r3, #0
+ 395 0012 80F83030 		strb	r3, [r0, #48]
+ARM GAS  /tmp/ccy9HRO0.s 			page 11
+
+
+ 168:BSP/u8g2/u8g2_polygon.c ****   for( i = 1; i < pg->cnt; i++ )
+ 396              		.loc 1 168 3 is_stmt 1 view .LVU123
+ 397              	.LVL32:
+ 166:BSP/u8g2/u8g2_polygon.c ****   min_y = pg->list[0].y;
+ 398              		.loc 1 166 9 is_stmt 0 view .LVU124
+ 399 0016 0D46     		mov	r5, r1
+ 400              		.loc 1 168 10 view .LVU125
+ 401 0018 0123     		movs	r3, #1
+ 402              		.loc 1 168 3 view .LVU126
+ 403 001a 01E0     		b	.L20
+ 404              	.LVL33:
+ 405              	.L22:
+ 406              		.loc 1 168 29 is_stmt 1 discriminator 2 view .LVU127
+ 407 001c 0133     		adds	r3, r3, #1
+ 408              	.LVL34:
+ 409              		.loc 1 168 29 is_stmt 0 discriminator 2 view .LVU128
+ 410 001e DBB2     		uxtb	r3, r3
+ 411              	.LVL35:
+ 412              	.L20:
+ 413              		.loc 1 168 17 is_stmt 1 discriminator 1 view .LVU129
+ 414              		.loc 1 168 21 is_stmt 0 discriminator 1 view .LVU130
+ 415 0020 227E     		ldrb	r2, [r4, #24]	@ zero_extendqisi2
+ 416              		.loc 1 168 17 discriminator 1 view .LVU131
+ 417 0022 9A42     		cmp	r2, r3
+ 418 0024 0CD9     		bls	.L30
+ 169:BSP/u8g2/u8g2_polygon.c ****   {
+ 170:BSP/u8g2/u8g2_polygon.c ****     if ( max_y < pg->list[i].y )
+ 419              		.loc 1 170 5 is_stmt 1 view .LVU132
+ 420              		.loc 1 170 29 is_stmt 0 view .LVU133
+ 421 0026 04EB8302 		add	r2, r4, r3, lsl #2
+ 422 002a B2F90220 		ldrsh	r2, [r2, #2]
+ 423              		.loc 1 170 8 view .LVU134
+ 424 002e 8A42     		cmp	r2, r1
+ 425 0030 00DD     		ble	.L21
+ 171:BSP/u8g2/u8g2_polygon.c ****     {
+ 172:BSP/u8g2/u8g2_polygon.c ****       max_y = pg->list[i].y;
+ 426              		.loc 1 172 13 view .LVU135
+ 427 0032 1146     		mov	r1, r2
+ 428              	.LVL36:
+ 429              	.L21:
+ 173:BSP/u8g2/u8g2_polygon.c ****     }
+ 174:BSP/u8g2/u8g2_polygon.c ****     if ( min_y > pg->list[i].y )
+ 430              		.loc 1 174 5 is_stmt 1 view .LVU136
+ 431              		.loc 1 174 8 is_stmt 0 view .LVU137
+ 432 0034 AA42     		cmp	r2, r5
+ 433 0036 F1DA     		bge	.L22
+ 175:BSP/u8g2/u8g2_polygon.c ****     {
+ 176:BSP/u8g2/u8g2_polygon.c ****       pg->pge[PG_LEFT].curr_idx = i;
+ 434              		.loc 1 176 7 is_stmt 1 view .LVU138
+ 435              		.loc 1 176 33 is_stmt 0 view .LVU139
+ 436 0038 84F83030 		strb	r3, [r4, #48]
+ 177:BSP/u8g2/u8g2_polygon.c ****       min_y = pg->list[i].y;
+ 437              		.loc 1 177 7 is_stmt 1 view .LVU140
+ 438              	.LVL37:
+ 439              		.loc 1 177 13 is_stmt 0 view .LVU141
+ 440 003c 1546     		mov	r5, r2
+ 441 003e EDE7     		b	.L22
+ARM GAS  /tmp/ccy9HRO0.s 			page 12
+
+
+ 442              	.LVL38:
+ 443              	.L30:
+ 178:BSP/u8g2/u8g2_polygon.c ****     }
+ 179:BSP/u8g2/u8g2_polygon.c ****   }
+ 180:BSP/u8g2/u8g2_polygon.c **** 
+ 181:BSP/u8g2/u8g2_polygon.c ****   /* calculate total number of scan lines */
+ 182:BSP/u8g2/u8g2_polygon.c ****   pg->total_scan_line_cnt = max_y;
+ 444              		.loc 1 182 3 is_stmt 1 view .LVU142
+ 445              		.loc 1 182 27 is_stmt 0 view .LVU143
+ 446 0040 6183     		strh	r1, [r4, #26]	@ movhi
+ 183:BSP/u8g2/u8g2_polygon.c ****   pg->total_scan_line_cnt -= min_y;
+ 447              		.loc 1 183 3 is_stmt 1 view .LVU144
+ 448              		.loc 1 183 5 is_stmt 0 view .LVU145
+ 449 0042 89B2     		uxth	r1, r1
+ 450              	.LVL39:
+ 451              		.loc 1 183 27 view .LVU146
+ 452 0044 491B     		subs	r1, r1, r5
+ 453 0046 09B2     		sxth	r1, r1
+ 454 0048 6183     		strh	r1, [r4, #26]	@ movhi
+ 455              	.LVL40:
+ 184:BSP/u8g2/u8g2_polygon.c ****   
+ 185:BSP/u8g2/u8g2_polygon.c ****   /* exit if polygon height is zero */
+ 186:BSP/u8g2/u8g2_polygon.c ****   if ( pg->total_scan_line_cnt == 0 )
+ 456              		.loc 1 186 3 is_stmt 1 view .LVU147
+ 457              		.loc 1 186 6 is_stmt 0 view .LVU148
+ 458 004a 09B9     		cbnz	r1, .L31
+ 187:BSP/u8g2/u8g2_polygon.c ****     return 0;
+ 459              		.loc 1 187 12 view .LVU149
+ 460 004c 0020     		movs	r0, #0
+ 461              	.LVL41:
+ 462              	.L24:
+ 188:BSP/u8g2/u8g2_polygon.c ****   
+ 189:BSP/u8g2/u8g2_polygon.c ****   /* if the minimum y side is flat, try to find the lowest and highest x points */
+ 190:BSP/u8g2/u8g2_polygon.c ****   pg->pge[PG_RIGHT].curr_idx = pg->pge[PG_LEFT].curr_idx;  
+ 191:BSP/u8g2/u8g2_polygon.c ****   pg_expand_min_y(pg, min_y, PG_RIGHT);
+ 192:BSP/u8g2/u8g2_polygon.c ****   pg_expand_min_y(pg, min_y, PG_LEFT);
+ 193:BSP/u8g2/u8g2_polygon.c ****   
+ 194:BSP/u8g2/u8g2_polygon.c ****   /* check if the min side is really flat (depends on the x values) */
+ 195:BSP/u8g2/u8g2_polygon.c ****   pg->is_min_y_not_flat = 1;
+ 196:BSP/u8g2/u8g2_polygon.c ****   if ( pg->list[pg->pge[PG_LEFT].curr_idx].x != pg->list[pg->pge[PG_RIGHT].curr_idx].x )
+ 197:BSP/u8g2/u8g2_polygon.c ****   {
+ 198:BSP/u8g2/u8g2_polygon.c ****     pg->is_min_y_not_flat = 0;
+ 199:BSP/u8g2/u8g2_polygon.c ****   }
+ 200:BSP/u8g2/u8g2_polygon.c ****   else
+ 201:BSP/u8g2/u8g2_polygon.c ****   {
+ 202:BSP/u8g2/u8g2_polygon.c ****     pg->total_scan_line_cnt--;
+ 203:BSP/u8g2/u8g2_polygon.c ****     if ( pg->total_scan_line_cnt == 0 )
+ 204:BSP/u8g2/u8g2_polygon.c ****       return 0;
+ 205:BSP/u8g2/u8g2_polygon.c ****   }
+ 206:BSP/u8g2/u8g2_polygon.c **** 
+ 207:BSP/u8g2/u8g2_polygon.c ****   return 1;
+ 208:BSP/u8g2/u8g2_polygon.c **** }
+ 463              		.loc 1 208 1 view .LVU150
+ 464 004e 38BD     		pop	{r3, r4, r5, pc}
+ 465              	.LVL42:
+ 466              	.L31:
+ 190:BSP/u8g2/u8g2_polygon.c ****   pg_expand_min_y(pg, min_y, PG_RIGHT);
+ARM GAS  /tmp/ccy9HRO0.s 			page 13
+
+
+ 467              		.loc 1 190 3 is_stmt 1 view .LVU151
+ 190:BSP/u8g2/u8g2_polygon.c ****   pg_expand_min_y(pg, min_y, PG_RIGHT);
+ 468              		.loc 1 190 48 is_stmt 0 view .LVU152
+ 469 0050 94F83030 		ldrb	r3, [r4, #48]	@ zero_extendqisi2
+ 470              	.LVL43:
+ 190:BSP/u8g2/u8g2_polygon.c ****   pg_expand_min_y(pg, min_y, PG_RIGHT);
+ 471              		.loc 1 190 30 view .LVU153
+ 472 0054 84F84830 		strb	r3, [r4, #72]
+ 191:BSP/u8g2/u8g2_polygon.c ****   pg_expand_min_y(pg, min_y, PG_LEFT);
+ 473              		.loc 1 191 3 is_stmt 1 view .LVU154
+ 474 0058 0122     		movs	r2, #1
+ 475 005a 2946     		mov	r1, r5
+ 476 005c 2046     		mov	r0, r4
+ 477              	.LVL44:
+ 191:BSP/u8g2/u8g2_polygon.c ****   pg_expand_min_y(pg, min_y, PG_LEFT);
+ 478              		.loc 1 191 3 is_stmt 0 view .LVU155
+ 479 005e FFF7FEFF 		bl	pg_expand_min_y
+ 480              	.LVL45:
+ 192:BSP/u8g2/u8g2_polygon.c ****   
+ 481              		.loc 1 192 3 is_stmt 1 view .LVU156
+ 482 0062 0022     		movs	r2, #0
+ 483 0064 2946     		mov	r1, r5
+ 484 0066 2046     		mov	r0, r4
+ 485 0068 FFF7FEFF 		bl	pg_expand_min_y
+ 486              	.LVL46:
+ 195:BSP/u8g2/u8g2_polygon.c ****   if ( pg->list[pg->pge[PG_LEFT].curr_idx].x != pg->list[pg->pge[PG_RIGHT].curr_idx].x )
+ 487              		.loc 1 195 3 view .LVU157
+ 195:BSP/u8g2/u8g2_polygon.c ****   if ( pg->list[pg->pge[PG_LEFT].curr_idx].x != pg->list[pg->pge[PG_RIGHT].curr_idx].x )
+ 488              		.loc 1 195 25 is_stmt 0 view .LVU158
+ 489 006c 0123     		movs	r3, #1
+ 490 006e 6376     		strb	r3, [r4, #25]
+ 196:BSP/u8g2/u8g2_polygon.c ****   {
+ 491              		.loc 1 196 3 is_stmt 1 view .LVU159
+ 196:BSP/u8g2/u8g2_polygon.c ****   {
+ 492              		.loc 1 196 33 is_stmt 0 view .LVU160
+ 493 0070 94F83030 		ldrb	r3, [r4, #48]	@ zero_extendqisi2
+ 196:BSP/u8g2/u8g2_polygon.c ****   {
+ 494              		.loc 1 196 43 view .LVU161
+ 495 0074 34F92320 		ldrsh	r2, [r4, r3, lsl #2]
+ 196:BSP/u8g2/u8g2_polygon.c ****   {
+ 496              		.loc 1 196 75 view .LVU162
+ 497 0078 94F84830 		ldrb	r3, [r4, #72]	@ zero_extendqisi2
+ 196:BSP/u8g2/u8g2_polygon.c ****   {
+ 498              		.loc 1 196 85 view .LVU163
+ 499 007c 34F92330 		ldrsh	r3, [r4, r3, lsl #2]
+ 196:BSP/u8g2/u8g2_polygon.c ****   {
+ 500              		.loc 1 196 6 view .LVU164
+ 501 0080 9A42     		cmp	r2, r3
+ 502 0082 03D0     		beq	.L25
+ 198:BSP/u8g2/u8g2_polygon.c ****   }
+ 503              		.loc 1 198 5 is_stmt 1 view .LVU165
+ 198:BSP/u8g2/u8g2_polygon.c ****   }
+ 504              		.loc 1 198 27 is_stmt 0 view .LVU166
+ 505 0084 0023     		movs	r3, #0
+ 506 0086 6376     		strb	r3, [r4, #25]
+ 207:BSP/u8g2/u8g2_polygon.c **** }
+ 507              		.loc 1 207 10 view .LVU167
+ARM GAS  /tmp/ccy9HRO0.s 			page 14
+
+
+ 508 0088 0120     		movs	r0, #1
+ 509 008a E0E7     		b	.L24
+ 510              	.L25:
+ 202:BSP/u8g2/u8g2_polygon.c ****     if ( pg->total_scan_line_cnt == 0 )
+ 511              		.loc 1 202 5 is_stmt 1 view .LVU168
+ 202:BSP/u8g2/u8g2_polygon.c ****     if ( pg->total_scan_line_cnt == 0 )
+ 512              		.loc 1 202 7 is_stmt 0 view .LVU169
+ 513 008c B4F91A30 		ldrsh	r3, [r4, #26]
+ 202:BSP/u8g2/u8g2_polygon.c ****     if ( pg->total_scan_line_cnt == 0 )
+ 514              		.loc 1 202 28 view .LVU170
+ 515 0090 013B     		subs	r3, r3, #1
+ 516 0092 1BB2     		sxth	r3, r3
+ 517 0094 6383     		strh	r3, [r4, #26]	@ movhi
+ 203:BSP/u8g2/u8g2_polygon.c ****       return 0;
+ 518              		.loc 1 203 5 is_stmt 1 view .LVU171
+ 203:BSP/u8g2/u8g2_polygon.c ****       return 0;
+ 519              		.loc 1 203 8 is_stmt 0 view .LVU172
+ 520 0096 0BB1     		cbz	r3, .L28
+ 207:BSP/u8g2/u8g2_polygon.c **** }
+ 521              		.loc 1 207 10 view .LVU173
+ 522 0098 0120     		movs	r0, #1
+ 523 009a D8E7     		b	.L24
+ 524              	.L28:
+ 204:BSP/u8g2/u8g2_polygon.c ****   }
+ 525              		.loc 1 204 14 view .LVU174
+ 526 009c 0020     		movs	r0, #0
+ 527 009e D6E7     		b	.L24
+ 528              	.L33:
+ 529              		.align	2
+ 530              	.L32:
+ 531 00a0 00000000 		.word	pg_inc
+ 532 00a4 00000000 		.word	pg_dec
+ 533              		.cfi_endproc
+ 534              	.LFE5:
+ 536              		.section	.text.pg_line_init,"ax",%progbits
+ 537              		.align	1
+ 538              		.syntax unified
+ 539              		.thumb
+ 540              		.thumb_func
+ 542              	pg_line_init:
+ 543              	.LVL47:
+ 544              	.LFB7:
+ 209:BSP/u8g2/u8g2_polygon.c **** 
+ 210:BSP/u8g2/u8g2_polygon.c **** static void pg_hline(pg_struct *pg, u8g2_t *u8g2)
+ 211:BSP/u8g2/u8g2_polygon.c **** {
+ 212:BSP/u8g2/u8g2_polygon.c ****   pg_word_t x1, x2, y;
+ 213:BSP/u8g2/u8g2_polygon.c ****   x1 = pg->pge[PG_LEFT].current_x;
+ 214:BSP/u8g2/u8g2_polygon.c ****   x2 = pg->pge[PG_RIGHT].current_x;
+ 215:BSP/u8g2/u8g2_polygon.c ****   y = pg->pge[PG_RIGHT].current_y;
+ 216:BSP/u8g2/u8g2_polygon.c ****   
+ 217:BSP/u8g2/u8g2_polygon.c ****   if ( y < 0 )
+ 218:BSP/u8g2/u8g2_polygon.c ****     return;
+ 219:BSP/u8g2/u8g2_polygon.c ****   if ( y >= u8g2_GetDisplayHeight(u8g2) )  // does not work for 256x64 display???
+ 220:BSP/u8g2/u8g2_polygon.c ****     return;
+ 221:BSP/u8g2/u8g2_polygon.c ****   if ( x1 < x2 )
+ 222:BSP/u8g2/u8g2_polygon.c ****   {
+ 223:BSP/u8g2/u8g2_polygon.c ****     if ( x2 < 0 )
+ARM GAS  /tmp/ccy9HRO0.s 			page 15
+
+
+ 224:BSP/u8g2/u8g2_polygon.c ****       return;
+ 225:BSP/u8g2/u8g2_polygon.c ****     if ( x1 >= u8g2_GetDisplayWidth(u8g2) )
+ 226:BSP/u8g2/u8g2_polygon.c ****       return;
+ 227:BSP/u8g2/u8g2_polygon.c ****     if ( x1 < 0 )
+ 228:BSP/u8g2/u8g2_polygon.c ****       x1 = 0;
+ 229:BSP/u8g2/u8g2_polygon.c ****     if ( x2 >= u8g2_GetDisplayWidth(u8g2) )
+ 230:BSP/u8g2/u8g2_polygon.c ****       x2 = u8g2_GetDisplayWidth(u8g2);
+ 231:BSP/u8g2/u8g2_polygon.c ****     u8g2_DrawHLine(u8g2, x1, y, x2 - x1);
+ 232:BSP/u8g2/u8g2_polygon.c ****   }
+ 233:BSP/u8g2/u8g2_polygon.c ****   else
+ 234:BSP/u8g2/u8g2_polygon.c ****   {
+ 235:BSP/u8g2/u8g2_polygon.c ****     if ( x1 < 0 )
+ 236:BSP/u8g2/u8g2_polygon.c ****       return;
+ 237:BSP/u8g2/u8g2_polygon.c ****     if ( x2 >= u8g2_GetDisplayWidth(u8g2) )
+ 238:BSP/u8g2/u8g2_polygon.c ****       return;
+ 239:BSP/u8g2/u8g2_polygon.c ****     if ( x2 < 0 )
+ 240:BSP/u8g2/u8g2_polygon.c ****       x1 = 0;
+ 241:BSP/u8g2/u8g2_polygon.c ****     if ( x1 >= u8g2_GetDisplayWidth(u8g2) )
+ 242:BSP/u8g2/u8g2_polygon.c ****       x1 = u8g2_GetDisplayWidth(u8g2);
+ 243:BSP/u8g2/u8g2_polygon.c ****     u8g2_DrawHLine(u8g2, x2, y, x1 - x2);
+ 244:BSP/u8g2/u8g2_polygon.c ****   }
+ 245:BSP/u8g2/u8g2_polygon.c **** }
+ 246:BSP/u8g2/u8g2_polygon.c **** 
+ 247:BSP/u8g2/u8g2_polygon.c **** static void pg_line_init(pg_struct * const pg, uint8_t pge_index)
+ 248:BSP/u8g2/u8g2_polygon.c **** {
+ 545              		.loc 1 248 1 is_stmt 1 view -0
+ 546              		.cfi_startproc
+ 547              		@ args = 0, pretend = 0, frame = 0
+ 548              		@ frame_needed = 0, uses_anonymous_args = 0
+ 549              		.loc 1 248 1 is_stmt 0 view .LVU176
+ 550 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 551              	.LCFI3:
+ 552              		.cfi_def_cfa_offset 20
+ 553              		.cfi_offset 4, -20
+ 554              		.cfi_offset 5, -16
+ 555              		.cfi_offset 6, -12
+ 556              		.cfi_offset 7, -8
+ 557              		.cfi_offset 14, -4
+ 558 0002 83B0     		sub	sp, sp, #12
+ 559              	.LCFI4:
+ 560              		.cfi_def_cfa_offset 32
+ 561 0004 0446     		mov	r4, r0
+ 249:BSP/u8g2/u8g2_polygon.c ****   struct pg_edge_struct  *pge = pg->pge+pge_index;
+ 562              		.loc 1 249 3 is_stmt 1 view .LVU177
+ 563              		.loc 1 249 33 is_stmt 0 view .LVU178
+ 564 0006 00F11C05 		add	r5, r0, #28
+ 565              		.loc 1 249 40 view .LVU179
+ 566 000a 01EB4101 		add	r1, r1, r1, lsl #1
+ 567              	.LVL48:
+ 568              		.loc 1 249 27 view .LVU180
+ 569 000e 05EBC105 		add	r5, r5, r1, lsl #3
+ 570              	.LVL49:
+ 250:BSP/u8g2/u8g2_polygon.c ****   uint8_t idx;  
+ 571              		.loc 1 250 3 is_stmt 1 view .LVU181
+ 251:BSP/u8g2/u8g2_polygon.c ****   pg_word_t x1;
+ 572              		.loc 1 251 3 view .LVU182
+ 252:BSP/u8g2/u8g2_polygon.c ****   pg_word_t y1;
+ARM GAS  /tmp/ccy9HRO0.s 			page 16
+
+
+ 573              		.loc 1 252 3 view .LVU183
+ 253:BSP/u8g2/u8g2_polygon.c ****   pg_word_t x2;
+ 574              		.loc 1 253 3 view .LVU184
+ 254:BSP/u8g2/u8g2_polygon.c ****   pg_word_t y2;
+ 575              		.loc 1 254 3 view .LVU185
+ 255:BSP/u8g2/u8g2_polygon.c **** 
+ 256:BSP/u8g2/u8g2_polygon.c ****   idx = pge->curr_idx;  
+ 576              		.loc 1 256 3 view .LVU186
+ 577              		.loc 1 256 7 is_stmt 0 view .LVU187
+ 578 0012 297D     		ldrb	r1, [r5, #20]	@ zero_extendqisi2
+ 579              	.LVL50:
+ 257:BSP/u8g2/u8g2_polygon.c ****   y1 = pg->list[idx].y;
+ 580              		.loc 1 257 3 is_stmt 1 view .LVU188
+ 581              		.loc 1 257 6 is_stmt 0 view .LVU189
+ 582 0014 00EB8103 		add	r3, r0, r1, lsl #2
+ 583 0018 B3F90270 		ldrsh	r7, [r3, #2]
+ 584              	.LVL51:
+ 258:BSP/u8g2/u8g2_polygon.c ****   x1 = pg->list[idx].x;
+ 585              		.loc 1 258 3 is_stmt 1 view .LVU190
+ 586              		.loc 1 258 6 is_stmt 0 view .LVU191
+ 587 001c 30F92160 		ldrsh	r6, [r0, r1, lsl #2]
+ 588              	.LVL52:
+ 259:BSP/u8g2/u8g2_polygon.c ****   idx = pge->next_idx_fn(pg, idx);
+ 589              		.loc 1 259 3 is_stmt 1 view .LVU192
+ 590              		.loc 1 259 12 is_stmt 0 view .LVU193
+ 591 0020 2B69     		ldr	r3, [r5, #16]
+ 592              	.LVL53:
+ 593              		.loc 1 259 9 view .LVU194
+ 594 0022 9847     		blx	r3
+ 595              	.LVL54:
+ 260:BSP/u8g2/u8g2_polygon.c ****   y2 = pg->list[idx].y;
+ 596              		.loc 1 260 3 is_stmt 1 view .LVU195
+ 597              		.loc 1 260 6 is_stmt 0 view .LVU196
+ 598 0024 04EB8003 		add	r3, r4, r0, lsl #2
+ 599 0028 B3F90220 		ldrsh	r2, [r3, #2]
+ 600              	.LVL55:
+ 261:BSP/u8g2/u8g2_polygon.c ****   x2 = pg->list[idx].x; 
+ 601              		.loc 1 261 3 is_stmt 1 view .LVU197
+ 602              		.loc 1 261 6 is_stmt 0 view .LVU198
+ 603 002c 34F92030 		ldrsh	r3, [r4, r0, lsl #2]
+ 604              	.LVL56:
+ 262:BSP/u8g2/u8g2_polygon.c ****   pge->curr_idx = idx;
+ 605              		.loc 1 262 3 is_stmt 1 view .LVU199
+ 606              		.loc 1 262 17 is_stmt 0 view .LVU200
+ 607 0030 2875     		strb	r0, [r5, #20]
+ 608              	.LVL57:
+ 263:BSP/u8g2/u8g2_polygon.c ****   
+ 264:BSP/u8g2/u8g2_polygon.c ****   pge_Init(pge, x1, y1, x2, y2);
+ 609              		.loc 1 264 3 is_stmt 1 view .LVU201
+ 610 0032 0092     		str	r2, [sp]
+ 611 0034 3A46     		mov	r2, r7
+ 612 0036 3146     		mov	r1, r6
+ 613 0038 2846     		mov	r0, r5
+ 614              	.LVL58:
+ 615              		.loc 1 264 3 is_stmt 0 view .LVU202
+ 616 003a FFF7FEFF 		bl	pge_Init
+ 617              	.LVL59:
+ARM GAS  /tmp/ccy9HRO0.s 			page 17
+
+
+ 265:BSP/u8g2/u8g2_polygon.c **** }
+ 618              		.loc 1 265 1 view .LVU203
+ 619 003e 03B0     		add	sp, sp, #12
+ 620              	.LCFI5:
+ 621              		.cfi_def_cfa_offset 20
+ 622              		@ sp needed
+ 623 0040 F0BD     		pop	{r4, r5, r6, r7, pc}
+ 624              		.loc 1 265 1 view .LVU204
+ 625              		.cfi_endproc
+ 626              	.LFE7:
+ 628              		.section	.text.pg_ClearPolygonXY,"ax",%progbits
+ 629              		.align	1
+ 630              		.syntax unified
+ 631              		.thumb
+ 632              		.thumb_func
+ 634              	pg_ClearPolygonXY:
+ 635              	.LVL60:
+ 636              	.LFB9:
+ 266:BSP/u8g2/u8g2_polygon.c **** 
+ 267:BSP/u8g2/u8g2_polygon.c **** static void pg_exec(pg_struct *pg, u8g2_t *u8g2)
+ 268:BSP/u8g2/u8g2_polygon.c **** {
+ 269:BSP/u8g2/u8g2_polygon.c ****   pg_word_t i = pg->total_scan_line_cnt;
+ 270:BSP/u8g2/u8g2_polygon.c **** 
+ 271:BSP/u8g2/u8g2_polygon.c ****   /* first line is skipped if the min y line is not flat */
+ 272:BSP/u8g2/u8g2_polygon.c ****   pg_line_init(pg, PG_LEFT);		
+ 273:BSP/u8g2/u8g2_polygon.c ****   pg_line_init(pg, PG_RIGHT);
+ 274:BSP/u8g2/u8g2_polygon.c ****   
+ 275:BSP/u8g2/u8g2_polygon.c ****   if ( pg->is_min_y_not_flat != 0 )
+ 276:BSP/u8g2/u8g2_polygon.c ****   {
+ 277:BSP/u8g2/u8g2_polygon.c ****     pge_Next(&(pg->pge[PG_LEFT])); 
+ 278:BSP/u8g2/u8g2_polygon.c ****     pge_Next(&(pg->pge[PG_RIGHT]));
+ 279:BSP/u8g2/u8g2_polygon.c ****   }
+ 280:BSP/u8g2/u8g2_polygon.c **** 
+ 281:BSP/u8g2/u8g2_polygon.c ****   do
+ 282:BSP/u8g2/u8g2_polygon.c ****   {
+ 283:BSP/u8g2/u8g2_polygon.c ****     pg_hline(pg, u8g2);
+ 284:BSP/u8g2/u8g2_polygon.c ****     while ( pge_Next(&(pg->pge[PG_LEFT])) == 0 )
+ 285:BSP/u8g2/u8g2_polygon.c ****     {
+ 286:BSP/u8g2/u8g2_polygon.c ****       pg_line_init(pg, PG_LEFT);
+ 287:BSP/u8g2/u8g2_polygon.c ****     }
+ 288:BSP/u8g2/u8g2_polygon.c ****     while ( pge_Next(&(pg->pge[PG_RIGHT])) == 0 )
+ 289:BSP/u8g2/u8g2_polygon.c ****     {
+ 290:BSP/u8g2/u8g2_polygon.c ****       pg_line_init(pg, PG_RIGHT);
+ 291:BSP/u8g2/u8g2_polygon.c ****     }
+ 292:BSP/u8g2/u8g2_polygon.c ****     i--;
+ 293:BSP/u8g2/u8g2_polygon.c ****   } while( i > 0 );
+ 294:BSP/u8g2/u8g2_polygon.c **** }
+ 295:BSP/u8g2/u8g2_polygon.c **** 
+ 296:BSP/u8g2/u8g2_polygon.c **** /*===========================================*/
+ 297:BSP/u8g2/u8g2_polygon.c **** /* API procedures */
+ 298:BSP/u8g2/u8g2_polygon.c **** 
+ 299:BSP/u8g2/u8g2_polygon.c **** static void pg_ClearPolygonXY(pg_struct *pg)
+ 300:BSP/u8g2/u8g2_polygon.c **** {
+ 637              		.loc 1 300 1 is_stmt 1 view -0
+ 638              		.cfi_startproc
+ 639              		@ args = 0, pretend = 0, frame = 0
+ 640              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  /tmp/ccy9HRO0.s 			page 18
+
+
+ 641              		@ link register save eliminated.
+ 301:BSP/u8g2/u8g2_polygon.c ****   pg->cnt = 0;
+ 642              		.loc 1 301 3 view .LVU206
+ 643              		.loc 1 301 11 is_stmt 0 view .LVU207
+ 644 0000 0023     		movs	r3, #0
+ 645 0002 0376     		strb	r3, [r0, #24]
+ 302:BSP/u8g2/u8g2_polygon.c **** }
+ 646              		.loc 1 302 1 view .LVU208
+ 647 0004 7047     		bx	lr
+ 648              		.cfi_endproc
+ 649              	.LFE9:
+ 651              		.section	.text.pg_AddPolygonXY,"ax",%progbits
+ 652              		.align	1
+ 653              		.syntax unified
+ 654              		.thumb
+ 655              		.thumb_func
+ 657              	pg_AddPolygonXY:
+ 658              	.LVL61:
+ 659              	.LFB10:
+ 303:BSP/u8g2/u8g2_polygon.c **** 
+ 304:BSP/u8g2/u8g2_polygon.c **** static void pg_AddPolygonXY(pg_struct *pg, int16_t x, int16_t y)
+ 305:BSP/u8g2/u8g2_polygon.c **** {
+ 660              		.loc 1 305 1 is_stmt 1 view -0
+ 661              		.cfi_startproc
+ 662              		@ args = 0, pretend = 0, frame = 0
+ 663              		@ frame_needed = 0, uses_anonymous_args = 0
+ 664              		@ link register save eliminated.
+ 306:BSP/u8g2/u8g2_polygon.c ****   if ( pg->cnt < PG_MAX_POINTS )
+ 665              		.loc 1 306 3 view .LVU210
+ 666              		.loc 1 306 10 is_stmt 0 view .LVU211
+ 667 0000 037E     		ldrb	r3, [r0, #24]	@ zero_extendqisi2
+ 668              		.loc 1 306 6 view .LVU212
+ 669 0002 052B     		cmp	r3, #5
+ 670 0004 06D8     		bhi	.L37
+ 307:BSP/u8g2/u8g2_polygon.c ****   {
+ 308:BSP/u8g2/u8g2_polygon.c ****     pg->list[pg->cnt].x = x;
+ 671              		.loc 1 308 5 is_stmt 1 view .LVU213
+ 672              		.loc 1 308 25 is_stmt 0 view .LVU214
+ 673 0006 20F82310 		strh	r1, [r0, r3, lsl #2]	@ movhi
+ 309:BSP/u8g2/u8g2_polygon.c ****     pg->list[pg->cnt].y = y;
+ 674              		.loc 1 309 5 is_stmt 1 view .LVU215
+ 675              		.loc 1 309 25 is_stmt 0 view .LVU216
+ 676 000a 00EB8301 		add	r1, r0, r3, lsl #2
+ 677              	.LVL62:
+ 678              		.loc 1 309 25 view .LVU217
+ 679 000e 4A80     		strh	r2, [r1, #2]	@ movhi
+ 680              	.LVL63:
+ 310:BSP/u8g2/u8g2_polygon.c ****     pg->cnt++;
+ 681              		.loc 1 310 5 is_stmt 1 view .LVU218
+ 682              		.loc 1 310 12 is_stmt 0 view .LVU219
+ 683 0010 0133     		adds	r3, r3, #1
+ 684 0012 0376     		strb	r3, [r0, #24]
+ 685              	.L37:
+ 311:BSP/u8g2/u8g2_polygon.c ****   }
+ 312:BSP/u8g2/u8g2_polygon.c **** }
+ 686              		.loc 1 312 1 view .LVU220
+ 687 0014 7047     		bx	lr
+ARM GAS  /tmp/ccy9HRO0.s 			page 19
+
+
+ 688              		.cfi_endproc
+ 689              	.LFE10:
+ 691              		.section	.text.pg_hline,"ax",%progbits
+ 692              		.align	1
+ 693              		.syntax unified
+ 694              		.thumb
+ 695              		.thumb_func
+ 697              	pg_hline:
+ 698              	.LVL64:
+ 699              	.LFB6:
+ 211:BSP/u8g2/u8g2_polygon.c ****   pg_word_t x1, x2, y;
+ 700              		.loc 1 211 1 is_stmt 1 view -0
+ 701              		.cfi_startproc
+ 702              		@ args = 0, pretend = 0, frame = 0
+ 703              		@ frame_needed = 0, uses_anonymous_args = 0
+ 211:BSP/u8g2/u8g2_polygon.c ****   pg_word_t x1, x2, y;
+ 704              		.loc 1 211 1 is_stmt 0 view .LVU222
+ 705 0000 08B5     		push	{r3, lr}
+ 706              	.LCFI6:
+ 707              		.cfi_def_cfa_offset 8
+ 708              		.cfi_offset 3, -8
+ 709              		.cfi_offset 14, -4
+ 212:BSP/u8g2/u8g2_polygon.c ****   x1 = pg->pge[PG_LEFT].current_x;
+ 710              		.loc 1 212 3 is_stmt 1 view .LVU223
+ 213:BSP/u8g2/u8g2_polygon.c ****   x2 = pg->pge[PG_RIGHT].current_x;
+ 711              		.loc 1 213 3 view .LVU224
+ 213:BSP/u8g2/u8g2_polygon.c ****   x2 = pg->pge[PG_RIGHT].current_x;
+ 712              		.loc 1 213 6 is_stmt 0 view .LVU225
+ 713 0002 B0F92830 		ldrsh	r3, [r0, #40]
+ 714              	.LVL65:
+ 214:BSP/u8g2/u8g2_polygon.c ****   y = pg->pge[PG_RIGHT].current_y;
+ 715              		.loc 1 214 3 is_stmt 1 view .LVU226
+ 214:BSP/u8g2/u8g2_polygon.c ****   y = pg->pge[PG_RIGHT].current_y;
+ 716              		.loc 1 214 6 is_stmt 0 view .LVU227
+ 717 0006 B0F940C0 		ldrsh	ip, [r0, #64]
+ 718              	.LVL66:
+ 215:BSP/u8g2/u8g2_polygon.c ****   
+ 719              		.loc 1 215 3 is_stmt 1 view .LVU228
+ 215:BSP/u8g2/u8g2_polygon.c ****   
+ 720              		.loc 1 215 5 is_stmt 0 view .LVU229
+ 721 000a B0F93C20 		ldrsh	r2, [r0, #60]
+ 722              	.LVL67:
+ 217:BSP/u8g2/u8g2_polygon.c ****     return;
+ 723              		.loc 1 217 3 is_stmt 1 view .LVU230
+ 217:BSP/u8g2/u8g2_polygon.c ****     return;
+ 724              		.loc 1 217 6 is_stmt 0 view .LVU231
+ 725 000e 002A     		cmp	r2, #0
+ 726 0010 1ADB     		blt	.L39
+ 727 0012 0846     		mov	r0, r1
+ 728              	.LVL68:
+ 219:BSP/u8g2/u8g2_polygon.c ****     return;
+ 729              		.loc 1 219 3 is_stmt 1 view .LVU232
+ 219:BSP/u8g2/u8g2_polygon.c ****     return;
+ 730              		.loc 1 219 13 is_stmt 0 view .LVU233
+ 731 0014 91F84410 		ldrb	r1, [r1, #68]	@ zero_extendqisi2
+ 732              	.LVL69:
+ 219:BSP/u8g2/u8g2_polygon.c ****     return;
+ARM GAS  /tmp/ccy9HRO0.s 			page 20
+
+
+ 733              		.loc 1 219 6 view .LVU234
+ 734 0018 8A42     		cmp	r2, r1
+ 735 001a 15DA     		bge	.L39
+ 221:BSP/u8g2/u8g2_polygon.c ****   {
+ 736              		.loc 1 221 3 is_stmt 1 view .LVU235
+ 221:BSP/u8g2/u8g2_polygon.c ****   {
+ 737              		.loc 1 221 6 is_stmt 0 view .LVU236
+ 738 001c 6345     		cmp	r3, ip
+ 739 001e 16DA     		bge	.L41
+ 223:BSP/u8g2/u8g2_polygon.c ****       return;
+ 740              		.loc 1 223 5 is_stmt 1 view .LVU237
+ 223:BSP/u8g2/u8g2_polygon.c ****       return;
+ 741              		.loc 1 223 8 is_stmt 0 view .LVU238
+ 742 0020 BCF1000F 		cmp	ip, #0
+ 743 0024 10DB     		blt	.L39
+ 225:BSP/u8g2/u8g2_polygon.c ****       return;
+ 744              		.loc 1 225 5 is_stmt 1 view .LVU239
+ 225:BSP/u8g2/u8g2_polygon.c ****       return;
+ 745              		.loc 1 225 16 is_stmt 0 view .LVU240
+ 746 0026 90F84310 		ldrb	r1, [r0, #67]	@ zero_extendqisi2
+ 225:BSP/u8g2/u8g2_polygon.c ****       return;
+ 747              		.loc 1 225 8 view .LVU241
+ 748 002a 8B42     		cmp	r3, r1
+ 749 002c 0CDA     		bge	.L39
+ 227:BSP/u8g2/u8g2_polygon.c ****       x1 = 0;
+ 750              		.loc 1 227 5 is_stmt 1 view .LVU242
+ 227:BSP/u8g2/u8g2_polygon.c ****       x1 = 0;
+ 751              		.loc 1 227 8 is_stmt 0 view .LVU243
+ 752 002e 002B     		cmp	r3, #0
+ 753 0030 0BDB     		blt	.L49
+ 754              	.LVL70:
+ 755              	.L42:
+ 229:BSP/u8g2/u8g2_polygon.c ****       x2 = u8g2_GetDisplayWidth(u8g2);
+ 756              		.loc 1 229 5 is_stmt 1 view .LVU244
+ 229:BSP/u8g2/u8g2_polygon.c ****       x2 = u8g2_GetDisplayWidth(u8g2);
+ 757              		.loc 1 229 8 is_stmt 0 view .LVU245
+ 758 0032 6145     		cmp	r1, ip
+ 759 0034 01DC     		bgt	.L43
+ 230:BSP/u8g2/u8g2_polygon.c ****     u8g2_DrawHLine(u8g2, x1, y, x2 - x1);
+ 760              		.loc 1 230 7 is_stmt 1 view .LVU246
+ 230:BSP/u8g2/u8g2_polygon.c ****     u8g2_DrawHLine(u8g2, x1, y, x2 - x1);
+ 761              		.loc 1 230 10 is_stmt 0 view .LVU247
+ 762 0036 0FFA81FC 		sxth	ip, r1
+ 763              	.LVL71:
+ 764              	.L43:
+ 231:BSP/u8g2/u8g2_polygon.c ****   }
+ 765              		.loc 1 231 5 is_stmt 1 view .LVU248
+ 766 003a D9B2     		uxtb	r1, r3
+ 767 003c ACEB0103 		sub	r3, ip, r1
+ 768              	.LVL72:
+ 231:BSP/u8g2/u8g2_polygon.c ****   }
+ 769              		.loc 1 231 5 is_stmt 0 view .LVU249
+ 770 0040 DBB2     		uxtb	r3, r3
+ 771 0042 D2B2     		uxtb	r2, r2
+ 772              	.LVL73:
+ 231:BSP/u8g2/u8g2_polygon.c ****   }
+ 773              		.loc 1 231 5 view .LVU250
+ARM GAS  /tmp/ccy9HRO0.s 			page 21
+
+
+ 774 0044 FFF7FEFF 		bl	u8g2_DrawHLine
+ 775              	.LVL74:
+ 776              	.L39:
+ 245:BSP/u8g2/u8g2_polygon.c **** 
+ 777              		.loc 1 245 1 view .LVU251
+ 778 0048 08BD     		pop	{r3, pc}
+ 779              	.LVL75:
+ 780              	.L49:
+ 228:BSP/u8g2/u8g2_polygon.c ****     if ( x2 >= u8g2_GetDisplayWidth(u8g2) )
+ 781              		.loc 1 228 10 view .LVU252
+ 782 004a 0023     		movs	r3, #0
+ 783              	.LVL76:
+ 228:BSP/u8g2/u8g2_polygon.c ****     if ( x2 >= u8g2_GetDisplayWidth(u8g2) )
+ 784              		.loc 1 228 10 view .LVU253
+ 785 004c F1E7     		b	.L42
+ 786              	.LVL77:
+ 787              	.L41:
+ 235:BSP/u8g2/u8g2_polygon.c ****       return;
+ 788              		.loc 1 235 5 is_stmt 1 view .LVU254
+ 235:BSP/u8g2/u8g2_polygon.c ****       return;
+ 789              		.loc 1 235 8 is_stmt 0 view .LVU255
+ 790 004e 002B     		cmp	r3, #0
+ 791 0050 FADB     		blt	.L39
+ 237:BSP/u8g2/u8g2_polygon.c ****       return;
+ 792              		.loc 1 237 5 is_stmt 1 view .LVU256
+ 237:BSP/u8g2/u8g2_polygon.c ****       return;
+ 793              		.loc 1 237 16 is_stmt 0 view .LVU257
+ 794 0052 90F84310 		ldrb	r1, [r0, #67]	@ zero_extendqisi2
+ 237:BSP/u8g2/u8g2_polygon.c ****       return;
+ 795              		.loc 1 237 8 view .LVU258
+ 796 0056 8C45     		cmp	ip, r1
+ 797 0058 F6DA     		bge	.L39
+ 239:BSP/u8g2/u8g2_polygon.c ****       x1 = 0;
+ 798              		.loc 1 239 5 is_stmt 1 view .LVU259
+ 239:BSP/u8g2/u8g2_polygon.c ****       x1 = 0;
+ 799              		.loc 1 239 8 is_stmt 0 view .LVU260
+ 800 005a BCF1000F 		cmp	ip, #0
+ 801 005e 0ADB     		blt	.L50
+ 802              	.LVL78:
+ 803              	.L44:
+ 241:BSP/u8g2/u8g2_polygon.c ****       x1 = u8g2_GetDisplayWidth(u8g2);
+ 804              		.loc 1 241 5 is_stmt 1 view .LVU261
+ 241:BSP/u8g2/u8g2_polygon.c ****       x1 = u8g2_GetDisplayWidth(u8g2);
+ 805              		.loc 1 241 8 is_stmt 0 view .LVU262
+ 806 0060 9942     		cmp	r1, r3
+ 807 0062 00DC     		bgt	.L45
+ 242:BSP/u8g2/u8g2_polygon.c ****     u8g2_DrawHLine(u8g2, x2, y, x1 - x2);
+ 808              		.loc 1 242 7 is_stmt 1 view .LVU263
+ 242:BSP/u8g2/u8g2_polygon.c ****     u8g2_DrawHLine(u8g2, x2, y, x1 - x2);
+ 809              		.loc 1 242 10 is_stmt 0 view .LVU264
+ 810 0064 0BB2     		sxth	r3, r1
+ 811              	.LVL79:
+ 812              	.L45:
+ 243:BSP/u8g2/u8g2_polygon.c ****   }
+ 813              		.loc 1 243 5 is_stmt 1 view .LVU265
+ 814 0066 5FFA8CF1 		uxtb	r1, ip
+ 815 006a 5B1A     		subs	r3, r3, r1
+ARM GAS  /tmp/ccy9HRO0.s 			page 22
+
+
+ 816              	.LVL80:
+ 243:BSP/u8g2/u8g2_polygon.c ****   }
+ 817              		.loc 1 243 5 is_stmt 0 view .LVU266
+ 818 006c DBB2     		uxtb	r3, r3
+ 819 006e D2B2     		uxtb	r2, r2
+ 820              	.LVL81:
+ 243:BSP/u8g2/u8g2_polygon.c ****   }
+ 821              		.loc 1 243 5 view .LVU267
+ 822 0070 FFF7FEFF 		bl	u8g2_DrawHLine
+ 823              	.LVL82:
+ 243:BSP/u8g2/u8g2_polygon.c ****   }
+ 824              		.loc 1 243 5 view .LVU268
+ 825 0074 E8E7     		b	.L39
+ 826              	.LVL83:
+ 827              	.L50:
+ 240:BSP/u8g2/u8g2_polygon.c ****     if ( x1 >= u8g2_GetDisplayWidth(u8g2) )
+ 828              		.loc 1 240 10 view .LVU269
+ 829 0076 0023     		movs	r3, #0
+ 830              	.LVL84:
+ 240:BSP/u8g2/u8g2_polygon.c ****     if ( x1 >= u8g2_GetDisplayWidth(u8g2) )
+ 831              		.loc 1 240 10 view .LVU270
+ 832 0078 F2E7     		b	.L44
+ 833              		.cfi_endproc
+ 834              	.LFE6:
+ 836              		.section	.text.pg_exec,"ax",%progbits
+ 837              		.align	1
+ 838              		.syntax unified
+ 839              		.thumb
+ 840              		.thumb_func
+ 842              	pg_exec:
+ 843              	.LVL85:
+ 844              	.LFB8:
+ 268:BSP/u8g2/u8g2_polygon.c ****   pg_word_t i = pg->total_scan_line_cnt;
+ 845              		.loc 1 268 1 is_stmt 1 view -0
+ 846              		.cfi_startproc
+ 847              		@ args = 0, pretend = 0, frame = 0
+ 848              		@ frame_needed = 0, uses_anonymous_args = 0
+ 268:BSP/u8g2/u8g2_polygon.c ****   pg_word_t i = pg->total_scan_line_cnt;
+ 849              		.loc 1 268 1 is_stmt 0 view .LVU272
+ 850 0000 70B5     		push	{r4, r5, r6, lr}
+ 851              	.LCFI7:
+ 852              		.cfi_def_cfa_offset 16
+ 853              		.cfi_offset 4, -16
+ 854              		.cfi_offset 5, -12
+ 855              		.cfi_offset 6, -8
+ 856              		.cfi_offset 14, -4
+ 857 0002 0446     		mov	r4, r0
+ 858 0004 0E46     		mov	r6, r1
+ 269:BSP/u8g2/u8g2_polygon.c **** 
+ 859              		.loc 1 269 3 is_stmt 1 view .LVU273
+ 269:BSP/u8g2/u8g2_polygon.c **** 
+ 860              		.loc 1 269 13 is_stmt 0 view .LVU274
+ 861 0006 B0F91A50 		ldrsh	r5, [r0, #26]
+ 862              	.LVL86:
+ 272:BSP/u8g2/u8g2_polygon.c ****   pg_line_init(pg, PG_RIGHT);
+ 863              		.loc 1 272 3 is_stmt 1 view .LVU275
+ 864 000a 0021     		movs	r1, #0
+ARM GAS  /tmp/ccy9HRO0.s 			page 23
+
+
+ 865              	.LVL87:
+ 272:BSP/u8g2/u8g2_polygon.c ****   pg_line_init(pg, PG_RIGHT);
+ 866              		.loc 1 272 3 is_stmt 0 view .LVU276
+ 867 000c FFF7FEFF 		bl	pg_line_init
+ 868              	.LVL88:
+ 273:BSP/u8g2/u8g2_polygon.c ****   
+ 869              		.loc 1 273 3 is_stmt 1 view .LVU277
+ 870 0010 0121     		movs	r1, #1
+ 871 0012 2046     		mov	r0, r4
+ 872 0014 FFF7FEFF 		bl	pg_line_init
+ 873              	.LVL89:
+ 275:BSP/u8g2/u8g2_polygon.c ****   {
+ 874              		.loc 1 275 3 view .LVU278
+ 275:BSP/u8g2/u8g2_polygon.c ****   {
+ 875              		.loc 1 275 10 is_stmt 0 view .LVU279
+ 876 0018 637E     		ldrb	r3, [r4, #25]	@ zero_extendqisi2
+ 275:BSP/u8g2/u8g2_polygon.c ****   {
+ 877              		.loc 1 275 6 view .LVU280
+ 878 001a 0BB3     		cbz	r3, .L57
+ 277:BSP/u8g2/u8g2_polygon.c ****     pge_Next(&(pg->pge[PG_RIGHT]));
+ 879              		.loc 1 277 5 is_stmt 1 view .LVU281
+ 880 001c 04F11C00 		add	r0, r4, #28
+ 881 0020 FFF7FEFF 		bl	pge_Next
+ 882              	.LVL90:
+ 278:BSP/u8g2/u8g2_polygon.c ****   }
+ 883              		.loc 1 278 5 view .LVU282
+ 884 0024 04F13400 		add	r0, r4, #52
+ 885 0028 FFF7FEFF 		bl	pge_Next
+ 886              	.LVL91:
+ 887 002c 18E0     		b	.L57
+ 888              	.L54:
+ 286:BSP/u8g2/u8g2_polygon.c ****     }
+ 889              		.loc 1 286 7 view .LVU283
+ 890 002e 0021     		movs	r1, #0
+ 891 0030 2046     		mov	r0, r4
+ 892 0032 FFF7FEFF 		bl	pg_line_init
+ 893              	.LVL92:
+ 894              	.L53:
+ 284:BSP/u8g2/u8g2_polygon.c ****     {
+ 895              		.loc 1 284 43 view .LVU284
+ 284:BSP/u8g2/u8g2_polygon.c ****     {
+ 896              		.loc 1 284 13 is_stmt 0 view .LVU285
+ 897 0036 04F11C00 		add	r0, r4, #28
+ 898 003a FFF7FEFF 		bl	pge_Next
+ 899              	.LVL93:
+ 284:BSP/u8g2/u8g2_polygon.c ****     {
+ 900              		.loc 1 284 43 discriminator 1 view .LVU286
+ 901 003e 0028     		cmp	r0, #0
+ 902 0040 F5D0     		beq	.L54
+ 903 0042 03E0     		b	.L55
+ 904              	.L56:
+ 290:BSP/u8g2/u8g2_polygon.c ****     }
+ 905              		.loc 1 290 7 is_stmt 1 view .LVU287
+ 906 0044 0121     		movs	r1, #1
+ 907 0046 2046     		mov	r0, r4
+ 908 0048 FFF7FEFF 		bl	pg_line_init
+ 909              	.LVL94:
+ARM GAS  /tmp/ccy9HRO0.s 			page 24
+
+
+ 910              	.L55:
+ 288:BSP/u8g2/u8g2_polygon.c ****     {
+ 911              		.loc 1 288 44 view .LVU288
+ 288:BSP/u8g2/u8g2_polygon.c ****     {
+ 912              		.loc 1 288 13 is_stmt 0 view .LVU289
+ 913 004c 04F13400 		add	r0, r4, #52
+ 914 0050 FFF7FEFF 		bl	pge_Next
+ 915              	.LVL95:
+ 288:BSP/u8g2/u8g2_polygon.c ****     {
+ 916              		.loc 1 288 44 discriminator 1 view .LVU290
+ 917 0054 0028     		cmp	r0, #0
+ 918 0056 F5D0     		beq	.L56
+ 292:BSP/u8g2/u8g2_polygon.c ****   } while( i > 0 );
+ 919              		.loc 1 292 5 is_stmt 1 view .LVU291
+ 292:BSP/u8g2/u8g2_polygon.c ****   } while( i > 0 );
+ 920              		.loc 1 292 6 is_stmt 0 view .LVU292
+ 921 0058 013D     		subs	r5, r5, #1
+ 922              	.LVL96:
+ 292:BSP/u8g2/u8g2_polygon.c ****   } while( i > 0 );
+ 923              		.loc 1 292 6 view .LVU293
+ 924 005a 2DB2     		sxth	r5, r5
+ 925              	.LVL97:
+ 293:BSP/u8g2/u8g2_polygon.c **** }
+ 926              		.loc 1 293 14 is_stmt 1 view .LVU294
+ 927 005c 002D     		cmp	r5, #0
+ 928 005e 04DD     		ble	.L59
+ 929              	.L57:
+ 281:BSP/u8g2/u8g2_polygon.c ****   {
+ 930              		.loc 1 281 3 view .LVU295
+ 283:BSP/u8g2/u8g2_polygon.c ****     while ( pge_Next(&(pg->pge[PG_LEFT])) == 0 )
+ 931              		.loc 1 283 5 view .LVU296
+ 932 0060 3146     		mov	r1, r6
+ 933 0062 2046     		mov	r0, r4
+ 934 0064 FFF7FEFF 		bl	pg_hline
+ 935              	.LVL98:
+ 284:BSP/u8g2/u8g2_polygon.c ****     {
+ 936              		.loc 1 284 5 view .LVU297
+ 284:BSP/u8g2/u8g2_polygon.c ****     {
+ 937              		.loc 1 284 11 is_stmt 0 view .LVU298
+ 938 0068 E5E7     		b	.L53
+ 939              	.L59:
+ 294:BSP/u8g2/u8g2_polygon.c **** 
+ 940              		.loc 1 294 1 view .LVU299
+ 941 006a 70BD     		pop	{r4, r5, r6, pc}
+ 294:BSP/u8g2/u8g2_polygon.c **** 
+ 942              		.loc 1 294 1 view .LVU300
+ 943              		.cfi_endproc
+ 944              	.LFE8:
+ 946              		.section	.text.pg_DrawPolygon,"ax",%progbits
+ 947              		.align	1
+ 948              		.syntax unified
+ 949              		.thumb
+ 950              		.thumb_func
+ 952              	pg_DrawPolygon:
+ 953              	.LVL99:
+ 954              	.LFB11:
+ 313:BSP/u8g2/u8g2_polygon.c **** 
+ARM GAS  /tmp/ccy9HRO0.s 			page 25
+
+
+ 314:BSP/u8g2/u8g2_polygon.c **** static void pg_DrawPolygon(pg_struct *pg, u8g2_t *u8g2)
+ 315:BSP/u8g2/u8g2_polygon.c **** {
+ 955              		.loc 1 315 1 is_stmt 1 view -0
+ 956              		.cfi_startproc
+ 957              		@ args = 0, pretend = 0, frame = 0
+ 958              		@ frame_needed = 0, uses_anonymous_args = 0
+ 959              		.loc 1 315 1 is_stmt 0 view .LVU302
+ 960 0000 38B5     		push	{r3, r4, r5, lr}
+ 961              	.LCFI8:
+ 962              		.cfi_def_cfa_offset 16
+ 963              		.cfi_offset 3, -16
+ 964              		.cfi_offset 4, -12
+ 965              		.cfi_offset 5, -8
+ 966              		.cfi_offset 14, -4
+ 967 0002 0446     		mov	r4, r0
+ 968 0004 0D46     		mov	r5, r1
+ 316:BSP/u8g2/u8g2_polygon.c ****   if ( pg_prepare(pg) == 0 )
+ 969              		.loc 1 316 3 is_stmt 1 view .LVU303
+ 970              		.loc 1 316 8 is_stmt 0 view .LVU304
+ 971 0006 FFF7FEFF 		bl	pg_prepare
+ 972              	.LVL100:
+ 973              		.loc 1 316 6 discriminator 1 view .LVU305
+ 974 000a 00B9     		cbnz	r0, .L63
+ 975              	.L60:
+ 317:BSP/u8g2/u8g2_polygon.c ****     return;
+ 318:BSP/u8g2/u8g2_polygon.c ****   pg_exec(pg, u8g2);
+ 319:BSP/u8g2/u8g2_polygon.c **** }
+ 976              		.loc 1 319 1 view .LVU306
+ 977 000c 38BD     		pop	{r3, r4, r5, pc}
+ 978              	.LVL101:
+ 979              	.L63:
+ 318:BSP/u8g2/u8g2_polygon.c **** }
+ 980              		.loc 1 318 3 is_stmt 1 view .LVU307
+ 981 000e 2946     		mov	r1, r5
+ 982 0010 2046     		mov	r0, r4
+ 983 0012 FFF7FEFF 		bl	pg_exec
+ 984              	.LVL102:
+ 985 0016 F9E7     		b	.L60
+ 986              		.cfi_endproc
+ 987              	.LFE11:
+ 989              		.section	.text.u8g2_ClearPolygonXY,"ax",%progbits
+ 990              		.align	1
+ 991              		.global	u8g2_ClearPolygonXY
+ 992              		.syntax unified
+ 993              		.thumb
+ 994              		.thumb_func
+ 996              	u8g2_ClearPolygonXY:
+ 997              	.LFB12:
+ 320:BSP/u8g2/u8g2_polygon.c **** 
+ 321:BSP/u8g2/u8g2_polygon.c **** pg_struct u8g2_pg;
+ 322:BSP/u8g2/u8g2_polygon.c **** 
+ 323:BSP/u8g2/u8g2_polygon.c **** void u8g2_ClearPolygonXY(void)
+ 324:BSP/u8g2/u8g2_polygon.c **** {
+ 998              		.loc 1 324 1 view -0
+ 999              		.cfi_startproc
+ 1000              		@ args = 0, pretend = 0, frame = 0
+ 1001              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  /tmp/ccy9HRO0.s 			page 26
+
+
+ 1002 0000 08B5     		push	{r3, lr}
+ 1003              	.LCFI9:
+ 1004              		.cfi_def_cfa_offset 8
+ 1005              		.cfi_offset 3, -8
+ 1006              		.cfi_offset 14, -4
+ 325:BSP/u8g2/u8g2_polygon.c ****   pg_ClearPolygonXY(&u8g2_pg);
+ 1007              		.loc 1 325 3 view .LVU309
+ 1008 0002 0248     		ldr	r0, .L66
+ 1009 0004 FFF7FEFF 		bl	pg_ClearPolygonXY
+ 1010              	.LVL103:
+ 326:BSP/u8g2/u8g2_polygon.c **** }
+ 1011              		.loc 1 326 1 is_stmt 0 view .LVU310
+ 1012 0008 08BD     		pop	{r3, pc}
+ 1013              	.L67:
+ 1014 000a 00BF     		.align	2
+ 1015              	.L66:
+ 1016 000c 00000000 		.word	u8g2_pg
+ 1017              		.cfi_endproc
+ 1018              	.LFE12:
+ 1020              		.section	.text.u8g2_AddPolygonXY,"ax",%progbits
+ 1021              		.align	1
+ 1022              		.global	u8g2_AddPolygonXY
+ 1023              		.syntax unified
+ 1024              		.thumb
+ 1025              		.thumb_func
+ 1027              	u8g2_AddPolygonXY:
+ 1028              	.LVL104:
+ 1029              	.LFB13:
+ 327:BSP/u8g2/u8g2_polygon.c **** 
+ 328:BSP/u8g2/u8g2_polygon.c **** void u8g2_AddPolygonXY(U8X8_UNUSED u8g2_t *u8g2, int16_t x, int16_t y)
+ 329:BSP/u8g2/u8g2_polygon.c **** {
+ 1030              		.loc 1 329 1 is_stmt 1 view -0
+ 1031              		.cfi_startproc
+ 1032              		@ args = 0, pretend = 0, frame = 0
+ 1033              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1034              		.loc 1 329 1 is_stmt 0 view .LVU312
+ 1035 0000 08B5     		push	{r3, lr}
+ 1036              	.LCFI10:
+ 1037              		.cfi_def_cfa_offset 8
+ 1038              		.cfi_offset 3, -8
+ 1039              		.cfi_offset 14, -4
+ 330:BSP/u8g2/u8g2_polygon.c ****   pg_AddPolygonXY(&u8g2_pg, x, y);
+ 1040              		.loc 1 330 3 is_stmt 1 view .LVU313
+ 1041 0002 0248     		ldr	r0, .L70
+ 1042              	.LVL105:
+ 1043              		.loc 1 330 3 is_stmt 0 view .LVU314
+ 1044 0004 FFF7FEFF 		bl	pg_AddPolygonXY
+ 1045              	.LVL106:
+ 331:BSP/u8g2/u8g2_polygon.c **** }
+ 1046              		.loc 1 331 1 view .LVU315
+ 1047 0008 08BD     		pop	{r3, pc}
+ 1048              	.L71:
+ 1049 000a 00BF     		.align	2
+ 1050              	.L70:
+ 1051 000c 00000000 		.word	u8g2_pg
+ 1052              		.cfi_endproc
+ 1053              	.LFE13:
+ARM GAS  /tmp/ccy9HRO0.s 			page 27
+
+
+ 1055              		.section	.text.u8g2_DrawPolygon,"ax",%progbits
+ 1056              		.align	1
+ 1057              		.global	u8g2_DrawPolygon
+ 1058              		.syntax unified
+ 1059              		.thumb
+ 1060              		.thumb_func
+ 1062              	u8g2_DrawPolygon:
+ 1063              	.LVL107:
+ 1064              	.LFB14:
+ 332:BSP/u8g2/u8g2_polygon.c **** 
+ 333:BSP/u8g2/u8g2_polygon.c **** void u8g2_DrawPolygon(u8g2_t *u8g2)
+ 334:BSP/u8g2/u8g2_polygon.c **** {
+ 1065              		.loc 1 334 1 is_stmt 1 view -0
+ 1066              		.cfi_startproc
+ 1067              		@ args = 0, pretend = 0, frame = 0
+ 1068              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1069              		.loc 1 334 1 is_stmt 0 view .LVU317
+ 1070 0000 08B5     		push	{r3, lr}
+ 1071              	.LCFI11:
+ 1072              		.cfi_def_cfa_offset 8
+ 1073              		.cfi_offset 3, -8
+ 1074              		.cfi_offset 14, -4
+ 1075 0002 0146     		mov	r1, r0
+ 335:BSP/u8g2/u8g2_polygon.c ****   pg_DrawPolygon(&u8g2_pg, u8g2);
+ 1076              		.loc 1 335 3 is_stmt 1 view .LVU318
+ 1077 0004 0148     		ldr	r0, .L74
+ 1078              	.LVL108:
+ 1079              		.loc 1 335 3 is_stmt 0 view .LVU319
+ 1080 0006 FFF7FEFF 		bl	pg_DrawPolygon
+ 1081              	.LVL109:
+ 336:BSP/u8g2/u8g2_polygon.c **** }
+ 1082              		.loc 1 336 1 view .LVU320
+ 1083 000a 08BD     		pop	{r3, pc}
+ 1084              	.L75:
+ 1085              		.align	2
+ 1086              	.L74:
+ 1087 000c 00000000 		.word	u8g2_pg
+ 1088              		.cfi_endproc
+ 1089              	.LFE14:
+ 1091              		.section	.text.u8g2_DrawTriangle,"ax",%progbits
+ 1092              		.align	1
+ 1093              		.global	u8g2_DrawTriangle
+ 1094              		.syntax unified
+ 1095              		.thumb
+ 1096              		.thumb_func
+ 1098              	u8g2_DrawTriangle:
+ 1099              	.LVL110:
+ 1100              	.LFB15:
+ 337:BSP/u8g2/u8g2_polygon.c **** 
+ 338:BSP/u8g2/u8g2_polygon.c **** void u8g2_DrawTriangle(u8g2_t *u8g2, int16_t x0, int16_t y0, int16_t x1, int16_t y1, int16_t x2, in
+ 339:BSP/u8g2/u8g2_polygon.c **** {
+ 1101              		.loc 1 339 1 is_stmt 1 view -0
+ 1102              		.cfi_startproc
+ 1103              		@ args = 12, pretend = 0, frame = 0
+ 1104              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1105              		.loc 1 339 1 is_stmt 0 view .LVU322
+ 1106 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ARM GAS  /tmp/ccy9HRO0.s 			page 28
+
+
+ 1107              	.LCFI12:
+ 1108              		.cfi_def_cfa_offset 24
+ 1109              		.cfi_offset 3, -24
+ 1110              		.cfi_offset 4, -20
+ 1111              		.cfi_offset 5, -16
+ 1112              		.cfi_offset 6, -12
+ 1113              		.cfi_offset 7, -8
+ 1114              		.cfi_offset 14, -4
+ 1115 0002 0446     		mov	r4, r0
+ 1116 0004 0E46     		mov	r6, r1
+ 1117 0006 1746     		mov	r7, r2
+ 1118 0008 1D46     		mov	r5, r3
+ 340:BSP/u8g2/u8g2_polygon.c ****   u8g2_ClearPolygonXY();
+ 1119              		.loc 1 340 3 is_stmt 1 view .LVU323
+ 1120 000a FFF7FEFF 		bl	u8g2_ClearPolygonXY
+ 1121              	.LVL111:
+ 341:BSP/u8g2/u8g2_polygon.c ****   u8g2_AddPolygonXY(u8g2, x0, y0);
+ 1122              		.loc 1 341 3 view .LVU324
+ 1123 000e 3A46     		mov	r2, r7
+ 1124 0010 3146     		mov	r1, r6
+ 1125 0012 2046     		mov	r0, r4
+ 1126 0014 FFF7FEFF 		bl	u8g2_AddPolygonXY
+ 1127              	.LVL112:
+ 342:BSP/u8g2/u8g2_polygon.c ****   u8g2_AddPolygonXY(u8g2, x1, y1);
+ 1128              		.loc 1 342 3 view .LVU325
+ 1129 0018 BDF91820 		ldrsh	r2, [sp, #24]
+ 1130 001c 2946     		mov	r1, r5
+ 1131 001e 2046     		mov	r0, r4
+ 1132 0020 FFF7FEFF 		bl	u8g2_AddPolygonXY
+ 1133              	.LVL113:
+ 343:BSP/u8g2/u8g2_polygon.c ****   u8g2_AddPolygonXY(u8g2, x2, y2);
+ 1134              		.loc 1 343 3 view .LVU326
+ 1135 0024 BDF92020 		ldrsh	r2, [sp, #32]
+ 1136 0028 BDF91C10 		ldrsh	r1, [sp, #28]
+ 1137 002c 2046     		mov	r0, r4
+ 1138 002e FFF7FEFF 		bl	u8g2_AddPolygonXY
+ 1139              	.LVL114:
+ 344:BSP/u8g2/u8g2_polygon.c ****   u8g2_DrawPolygon(u8g2);
+ 1140              		.loc 1 344 3 view .LVU327
+ 1141 0032 2046     		mov	r0, r4
+ 1142 0034 FFF7FEFF 		bl	u8g2_DrawPolygon
+ 1143              	.LVL115:
+ 345:BSP/u8g2/u8g2_polygon.c **** }
+ 1144              		.loc 1 345 1 is_stmt 0 view .LVU328
+ 1145 0038 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 1146              		.loc 1 345 1 view .LVU329
+ 1147              		.cfi_endproc
+ 1148              	.LFE15:
+ 1150              		.global	u8g2_pg
+ 1151              		.section	.bss.u8g2_pg,"aw",%nobits
+ 1152              		.align	2
+ 1155              	u8g2_pg:
+ 1156 0000 00000000 		.space	76
+ 1156      00000000 
+ 1156      00000000 
+ 1156      00000000 
+ 1156      00000000 
+ARM GAS  /tmp/ccy9HRO0.s 			page 29
+
+
+ 1157              		.text
+ 1158              	.Letext0:
+ 1159              		.file 2 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ 1160              		.file 3 "BSP/u8g2/u8x8.h"
+ 1161              		.file 4 "BSP/u8g2/u8g2.h"
+ARM GAS  /tmp/ccy9HRO0.s 			page 30
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 u8g2_polygon.c
+     /tmp/ccy9HRO0.s:19     .text.pge_Next:00000000 $t
+     /tmp/ccy9HRO0.s:24     .text.pge_Next:00000000 pge_Next
+     /tmp/ccy9HRO0.s:97     .text.pge_Init:00000000 $t
+     /tmp/ccy9HRO0.s:102    .text.pge_Init:00000000 pge_Init
+     /tmp/ccy9HRO0.s:205    .text.pg_inc:00000000 $t
+     /tmp/ccy9HRO0.s:210    .text.pg_inc:00000000 pg_inc
+     /tmp/ccy9HRO0.s:245    .text.pg_dec:00000000 $t
+     /tmp/ccy9HRO0.s:250    .text.pg_dec:00000000 pg_dec
+     /tmp/ccy9HRO0.s:287    .text.pg_expand_min_y:00000000 $t
+     /tmp/ccy9HRO0.s:292    .text.pg_expand_min_y:00000000 pg_expand_min_y
+     /tmp/ccy9HRO0.s:355    .text.pg_prepare:00000000 $t
+     /tmp/ccy9HRO0.s:360    .text.pg_prepare:00000000 pg_prepare
+     /tmp/ccy9HRO0.s:531    .text.pg_prepare:000000a0 $d
+     /tmp/ccy9HRO0.s:537    .text.pg_line_init:00000000 $t
+     /tmp/ccy9HRO0.s:542    .text.pg_line_init:00000000 pg_line_init
+     /tmp/ccy9HRO0.s:629    .text.pg_ClearPolygonXY:00000000 $t
+     /tmp/ccy9HRO0.s:634    .text.pg_ClearPolygonXY:00000000 pg_ClearPolygonXY
+     /tmp/ccy9HRO0.s:652    .text.pg_AddPolygonXY:00000000 $t
+     /tmp/ccy9HRO0.s:657    .text.pg_AddPolygonXY:00000000 pg_AddPolygonXY
+     /tmp/ccy9HRO0.s:692    .text.pg_hline:00000000 $t
+     /tmp/ccy9HRO0.s:697    .text.pg_hline:00000000 pg_hline
+     /tmp/ccy9HRO0.s:837    .text.pg_exec:00000000 $t
+     /tmp/ccy9HRO0.s:842    .text.pg_exec:00000000 pg_exec
+     /tmp/ccy9HRO0.s:947    .text.pg_DrawPolygon:00000000 $t
+     /tmp/ccy9HRO0.s:952    .text.pg_DrawPolygon:00000000 pg_DrawPolygon
+     /tmp/ccy9HRO0.s:990    .text.u8g2_ClearPolygonXY:00000000 $t
+     /tmp/ccy9HRO0.s:996    .text.u8g2_ClearPolygonXY:00000000 u8g2_ClearPolygonXY
+     /tmp/ccy9HRO0.s:1016   .text.u8g2_ClearPolygonXY:0000000c $d
+     /tmp/ccy9HRO0.s:1155   .bss.u8g2_pg:00000000 u8g2_pg
+     /tmp/ccy9HRO0.s:1021   .text.u8g2_AddPolygonXY:00000000 $t
+     /tmp/ccy9HRO0.s:1027   .text.u8g2_AddPolygonXY:00000000 u8g2_AddPolygonXY
+     /tmp/ccy9HRO0.s:1051   .text.u8g2_AddPolygonXY:0000000c $d
+     /tmp/ccy9HRO0.s:1056   .text.u8g2_DrawPolygon:00000000 $t
+     /tmp/ccy9HRO0.s:1062   .text.u8g2_DrawPolygon:00000000 u8g2_DrawPolygon
+     /tmp/ccy9HRO0.s:1087   .text.u8g2_DrawPolygon:0000000c $d
+     /tmp/ccy9HRO0.s:1092   .text.u8g2_DrawTriangle:00000000 $t
+     /tmp/ccy9HRO0.s:1098   .text.u8g2_DrawTriangle:00000000 u8g2_DrawTriangle
+     /tmp/ccy9HRO0.s:1152   .bss.u8g2_pg:00000000 $d
+
+UNDEFINED SYMBOLS
+u8g2_DrawHLine

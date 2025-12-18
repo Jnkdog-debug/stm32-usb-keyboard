@@ -1,0 +1,1300 @@
+ARM GAS  /tmp/ccUH9ldI.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.arch armv7-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"u8g2_selection_list.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.file 1 "BSP/u8g2/u8g2_selection_list.c"
+  18              		.section	.text.u8g2_DrawUTF8Line,"ax",%progbits
+  19              		.align	1
+  20              		.global	u8g2_DrawUTF8Line
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  25              	u8g2_DrawUTF8Line:
+  26              	.LVL0:
+  27              	.LFB0:
+   1:BSP/u8g2/u8g2_selection_list.c **** /*
+   2:BSP/u8g2/u8g2_selection_list.c **** 
+   3:BSP/u8g2/u8g2_selection_list.c ****   u8g2_selection_list.c
+   4:BSP/u8g2/u8g2_selection_list.c ****   
+   5:BSP/u8g2/u8g2_selection_list.c ****   selection list with scroll option
+   6:BSP/u8g2/u8g2_selection_list.c ****   
+   7:BSP/u8g2/u8g2_selection_list.c ****   Universal 8bit Graphics Library (https://github.com/olikraus/u8g2/)
+   8:BSP/u8g2/u8g2_selection_list.c **** 
+   9:BSP/u8g2/u8g2_selection_list.c ****   Copyright (c) 2016, olikraus@gmail.com
+  10:BSP/u8g2/u8g2_selection_list.c ****   All rights reserved.
+  11:BSP/u8g2/u8g2_selection_list.c **** 
+  12:BSP/u8g2/u8g2_selection_list.c ****   Redistribution and use in source and binary forms, with or without modification, 
+  13:BSP/u8g2/u8g2_selection_list.c ****   are permitted provided that the following conditions are met:
+  14:BSP/u8g2/u8g2_selection_list.c **** 
+  15:BSP/u8g2/u8g2_selection_list.c ****   * Redistributions of source code must retain the above copyright notice, this list 
+  16:BSP/u8g2/u8g2_selection_list.c ****     of conditions and the following disclaimer.
+  17:BSP/u8g2/u8g2_selection_list.c ****     
+  18:BSP/u8g2/u8g2_selection_list.c ****   * Redistributions in binary form must reproduce the above copyright notice, this 
+  19:BSP/u8g2/u8g2_selection_list.c ****     list of conditions and the following disclaimer in the documentation and/or other 
+  20:BSP/u8g2/u8g2_selection_list.c ****     materials provided with the distribution.
+  21:BSP/u8g2/u8g2_selection_list.c **** 
+  22:BSP/u8g2/u8g2_selection_list.c ****   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND 
+  23:BSP/u8g2/u8g2_selection_list.c ****   CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, 
+  24:BSP/u8g2/u8g2_selection_list.c ****   INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF 
+  25:BSP/u8g2/u8g2_selection_list.c ****   MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
+  26:BSP/u8g2/u8g2_selection_list.c ****   DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR 
+  27:BSP/u8g2/u8g2_selection_list.c ****   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+  28:BSP/u8g2/u8g2_selection_list.c ****   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+  29:BSP/u8g2/u8g2_selection_list.c ****   NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
+  30:BSP/u8g2/u8g2_selection_list.c ****   LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
+  31:BSP/u8g2/u8g2_selection_list.c ****   CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, 
+ARM GAS  /tmp/ccUH9ldI.s 			page 2
+
+
+  32:BSP/u8g2/u8g2_selection_list.c ****   STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+  33:BSP/u8g2/u8g2_selection_list.c ****   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
+  34:BSP/u8g2/u8g2_selection_list.c ****   ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
+  35:BSP/u8g2/u8g2_selection_list.c ****   
+  36:BSP/u8g2/u8g2_selection_list.c **** */
+  37:BSP/u8g2/u8g2_selection_list.c **** 
+  38:BSP/u8g2/u8g2_selection_list.c **** #include "u8g2.h"
+  39:BSP/u8g2/u8g2_selection_list.c **** 
+  40:BSP/u8g2/u8g2_selection_list.c **** #define MY_BORDER_SIZE 1
+  41:BSP/u8g2/u8g2_selection_list.c **** 
+  42:BSP/u8g2/u8g2_selection_list.c **** 
+  43:BSP/u8g2/u8g2_selection_list.c **** /*
+  44:BSP/u8g2/u8g2_selection_list.c ****   Draw a string at x,y
+  45:BSP/u8g2/u8g2_selection_list.c ****   Center string within w (left adjust if w < pixel len of s)
+  46:BSP/u8g2/u8g2_selection_list.c ****   
+  47:BSP/u8g2/u8g2_selection_list.c ****   Side effects:
+  48:BSP/u8g2/u8g2_selection_list.c ****     u8g2_SetFontDirection(u8g2, 0);
+  49:BSP/u8g2/u8g2_selection_list.c ****     u8g2_SetFontPosBaseline(u8g2);
+  50:BSP/u8g2/u8g2_selection_list.c **** 
+  51:BSP/u8g2/u8g2_selection_list.c **** */
+  52:BSP/u8g2/u8g2_selection_list.c **** void u8g2_DrawUTF8Line(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t w, const char *s, ui
+  53:BSP/u8g2/u8g2_selection_list.c **** {
+  28              		.loc 1 53 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 12, pretend = 0, frame = 8
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		.loc 1 53 1 is_stmt 0 view .LVU1
+  33 0000 2DE9F04F 		push	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 36
+  36              		.cfi_offset 4, -36
+  37              		.cfi_offset 5, -32
+  38              		.cfi_offset 6, -28
+  39              		.cfi_offset 7, -24
+  40              		.cfi_offset 8, -20
+  41              		.cfi_offset 9, -16
+  42              		.cfi_offset 10, -12
+  43              		.cfi_offset 11, -8
+  44              		.cfi_offset 14, -4
+  45 0004 85B0     		sub	sp, sp, #20
+  46              	.LCFI1:
+  47              		.cfi_def_cfa_offset 56
+  48 0006 8146     		mov	r9, r0
+  49 0008 0291     		str	r1, [sp, #8]
+  50 000a 9246     		mov	r10, r2
+  51 000c 1D46     		mov	r5, r3
+  52 000e 9DF83C70 		ldrb	r7, [sp, #60]	@ zero_extendqisi2
+  53 0012 9DF840B0 		ldrb	fp, [sp, #64]	@ zero_extendqisi2
+  54:BSP/u8g2/u8g2_selection_list.c ****   u8g2_uint_t d, str_width;
+  54              		.loc 1 54 3 is_stmt 1 view .LVU2
+  55:BSP/u8g2/u8g2_selection_list.c ****   u8g2_uint_t fx, fy, fw, fh;
+  55              		.loc 1 55 3 view .LVU3
+  56:BSP/u8g2/u8g2_selection_list.c **** 
+  57:BSP/u8g2/u8g2_selection_list.c ****   /* only horizontal strings are supported, so force this here */
+  58:BSP/u8g2/u8g2_selection_list.c ****   u8g2_SetFontDirection(u8g2, 0);
+  56              		.loc 1 58 3 view .LVU4
+  57 0016 0021     		movs	r1, #0
+ARM GAS  /tmp/ccUH9ldI.s 			page 3
+
+
+  58              	.LVL1:
+  59              		.loc 1 58 3 is_stmt 0 view .LVU5
+  60 0018 FFF7FEFF 		bl	u8g2_SetFontDirection
+  61              	.LVL2:
+  59:BSP/u8g2/u8g2_selection_list.c **** 
+  60:BSP/u8g2/u8g2_selection_list.c ****   /* revert y position back to baseline ref */
+  61:BSP/u8g2/u8g2_selection_list.c ****   y += u8g2->font_calc_vref(u8g2);   
+  62              		.loc 1 61 3 is_stmt 1 view .LVU6
+  63              		.loc 1 61 12 is_stmt 0 view .LVU7
+  64 001c D9F85430 		ldr	r3, [r9, #84]
+  65              		.loc 1 61 8 view .LVU8
+  66 0020 4846     		mov	r0, r9
+  67 0022 9847     		blx	r3
+  68              	.LVL3:
+  69              		.loc 1 61 5 discriminator 1 view .LVU9
+  70 0024 8244     		add	r10, r10, r0
+  71              	.LVL4:
+  72              		.loc 1 61 5 discriminator 1 view .LVU10
+  73 0026 5FFA8AFA 		uxtb	r10, r10
+  74              	.LVL5:
+  62:BSP/u8g2/u8g2_selection_list.c **** 
+  63:BSP/u8g2/u8g2_selection_list.c ****   /* calculate the width of the string in pixel */
+  64:BSP/u8g2/u8g2_selection_list.c ****   str_width = u8g2_GetUTF8Width(u8g2, s);
+  75              		.loc 1 64 3 is_stmt 1 view .LVU11
+  76              		.loc 1 64 15 is_stmt 0 view .LVU12
+  77 002a 0E99     		ldr	r1, [sp, #56]
+  78 002c 4846     		mov	r0, r9
+  79 002e FFF7FEFF 		bl	u8g2_GetUTF8Width
+  80              	.LVL6:
+  81 0032 0446     		mov	r4, r0
+  82              	.LVL7:
+  65:BSP/u8g2/u8g2_selection_list.c **** 
+  66:BSP/u8g2/u8g2_selection_list.c ****   /* calculate delta d within the box */
+  67:BSP/u8g2/u8g2_selection_list.c ****   d = 0;
+  83              		.loc 1 67 3 is_stmt 1 view .LVU13
+  68:BSP/u8g2/u8g2_selection_list.c ****   if ( str_width < w )
+  84              		.loc 1 68 3 view .LVU14
+  85              		.loc 1 68 6 is_stmt 0 view .LVU15
+  86 0034 A842     		cmp	r0, r5
+  87 0036 17D2     		bcs	.L8
+  69:BSP/u8g2/u8g2_selection_list.c ****   {
+  70:BSP/u8g2/u8g2_selection_list.c ****     d = w;
+  88              		.loc 1 70 5 is_stmt 1 view .LVU16
+  89              	.LVL8:
+  71:BSP/u8g2/u8g2_selection_list.c ****     d -=str_width;
+  90              		.loc 1 71 5 view .LVU17
+  91              		.loc 1 71 7 is_stmt 0 view .LVU18
+  92 0038 2C1A     		subs	r4, r5, r0
+  93              	.LVL9:
+  72:BSP/u8g2/u8g2_selection_list.c ****     d /= 2;
+  94              		.loc 1 72 5 is_stmt 1 view .LVU19
+  95              		.loc 1 72 7 is_stmt 0 view .LVU20
+  96 003a C4F34603 		ubfx	r3, r4, #1, #7
+  97 003e 0393     		str	r3, [sp, #12]
+  98              	.LVL10:
+  99              		.loc 1 72 7 view .LVU21
+ 100 0040 2C46     		mov	r4, r5
+ARM GAS  /tmp/ccUH9ldI.s 			page 4
+
+
+ 101              	.LVL11:
+ 102              	.L2:
+  73:BSP/u8g2/u8g2_selection_list.c ****   }
+  74:BSP/u8g2/u8g2_selection_list.c ****   else
+  75:BSP/u8g2/u8g2_selection_list.c ****   {
+  76:BSP/u8g2/u8g2_selection_list.c ****     w = str_width;
+  77:BSP/u8g2/u8g2_selection_list.c ****   }
+  78:BSP/u8g2/u8g2_selection_list.c **** 
+  79:BSP/u8g2/u8g2_selection_list.c ****   /* caluclate text box */
+  80:BSP/u8g2/u8g2_selection_list.c ****   fx = x;
+ 103              		.loc 1 80 3 is_stmt 1 view .LVU22
+  81:BSP/u8g2/u8g2_selection_list.c ****   fy = y - u8g2_GetAscent(u8g2) ;
+ 104              		.loc 1 81 3 view .LVU23
+ 105              		.loc 1 81 12 is_stmt 0 view .LVU24
+ 106 0042 99F88250 		ldrb	r5, [r9, #130]	@ zero_extendqisi2
+ 107              		.loc 1 81 6 view .LVU25
+ 108 0046 AAEB0506 		sub	r6, r10, r5
+ 109 004a F6B2     		uxtb	r6, r6
+ 110              	.LVL12:
+  82:BSP/u8g2/u8g2_selection_list.c ****   fw = w;
+ 111              		.loc 1 82 3 is_stmt 1 view .LVU26
+  83:BSP/u8g2/u8g2_selection_list.c ****   fh = u8g2_GetAscent(u8g2) - u8g2_GetDescent(u8g2) ;
+ 112              		.loc 1 83 3 view .LVU27
+ 113              		.loc 1 83 31 is_stmt 0 view .LVU28
+ 114 004c 99F88330 		ldrb	r3, [r9, #131]	@ zero_extendqisi2
+ 115              		.loc 1 83 6 view .LVU29
+ 116 0050 ED1A     		subs	r5, r5, r3
+ 117 0052 EDB2     		uxtb	r5, r5
+ 118              	.LVL13:
+  84:BSP/u8g2/u8g2_selection_list.c **** 
+  85:BSP/u8g2/u8g2_selection_list.c ****   /* draw the box, if inverted */
+  86:BSP/u8g2/u8g2_selection_list.c ****   u8g2_SetDrawColor(u8g2, 1);
+ 119              		.loc 1 86 3 is_stmt 1 view .LVU30
+ 120 0054 0121     		movs	r1, #1
+ 121 0056 4846     		mov	r0, r9
+ 122              	.LVL14:
+ 123              		.loc 1 86 3 is_stmt 0 view .LVU31
+ 124 0058 FFF7FEFF 		bl	u8g2_SetDrawColor
+ 125              	.LVL15:
+  87:BSP/u8g2/u8g2_selection_list.c ****   if ( is_invert )
+ 126              		.loc 1 87 3 is_stmt 1 view .LVU32
+ 127              		.loc 1 87 6 is_stmt 0 view .LVU33
+ 128 005c BBF1000F 		cmp	fp, #0
+ 129 0060 05D1     		bne	.L10
+ 130              	.L3:
+  67:BSP/u8g2/u8g2_selection_list.c ****   if ( str_width < w )
+ 131              		.loc 1 67 5 view .LVU34
+ 132 0062 DDF80880 		ldr	r8, [sp, #8]
+ 133 0066 1DE0     		b	.L4
+ 134              	.LVL16:
+ 135              	.L8:
+  67:BSP/u8g2/u8g2_selection_list.c ****   if ( str_width < w )
+ 136              		.loc 1 67 5 view .LVU35
+ 137 0068 0023     		movs	r3, #0
+ 138 006a 0393     		str	r3, [sp, #12]
+ 139 006c E9E7     		b	.L2
+ 140              	.LVL17:
+ARM GAS  /tmp/ccUH9ldI.s 			page 5
+
+
+ 141              	.L10:
+  88:BSP/u8g2/u8g2_selection_list.c ****   {
+  89:BSP/u8g2/u8g2_selection_list.c ****     u8g2_DrawBox(u8g2, fx, fy, fw, fh);
+ 142              		.loc 1 89 5 is_stmt 1 view .LVU36
+ 143 006e 0095     		str	r5, [sp]
+ 144 0070 2346     		mov	r3, r4
+ 145 0072 3246     		mov	r2, r6
+ 146 0074 0299     		ldr	r1, [sp, #8]
+ 147 0076 4846     		mov	r0, r9
+ 148 0078 FFF7FEFF 		bl	u8g2_DrawBox
+ 149              	.LVL18:
+ 150 007c F1E7     		b	.L3
+ 151              	.LVL19:
+ 152              	.L5:
+  90:BSP/u8g2/u8g2_selection_list.c ****   }
+  91:BSP/u8g2/u8g2_selection_list.c **** 
+  92:BSP/u8g2/u8g2_selection_list.c ****   /* draw the frame */
+  93:BSP/u8g2/u8g2_selection_list.c ****   while( border_size > 0 )
+  94:BSP/u8g2/u8g2_selection_list.c ****   {
+  95:BSP/u8g2/u8g2_selection_list.c ****     fx--;
+ 153              		.loc 1 95 5 view .LVU37
+ 154              		.loc 1 95 7 is_stmt 0 view .LVU38
+ 155 007e 08F1FF38 		add	r8, r8, #-1
+ 156              	.LVL20:
+ 157              		.loc 1 95 7 view .LVU39
+ 158 0082 5FFA88F8 		uxtb	r8, r8
+ 159              	.LVL21:
+  96:BSP/u8g2/u8g2_selection_list.c ****     fy--;
+ 160              		.loc 1 96 5 is_stmt 1 view .LVU40
+ 161              		.loc 1 96 7 is_stmt 0 view .LVU41
+ 162 0086 013E     		subs	r6, r6, #1
+ 163              	.LVL22:
+ 164              		.loc 1 96 7 view .LVU42
+ 165 0088 F6B2     		uxtb	r6, r6
+ 166              	.LVL23:
+  97:BSP/u8g2/u8g2_selection_list.c ****     fw +=2;
+ 167              		.loc 1 97 5 is_stmt 1 view .LVU43
+ 168              		.loc 1 97 8 is_stmt 0 view .LVU44
+ 169 008a 0234     		adds	r4, r4, #2
+ 170              	.LVL24:
+ 171              		.loc 1 97 8 view .LVU45
+ 172 008c E4B2     		uxtb	r4, r4
+ 173              	.LVL25:
+  98:BSP/u8g2/u8g2_selection_list.c ****     fh +=2;
+ 174              		.loc 1 98 5 is_stmt 1 view .LVU46
+ 175              		.loc 1 98 8 is_stmt 0 view .LVU47
+ 176 008e 0235     		adds	r5, r5, #2
+ 177              	.LVL26:
+ 178              		.loc 1 98 8 view .LVU48
+ 179 0090 EDB2     		uxtb	r5, r5
+ 180              	.LVL27:
+  99:BSP/u8g2/u8g2_selection_list.c ****     u8g2_DrawFrame(u8g2, fx, fy, fw, fh );
+ 181              		.loc 1 99 5 is_stmt 1 view .LVU49
+ 182 0092 0095     		str	r5, [sp]
+ 183 0094 2346     		mov	r3, r4
+ 184 0096 3246     		mov	r2, r6
+ 185 0098 4146     		mov	r1, r8
+ARM GAS  /tmp/ccUH9ldI.s 			page 6
+
+
+ 186 009a 4846     		mov	r0, r9
+ 187 009c FFF7FEFF 		bl	u8g2_DrawFrame
+ 188              	.LVL28:
+ 100:BSP/u8g2/u8g2_selection_list.c ****     border_size--;
+ 189              		.loc 1 100 5 view .LVU50
+ 190              		.loc 1 100 16 is_stmt 0 view .LVU51
+ 191 00a0 013F     		subs	r7, r7, #1
+ 192              	.LVL29:
+ 193              		.loc 1 100 16 view .LVU52
+ 194 00a2 FFB2     		uxtb	r7, r7
+ 195              	.LVL30:
+ 196              	.L4:
+  93:BSP/u8g2/u8g2_selection_list.c ****   {
+ 197              		.loc 1 93 22 is_stmt 1 view .LVU53
+ 198 00a4 002F     		cmp	r7, #0
+ 199 00a6 EAD1     		bne	.L5
+ 101:BSP/u8g2/u8g2_selection_list.c ****   }
+ 102:BSP/u8g2/u8g2_selection_list.c **** 
+ 103:BSP/u8g2/u8g2_selection_list.c ****   if ( is_invert )
+ 200              		.loc 1 103 3 view .LVU54
+ 201              		.loc 1 103 6 is_stmt 0 view .LVU55
+ 202 00a8 BBF1000F 		cmp	fp, #0
+ 203 00ac 13D0     		beq	.L6
+ 104:BSP/u8g2/u8g2_selection_list.c ****   {
+ 105:BSP/u8g2/u8g2_selection_list.c ****     u8g2_SetDrawColor(u8g2, 0);
+ 204              		.loc 1 105 5 is_stmt 1 view .LVU56
+ 205 00ae 0021     		movs	r1, #0
+ 206 00b0 4846     		mov	r0, r9
+ 207 00b2 FFF7FEFF 		bl	u8g2_SetDrawColor
+ 208              	.LVL31:
+ 209              	.L7:
+ 106:BSP/u8g2/u8g2_selection_list.c ****   }
+ 107:BSP/u8g2/u8g2_selection_list.c ****   else
+ 108:BSP/u8g2/u8g2_selection_list.c ****   {
+ 109:BSP/u8g2/u8g2_selection_list.c ****     u8g2_SetDrawColor(u8g2, 1);
+ 110:BSP/u8g2/u8g2_selection_list.c ****   }
+ 111:BSP/u8g2/u8g2_selection_list.c **** 
+ 112:BSP/u8g2/u8g2_selection_list.c ****   /* draw the text */
+ 113:BSP/u8g2/u8g2_selection_list.c ****   u8g2_DrawUTF8(u8g2, x+d, y, s);
+ 210              		.loc 1 113 3 view .LVU57
+ 211 00b6 0399     		ldr	r1, [sp, #12]
+ 212 00b8 029B     		ldr	r3, [sp, #8]
+ 213 00ba 1944     		add	r1, r1, r3
+ 214 00bc 0E9B     		ldr	r3, [sp, #56]
+ 215 00be 5246     		mov	r2, r10
+ 216 00c0 C9B2     		uxtb	r1, r1
+ 217 00c2 4846     		mov	r0, r9
+ 218 00c4 FFF7FEFF 		bl	u8g2_DrawUTF8
+ 219              	.LVL32:
+ 114:BSP/u8g2/u8g2_selection_list.c **** 
+ 115:BSP/u8g2/u8g2_selection_list.c ****   /* revert draw color */
+ 116:BSP/u8g2/u8g2_selection_list.c ****   u8g2_SetDrawColor(u8g2, 1);
+ 220              		.loc 1 116 3 view .LVU58
+ 221 00c8 0121     		movs	r1, #1
+ 222 00ca 4846     		mov	r0, r9
+ 223 00cc FFF7FEFF 		bl	u8g2_SetDrawColor
+ 224              	.LVL33:
+ARM GAS  /tmp/ccUH9ldI.s 			page 7
+
+
+ 117:BSP/u8g2/u8g2_selection_list.c **** 
+ 118:BSP/u8g2/u8g2_selection_list.c **** }
+ 225              		.loc 1 118 1 is_stmt 0 view .LVU59
+ 226 00d0 05B0     		add	sp, sp, #20
+ 227              	.LCFI2:
+ 228              		.cfi_remember_state
+ 229              		.cfi_def_cfa_offset 36
+ 230              		@ sp needed
+ 231 00d2 BDE8F08F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 232              	.LVL34:
+ 233              	.L6:
+ 234              	.LCFI3:
+ 235              		.cfi_restore_state
+ 109:BSP/u8g2/u8g2_selection_list.c ****   }
+ 236              		.loc 1 109 5 is_stmt 1 view .LVU60
+ 237 00d6 0121     		movs	r1, #1
+ 238 00d8 4846     		mov	r0, r9
+ 239 00da FFF7FEFF 		bl	u8g2_SetDrawColor
+ 240              	.LVL35:
+ 241 00de EAE7     		b	.L7
+ 242              		.cfi_endproc
+ 243              	.LFE0:
+ 245              		.section	.rodata.u8g2_draw_selection_list_line.str1.4,"aMS",%progbits,1
+ 246              		.align	2
+ 247              	.LC0:
+ 248 0000 00       		.ascii	"\000"
+ 249              		.section	.text.u8g2_draw_selection_list_line,"ax",%progbits
+ 250              		.align	1
+ 251              		.syntax unified
+ 252              		.thumb
+ 253              		.thumb_func
+ 255              	u8g2_draw_selection_list_line:
+ 256              	.LVL36:
+ 257              	.LFB2:
+ 119:BSP/u8g2/u8g2_selection_list.c **** 
+ 120:BSP/u8g2/u8g2_selection_list.c **** 
+ 121:BSP/u8g2/u8g2_selection_list.c **** /*
+ 122:BSP/u8g2/u8g2_selection_list.c ****   draw several lines at position x,y.
+ 123:BSP/u8g2/u8g2_selection_list.c ****   lines are stored in s and must be separated with '\n'.
+ 124:BSP/u8g2/u8g2_selection_list.c ****   lines can be centered with respect to "w"
+ 125:BSP/u8g2/u8g2_selection_list.c ****   if s == NULL nothing is drawn and 0 is returned
+ 126:BSP/u8g2/u8g2_selection_list.c ****   returns the number of lines in s multiplied with line_height
+ 127:BSP/u8g2/u8g2_selection_list.c **** */
+ 128:BSP/u8g2/u8g2_selection_list.c **** u8g2_uint_t u8g2_DrawUTF8Lines(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t w, u8g2_uint
+ 129:BSP/u8g2/u8g2_selection_list.c **** {
+ 130:BSP/u8g2/u8g2_selection_list.c ****   uint8_t i;
+ 131:BSP/u8g2/u8g2_selection_list.c ****   uint8_t cnt;
+ 132:BSP/u8g2/u8g2_selection_list.c ****   u8g2_uint_t yy = 0;
+ 133:BSP/u8g2/u8g2_selection_list.c ****   cnt = u8x8_GetStringLineCnt(s);
+ 134:BSP/u8g2/u8g2_selection_list.c ****   //printf("str=%s\n", s);
+ 135:BSP/u8g2/u8g2_selection_list.c ****   //printf("cnt=%d, y=%d, line_height=%d\n", cnt, y, line_height);
+ 136:BSP/u8g2/u8g2_selection_list.c ****   for( i = 0; i < cnt; i++ )
+ 137:BSP/u8g2/u8g2_selection_list.c ****   {
+ 138:BSP/u8g2/u8g2_selection_list.c ****     //printf("  i=%d, y=%d, line_height=%d\n", i, y, line_height);
+ 139:BSP/u8g2/u8g2_selection_list.c ****     u8g2_DrawUTF8Line(u8g2, x, y, w, u8x8_GetStringLineStart(i, s), 0, 0);
+ 140:BSP/u8g2/u8g2_selection_list.c ****     y+=line_height;
+ 141:BSP/u8g2/u8g2_selection_list.c ****     yy+=line_height;
+ARM GAS  /tmp/ccUH9ldI.s 			page 8
+
+
+ 142:BSP/u8g2/u8g2_selection_list.c ****   }
+ 143:BSP/u8g2/u8g2_selection_list.c ****   return yy;
+ 144:BSP/u8g2/u8g2_selection_list.c **** }
+ 145:BSP/u8g2/u8g2_selection_list.c **** 
+ 146:BSP/u8g2/u8g2_selection_list.c **** /*
+ 147:BSP/u8g2/u8g2_selection_list.c ****   selection list with string line
+ 148:BSP/u8g2/u8g2_selection_list.c ****   returns line height
+ 149:BSP/u8g2/u8g2_selection_list.c **** */
+ 150:BSP/u8g2/u8g2_selection_list.c **** static u8g2_uint_t u8g2_draw_selection_list_line(u8g2_t *u8g2, u8sl_t *u8sl, u8g2_uint_t y, uint8_t
+ 151:BSP/u8g2/u8g2_selection_list.c **** static u8g2_uint_t u8g2_draw_selection_list_line(u8g2_t *u8g2, u8sl_t *u8sl, u8g2_uint_t y, uint8_t
+ 152:BSP/u8g2/u8g2_selection_list.c **** {
+ 258              		.loc 1 152 1 view -0
+ 259              		.cfi_startproc
+ 260              		@ args = 4, pretend = 0, frame = 0
+ 261              		@ frame_needed = 0, uses_anonymous_args = 0
+ 262              		.loc 1 152 1 is_stmt 0 view .LVU62
+ 263 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 264              	.LCFI4:
+ 265              		.cfi_def_cfa_offset 20
+ 266              		.cfi_offset 4, -20
+ 267              		.cfi_offset 5, -16
+ 268              		.cfi_offset 6, -12
+ 269              		.cfi_offset 7, -8
+ 270              		.cfi_offset 14, -4
+ 271 0002 85B0     		sub	sp, sp, #20
+ 272              	.LCFI5:
+ 273              		.cfi_def_cfa_offset 40
+ 274 0004 0546     		mov	r5, r0
+ 275 0006 1646     		mov	r6, r2
+ 276 0008 1846     		mov	r0, r3
+ 277              	.LVL37:
+ 153:BSP/u8g2/u8g2_selection_list.c ****   u8g2_uint_t yy;
+ 278              		.loc 1 153 3 is_stmt 1 view .LVU63
+ 154:BSP/u8g2/u8g2_selection_list.c ****   uint8_t border_size = 0;
+ 279              		.loc 1 154 3 view .LVU64
+ 155:BSP/u8g2/u8g2_selection_list.c ****   uint8_t is_invert = 0;
+ 280              		.loc 1 155 3 view .LVU65
+ 156:BSP/u8g2/u8g2_selection_list.c **** 	
+ 157:BSP/u8g2/u8g2_selection_list.c ****   u8g2_uint_t line_height = u8g2_GetAscent(u8g2) - u8g2_GetDescent(u8g2)+MY_BORDER_SIZE;
+ 281              		.loc 1 157 3 view .LVU66
+ 282              		.loc 1 157 29 is_stmt 0 view .LVU67
+ 283 000a 95F88240 		ldrb	r4, [r5, #130]	@ zero_extendqisi2
+ 284              		.loc 1 157 52 view .LVU68
+ 285 000e 95F88330 		ldrb	r3, [r5, #131]	@ zero_extendqisi2
+ 286              	.LVL38:
+ 287              		.loc 1 157 50 view .LVU69
+ 288 0012 E41A     		subs	r4, r4, r3
+ 289 0014 E4B2     		uxtb	r4, r4
+ 290              		.loc 1 157 15 view .LVU70
+ 291 0016 0134     		adds	r4, r4, #1
+ 292 0018 E4B2     		uxtb	r4, r4
+ 293              	.LVL39:
+ 158:BSP/u8g2/u8g2_selection_list.c **** 
+ 159:BSP/u8g2/u8g2_selection_list.c ****   /* calculate offset from display upper border */
+ 160:BSP/u8g2/u8g2_selection_list.c ****   yy = idx;
+ 294              		.loc 1 160 3 is_stmt 1 view .LVU71
+ 161:BSP/u8g2/u8g2_selection_list.c ****   yy -= u8sl->first_pos;
+ARM GAS  /tmp/ccUH9ldI.s 			page 9
+
+
+ 295              		.loc 1 161 3 view .LVU72
+ 162:BSP/u8g2/u8g2_selection_list.c ****   yy *= line_height;
+ 296              		.loc 1 162 3 view .LVU73
+ 163:BSP/u8g2/u8g2_selection_list.c ****   yy += y;
+ 297              		.loc 1 163 3 view .LVU74
+ 164:BSP/u8g2/u8g2_selection_list.c **** 
+ 165:BSP/u8g2/u8g2_selection_list.c ****   /* check whether this is the current cursor line */
+ 166:BSP/u8g2/u8g2_selection_list.c ****   if ( idx == u8sl->current_pos )
+ 298              		.loc 1 166 3 view .LVU75
+ 299              		.loc 1 166 19 is_stmt 0 view .LVU76
+ 300 001a CB78     		ldrb	r3, [r1, #3]	@ zero_extendqisi2
+ 301              		.loc 1 166 6 view .LVU77
+ 302 001c 8342     		cmp	r3, r0
+ 303 001e 14D0     		beq	.L14
+ 154:BSP/u8g2/u8g2_selection_list.c ****   uint8_t is_invert = 0;
+ 304              		.loc 1 154 11 view .LVU78
+ 305 0020 0027     		movs	r7, #0
+ 306              	.L12:
+ 307              	.LVL40:
+ 167:BSP/u8g2/u8g2_selection_list.c ****   {
+ 168:BSP/u8g2/u8g2_selection_list.c ****     border_size = MY_BORDER_SIZE;
+ 169:BSP/u8g2/u8g2_selection_list.c ****     is_invert = 1;
+ 170:BSP/u8g2/u8g2_selection_list.c ****   }
+ 171:BSP/u8g2/u8g2_selection_list.c **** 
+ 172:BSP/u8g2/u8g2_selection_list.c ****   /* get the line from the array */
+ 173:BSP/u8g2/u8g2_selection_list.c ****   s = u8x8_GetStringLineStart(idx, s);
+ 308              		.loc 1 173 3 is_stmt 1 view .LVU79
+ 309              		.loc 1 173 7 is_stmt 0 view .LVU80
+ 310 0022 0A99     		ldr	r1, [sp, #40]
+ 311              	.LVL41:
+ 312              		.loc 1 173 7 view .LVU81
+ 313 0024 FFF7FEFF 		bl	u8x8_GetStringLineStart
+ 314              	.LVL42:
+ 174:BSP/u8g2/u8g2_selection_list.c **** 
+ 175:BSP/u8g2/u8g2_selection_list.c ****   /* draw the line */
+ 176:BSP/u8g2/u8g2_selection_list.c ****   if ( s == NULL )
+ 315              		.loc 1 176 3 is_stmt 1 view .LVU82
+ 316              		.loc 1 176 6 is_stmt 0 view .LVU83
+ 317 0028 0246     		mov	r2, r0
+ 318 002a 80B1     		cbz	r0, .L17
+ 319              	.L13:
+ 320              	.LVL43:
+ 177:BSP/u8g2/u8g2_selection_list.c ****     s = "";
+ 178:BSP/u8g2/u8g2_selection_list.c ****   u8g2_DrawUTF8Line(u8g2, MY_BORDER_SIZE, y, u8g2_GetDisplayWidth(u8g2)-2*MY_BORDER_SIZE, s, border
+ 321              		.loc 1 178 3 is_stmt 1 view .LVU84
+ 322              		.loc 1 178 46 is_stmt 0 view .LVU85
+ 323 002c 95F84330 		ldrb	r3, [r5, #67]	@ zero_extendqisi2
+ 324              		.loc 1 178 3 view .LVU86
+ 325 0030 023B     		subs	r3, r3, #2
+ 326 0032 0297     		str	r7, [sp, #8]
+ 327 0034 0197     		str	r7, [sp, #4]
+ 328 0036 0092     		str	r2, [sp]
+ 329 0038 DBB2     		uxtb	r3, r3
+ 330 003a 3246     		mov	r2, r6
+ 331              	.LVL44:
+ 332              		.loc 1 178 3 view .LVU87
+ 333 003c 0121     		movs	r1, #1
+ARM GAS  /tmp/ccUH9ldI.s 			page 10
+
+
+ 334 003e 2846     		mov	r0, r5
+ 335 0040 FFF7FEFF 		bl	u8g2_DrawUTF8Line
+ 336              	.LVL45:
+ 179:BSP/u8g2/u8g2_selection_list.c ****   return line_height;
+ 337              		.loc 1 179 3 is_stmt 1 view .LVU88
+ 180:BSP/u8g2/u8g2_selection_list.c **** }
+ 338              		.loc 1 180 1 is_stmt 0 view .LVU89
+ 339 0044 2046     		mov	r0, r4
+ 340 0046 05B0     		add	sp, sp, #20
+ 341              	.LCFI6:
+ 342              		.cfi_remember_state
+ 343              		.cfi_def_cfa_offset 20
+ 344              		@ sp needed
+ 345 0048 F0BD     		pop	{r4, r5, r6, r7, pc}
+ 346              	.LVL46:
+ 347              	.L14:
+ 348              	.LCFI7:
+ 349              		.cfi_restore_state
+ 168:BSP/u8g2/u8g2_selection_list.c ****     is_invert = 1;
+ 350              		.loc 1 168 17 view .LVU90
+ 351 004a 0127     		movs	r7, #1
+ 352 004c E9E7     		b	.L12
+ 353              	.LVL47:
+ 354              	.L17:
+ 177:BSP/u8g2/u8g2_selection_list.c ****   u8g2_DrawUTF8Line(u8g2, MY_BORDER_SIZE, y, u8g2_GetDisplayWidth(u8g2)-2*MY_BORDER_SIZE, s, border
+ 355              		.loc 1 177 7 view .LVU91
+ 356 004e 014A     		ldr	r2, .L18
+ 357 0050 ECE7     		b	.L13
+ 358              	.L19:
+ 359 0052 00BF     		.align	2
+ 360              	.L18:
+ 361 0054 00000000 		.word	.LC0
+ 362              		.cfi_endproc
+ 363              	.LFE2:
+ 365              		.section	.text.u8g2_DrawUTF8Lines,"ax",%progbits
+ 366              		.align	1
+ 367              		.global	u8g2_DrawUTF8Lines
+ 368              		.syntax unified
+ 369              		.thumb
+ 370              		.thumb_func
+ 372              	u8g2_DrawUTF8Lines:
+ 373              	.LVL48:
+ 374              	.LFB1:
+ 129:BSP/u8g2/u8g2_selection_list.c ****   uint8_t i;
+ 375              		.loc 1 129 1 is_stmt 1 view -0
+ 376              		.cfi_startproc
+ 377              		@ args = 8, pretend = 0, frame = 0
+ 378              		@ frame_needed = 0, uses_anonymous_args = 0
+ 129:BSP/u8g2/u8g2_selection_list.c ****   uint8_t i;
+ 379              		.loc 1 129 1 is_stmt 0 view .LVU93
+ 380 0000 2DE9F04F 		push	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
+ 381              	.LCFI8:
+ 382              		.cfi_def_cfa_offset 36
+ 383              		.cfi_offset 4, -36
+ 384              		.cfi_offset 5, -32
+ 385              		.cfi_offset 6, -28
+ 386              		.cfi_offset 7, -24
+ARM GAS  /tmp/ccUH9ldI.s 			page 11
+
+
+ 387              		.cfi_offset 8, -20
+ 388              		.cfi_offset 9, -16
+ 389              		.cfi_offset 10, -12
+ 390              		.cfi_offset 11, -8
+ 391              		.cfi_offset 14, -4
+ 392 0004 85B0     		sub	sp, sp, #20
+ 393              	.LCFI9:
+ 394              		.cfi_def_cfa_offset 56
+ 395 0006 8346     		mov	fp, r0
+ 396 0008 8A46     		mov	r10, r1
+ 397 000a 1546     		mov	r5, r2
+ 398 000c 9946     		mov	r9, r3
+ 399 000e 9DF83870 		ldrb	r7, [sp, #56]	@ zero_extendqisi2
+ 130:BSP/u8g2/u8g2_selection_list.c ****   uint8_t cnt;
+ 400              		.loc 1 130 3 is_stmt 1 view .LVU94
+ 131:BSP/u8g2/u8g2_selection_list.c ****   u8g2_uint_t yy = 0;
+ 401              		.loc 1 131 3 view .LVU95
+ 132:BSP/u8g2/u8g2_selection_list.c ****   cnt = u8x8_GetStringLineCnt(s);
+ 402              		.loc 1 132 3 view .LVU96
+ 403              	.LVL49:
+ 133:BSP/u8g2/u8g2_selection_list.c ****   //printf("str=%s\n", s);
+ 404              		.loc 1 133 3 view .LVU97
+ 133:BSP/u8g2/u8g2_selection_list.c ****   //printf("str=%s\n", s);
+ 405              		.loc 1 133 9 is_stmt 0 view .LVU98
+ 406 0012 0F98     		ldr	r0, [sp, #60]
+ 407              	.LVL50:
+ 133:BSP/u8g2/u8g2_selection_list.c ****   //printf("str=%s\n", s);
+ 408              		.loc 1 133 9 view .LVU99
+ 409 0014 FFF7FEFF 		bl	u8x8_GetStringLineCnt
+ 410              	.LVL51:
+ 133:BSP/u8g2/u8g2_selection_list.c ****   //printf("str=%s\n", s);
+ 411              		.loc 1 133 9 view .LVU100
+ 412 0018 8046     		mov	r8, r0
+ 413              	.LVL52:
+ 136:BSP/u8g2/u8g2_selection_list.c ****   {
+ 414              		.loc 1 136 3 is_stmt 1 view .LVU101
+ 132:BSP/u8g2/u8g2_selection_list.c ****   cnt = u8x8_GetStringLineCnt(s);
+ 415              		.loc 1 132 15 is_stmt 0 view .LVU102
+ 416 001a 0026     		movs	r6, #0
+ 136:BSP/u8g2/u8g2_selection_list.c ****   {
+ 417              		.loc 1 136 10 view .LVU103
+ 418 001c 3446     		mov	r4, r6
+ 136:BSP/u8g2/u8g2_selection_list.c ****   {
+ 419              		.loc 1 136 3 view .LVU104
+ 420 001e 13E0     		b	.L21
+ 421              	.LVL53:
+ 422              	.L22:
+ 139:BSP/u8g2/u8g2_selection_list.c ****     y+=line_height;
+ 423              		.loc 1 139 5 is_stmt 1 view .LVU105
+ 424 0020 0F99     		ldr	r1, [sp, #60]
+ 425 0022 2046     		mov	r0, r4
+ 426 0024 FFF7FEFF 		bl	u8x8_GetStringLineStart
+ 427              	.LVL54:
+ 139:BSP/u8g2/u8g2_selection_list.c ****     y+=line_height;
+ 428              		.loc 1 139 5 is_stmt 0 discriminator 1 view .LVU106
+ 429 0028 0023     		movs	r3, #0
+ 430 002a 0293     		str	r3, [sp, #8]
+ARM GAS  /tmp/ccUH9ldI.s 			page 12
+
+
+ 431 002c 0193     		str	r3, [sp, #4]
+ 432 002e 0090     		str	r0, [sp]
+ 433 0030 4B46     		mov	r3, r9
+ 434 0032 2A46     		mov	r2, r5
+ 435 0034 5146     		mov	r1, r10
+ 436 0036 5846     		mov	r0, fp
+ 437 0038 FFF7FEFF 		bl	u8g2_DrawUTF8Line
+ 438              	.LVL55:
+ 140:BSP/u8g2/u8g2_selection_list.c ****     yy+=line_height;
+ 439              		.loc 1 140 5 is_stmt 1 view .LVU107
+ 140:BSP/u8g2/u8g2_selection_list.c ****     yy+=line_height;
+ 440              		.loc 1 140 6 is_stmt 0 view .LVU108
+ 441 003c 3D44     		add	r5, r5, r7
+ 442              	.LVL56:
+ 140:BSP/u8g2/u8g2_selection_list.c ****     yy+=line_height;
+ 443              		.loc 1 140 6 view .LVU109
+ 444 003e EDB2     		uxtb	r5, r5
+ 445              	.LVL57:
+ 141:BSP/u8g2/u8g2_selection_list.c ****   }
+ 446              		.loc 1 141 5 is_stmt 1 view .LVU110
+ 141:BSP/u8g2/u8g2_selection_list.c ****   }
+ 447              		.loc 1 141 7 is_stmt 0 view .LVU111
+ 448 0040 3E44     		add	r6, r6, r7
+ 449              	.LVL58:
+ 141:BSP/u8g2/u8g2_selection_list.c ****   }
+ 450              		.loc 1 141 7 view .LVU112
+ 451 0042 F6B2     		uxtb	r6, r6
+ 452              	.LVL59:
+ 136:BSP/u8g2/u8g2_selection_list.c ****   {
+ 453              		.loc 1 136 25 is_stmt 1 discriminator 3 view .LVU113
+ 454 0044 0134     		adds	r4, r4, #1
+ 455              	.LVL60:
+ 136:BSP/u8g2/u8g2_selection_list.c ****   {
+ 456              		.loc 1 136 25 is_stmt 0 discriminator 3 view .LVU114
+ 457 0046 E4B2     		uxtb	r4, r4
+ 458              	.LVL61:
+ 459              	.L21:
+ 136:BSP/u8g2/u8g2_selection_list.c ****   {
+ 460              		.loc 1 136 17 is_stmt 1 discriminator 1 view .LVU115
+ 461 0048 4445     		cmp	r4, r8
+ 462 004a E9D3     		bcc	.L22
+ 143:BSP/u8g2/u8g2_selection_list.c **** }
+ 463              		.loc 1 143 3 view .LVU116
+ 144:BSP/u8g2/u8g2_selection_list.c **** 
+ 464              		.loc 1 144 1 is_stmt 0 view .LVU117
+ 465 004c 3046     		mov	r0, r6
+ 466 004e 05B0     		add	sp, sp, #20
+ 467              	.LCFI10:
+ 468              		.cfi_def_cfa_offset 36
+ 469              		@ sp needed
+ 470 0050 BDE8F08F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 144:BSP/u8g2/u8g2_selection_list.c **** 
+ 471              		.loc 1 144 1 view .LVU118
+ 472              		.cfi_endproc
+ 473              	.LFE1:
+ 475              		.section	.text.u8g2_DrawSelectionList,"ax",%progbits
+ 476              		.align	1
+ARM GAS  /tmp/ccUH9ldI.s 			page 13
+
+
+ 477              		.global	u8g2_DrawSelectionList
+ 478              		.syntax unified
+ 479              		.thumb
+ 480              		.thumb_func
+ 482              	u8g2_DrawSelectionList:
+ 483              	.LVL62:
+ 484              	.LFB3:
+ 181:BSP/u8g2/u8g2_selection_list.c **** 
+ 182:BSP/u8g2/u8g2_selection_list.c **** void u8g2_DrawSelectionList(u8g2_t *u8g2, u8sl_t *u8sl, u8g2_uint_t y, const char *s)
+ 183:BSP/u8g2/u8g2_selection_list.c **** {
+ 485              		.loc 1 183 1 is_stmt 1 view -0
+ 486              		.cfi_startproc
+ 487              		@ args = 0, pretend = 0, frame = 0
+ 488              		@ frame_needed = 0, uses_anonymous_args = 0
+ 489              		.loc 1 183 1 is_stmt 0 view .LVU120
+ 490 0000 2DE9F041 		push	{r4, r5, r6, r7, r8, lr}
+ 491              	.LCFI11:
+ 492              		.cfi_def_cfa_offset 24
+ 493              		.cfi_offset 4, -24
+ 494              		.cfi_offset 5, -20
+ 495              		.cfi_offset 6, -16
+ 496              		.cfi_offset 7, -12
+ 497              		.cfi_offset 8, -8
+ 498              		.cfi_offset 14, -4
+ 499 0004 82B0     		sub	sp, sp, #8
+ 500              	.LCFI12:
+ 501              		.cfi_def_cfa_offset 32
+ 502 0006 0746     		mov	r7, r0
+ 503 0008 0D46     		mov	r5, r1
+ 504 000a 9046     		mov	r8, r2
+ 505 000c 1E46     		mov	r6, r3
+ 184:BSP/u8g2/u8g2_selection_list.c ****   uint8_t i;
+ 506              		.loc 1 184 3 is_stmt 1 view .LVU121
+ 185:BSP/u8g2/u8g2_selection_list.c ****   for( i = 0; i < u8sl->visible; i++ )
+ 507              		.loc 1 185 3 view .LVU122
+ 508              	.LVL63:
+ 509              		.loc 1 185 10 is_stmt 0 view .LVU123
+ 510 000e 0024     		movs	r4, #0
+ 511              		.loc 1 185 3 view .LVU124
+ 512 0010 0EE0     		b	.L25
+ 513              	.LVL64:
+ 514              	.L26:
+ 186:BSP/u8g2/u8g2_selection_list.c ****   {
+ 187:BSP/u8g2/u8g2_selection_list.c ****     y += u8g2_draw_selection_list_line(u8g2, u8sl, y, i+u8sl->first_pos, s);
+ 515              		.loc 1 187 5 is_stmt 1 view .LVU125
+ 516              		.loc 1 187 61 is_stmt 0 view .LVU126
+ 517 0012 AB78     		ldrb	r3, [r5, #2]	@ zero_extendqisi2
+ 518              		.loc 1 187 10 view .LVU127
+ 519 0014 2344     		add	r3, r3, r4
+ 520 0016 0096     		str	r6, [sp]
+ 521 0018 DBB2     		uxtb	r3, r3
+ 522 001a 4246     		mov	r2, r8
+ 523 001c 2946     		mov	r1, r5
+ 524 001e 3846     		mov	r0, r7
+ 525 0020 FFF7FEFF 		bl	u8g2_draw_selection_list_line
+ 526              	.LVL65:
+ 527              		.loc 1 187 7 discriminator 1 view .LVU128
+ARM GAS  /tmp/ccUH9ldI.s 			page 14
+
+
+ 528 0024 08EB0002 		add	r2, r8, r0
+ 529 0028 5FFA82F8 		uxtb	r8, r2
+ 530              	.LVL66:
+ 185:BSP/u8g2/u8g2_selection_list.c ****   for( i = 0; i < u8sl->visible; i++ )
+ 531              		.loc 1 185 35 is_stmt 1 discriminator 3 view .LVU129
+ 532 002c 0134     		adds	r4, r4, #1
+ 533              	.LVL67:
+ 185:BSP/u8g2/u8g2_selection_list.c ****   for( i = 0; i < u8sl->visible; i++ )
+ 534              		.loc 1 185 35 is_stmt 0 discriminator 3 view .LVU130
+ 535 002e E4B2     		uxtb	r4, r4
+ 536              	.LVL68:
+ 537              	.L25:
+ 185:BSP/u8g2/u8g2_selection_list.c ****   for( i = 0; i < u8sl->visible; i++ )
+ 538              		.loc 1 185 17 is_stmt 1 discriminator 1 view .LVU131
+ 185:BSP/u8g2/u8g2_selection_list.c ****   for( i = 0; i < u8sl->visible; i++ )
+ 539              		.loc 1 185 23 is_stmt 0 discriminator 1 view .LVU132
+ 540 0030 2B78     		ldrb	r3, [r5]	@ zero_extendqisi2
+ 185:BSP/u8g2/u8g2_selection_list.c ****   for( i = 0; i < u8sl->visible; i++ )
+ 541              		.loc 1 185 17 discriminator 1 view .LVU133
+ 542 0032 A342     		cmp	r3, r4
+ 543 0034 EDD8     		bhi	.L26
+ 188:BSP/u8g2/u8g2_selection_list.c ****   }
+ 189:BSP/u8g2/u8g2_selection_list.c **** }
+ 544              		.loc 1 189 1 view .LVU134
+ 545 0036 02B0     		add	sp, sp, #8
+ 546              	.LCFI13:
+ 547              		.cfi_def_cfa_offset 24
+ 548              		@ sp needed
+ 549 0038 BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
+ 550              		.loc 1 189 1 view .LVU135
+ 551              		.cfi_endproc
+ 552              	.LFE3:
+ 554              		.section	.text.u8g2_UserInterfaceSelectionList,"ax",%progbits
+ 555              		.align	1
+ 556              		.global	u8g2_UserInterfaceSelectionList
+ 557              		.syntax unified
+ 558              		.thumb
+ 559              		.thumb_func
+ 561              	u8g2_UserInterfaceSelectionList:
+ 562              	.LVL69:
+ 563              	.LFB4:
+ 190:BSP/u8g2/u8g2_selection_list.c **** 
+ 191:BSP/u8g2/u8g2_selection_list.c **** 
+ 192:BSP/u8g2/u8g2_selection_list.c **** /*
+ 193:BSP/u8g2/u8g2_selection_list.c ****   title: 		NULL for no title, valid str for title line. Can contain mutliple lines, separated by '\
+ 194:BSP/u8g2/u8g2_selection_list.c ****   start_pos: 	default position for the cursor, first line is 1.
+ 195:BSP/u8g2/u8g2_selection_list.c ****   sl:			string list (list of strings separated by \n)
+ 196:BSP/u8g2/u8g2_selection_list.c ****   returns 0 if user has pressed the home key
+ 197:BSP/u8g2/u8g2_selection_list.c ****   returns the selected line if user has pressed the select key
+ 198:BSP/u8g2/u8g2_selection_list.c ****   side effects:
+ 199:BSP/u8g2/u8g2_selection_list.c ****     u8g2_SetFontDirection(u8g2, 0);
+ 200:BSP/u8g2/u8g2_selection_list.c ****     u8g2_SetFontPosBaseline(u8g2);
+ 201:BSP/u8g2/u8g2_selection_list.c **** 	
+ 202:BSP/u8g2/u8g2_selection_list.c **** */
+ 203:BSP/u8g2/u8g2_selection_list.c **** uint8_t u8g2_UserInterfaceSelectionList(u8g2_t *u8g2, const char *title, uint8_t start_pos, const c
+ 204:BSP/u8g2/u8g2_selection_list.c **** {
+ 564              		.loc 1 204 1 is_stmt 1 view -0
+ARM GAS  /tmp/ccUH9ldI.s 			page 15
+
+
+ 565              		.cfi_startproc
+ 566              		@ args = 0, pretend = 0, frame = 8
+ 567              		@ frame_needed = 0, uses_anonymous_args = 0
+ 568              		.loc 1 204 1 is_stmt 0 view .LVU137
+ 569 0000 2DE9F043 		push	{r4, r5, r6, r7, r8, r9, lr}
+ 570              	.LCFI14:
+ 571              		.cfi_def_cfa_offset 28
+ 572              		.cfi_offset 4, -28
+ 573              		.cfi_offset 5, -24
+ 574              		.cfi_offset 6, -20
+ 575              		.cfi_offset 7, -16
+ 576              		.cfi_offset 8, -12
+ 577              		.cfi_offset 9, -8
+ 578              		.cfi_offset 14, -4
+ 579 0004 85B0     		sub	sp, sp, #20
+ 580              	.LCFI15:
+ 581              		.cfi_def_cfa_offset 48
+ 582 0006 0546     		mov	r5, r0
+ 583 0008 8946     		mov	r9, r1
+ 584 000a 1446     		mov	r4, r2
+ 585 000c 1F46     		mov	r7, r3
+ 205:BSP/u8g2/u8g2_selection_list.c ****   u8sl_t u8sl;
+ 586              		.loc 1 205 3 is_stmt 1 view .LVU138
+ 206:BSP/u8g2/u8g2_selection_list.c ****   u8g2_uint_t yy;
+ 587              		.loc 1 206 3 view .LVU139
+ 207:BSP/u8g2/u8g2_selection_list.c **** 
+ 208:BSP/u8g2/u8g2_selection_list.c ****   uint8_t event;
+ 588              		.loc 1 208 3 view .LVU140
+ 209:BSP/u8g2/u8g2_selection_list.c **** 
+ 210:BSP/u8g2/u8g2_selection_list.c ****   u8g2_uint_t line_height = u8g2_GetAscent(u8g2) - u8g2_GetDescent(u8g2)+MY_BORDER_SIZE;
+ 589              		.loc 1 210 3 view .LVU141
+ 590              		.loc 1 210 29 is_stmt 0 view .LVU142
+ 591 000e 90F88280 		ldrb	r8, [r0, #130]	@ zero_extendqisi2
+ 592              		.loc 1 210 52 view .LVU143
+ 593 0012 90F88330 		ldrb	r3, [r0, #131]	@ zero_extendqisi2
+ 594              	.LVL70:
+ 595              		.loc 1 210 50 view .LVU144
+ 596 0016 A8EB0308 		sub	r8, r8, r3
+ 597 001a 5FFA88F8 		uxtb	r8, r8
+ 598              		.loc 1 210 15 view .LVU145
+ 599 001e 08F10108 		add	r8, r8, #1
+ 600 0022 5FFA88F8 		uxtb	r8, r8
+ 601              	.LVL71:
+ 211:BSP/u8g2/u8g2_selection_list.c **** 
+ 212:BSP/u8g2/u8g2_selection_list.c ****   uint8_t title_lines = u8x8_GetStringLineCnt(title);
+ 602              		.loc 1 212 3 is_stmt 1 view .LVU146
+ 603              		.loc 1 212 25 is_stmt 0 view .LVU147
+ 604 0026 0846     		mov	r0, r1
+ 605              	.LVL72:
+ 606              		.loc 1 212 25 view .LVU148
+ 607 0028 FFF7FEFF 		bl	u8x8_GetStringLineCnt
+ 608              	.LVL73:
+ 609              		.loc 1 212 25 view .LVU149
+ 610 002c 0646     		mov	r6, r0
+ 611              	.LVL74:
+ 213:BSP/u8g2/u8g2_selection_list.c ****   uint8_t display_lines;
+ 612              		.loc 1 213 3 is_stmt 1 view .LVU150
+ARM GAS  /tmp/ccUH9ldI.s 			page 16
+
+
+ 214:BSP/u8g2/u8g2_selection_list.c **** 
+ 215:BSP/u8g2/u8g2_selection_list.c ****   
+ 216:BSP/u8g2/u8g2_selection_list.c ****   if ( start_pos > 0 )	/* issue 112 */
+ 613              		.loc 1 216 3 view .LVU151
+ 614              		.loc 1 216 6 is_stmt 0 view .LVU152
+ 615 002e 0CB1     		cbz	r4, .L29
+ 217:BSP/u8g2/u8g2_selection_list.c ****     start_pos--;		/* issue 112 */
+ 616              		.loc 1 217 5 is_stmt 1 view .LVU153
+ 617              		.loc 1 217 14 is_stmt 0 view .LVU154
+ 618 0030 013C     		subs	r4, r4, #1
+ 619              	.LVL75:
+ 620              		.loc 1 217 14 view .LVU155
+ 621 0032 E4B2     		uxtb	r4, r4
+ 622              	.LVL76:
+ 623              	.L29:
+ 218:BSP/u8g2/u8g2_selection_list.c **** 
+ 219:BSP/u8g2/u8g2_selection_list.c **** 
+ 220:BSP/u8g2/u8g2_selection_list.c ****   if ( title_lines > 0 )
+ 624              		.loc 1 220 3 is_stmt 1 view .LVU156
+ 625              		.loc 1 220 6 is_stmt 0 view .LVU157
+ 626 0034 5EB3     		cbz	r6, .L30
+ 221:BSP/u8g2/u8g2_selection_list.c ****   {
+ 222:BSP/u8g2/u8g2_selection_list.c **** 	display_lines = (u8g2_GetDisplayHeight(u8g2)-3) / line_height;
+ 627              		.loc 1 222 2 is_stmt 1 view .LVU158
+ 628              		.loc 1 222 19 is_stmt 0 view .LVU159
+ 629 0036 95F84430 		ldrb	r3, [r5, #68]	@ zero_extendqisi2
+ 630              		.loc 1 222 46 view .LVU160
+ 631 003a 033B     		subs	r3, r3, #3
+ 632              		.loc 1 222 50 view .LVU161
+ 633 003c 93FBF8F3 		sdiv	r3, r3, r8
+ 634              		.loc 1 222 16 view .LVU162
+ 635 0040 DBB2     		uxtb	r3, r3
+ 636              	.LVL77:
+ 223:BSP/u8g2/u8g2_selection_list.c **** 	u8sl.visible = display_lines;
+ 637              		.loc 1 223 2 is_stmt 1 view .LVU163
+ 638              		.loc 1 223 15 is_stmt 0 view .LVU164
+ 639 0042 8DF80830 		strb	r3, [sp, #8]
+ 224:BSP/u8g2/u8g2_selection_list.c **** 	u8sl.visible -= title_lines;
+ 640              		.loc 1 224 2 is_stmt 1 view .LVU165
+ 641              		.loc 1 224 15 is_stmt 0 view .LVU166
+ 642 0046 9B1B     		subs	r3, r3, r6
+ 643              	.LVL78:
+ 644              		.loc 1 224 15 view .LVU167
+ 645 0048 8DF80830 		strb	r3, [sp, #8]
+ 646              	.LVL79:
+ 647              	.L31:
+ 225:BSP/u8g2/u8g2_selection_list.c ****   }
+ 226:BSP/u8g2/u8g2_selection_list.c ****   else
+ 227:BSP/u8g2/u8g2_selection_list.c ****   {
+ 228:BSP/u8g2/u8g2_selection_list.c **** 	display_lines = u8g2_GetDisplayHeight(u8g2) / line_height;
+ 229:BSP/u8g2/u8g2_selection_list.c **** 	u8sl.visible = display_lines;
+ 230:BSP/u8g2/u8g2_selection_list.c ****   }
+ 231:BSP/u8g2/u8g2_selection_list.c **** 
+ 232:BSP/u8g2/u8g2_selection_list.c ****   u8sl.total = u8x8_GetStringLineCnt(sl);
+ 648              		.loc 1 232 3 is_stmt 1 view .LVU168
+ 649              		.loc 1 232 16 is_stmt 0 view .LVU169
+ 650 004c 3846     		mov	r0, r7
+ARM GAS  /tmp/ccUH9ldI.s 			page 17
+
+
+ 651 004e FFF7FEFF 		bl	u8x8_GetStringLineCnt
+ 652              	.LVL80:
+ 653              		.loc 1 232 14 discriminator 1 view .LVU170
+ 654 0052 8DF80900 		strb	r0, [sp, #9]
+ 233:BSP/u8g2/u8g2_selection_list.c ****   u8sl.first_pos = 0;
+ 655              		.loc 1 233 3 is_stmt 1 view .LVU171
+ 656              		.loc 1 233 18 is_stmt 0 view .LVU172
+ 657 0056 0023     		movs	r3, #0
+ 658 0058 8DF80A30 		strb	r3, [sp, #10]
+ 234:BSP/u8g2/u8g2_selection_list.c ****   u8sl.current_pos = start_pos;
+ 659              		.loc 1 234 3 is_stmt 1 view .LVU173
+ 660              		.loc 1 234 20 is_stmt 0 view .LVU174
+ 661 005c 8DF80B40 		strb	r4, [sp, #11]
+ 235:BSP/u8g2/u8g2_selection_list.c **** 
+ 236:BSP/u8g2/u8g2_selection_list.c ****   if ( u8sl.current_pos >= u8sl.total )
+ 662              		.loc 1 236 3 is_stmt 1 view .LVU175
+ 663              		.loc 1 236 6 is_stmt 0 view .LVU176
+ 664 0060 A042     		cmp	r0, r4
+ 665 0062 02D8     		bhi	.L32
+ 237:BSP/u8g2/u8g2_selection_list.c ****     u8sl.current_pos = u8sl.total-1;
+ 666              		.loc 1 237 5 is_stmt 1 view .LVU177
+ 667              		.loc 1 237 34 is_stmt 0 view .LVU178
+ 668 0064 0138     		subs	r0, r0, #1
+ 669              		.loc 1 237 22 view .LVU179
+ 670 0066 8DF80B00 		strb	r0, [sp, #11]
+ 671              	.L32:
+ 238:BSP/u8g2/u8g2_selection_list.c ****   if ( u8sl.first_pos+u8sl.visible <= u8sl.current_pos )
+ 672              		.loc 1 238 3 is_stmt 1 view .LVU180
+ 673              		.loc 1 238 27 is_stmt 0 view .LVU181
+ 674 006a 9DF80820 		ldrb	r2, [sp, #8]	@ zero_extendqisi2
+ 675              		.loc 1 238 43 view .LVU182
+ 676 006e 9DF80B30 		ldrb	r3, [sp, #11]	@ zero_extendqisi2
+ 677              		.loc 1 238 6 view .LVU183
+ 678 0072 9A42     		cmp	r2, r3
+ 679 0074 04DC     		bgt	.L33
+ 239:BSP/u8g2/u8g2_selection_list.c ****     u8sl.first_pos = u8sl.current_pos-u8sl.visible+1;
+ 680              		.loc 1 239 5 is_stmt 1 view .LVU184
+ 681              		.loc 1 239 38 is_stmt 0 view .LVU185
+ 682 0076 9B1A     		subs	r3, r3, r2
+ 683 0078 DBB2     		uxtb	r3, r3
+ 684              		.loc 1 239 51 view .LVU186
+ 685 007a 0133     		adds	r3, r3, #1
+ 686              		.loc 1 239 20 view .LVU187
+ 687 007c 8DF80A30 		strb	r3, [sp, #10]
+ 688              	.L33:
+ 240:BSP/u8g2/u8g2_selection_list.c **** 
+ 241:BSP/u8g2/u8g2_selection_list.c ****   u8g2_SetFontPosBaseline(u8g2);
+ 689              		.loc 1 241 3 is_stmt 1 view .LVU188
+ 690 0080 2846     		mov	r0, r5
+ 691 0082 FFF7FEFF 		bl	u8g2_SetFontPosBaseline
+ 692              	.LVL81:
+ 693              	.L34:
+ 242:BSP/u8g2/u8g2_selection_list.c ****   
+ 243:BSP/u8g2/u8g2_selection_list.c ****   for(;;)
+ 694              		.loc 1 243 3 view .LVU189
+ 244:BSP/u8g2/u8g2_selection_list.c ****   {
+ 245:BSP/u8g2/u8g2_selection_list.c ****       u8g2_FirstPage(u8g2);
+ARM GAS  /tmp/ccUH9ldI.s 			page 18
+
+
+ 695              		.loc 1 245 7 view .LVU190
+ 696 0086 2846     		mov	r0, r5
+ 697 0088 FFF7FEFF 		bl	u8g2_FirstPage
+ 698              	.LVL82:
+ 699 008c 11E0     		b	.L36
+ 700              	.LVL83:
+ 701              	.L30:
+ 228:BSP/u8g2/u8g2_selection_list.c **** 	u8sl.visible = display_lines;
+ 702              		.loc 1 228 2 view .LVU191
+ 228:BSP/u8g2/u8g2_selection_list.c **** 	u8sl.visible = display_lines;
+ 703              		.loc 1 228 18 is_stmt 0 view .LVU192
+ 704 008e 95F84430 		ldrb	r3, [r5, #68]	@ zero_extendqisi2
+ 228:BSP/u8g2/u8g2_selection_list.c **** 	u8sl.visible = display_lines;
+ 705              		.loc 1 228 16 view .LVU193
+ 706 0092 B3FBF8F3 		udiv	r3, r3, r8
+ 707              	.LVL84:
+ 229:BSP/u8g2/u8g2_selection_list.c ****   }
+ 708              		.loc 1 229 2 is_stmt 1 view .LVU194
+ 229:BSP/u8g2/u8g2_selection_list.c ****   }
+ 709              		.loc 1 229 15 is_stmt 0 view .LVU195
+ 710 0096 8DF80830 		strb	r3, [sp, #8]
+ 711 009a D7E7     		b	.L31
+ 712              	.LVL85:
+ 713              	.L35:
+ 246:BSP/u8g2/u8g2_selection_list.c ****       do
+ 247:BSP/u8g2/u8g2_selection_list.c ****       {
+ 248:BSP/u8g2/u8g2_selection_list.c ****         yy = u8g2_GetAscent(u8g2);
+ 249:BSP/u8g2/u8g2_selection_list.c ****         if ( title_lines > 0 )
+ 250:BSP/u8g2/u8g2_selection_list.c ****         {
+ 251:BSP/u8g2/u8g2_selection_list.c ****           yy += u8g2_DrawUTF8Lines(u8g2, 0, yy, u8g2_GetDisplayWidth(u8g2), line_height, title);
+ 252:BSP/u8g2/u8g2_selection_list.c **** 		
+ 253:BSP/u8g2/u8g2_selection_list.c **** 	  u8g2_DrawHLine(u8g2, 0, yy-line_height- u8g2_GetDescent(u8g2) + 1, u8g2_GetDisplayWidth(u8g2));
+ 254:BSP/u8g2/u8g2_selection_list.c **** 		
+ 255:BSP/u8g2/u8g2_selection_list.c **** 	  yy += 3;
+ 256:BSP/u8g2/u8g2_selection_list.c ****         }
+ 257:BSP/u8g2/u8g2_selection_list.c ****         u8g2_DrawSelectionList(u8g2, &u8sl, yy, sl);
+ 714              		.loc 1 257 9 is_stmt 1 view .LVU196
+ 715 009c 3B46     		mov	r3, r7
+ 716 009e 2246     		mov	r2, r4
+ 717 00a0 02A9     		add	r1, sp, #8
+ 718 00a2 2846     		mov	r0, r5
+ 719 00a4 FFF7FEFF 		bl	u8g2_DrawSelectionList
+ 720              	.LVL86:
+ 258:BSP/u8g2/u8g2_selection_list.c ****       } while( u8g2_NextPage(u8g2) );
+ 721              		.loc 1 258 16 view .LVU197
+ 722 00a8 2846     		mov	r0, r5
+ 723 00aa FFF7FEFF 		bl	u8g2_NextPage
+ 724              	.LVL87:
+ 725              		.loc 1 258 16 is_stmt 0 discriminator 1 view .LVU198
+ 726 00ae 0446     		mov	r4, r0
+ 727              	.LVL88:
+ 728              		.loc 1 258 16 discriminator 1 view .LVU199
+ 729 00b0 18B3     		cbz	r0, .L37
+ 730              	.LVL89:
+ 731              	.L36:
+ 246:BSP/u8g2/u8g2_selection_list.c ****       do
+ 732              		.loc 1 246 7 is_stmt 1 view .LVU200
+ARM GAS  /tmp/ccUH9ldI.s 			page 19
+
+
+ 248:BSP/u8g2/u8g2_selection_list.c ****         if ( title_lines > 0 )
+ 733              		.loc 1 248 9 view .LVU201
+ 248:BSP/u8g2/u8g2_selection_list.c ****         if ( title_lines > 0 )
+ 734              		.loc 1 248 14 is_stmt 0 view .LVU202
+ 735 00b2 95F98240 		ldrsb	r4, [r5, #130]
+ 248:BSP/u8g2/u8g2_selection_list.c ****         if ( title_lines > 0 )
+ 736              		.loc 1 248 12 view .LVU203
+ 737 00b6 E4B2     		uxtb	r4, r4
+ 738              	.LVL90:
+ 249:BSP/u8g2/u8g2_selection_list.c ****         {
+ 739              		.loc 1 249 9 is_stmt 1 view .LVU204
+ 249:BSP/u8g2/u8g2_selection_list.c ****         {
+ 740              		.loc 1 249 12 is_stmt 0 view .LVU205
+ 741 00b8 002E     		cmp	r6, #0
+ 742 00ba EFD0     		beq	.L35
+ 251:BSP/u8g2/u8g2_selection_list.c **** 		
+ 743              		.loc 1 251 11 is_stmt 1 view .LVU206
+ 251:BSP/u8g2/u8g2_selection_list.c **** 		
+ 744              		.loc 1 251 17 is_stmt 0 view .LVU207
+ 745 00bc CDF80490 		str	r9, [sp, #4]
+ 746 00c0 CDF80080 		str	r8, [sp]
+ 747 00c4 95F84330 		ldrb	r3, [r5, #67]	@ zero_extendqisi2
+ 748 00c8 2246     		mov	r2, r4
+ 749 00ca 0021     		movs	r1, #0
+ 750 00cc 2846     		mov	r0, r5
+ 751 00ce FFF7FEFF 		bl	u8g2_DrawUTF8Lines
+ 752              	.LVL91:
+ 251:BSP/u8g2/u8g2_selection_list.c **** 		
+ 753              		.loc 1 251 14 discriminator 1 view .LVU208
+ 754 00d2 0444     		add	r4, r4, r0
+ 755              	.LVL92:
+ 251:BSP/u8g2/u8g2_selection_list.c **** 		
+ 756              		.loc 1 251 14 discriminator 1 view .LVU209
+ 757 00d4 E4B2     		uxtb	r4, r4
+ 758              	.LVL93:
+ 253:BSP/u8g2/u8g2_selection_list.c **** 		
+ 759              		.loc 1 253 4 is_stmt 1 view .LVU210
+ 253:BSP/u8g2/u8g2_selection_list.c **** 		
+ 760              		.loc 1 253 30 is_stmt 0 view .LVU211
+ 761 00d6 A4EB0802 		sub	r2, r4, r8
+ 762 00da D2B2     		uxtb	r2, r2
+ 253:BSP/u8g2/u8g2_selection_list.c **** 		
+ 763              		.loc 1 253 44 view .LVU212
+ 764 00dc 95F88330 		ldrb	r3, [r5, #131]	@ zero_extendqisi2
+ 253:BSP/u8g2/u8g2_selection_list.c **** 		
+ 765              		.loc 1 253 42 view .LVU213
+ 766 00e0 D21A     		subs	r2, r2, r3
+ 767 00e2 D2B2     		uxtb	r2, r2
+ 253:BSP/u8g2/u8g2_selection_list.c **** 		
+ 768              		.loc 1 253 4 view .LVU214
+ 769 00e4 0132     		adds	r2, r2, #1
+ 770 00e6 95F84330 		ldrb	r3, [r5, #67]	@ zero_extendqisi2
+ 771 00ea D2B2     		uxtb	r2, r2
+ 772 00ec 0021     		movs	r1, #0
+ 773 00ee 2846     		mov	r0, r5
+ 774 00f0 FFF7FEFF 		bl	u8g2_DrawHLine
+ 775              	.LVL94:
+ARM GAS  /tmp/ccUH9ldI.s 			page 20
+
+
+ 255:BSP/u8g2/u8g2_selection_list.c ****         }
+ 776              		.loc 1 255 4 is_stmt 1 view .LVU215
+ 255:BSP/u8g2/u8g2_selection_list.c ****         }
+ 777              		.loc 1 255 7 is_stmt 0 view .LVU216
+ 778 00f4 0334     		adds	r4, r4, #3
+ 779              	.LVL95:
+ 255:BSP/u8g2/u8g2_selection_list.c ****         }
+ 780              		.loc 1 255 7 view .LVU217
+ 781 00f6 E4B2     		uxtb	r4, r4
+ 782              	.LVL96:
+ 255:BSP/u8g2/u8g2_selection_list.c ****         }
+ 783              		.loc 1 255 7 view .LVU218
+ 784 00f8 D0E7     		b	.L35
+ 785              	.LVL97:
+ 786              	.L37:
+ 259:BSP/u8g2/u8g2_selection_list.c ****       
+ 260:BSP/u8g2/u8g2_selection_list.c **** #ifdef U8G2_REF_MAN_PIC
+ 261:BSP/u8g2/u8g2_selection_list.c ****       return 0;
+ 262:BSP/u8g2/u8g2_selection_list.c **** #endif
+ 263:BSP/u8g2/u8g2_selection_list.c **** 
+ 264:BSP/u8g2/u8g2_selection_list.c **** 
+ 265:BSP/u8g2/u8g2_selection_list.c ****       for(;;)
+ 787              		.loc 1 265 7 is_stmt 1 view .LVU219
+ 266:BSP/u8g2/u8g2_selection_list.c ****       {
+ 267:BSP/u8g2/u8g2_selection_list.c ****         event = u8x8_GetMenuEvent(u8g2_GetU8x8(u8g2));
+ 788              		.loc 1 267 9 view .LVU220
+ 789              		.loc 1 267 17 is_stmt 0 view .LVU221
+ 790 00fa 2846     		mov	r0, r5
+ 791 00fc FFF7FEFF 		bl	u8x8_GetMenuEvent
+ 792              	.LVL98:
+ 268:BSP/u8g2/u8g2_selection_list.c ****         if ( event == U8X8_MSG_GPIO_MENU_SELECT )
+ 793              		.loc 1 268 9 is_stmt 1 view .LVU222
+ 794 0100 5038     		subs	r0, r0, #80
+ 795              	.LVL99:
+ 796              		.loc 1 268 9 is_stmt 0 view .LVU223
+ 797 0102 0528     		cmp	r0, #5
+ 798 0104 F9D8     		bhi	.L37
+ 799 0106 DFE800F0 		tbb	[pc, r0]
+ 800              	.L39:
+ 801 010a 03       		.byte	(.L42-.L39)/2
+ 802 010b 0B       		.byte	(.L38-.L39)/2
+ 803 010c 0F       		.byte	(.L40-.L39)/2
+ 804 010d 07       		.byte	(.L41-.L39)/2
+ 805 010e 0F       		.byte	(.L40-.L39)/2
+ 806 010f 0B       		.byte	(.L38-.L39)/2
+ 807              		.p2align 1
+ 808              	.L42:
+ 269:BSP/u8g2/u8g2_selection_list.c ****           return u8sl.current_pos+1;		/* +1, issue 112 */
+ 809              		.loc 1 269 11 is_stmt 1 view .LVU224
+ 810              		.loc 1 269 22 is_stmt 0 view .LVU225
+ 811 0110 9DF80B40 		ldrb	r4, [sp, #11]	@ zero_extendqisi2
+ 812              		.loc 1 269 34 view .LVU226
+ 813 0114 0134     		adds	r4, r4, #1
+ 814 0116 E4B2     		uxtb	r4, r4
+ 815              	.L41:
+ 270:BSP/u8g2/u8g2_selection_list.c ****         else if ( event == U8X8_MSG_GPIO_MENU_HOME )
+ 271:BSP/u8g2/u8g2_selection_list.c ****           return 0;				/* issue 112: return 0 instead of start_pos */
+ARM GAS  /tmp/ccUH9ldI.s 			page 21
+
+
+ 272:BSP/u8g2/u8g2_selection_list.c ****         else if ( event == U8X8_MSG_GPIO_MENU_NEXT || event == U8X8_MSG_GPIO_MENU_DOWN )
+ 273:BSP/u8g2/u8g2_selection_list.c ****         {
+ 274:BSP/u8g2/u8g2_selection_list.c ****           u8sl_Next(&u8sl);
+ 275:BSP/u8g2/u8g2_selection_list.c ****           break;
+ 276:BSP/u8g2/u8g2_selection_list.c ****         }
+ 277:BSP/u8g2/u8g2_selection_list.c ****         else if ( event == U8X8_MSG_GPIO_MENU_PREV || event == U8X8_MSG_GPIO_MENU_UP )
+ 278:BSP/u8g2/u8g2_selection_list.c ****         {
+ 279:BSP/u8g2/u8g2_selection_list.c ****           u8sl_Prev(&u8sl);
+ 280:BSP/u8g2/u8g2_selection_list.c ****           break;
+ 281:BSP/u8g2/u8g2_selection_list.c ****         }
+ 282:BSP/u8g2/u8g2_selection_list.c ****       }
+ 283:BSP/u8g2/u8g2_selection_list.c ****   }
+ 284:BSP/u8g2/u8g2_selection_list.c **** }
+ 816              		.loc 1 284 1 view .LVU227
+ 817 0118 2046     		mov	r0, r4
+ 818              	.LVL100:
+ 819              		.loc 1 284 1 view .LVU228
+ 820 011a 05B0     		add	sp, sp, #20
+ 821              	.LCFI16:
+ 822              		.cfi_remember_state
+ 823              		.cfi_def_cfa_offset 28
+ 824              		@ sp needed
+ 825 011c BDE8F083 		pop	{r4, r5, r6, r7, r8, r9, pc}
+ 826              	.LVL101:
+ 827              	.L38:
+ 828              	.LCFI17:
+ 829              		.cfi_restore_state
+ 274:BSP/u8g2/u8g2_selection_list.c ****           break;
+ 830              		.loc 1 274 11 is_stmt 1 view .LVU229
+ 831 0120 02A8     		add	r0, sp, #8
+ 832              	.LVL102:
+ 274:BSP/u8g2/u8g2_selection_list.c ****           break;
+ 833              		.loc 1 274 11 is_stmt 0 view .LVU230
+ 834 0122 FFF7FEFF 		bl	u8sl_Next
+ 835              	.LVL103:
+ 275:BSP/u8g2/u8g2_selection_list.c ****         }
+ 836              		.loc 1 275 11 is_stmt 1 view .LVU231
+ 837 0126 AEE7     		b	.L34
+ 838              	.LVL104:
+ 839              	.L40:
+ 279:BSP/u8g2/u8g2_selection_list.c ****           break;
+ 840              		.loc 1 279 11 view .LVU232
+ 841 0128 02A8     		add	r0, sp, #8
+ 842              	.LVL105:
+ 279:BSP/u8g2/u8g2_selection_list.c ****           break;
+ 843              		.loc 1 279 11 is_stmt 0 view .LVU233
+ 844 012a FFF7FEFF 		bl	u8sl_Prev
+ 845              	.LVL106:
+ 280:BSP/u8g2/u8g2_selection_list.c ****         }
+ 846              		.loc 1 280 11 is_stmt 1 view .LVU234
+ 847 012e AAE7     		b	.L34
+ 848              		.cfi_endproc
+ 849              	.LFE4:
+ 851              		.text
+ 852              	.Letext0:
+ 853              		.file 2 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ 854              		.file 3 "BSP/u8g2/u8x8.h"
+ARM GAS  /tmp/ccUH9ldI.s 			page 22
+
+
+ 855              		.file 4 "BSP/u8g2/u8g2.h"
+ARM GAS  /tmp/ccUH9ldI.s 			page 23
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 u8g2_selection_list.c
+     /tmp/ccUH9ldI.s:19     .text.u8g2_DrawUTF8Line:00000000 $t
+     /tmp/ccUH9ldI.s:25     .text.u8g2_DrawUTF8Line:00000000 u8g2_DrawUTF8Line
+     /tmp/ccUH9ldI.s:246    .rodata.u8g2_draw_selection_list_line.str1.4:00000000 $d
+     /tmp/ccUH9ldI.s:250    .text.u8g2_draw_selection_list_line:00000000 $t
+     /tmp/ccUH9ldI.s:255    .text.u8g2_draw_selection_list_line:00000000 u8g2_draw_selection_list_line
+     /tmp/ccUH9ldI.s:361    .text.u8g2_draw_selection_list_line:00000054 $d
+     /tmp/ccUH9ldI.s:366    .text.u8g2_DrawUTF8Lines:00000000 $t
+     /tmp/ccUH9ldI.s:372    .text.u8g2_DrawUTF8Lines:00000000 u8g2_DrawUTF8Lines
+     /tmp/ccUH9ldI.s:476    .text.u8g2_DrawSelectionList:00000000 $t
+     /tmp/ccUH9ldI.s:482    .text.u8g2_DrawSelectionList:00000000 u8g2_DrawSelectionList
+     /tmp/ccUH9ldI.s:555    .text.u8g2_UserInterfaceSelectionList:00000000 $t
+     /tmp/ccUH9ldI.s:561    .text.u8g2_UserInterfaceSelectionList:00000000 u8g2_UserInterfaceSelectionList
+     /tmp/ccUH9ldI.s:801    .text.u8g2_UserInterfaceSelectionList:0000010a $d
+     /tmp/ccUH9ldI.s:807    .text.u8g2_UserInterfaceSelectionList:00000110 $t
+
+UNDEFINED SYMBOLS
+u8g2_SetFontDirection
+u8g2_GetUTF8Width
+u8g2_SetDrawColor
+u8g2_DrawBox
+u8g2_DrawFrame
+u8g2_DrawUTF8
+u8x8_GetStringLineStart
+u8x8_GetStringLineCnt
+u8g2_SetFontPosBaseline
+u8g2_FirstPage
+u8g2_NextPage
+u8g2_DrawHLine
+u8x8_GetMenuEvent
+u8sl_Next
+u8sl_Prev

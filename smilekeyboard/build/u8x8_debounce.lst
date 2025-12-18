@@ -1,0 +1,606 @@
+ARM GAS  /tmp/cc3ZxTTH.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.arch armv7-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"u8x8_debounce.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.file 1 "BSP/u8g2/u8x8_debounce.c"
+  18              		.section	.text.u8x8_find_first_diff,"ax",%progbits
+  19              		.align	1
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  24              	u8x8_find_first_diff:
+  25              	.LVL0:
+  26              	.LFB1:
+   1:BSP/u8g2/u8x8_debounce.c **** /*
+   2:BSP/u8g2/u8x8_debounce.c **** 
+   3:BSP/u8g2/u8x8_debounce.c ****   u8x8_debounce.c
+   4:BSP/u8g2/u8x8_debounce.c ****   
+   5:BSP/u8g2/u8x8_debounce.c ****   Key/button simple debounce algorithm (Addon for u8x8)
+   6:BSP/u8g2/u8x8_debounce.c ****   
+   7:BSP/u8g2/u8x8_debounce.c ****   Universal 8bit Graphics Library (https://github.com/olikraus/u8g2/)
+   8:BSP/u8g2/u8x8_debounce.c **** 
+   9:BSP/u8g2/u8x8_debounce.c ****   Copyright (c) 2016, olikraus@gmail.com
+  10:BSP/u8g2/u8x8_debounce.c ****   All rights reserved.
+  11:BSP/u8g2/u8x8_debounce.c **** 
+  12:BSP/u8g2/u8x8_debounce.c ****   Redistribution and use in source and binary forms, with or without modification, 
+  13:BSP/u8g2/u8x8_debounce.c ****   are permitted provided that the following conditions are met:
+  14:BSP/u8g2/u8x8_debounce.c **** 
+  15:BSP/u8g2/u8x8_debounce.c ****   * Redistributions of source code must retain the above copyright notice, this list 
+  16:BSP/u8g2/u8x8_debounce.c ****     of conditions and the following disclaimer.
+  17:BSP/u8g2/u8x8_debounce.c ****     
+  18:BSP/u8g2/u8x8_debounce.c ****   * Redistributions in binary form must reproduce the above copyright notice, this 
+  19:BSP/u8g2/u8x8_debounce.c ****     list of conditions and the following disclaimer in the documentation and/or other 
+  20:BSP/u8g2/u8x8_debounce.c ****     materials provided with the distribution.
+  21:BSP/u8g2/u8x8_debounce.c **** 
+  22:BSP/u8g2/u8x8_debounce.c ****   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND 
+  23:BSP/u8g2/u8x8_debounce.c ****   CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, 
+  24:BSP/u8g2/u8x8_debounce.c ****   INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF 
+  25:BSP/u8g2/u8x8_debounce.c ****   MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
+  26:BSP/u8g2/u8x8_debounce.c ****   DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR 
+  27:BSP/u8g2/u8x8_debounce.c ****   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+  28:BSP/u8g2/u8x8_debounce.c ****   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+  29:BSP/u8g2/u8x8_debounce.c ****   NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
+  30:BSP/u8g2/u8x8_debounce.c ****   LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
+  31:BSP/u8g2/u8x8_debounce.c ****   CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, 
+  32:BSP/u8g2/u8x8_debounce.c ****   STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+ARM GAS  /tmp/cc3ZxTTH.s 			page 2
+
+
+  33:BSP/u8g2/u8x8_debounce.c ****   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
+  34:BSP/u8g2/u8x8_debounce.c ****   ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
+  35:BSP/u8g2/u8x8_debounce.c ****   
+  36:BSP/u8g2/u8x8_debounce.c **** */
+  37:BSP/u8g2/u8x8_debounce.c **** 
+  38:BSP/u8g2/u8x8_debounce.c **** #include "u8x8.h"
+  39:BSP/u8g2/u8x8_debounce.c **** 
+  40:BSP/u8g2/u8x8_debounce.c **** static uint8_t u8x8_read_pin_state(u8x8_t *u8x8)
+  41:BSP/u8g2/u8x8_debounce.c **** {
+  42:BSP/u8g2/u8x8_debounce.c ****   uint8_t i;
+  43:BSP/u8g2/u8x8_debounce.c ****   uint8_t pin_state;
+  44:BSP/u8g2/u8x8_debounce.c ****   
+  45:BSP/u8g2/u8x8_debounce.c ****   pin_state = 255;	/* be compatible with the setup of the default pin setup, which is 255 */
+  46:BSP/u8g2/u8x8_debounce.c ****   for( i = 0; i < U8X8_PIN_INPUT_CNT; i++ )
+  47:BSP/u8g2/u8x8_debounce.c ****   {
+  48:BSP/u8g2/u8x8_debounce.c ****     pin_state <<= 1;
+  49:BSP/u8g2/u8x8_debounce.c ****     
+  50:BSP/u8g2/u8x8_debounce.c ****     /* the callback function should put the return value into this variable */
+  51:BSP/u8g2/u8x8_debounce.c ****     u8x8->gpio_result = 1;
+  52:BSP/u8g2/u8x8_debounce.c ****     u8x8_gpio_call(u8x8, U8X8_MSG_GPIO(i+U8X8_PIN_OUTPUT_CNT), 0);
+  53:BSP/u8g2/u8x8_debounce.c ****     pin_state |= u8x8->gpio_result & 1;
+  54:BSP/u8g2/u8x8_debounce.c ****   }
+  55:BSP/u8g2/u8x8_debounce.c ****   
+  56:BSP/u8g2/u8x8_debounce.c ****   return pin_state;
+  57:BSP/u8g2/u8x8_debounce.c **** }
+  58:BSP/u8g2/u8x8_debounce.c **** 
+  59:BSP/u8g2/u8x8_debounce.c **** /*
+  60:BSP/u8g2/u8x8_debounce.c ****   return 0 to U8X8_PIN_INPUT_CNT-1 if there is a difference
+  61:BSP/u8g2/u8x8_debounce.c ****   return U8X8_PIN_INPUT_CNT if there is no difference
+  62:BSP/u8g2/u8x8_debounce.c **** */
+  63:BSP/u8g2/u8x8_debounce.c **** static uint8_t u8x8_find_first_diff(uint8_t a, uint8_t b)
+  64:BSP/u8g2/u8x8_debounce.c **** {
+  27              		.loc 1 64 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+  32              		.loc 1 64 1 is_stmt 0 view .LVU1
+  33 0000 8446     		mov	ip, r0
+  65:BSP/u8g2/u8x8_debounce.c ****   uint8_t mask;
+  34              		.loc 1 65 3 is_stmt 1 view .LVU2
+  66:BSP/u8g2/u8x8_debounce.c ****   uint8_t i;
+  35              		.loc 1 66 3 view .LVU3
+  67:BSP/u8g2/u8x8_debounce.c ****   mask = 1;
+  36              		.loc 1 67 3 view .LVU4
+  37              	.LVL1:
+  68:BSP/u8g2/u8x8_debounce.c ****   i = U8X8_PIN_INPUT_CNT;
+  38              		.loc 1 68 3 view .LVU5
+  39              		.loc 1 68 5 is_stmt 0 view .LVU6
+  40 0002 0620     		movs	r0, #6
+  41              	.LVL2:
+  67:BSP/u8g2/u8x8_debounce.c ****   mask = 1;
+  42              		.loc 1 67 8 view .LVU7
+  43 0004 0123     		movs	r3, #1
+  44              	.LVL3:
+  45              	.L3:
+  69:BSP/u8g2/u8x8_debounce.c ****   do
+ARM GAS  /tmp/cc3ZxTTH.s 			page 3
+
+
+  46              		.loc 1 69 3 is_stmt 1 view .LVU8
+  70:BSP/u8g2/u8x8_debounce.c ****   {
+  71:BSP/u8g2/u8x8_debounce.c ****     i--;
+  47              		.loc 1 71 5 view .LVU9
+  48              		.loc 1 71 6 is_stmt 0 view .LVU10
+  49 0006 0138     		subs	r0, r0, #1
+  50              	.LVL4:
+  51              		.loc 1 71 6 view .LVU11
+  52 0008 C0B2     		uxtb	r0, r0
+  53              	.LVL5:
+  72:BSP/u8g2/u8x8_debounce.c ****     if ( (a & mask) != (b & mask) )
+  54              		.loc 1 72 5 is_stmt 1 view .LVU12
+  55              		.loc 1 72 21 is_stmt 0 view .LVU13
+  56 000a 8CEA0102 		eor	r2, ip, r1
+  57              		.loc 1 72 8 view .LVU14
+  58 000e 1342     		tst	r3, r2
+  59 0010 04D1     		bne	.L2
+  73:BSP/u8g2/u8x8_debounce.c ****       return i;
+  74:BSP/u8g2/u8x8_debounce.c ****     mask <<= 1;
+  60              		.loc 1 74 5 is_stmt 1 view .LVU15
+  61              		.loc 1 74 10 is_stmt 0 view .LVU16
+  62 0012 5B00     		lsls	r3, r3, #1
+  63              	.LVL6:
+  64              		.loc 1 74 10 view .LVU17
+  65 0014 DBB2     		uxtb	r3, r3
+  66              	.LVL7:
+  75:BSP/u8g2/u8x8_debounce.c ****   } while( i > 0 );
+  67              		.loc 1 75 14 is_stmt 1 view .LVU18
+  68 0016 0028     		cmp	r0, #0
+  69 0018 F5D1     		bne	.L3
+  76:BSP/u8g2/u8x8_debounce.c ****   return U8X8_PIN_INPUT_CNT;
+  70              		.loc 1 76 10 is_stmt 0 view .LVU19
+  71 001a 0620     		movs	r0, #6
+  72              	.LVL8:
+  73              	.L2:
+  77:BSP/u8g2/u8x8_debounce.c **** }
+  74              		.loc 1 77 1 view .LVU20
+  75 001c 7047     		bx	lr
+  76              		.cfi_endproc
+  77              	.LFE1:
+  79              		.section	.text.u8x8_read_pin_state,"ax",%progbits
+  80              		.align	1
+  81              		.syntax unified
+  82              		.thumb
+  83              		.thumb_func
+  85              	u8x8_read_pin_state:
+  86              	.LVL9:
+  87              	.LFB0:
+  41:BSP/u8g2/u8x8_debounce.c ****   uint8_t i;
+  88              		.loc 1 41 1 is_stmt 1 view -0
+  89              		.cfi_startproc
+  90              		@ args = 0, pretend = 0, frame = 0
+  91              		@ frame_needed = 0, uses_anonymous_args = 0
+  41:BSP/u8g2/u8x8_debounce.c ****   uint8_t i;
+  92              		.loc 1 41 1 is_stmt 0 view .LVU22
+  93 0000 70B5     		push	{r4, r5, r6, lr}
+  94              	.LCFI0:
+ARM GAS  /tmp/cc3ZxTTH.s 			page 4
+
+
+  95              		.cfi_def_cfa_offset 16
+  96              		.cfi_offset 4, -16
+  97              		.cfi_offset 5, -12
+  98              		.cfi_offset 6, -8
+  99              		.cfi_offset 14, -4
+ 100 0002 0646     		mov	r6, r0
+  42:BSP/u8g2/u8x8_debounce.c ****   uint8_t pin_state;
+ 101              		.loc 1 42 3 is_stmt 1 view .LVU23
+  43:BSP/u8g2/u8x8_debounce.c ****   
+ 102              		.loc 1 43 3 view .LVU24
+  45:BSP/u8g2/u8x8_debounce.c ****   for( i = 0; i < U8X8_PIN_INPUT_CNT; i++ )
+ 103              		.loc 1 45 3 view .LVU25
+ 104              	.LVL10:
+  46:BSP/u8g2/u8x8_debounce.c ****   {
+ 105              		.loc 1 46 3 view .LVU26
+  45:BSP/u8g2/u8x8_debounce.c ****   for( i = 0; i < U8X8_PIN_INPUT_CNT; i++ )
+ 106              		.loc 1 45 13 is_stmt 0 view .LVU27
+ 107 0004 FF25     		movs	r5, #255
+  46:BSP/u8g2/u8x8_debounce.c ****   {
+ 108              		.loc 1 46 10 view .LVU28
+ 109 0006 0024     		movs	r4, #0
+  46:BSP/u8g2/u8x8_debounce.c ****   {
+ 110              		.loc 1 46 3 view .LVU29
+ 111 0008 12E0     		b	.L5
+ 112              	.LVL11:
+ 113              	.L6:
+  48:BSP/u8g2/u8x8_debounce.c ****     
+ 114              		.loc 1 48 5 is_stmt 1 view .LVU30
+  51:BSP/u8g2/u8x8_debounce.c ****     u8x8_gpio_call(u8x8, U8X8_MSG_GPIO(i+U8X8_PIN_OUTPUT_CNT), 0);
+ 115              		.loc 1 51 5 view .LVU31
+  51:BSP/u8g2/u8x8_debounce.c ****     u8x8_gpio_call(u8x8, U8X8_MSG_GPIO(i+U8X8_PIN_OUTPUT_CNT), 0);
+ 116              		.loc 1 51 23 is_stmt 0 view .LVU32
+ 117 000a 0123     		movs	r3, #1
+ 118 000c 86F82830 		strb	r3, [r6, #40]
+  52:BSP/u8g2/u8x8_debounce.c ****     pin_state |= u8x8->gpio_result & 1;
+ 119              		.loc 1 52 5 is_stmt 1 view .LVU33
+ 120 0010 04F15001 		add	r1, r4, #80
+ 121 0014 0022     		movs	r2, #0
+ 122 0016 C9B2     		uxtb	r1, r1
+ 123 0018 3046     		mov	r0, r6
+ 124 001a FFF7FEFF 		bl	u8x8_gpio_call
+ 125              	.LVL12:
+  53:BSP/u8g2/u8x8_debounce.c ****   }
+ 126              		.loc 1 53 5 view .LVU34
+  53:BSP/u8g2/u8x8_debounce.c ****   }
+ 127              		.loc 1 53 22 is_stmt 0 view .LVU35
+ 128 001e 96F82830 		ldrb	r3, [r6, #40]	@ zero_extendqisi2
+ 129 0022 6D00     		lsls	r5, r5, #1
+ 130              	.LVL13:
+  53:BSP/u8g2/u8x8_debounce.c ****   }
+ 131              		.loc 1 53 22 view .LVU36
+ 132 0024 EDB2     		uxtb	r5, r5
+  53:BSP/u8g2/u8x8_debounce.c ****   }
+ 133              		.loc 1 53 15 view .LVU37
+ 134 0026 03F00103 		and	r3, r3, #1
+ 135 002a 1D43     		orrs	r5, r5, r3
+ 136              	.LVL14:
+ARM GAS  /tmp/cc3ZxTTH.s 			page 5
+
+
+  46:BSP/u8g2/u8x8_debounce.c ****   {
+ 137              		.loc 1 46 40 is_stmt 1 discriminator 3 view .LVU38
+ 138 002c 0134     		adds	r4, r4, #1
+ 139              	.LVL15:
+  46:BSP/u8g2/u8x8_debounce.c ****   {
+ 140              		.loc 1 46 40 is_stmt 0 discriminator 3 view .LVU39
+ 141 002e E4B2     		uxtb	r4, r4
+ 142              	.LVL16:
+ 143              	.L5:
+  46:BSP/u8g2/u8x8_debounce.c ****   {
+ 144              		.loc 1 46 17 is_stmt 1 discriminator 1 view .LVU40
+ 145 0030 052C     		cmp	r4, #5
+ 146 0032 EAD9     		bls	.L6
+  56:BSP/u8g2/u8x8_debounce.c **** }
+ 147              		.loc 1 56 3 view .LVU41
+  57:BSP/u8g2/u8x8_debounce.c **** 
+ 148              		.loc 1 57 1 is_stmt 0 view .LVU42
+ 149 0034 2846     		mov	r0, r5
+ 150 0036 70BD     		pop	{r4, r5, r6, pc}
+  57:BSP/u8g2/u8x8_debounce.c **** 
+ 151              		.loc 1 57 1 view .LVU43
+ 152              		.cfi_endproc
+ 153              	.LFE0:
+ 155              		.section	.text.u8x8_GetMenuEvent,"ax",%progbits
+ 156              		.align	1
+ 157              		.weak	u8x8_GetMenuEvent
+ 158              		.syntax unified
+ 159              		.thumb
+ 160              		.thumb_func
+ 162              	u8x8_GetMenuEvent:
+ 163              	.LVL17:
+ 164              	.LFB2:
+  78:BSP/u8g2/u8x8_debounce.c **** 
+  79:BSP/u8g2/u8x8_debounce.c **** /*
+  80:BSP/u8g2/u8x8_debounce.c ****   State A:
+  81:BSP/u8g2/u8x8_debounce.c ****     u8x8->debounce_last_pin_state == current_state 
+  82:BSP/u8g2/u8x8_debounce.c ****       --> State A
+  83:BSP/u8g2/u8x8_debounce.c ****     u8x8->debounce_last_pin_state != current_state 
+  84:BSP/u8g2/u8x8_debounce.c ****       --> u8x8->debounce_last_pin_state = current_state 
+  85:BSP/u8g2/u8x8_debounce.c ****       --> State B + cnt
+  86:BSP/u8g2/u8x8_debounce.c **** 
+  87:BSP/u8g2/u8x8_debounce.c ****   State B + cnt
+  88:BSP/u8g2/u8x8_debounce.c ****     --> state--
+  89:BSP/u8g2/u8x8_debounce.c **** 
+  90:BSP/u8g2/u8x8_debounce.c ****   State B
+  91:BSP/u8g2/u8x8_debounce.c ****     u8x8->debounce_last_pin_state == current_state 
+  92:BSP/u8g2/u8x8_debounce.c ****       --> keypress detected
+  93:BSP/u8g2/u8x8_debounce.c ****       --> State C
+  94:BSP/u8g2/u8x8_debounce.c ****     u8x8->debounce_last_pin_state != current_state 
+  95:BSP/u8g2/u8x8_debounce.c ****       --> State A
+  96:BSP/u8g2/u8x8_debounce.c **** 
+  97:BSP/u8g2/u8x8_debounce.c ****   State C
+  98:BSP/u8g2/u8x8_debounce.c ****     u8x8->debounce_last_pin_state == current_state 
+  99:BSP/u8g2/u8x8_debounce.c ****       --> State C
+ 100:BSP/u8g2/u8x8_debounce.c ****     u8x8->debounce_last_pin_state != current_state 
+ 101:BSP/u8g2/u8x8_debounce.c ****       --> State A
+ 102:BSP/u8g2/u8x8_debounce.c **** 
+ARM GAS  /tmp/cc3ZxTTH.s 			page 6
+
+
+ 103:BSP/u8g2/u8x8_debounce.c **** */
+ 104:BSP/u8g2/u8x8_debounce.c **** 
+ 105:BSP/u8g2/u8x8_debounce.c **** #ifdef __unix__xxxxxx_THIS_IS_DISABLED
+ 106:BSP/u8g2/u8x8_debounce.c **** 
+ 107:BSP/u8g2/u8x8_debounce.c **** #include <stdio.h>
+ 108:BSP/u8g2/u8x8_debounce.c **** #include <stdlib.h>
+ 109:BSP/u8g2/u8x8_debounce.c **** uint8_t u8x8_GetMenuEvent(u8x8_t *u8x8)
+ 110:BSP/u8g2/u8x8_debounce.c **** {
+ 111:BSP/u8g2/u8x8_debounce.c ****     int c;
+ 112:BSP/u8g2/u8x8_debounce.c ****     c = getc(stdin);
+ 113:BSP/u8g2/u8x8_debounce.c ****     switch(c)
+ 114:BSP/u8g2/u8x8_debounce.c ****     {
+ 115:BSP/u8g2/u8x8_debounce.c ****         case 'n':
+ 116:BSP/u8g2/u8x8_debounce.c ****             return  U8X8_MSG_GPIO_MENU_NEXT;
+ 117:BSP/u8g2/u8x8_debounce.c ****         case 'p':
+ 118:BSP/u8g2/u8x8_debounce.c ****             return  U8X8_MSG_GPIO_MENU_PREV;
+ 119:BSP/u8g2/u8x8_debounce.c ****         case 's':
+ 120:BSP/u8g2/u8x8_debounce.c ****             return  U8X8_MSG_GPIO_MENU_SELECT;
+ 121:BSP/u8g2/u8x8_debounce.c ****         case 'h':
+ 122:BSP/u8g2/u8x8_debounce.c ****             return  U8X8_MSG_GPIO_MENU_HOME;
+ 123:BSP/u8g2/u8x8_debounce.c ****         case 'x':
+ 124:BSP/u8g2/u8x8_debounce.c ****             exit(0);
+ 125:BSP/u8g2/u8x8_debounce.c ****         default:
+ 126:BSP/u8g2/u8x8_debounce.c ****             puts("press n, p, s, h or x");
+ 127:BSP/u8g2/u8x8_debounce.c ****             break;
+ 128:BSP/u8g2/u8x8_debounce.c ****     }
+ 129:BSP/u8g2/u8x8_debounce.c ****     return 0;
+ 130:BSP/u8g2/u8x8_debounce.c **** }
+ 131:BSP/u8g2/u8x8_debounce.c **** 
+ 132:BSP/u8g2/u8x8_debounce.c **** 
+ 133:BSP/u8g2/u8x8_debounce.c **** #else  /* __unix__ */
+ 134:BSP/u8g2/u8x8_debounce.c **** 
+ 135:BSP/u8g2/u8x8_debounce.c **** 
+ 136:BSP/u8g2/u8x8_debounce.c **** #define U8X8_DEBOUNCE_WAIT 2
+ 137:BSP/u8g2/u8x8_debounce.c **** /* do debounce and return a GPIO msg which indicates the event */
+ 138:BSP/u8g2/u8x8_debounce.c **** /* returns 0, if there is no event */
+ 139:BSP/u8g2/u8x8_debounce.c **** #if defined(__GNUC__) && !defined(__CYGWIN__)
+ 140:BSP/u8g2/u8x8_debounce.c **** # pragma weak  u8x8_GetMenuEvent
+ 141:BSP/u8g2/u8x8_debounce.c **** #endif
+ 142:BSP/u8g2/u8x8_debounce.c **** uint8_t u8x8_GetMenuEvent(u8x8_t *u8x8)
+ 143:BSP/u8g2/u8x8_debounce.c **** {
+ 165              		.loc 1 143 1 is_stmt 1 view -0
+ 166              		.cfi_startproc
+ 167              		@ args = 0, pretend = 0, frame = 0
+ 168              		@ frame_needed = 0, uses_anonymous_args = 0
+ 169              		.loc 1 143 1 is_stmt 0 view .LVU45
+ 170 0000 10B5     		push	{r4, lr}
+ 171              	.LCFI1:
+ 172              		.cfi_def_cfa_offset 8
+ 173              		.cfi_offset 4, -8
+ 174              		.cfi_offset 14, -4
+ 175 0002 0446     		mov	r4, r0
+ 144:BSP/u8g2/u8x8_debounce.c ****   uint8_t pin_state;
+ 176              		.loc 1 144 3 is_stmt 1 view .LVU46
+ 145:BSP/u8g2/u8x8_debounce.c ****   uint8_t result_msg = 0;	/* invalid message, no event */
+ 177              		.loc 1 145 3 view .LVU47
+ 178              	.LVL18:
+ARM GAS  /tmp/cc3ZxTTH.s 			page 7
+
+
+ 146:BSP/u8g2/u8x8_debounce.c ****   
+ 147:BSP/u8g2/u8x8_debounce.c ****   pin_state = u8x8_read_pin_state(u8x8);
+ 179              		.loc 1 147 3 view .LVU48
+ 180              		.loc 1 147 15 is_stmt 0 view .LVU49
+ 181 0004 FFF7FEFF 		bl	u8x8_read_pin_state
+ 182              	.LVL19:
+ 183              		.loc 1 147 15 view .LVU50
+ 184 0008 0346     		mov	r3, r0
+ 185              	.LVL20:
+ 148:BSP/u8g2/u8x8_debounce.c ****   
+ 149:BSP/u8g2/u8x8_debounce.c ****   /* States A, B, C & D are encoded in the upper 4 bit*/
+ 150:BSP/u8g2/u8x8_debounce.c ****   switch(u8x8->debounce_state)
+ 186              		.loc 1 150 3 is_stmt 1 view .LVU51
+ 187              		.loc 1 150 14 is_stmt 0 view .LVU52
+ 188 000a 94F82B00 		ldrb	r0, [r4, #43]	@ zero_extendqisi2
+ 189              		.loc 1 150 3 view .LVU53
+ 190 000e 2028     		cmp	r0, #32
+ 191 0010 23D0     		beq	.L9
+ 192 0012 0DD8     		bhi	.L10
+ 193 0014 A0B1     		cbz	r0, .L11
+ 194 0016 1028     		cmp	r0, #16
+ 195 0018 36D1     		bne	.L13
+ 151:BSP/u8g2/u8x8_debounce.c ****   {
+ 152:BSP/u8g2/u8x8_debounce.c ****     case 0x00:	/* State A, default state */
+ 153:BSP/u8g2/u8x8_debounce.c ****       if ( u8x8->debounce_default_pin_state != pin_state )
+ 154:BSP/u8g2/u8x8_debounce.c ****       {
+ 155:BSP/u8g2/u8x8_debounce.c **** 	//u8x8->debounce_last_pin_state = pin_state;
+ 156:BSP/u8g2/u8x8_debounce.c **** 	u8x8->debounce_state = 0x010 + U8X8_DEBOUNCE_WAIT;
+ 157:BSP/u8g2/u8x8_debounce.c ****       }
+ 158:BSP/u8g2/u8x8_debounce.c ****       break;
+ 159:BSP/u8g2/u8x8_debounce.c ****     case 0x10:	/* State B */
+ 160:BSP/u8g2/u8x8_debounce.c ****       //if ( u8x8->debounce_last_pin_state != pin_state )
+ 161:BSP/u8g2/u8x8_debounce.c ****       if ( u8x8->debounce_default_pin_state == pin_state )
+ 196              		.loc 1 161 7 is_stmt 1 view .LVU54
+ 197              		.loc 1 161 16 is_stmt 0 view .LVU55
+ 198 001a 94F82920 		ldrb	r2, [r4, #41]	@ zero_extendqisi2
+ 199              		.loc 1 161 10 view .LVU56
+ 200 001e 9A42     		cmp	r2, r3
+ 201 0020 16D0     		beq	.L20
+ 162:BSP/u8g2/u8x8_debounce.c ****       {
+ 163:BSP/u8g2/u8x8_debounce.c **** 	u8x8->debounce_state = 0x00;	/* back to state A */
+ 164:BSP/u8g2/u8x8_debounce.c ****       }
+ 165:BSP/u8g2/u8x8_debounce.c ****       else
+ 166:BSP/u8g2/u8x8_debounce.c ****       {
+ 167:BSP/u8g2/u8x8_debounce.c **** 	/* keypress detected */
+ 168:BSP/u8g2/u8x8_debounce.c **** 	u8x8->debounce_last_pin_state = pin_state;
+ 202              		.loc 1 168 2 is_stmt 1 view .LVU57
+ 203              		.loc 1 168 32 is_stmt 0 view .LVU58
+ 204 0022 84F82A30 		strb	r3, [r4, #42]
+ 169:BSP/u8g2/u8x8_debounce.c **** 	//result_msg = U8X8_MSG_GPIO_MENU_NEXT;
+ 170:BSP/u8g2/u8x8_debounce.c **** 	u8x8->debounce_state = 0x020 + U8X8_DEBOUNCE_WAIT;	/* got to state C */	
+ 205              		.loc 1 170 2 is_stmt 1 view .LVU59
+ 206              		.loc 1 170 23 is_stmt 0 view .LVU60
+ 207 0026 2223     		movs	r3, #34
+ 208              	.LVL21:
+ 209              		.loc 1 170 23 view .LVU61
+ 210 0028 84F82B30 		strb	r3, [r4, #43]
+ARM GAS  /tmp/cc3ZxTTH.s 			page 8
+
+
+ 145:BSP/u8g2/u8x8_debounce.c ****   
+ 211              		.loc 1 145 11 view .LVU62
+ 212 002c 0020     		movs	r0, #0
+ 213 002e 2FE0     		b	.L15
+ 214              	.LVL22:
+ 215              	.L10:
+ 150:BSP/u8g2/u8x8_debounce.c ****   {
+ 216              		.loc 1 150 3 view .LVU63
+ 217 0030 3028     		cmp	r0, #48
+ 218 0032 29D1     		bne	.L13
+ 171:BSP/u8g2/u8x8_debounce.c ****       }
+ 172:BSP/u8g2/u8x8_debounce.c ****       break;
+ 173:BSP/u8g2/u8x8_debounce.c ****       
+ 174:BSP/u8g2/u8x8_debounce.c ****     case 0x20:	/* State C */
+ 175:BSP/u8g2/u8x8_debounce.c ****       if ( u8x8->debounce_last_pin_state != pin_state )
+ 176:BSP/u8g2/u8x8_debounce.c ****       {
+ 177:BSP/u8g2/u8x8_debounce.c **** 	u8x8->debounce_state = 0x00;	/* back to state A */
+ 178:BSP/u8g2/u8x8_debounce.c ****       }
+ 179:BSP/u8g2/u8x8_debounce.c ****       else
+ 180:BSP/u8g2/u8x8_debounce.c ****       {
+ 181:BSP/u8g2/u8x8_debounce.c **** 	u8x8->debounce_state = 0x030;	/* got to state D */	
+ 182:BSP/u8g2/u8x8_debounce.c ****       }
+ 183:BSP/u8g2/u8x8_debounce.c ****       break;
+ 184:BSP/u8g2/u8x8_debounce.c ****       
+ 185:BSP/u8g2/u8x8_debounce.c ****     case 0x30:	/* State D */
+ 186:BSP/u8g2/u8x8_debounce.c ****       /* wait until key release */
+ 187:BSP/u8g2/u8x8_debounce.c ****       if ( u8x8->debounce_default_pin_state == pin_state )
+ 219              		.loc 1 187 7 is_stmt 1 view .LVU64
+ 220              		.loc 1 187 16 is_stmt 0 view .LVU65
+ 221 0034 94F82900 		ldrb	r0, [r4, #41]	@ zero_extendqisi2
+ 222              		.loc 1 187 10 view .LVU66
+ 223 0038 9842     		cmp	r0, r3
+ 224 003a 1BD0     		beq	.L21
+ 145:BSP/u8g2/u8x8_debounce.c ****   
+ 225              		.loc 1 145 11 view .LVU67
+ 226 003c 0020     		movs	r0, #0
+ 227 003e 27E0     		b	.L15
+ 228              	.L11:
+ 153:BSP/u8g2/u8x8_debounce.c ****       {
+ 229              		.loc 1 153 7 is_stmt 1 view .LVU68
+ 153:BSP/u8g2/u8x8_debounce.c ****       {
+ 230              		.loc 1 153 16 is_stmt 0 view .LVU69
+ 231 0040 94F82920 		ldrb	r2, [r4, #41]	@ zero_extendqisi2
+ 153:BSP/u8g2/u8x8_debounce.c ****       {
+ 232              		.loc 1 153 10 view .LVU70
+ 233 0044 9A42     		cmp	r2, r3
+ 234 0046 23D0     		beq	.L15
+ 156:BSP/u8g2/u8x8_debounce.c ****       }
+ 235              		.loc 1 156 2 is_stmt 1 view .LVU71
+ 156:BSP/u8g2/u8x8_debounce.c ****       }
+ 236              		.loc 1 156 23 is_stmt 0 view .LVU72
+ 237 0048 1223     		movs	r3, #18
+ 238              	.LVL23:
+ 156:BSP/u8g2/u8x8_debounce.c ****       }
+ 239              		.loc 1 156 23 view .LVU73
+ 240 004a 84F82B30 		strb	r3, [r4, #43]
+ 241 004e 1FE0     		b	.L15
+ARM GAS  /tmp/cc3ZxTTH.s 			page 9
+
+
+ 242              	.LVL24:
+ 243              	.L20:
+ 163:BSP/u8g2/u8x8_debounce.c ****       }
+ 244              		.loc 1 163 2 is_stmt 1 view .LVU74
+ 163:BSP/u8g2/u8x8_debounce.c ****       }
+ 245              		.loc 1 163 23 is_stmt 0 view .LVU75
+ 246 0050 0023     		movs	r3, #0
+ 247              	.LVL25:
+ 163:BSP/u8g2/u8x8_debounce.c ****       }
+ 248              		.loc 1 163 23 view .LVU76
+ 249 0052 84F82B30 		strb	r3, [r4, #43]
+ 145:BSP/u8g2/u8x8_debounce.c ****   
+ 250              		.loc 1 145 11 view .LVU77
+ 251 0056 1846     		mov	r0, r3
+ 252 0058 1AE0     		b	.L15
+ 253              	.LVL26:
+ 254              	.L9:
+ 175:BSP/u8g2/u8x8_debounce.c ****       {
+ 255              		.loc 1 175 7 is_stmt 1 view .LVU78
+ 175:BSP/u8g2/u8x8_debounce.c ****       {
+ 256              		.loc 1 175 16 is_stmt 0 view .LVU79
+ 257 005a 94F82A20 		ldrb	r2, [r4, #42]	@ zero_extendqisi2
+ 175:BSP/u8g2/u8x8_debounce.c ****       {
+ 258              		.loc 1 175 10 view .LVU80
+ 259 005e 9A42     		cmp	r2, r3
+ 260 0060 03D0     		beq	.L17
+ 177:BSP/u8g2/u8x8_debounce.c ****       }
+ 261              		.loc 1 177 2 is_stmt 1 view .LVU81
+ 177:BSP/u8g2/u8x8_debounce.c ****       }
+ 262              		.loc 1 177 23 is_stmt 0 view .LVU82
+ 263 0062 0020     		movs	r0, #0
+ 264 0064 84F82B00 		strb	r0, [r4, #43]
+ 265 0068 12E0     		b	.L15
+ 266              	.L17:
+ 181:BSP/u8g2/u8x8_debounce.c ****       }
+ 267              		.loc 1 181 2 is_stmt 1 view .LVU83
+ 181:BSP/u8g2/u8x8_debounce.c ****       }
+ 268              		.loc 1 181 23 is_stmt 0 view .LVU84
+ 269 006a 3023     		movs	r3, #48
+ 270              	.LVL27:
+ 181:BSP/u8g2/u8x8_debounce.c ****       }
+ 271              		.loc 1 181 23 view .LVU85
+ 272 006c 84F82B30 		strb	r3, [r4, #43]
+ 145:BSP/u8g2/u8x8_debounce.c ****   
+ 273              		.loc 1 145 11 view .LVU86
+ 274 0070 0020     		movs	r0, #0
+ 275 0072 0DE0     		b	.L15
+ 276              	.LVL28:
+ 277              	.L21:
+ 188:BSP/u8g2/u8x8_debounce.c ****       {
+ 189:BSP/u8g2/u8x8_debounce.c **** 	u8x8->debounce_state = 0x00;	/* back to state A */
+ 278              		.loc 1 189 2 is_stmt 1 view .LVU87
+ 279              		.loc 1 189 23 is_stmt 0 view .LVU88
+ 280 0074 0023     		movs	r3, #0
+ 281              	.LVL29:
+ 282              		.loc 1 189 23 view .LVU89
+ 283 0076 84F82B30 		strb	r3, [r4, #43]
+ARM GAS  /tmp/cc3ZxTTH.s 			page 10
+
+
+ 190:BSP/u8g2/u8x8_debounce.c **** 	result_msg = U8X8_MSG_GPIO(u8x8_find_first_diff(u8x8->debounce_default_pin_state, u8x8->debounce_l
+ 284              		.loc 1 190 2 is_stmt 1 view .LVU90
+ 285              		.loc 1 190 15 is_stmt 0 view .LVU91
+ 286 007a 94F82A10 		ldrb	r1, [r4, #42]	@ zero_extendqisi2
+ 287 007e FFF7FEFF 		bl	u8x8_find_first_diff
+ 288              	.LVL30:
+ 289              		.loc 1 190 13 discriminator 1 view .LVU92
+ 290 0082 5030     		adds	r0, r0, #80
+ 291 0084 C0B2     		uxtb	r0, r0
+ 292              	.LVL31:
+ 293              		.loc 1 190 13 discriminator 1 view .LVU93
+ 294 0086 03E0     		b	.L15
+ 295              	.LVL32:
+ 296              	.L13:
+ 191:BSP/u8g2/u8x8_debounce.c ****       }
+ 192:BSP/u8g2/u8x8_debounce.c ****       else
+ 193:BSP/u8g2/u8x8_debounce.c ****       {
+ 194:BSP/u8g2/u8x8_debounce.c **** 	//result_msg = U8X8_MSG_GPIO_MENU_NEXT;
+ 195:BSP/u8g2/u8x8_debounce.c **** 	// maybe implement autorepeat here 
+ 196:BSP/u8g2/u8x8_debounce.c ****       }
+ 197:BSP/u8g2/u8x8_debounce.c ****       break;
+ 198:BSP/u8g2/u8x8_debounce.c ****     default:
+ 199:BSP/u8g2/u8x8_debounce.c ****       u8x8->debounce_state--;	/* count down, until there is a valid state */
+ 297              		.loc 1 199 7 is_stmt 1 view .LVU94
+ 298              		.loc 1 199 27 is_stmt 0 view .LVU95
+ 299 0088 431E     		subs	r3, r0, #1
+ 300              	.LVL33:
+ 301              		.loc 1 199 27 view .LVU96
+ 302 008a 84F82B30 		strb	r3, [r4, #43]
+ 200:BSP/u8g2/u8x8_debounce.c ****       break;
+ 303              		.loc 1 200 7 is_stmt 1 view .LVU97
+ 145:BSP/u8g2/u8x8_debounce.c ****   
+ 304              		.loc 1 145 11 is_stmt 0 view .LVU98
+ 305 008e 0020     		movs	r0, #0
+ 306              	.LVL34:
+ 307              	.L15:
+ 201:BSP/u8g2/u8x8_debounce.c ****   }
+ 202:BSP/u8g2/u8x8_debounce.c ****   return result_msg;
+ 308              		.loc 1 202 3 is_stmt 1 view .LVU99
+ 203:BSP/u8g2/u8x8_debounce.c **** }
+ 309              		.loc 1 203 1 is_stmt 0 view .LVU100
+ 310 0090 10BD     		pop	{r4, pc}
+ 311              		.loc 1 203 1 view .LVU101
+ 312              		.cfi_endproc
+ 313              	.LFE2:
+ 315              		.text
+ 316              	.Letext0:
+ 317              		.file 2 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ 318              		.file 3 "BSP/u8g2/u8x8.h"
+ARM GAS  /tmp/cc3ZxTTH.s 			page 11
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 u8x8_debounce.c
+     /tmp/cc3ZxTTH.s:19     .text.u8x8_find_first_diff:00000000 $t
+     /tmp/cc3ZxTTH.s:24     .text.u8x8_find_first_diff:00000000 u8x8_find_first_diff
+     /tmp/cc3ZxTTH.s:80     .text.u8x8_read_pin_state:00000000 $t
+     /tmp/cc3ZxTTH.s:85     .text.u8x8_read_pin_state:00000000 u8x8_read_pin_state
+     /tmp/cc3ZxTTH.s:156    .text.u8x8_GetMenuEvent:00000000 $t
+     /tmp/cc3ZxTTH.s:162    .text.u8x8_GetMenuEvent:00000000 u8x8_GetMenuEvent
+
+UNDEFINED SYMBOLS
+u8x8_gpio_call

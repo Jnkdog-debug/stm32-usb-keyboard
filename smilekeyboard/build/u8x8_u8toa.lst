@@ -1,0 +1,291 @@
+ARM GAS  /tmp/ccz3hwBJ.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.arch armv7-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"u8x8_u8toa.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.file 1 "BSP/u8g2/u8x8_u8toa.c"
+  18              		.section	.text.u8x8_u8toap,"ax",%progbits
+  19              		.align	1
+  20              		.global	u8x8_u8toap
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  25              	u8x8_u8toap:
+  26              	.LVL0:
+  27              	.LFB0:
+   1:BSP/u8g2/u8x8_u8toa.c **** /*
+   2:BSP/u8g2/u8x8_u8toa.c **** 
+   3:BSP/u8g2/u8x8_u8toa.c ****   u8x8_u8toa.c
+   4:BSP/u8g2/u8x8_u8toa.c **** 
+   5:BSP/u8g2/u8x8_u8toa.c ****   Universal 8bit Graphics Library (https://github.com/olikraus/u8g2/)
+   6:BSP/u8g2/u8x8_u8toa.c **** 
+   7:BSP/u8g2/u8x8_u8toa.c ****   Copyright (c) 2016, olikraus@gmail.com
+   8:BSP/u8g2/u8x8_u8toa.c ****   All rights reserved.
+   9:BSP/u8g2/u8x8_u8toa.c **** 
+  10:BSP/u8g2/u8x8_u8toa.c ****   Redistribution and use in source and binary forms, with or without modification, 
+  11:BSP/u8g2/u8x8_u8toa.c ****   are permitted provided that the following conditions are met:
+  12:BSP/u8g2/u8x8_u8toa.c **** 
+  13:BSP/u8g2/u8x8_u8toa.c ****   * Redistributions of source code must retain the above copyright notice, this list 
+  14:BSP/u8g2/u8x8_u8toa.c ****     of conditions and the following disclaimer.
+  15:BSP/u8g2/u8x8_u8toa.c ****     
+  16:BSP/u8g2/u8x8_u8toa.c ****   * Redistributions in binary form must reproduce the above copyright notice, this 
+  17:BSP/u8g2/u8x8_u8toa.c ****     list of conditions and the following disclaimer in the documentation and/or other 
+  18:BSP/u8g2/u8x8_u8toa.c ****     materials provided with the distribution.
+  19:BSP/u8g2/u8x8_u8toa.c **** 
+  20:BSP/u8g2/u8x8_u8toa.c ****   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND 
+  21:BSP/u8g2/u8x8_u8toa.c ****   CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, 
+  22:BSP/u8g2/u8x8_u8toa.c ****   INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF 
+  23:BSP/u8g2/u8x8_u8toa.c ****   MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
+  24:BSP/u8g2/u8x8_u8toa.c ****   DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR 
+  25:BSP/u8g2/u8x8_u8toa.c ****   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+  26:BSP/u8g2/u8x8_u8toa.c ****   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+  27:BSP/u8g2/u8x8_u8toa.c ****   NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
+  28:BSP/u8g2/u8x8_u8toa.c ****   LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
+  29:BSP/u8g2/u8x8_u8toa.c ****   CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, 
+  30:BSP/u8g2/u8x8_u8toa.c ****   STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+  31:BSP/u8g2/u8x8_u8toa.c ****   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
+ARM GAS  /tmp/ccz3hwBJ.s 			page 2
+
+
+  32:BSP/u8g2/u8x8_u8toa.c ****   ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
+  33:BSP/u8g2/u8x8_u8toa.c ****   
+  34:BSP/u8g2/u8x8_u8toa.c **** */
+  35:BSP/u8g2/u8x8_u8toa.c **** 
+  36:BSP/u8g2/u8x8_u8toa.c **** 
+  37:BSP/u8g2/u8x8_u8toa.c **** #include "u8x8.h"
+  38:BSP/u8g2/u8x8_u8toa.c **** 
+  39:BSP/u8g2/u8x8_u8toa.c **** static const unsigned char u8x8_u8toa_tab[3]  = { 100, 10, 1 } ;
+  40:BSP/u8g2/u8x8_u8toa.c **** const char *u8x8_u8toap(char * dest, uint8_t v)
+  41:BSP/u8g2/u8x8_u8toa.c **** {
+  28              		.loc 1 41 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  42:BSP/u8g2/u8x8_u8toa.c ****   uint8_t pos;
+  32              		.loc 1 42 3 view .LVU1
+  43:BSP/u8g2/u8x8_u8toa.c ****   uint8_t d;
+  33              		.loc 1 43 3 view .LVU2
+  44:BSP/u8g2/u8x8_u8toa.c ****   uint8_t c;
+  34              		.loc 1 44 3 view .LVU3
+  45:BSP/u8g2/u8x8_u8toa.c ****   for( pos = 0; pos < 3; pos++ )
+  35              		.loc 1 45 3 view .LVU4
+  36              		.loc 1 45 12 is_stmt 0 view .LVU5
+  37 0000 4FF0000C 		mov	ip, #0
+  38              	.LVL1:
+  39              		.loc 1 45 21 is_stmt 1 discriminator 1 view .LVU6
+  40 0004 BCF1020F 		cmp	ip, #2
+  41 0008 1AD8     		bhi	.L10
+  41:BSP/u8g2/u8x8_u8toa.c ****   uint8_t pos;
+  42              		.loc 1 41 1 is_stmt 0 view .LVU7
+  43 000a 00B5     		push	{lr}
+  44              	.LCFI0:
+  45              		.cfi_def_cfa_offset 4
+  46              		.cfi_offset 14, -4
+  47 000c 0EE0     		b	.L5
+  48              	.LVL2:
+  49              	.L4:
+  46:BSP/u8g2/u8x8_u8toa.c ****   {
+  47:BSP/u8g2/u8x8_u8toa.c ****       d = '0';
+  48:BSP/u8g2/u8x8_u8toa.c ****       c = *(u8x8_u8toa_tab+pos);
+  49:BSP/u8g2/u8x8_u8toa.c ****       while( v >= c )
+  50:BSP/u8g2/u8x8_u8toa.c ****       {
+  51:BSP/u8g2/u8x8_u8toa.c **** 	v -= c;
+  50              		.loc 1 51 2 is_stmt 1 view .LVU8
+  51              		.loc 1 51 4 is_stmt 0 view .LVU9
+  52 000e 891A     		subs	r1, r1, r2
+  53              	.LVL3:
+  54              		.loc 1 51 4 view .LVU10
+  55 0010 C9B2     		uxtb	r1, r1
+  56              	.LVL4:
+  52:BSP/u8g2/u8x8_u8toa.c **** 	d++;
+  57              		.loc 1 52 2 is_stmt 1 view .LVU11
+  58              		.loc 1 52 3 is_stmt 0 view .LVU12
+  59 0012 0133     		adds	r3, r3, #1
+  60              	.LVL5:
+  61              		.loc 1 52 3 view .LVU13
+  62 0014 DBB2     		uxtb	r3, r3
+ARM GAS  /tmp/ccz3hwBJ.s 			page 3
+
+
+  63              	.LVL6:
+  64              	.L3:
+  49:BSP/u8g2/u8x8_u8toa.c ****       {
+  65              		.loc 1 49 16 is_stmt 1 view .LVU14
+  66 0016 9142     		cmp	r1, r2
+  67 0018 F9D2     		bcs	.L4
+  53:BSP/u8g2/u8x8_u8toa.c ****       }
+  54:BSP/u8g2/u8x8_u8toa.c ****       dest[pos] = d;
+  68              		.loc 1 54 7 view .LVU15
+  69              		.loc 1 54 17 is_stmt 0 view .LVU16
+  70 001a 00F80E30 		strb	r3, [r0, lr]
+  45:BSP/u8g2/u8x8_u8toa.c ****   {
+  71              		.loc 1 45 29 is_stmt 1 discriminator 2 view .LVU17
+  72 001e 0CF1010C 		add	ip, ip, #1
+  73              	.LVL7:
+  45:BSP/u8g2/u8x8_u8toa.c ****   {
+  74              		.loc 1 45 29 is_stmt 0 discriminator 2 view .LVU18
+  75 0022 5FFA8CFC 		uxtb	ip, ip
+  76              	.LVL8:
+  45:BSP/u8g2/u8x8_u8toa.c ****   {
+  77              		.loc 1 45 21 is_stmt 1 discriminator 1 view .LVU19
+  78 0026 BCF1020F 		cmp	ip, #2
+  79 002a 05D8     		bhi	.L11
+  80              	.LVL9:
+  81              	.L5:
+  47:BSP/u8g2/u8x8_u8toa.c ****       c = *(u8x8_u8toa_tab+pos);
+  82              		.loc 1 47 7 view .LVU20
+  48:BSP/u8g2/u8x8_u8toa.c ****       while( v >= c )
+  83              		.loc 1 48 7 view .LVU21
+  48:BSP/u8g2/u8x8_u8toa.c ****       while( v >= c )
+  84              		.loc 1 48 27 is_stmt 0 view .LVU22
+  85 002c E646     		mov	lr, ip
+  86 002e 064B     		ldr	r3, .L12
+  48:BSP/u8g2/u8x8_u8toa.c ****       while( v >= c )
+  87              		.loc 1 48 9 view .LVU23
+  88 0030 13F80C20 		ldrb	r2, [r3, ip]	@ zero_extendqisi2
+  89              	.LVL10:
+  49:BSP/u8g2/u8x8_u8toa.c ****       {
+  90              		.loc 1 49 7 is_stmt 1 view .LVU24
+  47:BSP/u8g2/u8x8_u8toa.c ****       c = *(u8x8_u8toa_tab+pos);
+  91              		.loc 1 47 9 is_stmt 0 view .LVU25
+  92 0034 3023     		movs	r3, #48
+  49:BSP/u8g2/u8x8_u8toa.c ****       {
+  93              		.loc 1 49 12 view .LVU26
+  94 0036 EEE7     		b	.L3
+  95              	.LVL11:
+  96              	.L11:
+  55:BSP/u8g2/u8x8_u8toa.c ****   }  
+  56:BSP/u8g2/u8x8_u8toa.c ****   dest[3] = '\0';
+  97              		.loc 1 56 3 is_stmt 1 view .LVU27
+  98              		.loc 1 56 11 is_stmt 0 view .LVU28
+  99 0038 0023     		movs	r3, #0
+ 100              	.LVL12:
+ 101              		.loc 1 56 11 view .LVU29
+ 102 003a C370     		strb	r3, [r0, #3]
+ 103              	.LVL13:
+  57:BSP/u8g2/u8x8_u8toa.c ****   return dest;
+ARM GAS  /tmp/ccz3hwBJ.s 			page 4
+
+
+ 104              		.loc 1 57 3 is_stmt 1 view .LVU30
+  58:BSP/u8g2/u8x8_u8toa.c **** }
+ 105              		.loc 1 58 1 is_stmt 0 view .LVU31
+ 106 003c 5DF804FB 		ldr	pc, [sp], #4
+ 107              	.LVL14:
+ 108              	.L10:
+ 109              	.LCFI1:
+ 110              		.cfi_def_cfa_offset 0
+ 111              		.cfi_restore 14
+  56:BSP/u8g2/u8x8_u8toa.c ****   return dest;
+ 112              		.loc 1 56 3 is_stmt 1 view .LVU32
+  56:BSP/u8g2/u8x8_u8toa.c ****   return dest;
+ 113              		.loc 1 56 11 is_stmt 0 view .LVU33
+ 114 0040 0023     		movs	r3, #0
+ 115 0042 C370     		strb	r3, [r0, #3]
+  57:BSP/u8g2/u8x8_u8toa.c ****   return dest;
+ 116              		.loc 1 57 3 is_stmt 1 view .LVU34
+ 117              		.loc 1 58 1 is_stmt 0 view .LVU35
+ 118 0044 7047     		bx	lr
+ 119              	.L13:
+ 120 0046 00BF     		.align	2
+ 121              	.L12:
+ 122 0048 00000000 		.word	u8x8_u8toa_tab
+ 123              		.cfi_endproc
+ 124              	.LFE0:
+ 126              		.section	.text.u8x8_u8toa,"ax",%progbits
+ 127              		.align	1
+ 128              		.global	u8x8_u8toa
+ 129              		.syntax unified
+ 130              		.thumb
+ 131              		.thumb_func
+ 133              	u8x8_u8toa:
+ 134              	.LVL15:
+ 135              	.LFB1:
+  59:BSP/u8g2/u8x8_u8toa.c **** 
+  60:BSP/u8g2/u8x8_u8toa.c **** /* v = value, d = number of digits */
+  61:BSP/u8g2/u8x8_u8toa.c **** const char *u8x8_u8toa(uint8_t v, uint8_t d)
+  62:BSP/u8g2/u8x8_u8toa.c **** {
+ 136              		.loc 1 62 1 is_stmt 1 view -0
+ 137              		.cfi_startproc
+ 138              		@ args = 0, pretend = 0, frame = 0
+ 139              		@ frame_needed = 0, uses_anonymous_args = 0
+ 140              		.loc 1 62 1 is_stmt 0 view .LVU37
+ 141 0000 10B5     		push	{r4, lr}
+ 142              	.LCFI2:
+ 143              		.cfi_def_cfa_offset 8
+ 144              		.cfi_offset 4, -8
+ 145              		.cfi_offset 14, -4
+  63:BSP/u8g2/u8x8_u8toa.c ****   static char buf[4];
+ 146              		.loc 1 63 3 is_stmt 1 view .LVU38
+  64:BSP/u8g2/u8x8_u8toa.c ****   d = 3-d;
+ 147              		.loc 1 64 3 view .LVU39
+ 148              		.loc 1 64 5 is_stmt 0 view .LVU40
+ 149 0002 C1F10304 		rsb	r4, r1, #3
+ 150 0006 E4B2     		uxtb	r4, r4
+ 151              	.LVL16:
+  65:BSP/u8g2/u8x8_u8toa.c ****   return u8x8_u8toap(buf, v) + d;
+ARM GAS  /tmp/ccz3hwBJ.s 			page 5
+
+
+ 152              		.loc 1 65 3 is_stmt 1 view .LVU41
+ 153              		.loc 1 65 10 is_stmt 0 view .LVU42
+ 154 0008 0146     		mov	r1, r0
+ 155 000a 0248     		ldr	r0, .L16
+ 156              	.LVL17:
+ 157              		.loc 1 65 10 view .LVU43
+ 158 000c FFF7FEFF 		bl	u8x8_u8toap
+ 159              	.LVL18:
+  66:BSP/u8g2/u8x8_u8toa.c **** }
+ 160              		.loc 1 66 1 view .LVU44
+ 161 0010 2044     		add	r0, r0, r4
+ 162 0012 10BD     		pop	{r4, pc}
+ 163              	.LVL19:
+ 164              	.L17:
+ 165              		.loc 1 66 1 view .LVU45
+ 166              		.align	2
+ 167              	.L16:
+ 168 0014 00000000 		.word	buf.0
+ 169              		.cfi_endproc
+ 170              	.LFE1:
+ 172              		.section	.bss.buf.0,"aw",%nobits
+ 173              		.align	2
+ 176              	buf.0:
+ 177 0000 00000000 		.space	4
+ 178              		.section	.rodata.u8x8_u8toa_tab,"a"
+ 179              		.align	2
+ 182              	u8x8_u8toa_tab:
+ 183 0000 640A01   		.ascii	"d\012\001"
+ 184              		.text
+ 185              	.Letext0:
+ 186              		.file 2 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ARM GAS  /tmp/ccz3hwBJ.s 			page 6
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 u8x8_u8toa.c
+     /tmp/ccz3hwBJ.s:19     .text.u8x8_u8toap:00000000 $t
+     /tmp/ccz3hwBJ.s:25     .text.u8x8_u8toap:00000000 u8x8_u8toap
+     /tmp/ccz3hwBJ.s:122    .text.u8x8_u8toap:00000048 $d
+     /tmp/ccz3hwBJ.s:182    .rodata.u8x8_u8toa_tab:00000000 u8x8_u8toa_tab
+     /tmp/ccz3hwBJ.s:127    .text.u8x8_u8toa:00000000 $t
+     /tmp/ccz3hwBJ.s:133    .text.u8x8_u8toa:00000000 u8x8_u8toa
+     /tmp/ccz3hwBJ.s:168    .text.u8x8_u8toa:00000014 $d
+     /tmp/ccz3hwBJ.s:176    .bss.buf.0:00000000 buf.0
+     /tmp/ccz3hwBJ.s:173    .bss.buf.0:00000000 $d
+     /tmp/ccz3hwBJ.s:179    .rodata.u8x8_u8toa_tab:00000000 $d
+
+NO UNDEFINED SYMBOLS

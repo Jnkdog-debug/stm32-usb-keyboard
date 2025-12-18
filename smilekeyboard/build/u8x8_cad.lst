@@ -1,0 +1,3945 @@
+ARM GAS  /tmp/cczpVMPO.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.arch armv7-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"u8x8_cad.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.file 1 "BSP/u8g2/u8x8_cad.c"
+  18              		.section	.text.u8x8_i2c_data_transfer,"ax",%progbits
+  19              		.align	1
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  24              	u8x8_i2c_data_transfer:
+  25              	.LVL0:
+  26              	.LFB15:
+   1:BSP/u8g2/u8x8_cad.c **** /*
+   2:BSP/u8g2/u8x8_cad.c ****   
+   3:BSP/u8g2/u8x8_cad.c ****   u8x8_cad.c
+   4:BSP/u8g2/u8x8_cad.c ****   
+   5:BSP/u8g2/u8x8_cad.c ****   "command arg data" interface to the graphics controller
+   6:BSP/u8g2/u8x8_cad.c **** 
+   7:BSP/u8g2/u8x8_cad.c ****   Universal 8bit Graphics Library (https://github.com/olikraus/u8g2/)
+   8:BSP/u8g2/u8x8_cad.c **** 
+   9:BSP/u8g2/u8x8_cad.c ****   Copyright (c) 2016, olikraus@gmail.com
+  10:BSP/u8g2/u8x8_cad.c ****   All rights reserved.
+  11:BSP/u8g2/u8x8_cad.c **** 
+  12:BSP/u8g2/u8x8_cad.c ****   Redistribution and use in source and binary forms, with or without modification, 
+  13:BSP/u8g2/u8x8_cad.c ****   are permitted provided that the following conditions are met:
+  14:BSP/u8g2/u8x8_cad.c **** 
+  15:BSP/u8g2/u8x8_cad.c ****   * Redistributions of source code must retain the above copyright notice, this list 
+  16:BSP/u8g2/u8x8_cad.c ****     of conditions and the following disclaimer.
+  17:BSP/u8g2/u8x8_cad.c ****     
+  18:BSP/u8g2/u8x8_cad.c ****   * Redistributions in binary form must reproduce the above copyright notice, this 
+  19:BSP/u8g2/u8x8_cad.c ****     list of conditions and the following disclaimer in the documentation and/or other 
+  20:BSP/u8g2/u8x8_cad.c ****     materials provided with the distribution.
+  21:BSP/u8g2/u8x8_cad.c **** 
+  22:BSP/u8g2/u8x8_cad.c ****   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND 
+  23:BSP/u8g2/u8x8_cad.c ****   CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, 
+  24:BSP/u8g2/u8x8_cad.c ****   INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF 
+  25:BSP/u8g2/u8x8_cad.c ****   MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
+  26:BSP/u8g2/u8x8_cad.c ****   DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR 
+  27:BSP/u8g2/u8x8_cad.c ****   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+  28:BSP/u8g2/u8x8_cad.c ****   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+  29:BSP/u8g2/u8x8_cad.c ****   NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
+  30:BSP/u8g2/u8x8_cad.c ****   LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
+  31:BSP/u8g2/u8x8_cad.c ****   CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, 
+  32:BSP/u8g2/u8x8_cad.c ****   STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+ARM GAS  /tmp/cczpVMPO.s 			page 2
+
+
+  33:BSP/u8g2/u8x8_cad.c ****   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
+  34:BSP/u8g2/u8x8_cad.c ****   ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
+  35:BSP/u8g2/u8x8_cad.c **** 
+  36:BSP/u8g2/u8x8_cad.c **** 
+  37:BSP/u8g2/u8x8_cad.c ****   The following sequence must be used for any data, which is set to the display:
+  38:BSP/u8g2/u8x8_cad.c ****   
+  39:BSP/u8g2/u8x8_cad.c ****   
+  40:BSP/u8g2/u8x8_cad.c ****   uint8_t u8x8_cad_StartTransfer(u8x8_t *u8x8)
+  41:BSP/u8g2/u8x8_cad.c **** 
+  42:BSP/u8g2/u8x8_cad.c ****   any of the following calls
+  43:BSP/u8g2/u8x8_cad.c ****     uint8_t u8x8_cad_SendCmd(u8x8_t *u8x8, uint8_t cmd)
+  44:BSP/u8g2/u8x8_cad.c ****     uint8_t u8x8_cad_SendArg(u8x8_t *u8x8, uint8_t arg)
+  45:BSP/u8g2/u8x8_cad.c ****     uint8_t u8x8_cad_SendData(u8x8_t *u8x8, uint8_t cnt, uint8_t *data)
+  46:BSP/u8g2/u8x8_cad.c ****   
+  47:BSP/u8g2/u8x8_cad.c ****   uint8_t u8x8_cad_EndTransfer(u8x8_t *u8x8)
+  48:BSP/u8g2/u8x8_cad.c **** 
+  49:BSP/u8g2/u8x8_cad.c **** 
+  50:BSP/u8g2/u8x8_cad.c **** 
+  51:BSP/u8g2/u8x8_cad.c **** */
+  52:BSP/u8g2/u8x8_cad.c **** /*
+  53:BSP/u8g2/u8x8_cad.c **** uint8_t u8x8_cad_template(u8x8_t *u8x8, uint8_t msg, uint16_t arg_int, void *arg_ptr)
+  54:BSP/u8g2/u8x8_cad.c **** {
+  55:BSP/u8g2/u8x8_cad.c ****   uint8_t i;
+  56:BSP/u8g2/u8x8_cad.c ****   
+  57:BSP/u8g2/u8x8_cad.c ****   switch(msg)
+  58:BSP/u8g2/u8x8_cad.c ****   {
+  59:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_CMD:
+  60:BSP/u8g2/u8x8_cad.c ****       u8x8_mcd_byte_SetDC(mcd->next, 1);
+  61:BSP/u8g2/u8x8_cad.c ****       u8x8_mcd_byte_Send(mcd->next, arg_int);
+  62:BSP/u8g2/u8x8_cad.c ****       break;
+  63:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_ARG:
+  64:BSP/u8g2/u8x8_cad.c ****       u8x8_mcd_byte_SetDC(mcd->next, 1);
+  65:BSP/u8g2/u8x8_cad.c ****       u8x8_mcd_byte_Send(mcd->next, arg_int);
+  66:BSP/u8g2/u8x8_cad.c ****       break;
+  67:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_DATA:
+  68:BSP/u8g2/u8x8_cad.c ****       u8x8_mcd_byte_SetDC(mcd->next, 0);
+  69:BSP/u8g2/u8x8_cad.c ****       for( i = 0; i < 8; i++ )
+  70:BSP/u8g2/u8x8_cad.c **** 	u8x8_mcd_byte_Send(mcd->next, ((uint8_t *)arg_ptr)[i]);
+  71:BSP/u8g2/u8x8_cad.c ****       break;
+  72:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_RESET:
+  73:BSP/u8g2/u8x8_cad.c ****       return mcd->next->cb(mcd->next, msg, arg_int, arg_ptr);
+  74:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_START_TRANSFER:
+  75:BSP/u8g2/u8x8_cad.c ****       return mcd->next->cb(mcd->next, msg, arg_int, arg_ptr);
+  76:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_END_TRANSFER:
+  77:BSP/u8g2/u8x8_cad.c ****       return mcd->next->cb(mcd->next, msg, arg_int, arg_ptr);
+  78:BSP/u8g2/u8x8_cad.c ****     default:
+  79:BSP/u8g2/u8x8_cad.c ****       break;
+  80:BSP/u8g2/u8x8_cad.c ****   }
+  81:BSP/u8g2/u8x8_cad.c ****   return 1;
+  82:BSP/u8g2/u8x8_cad.c **** }
+  83:BSP/u8g2/u8x8_cad.c **** 
+  84:BSP/u8g2/u8x8_cad.c **** */
+  85:BSP/u8g2/u8x8_cad.c **** 
+  86:BSP/u8g2/u8x8_cad.c **** #include "u8x8.h"
+  87:BSP/u8g2/u8x8_cad.c **** 
+  88:BSP/u8g2/u8x8_cad.c **** uint8_t u8x8_cad_SendCmd(u8x8_t *u8x8, uint8_t cmd)
+  89:BSP/u8g2/u8x8_cad.c **** {
+ARM GAS  /tmp/cczpVMPO.s 			page 3
+
+
+  90:BSP/u8g2/u8x8_cad.c ****   return u8x8->cad_cb(u8x8, U8X8_MSG_CAD_SEND_CMD, cmd, NULL);
+  91:BSP/u8g2/u8x8_cad.c **** }
+  92:BSP/u8g2/u8x8_cad.c **** 
+  93:BSP/u8g2/u8x8_cad.c **** uint8_t u8x8_cad_SendArg(u8x8_t *u8x8, uint8_t arg)
+  94:BSP/u8g2/u8x8_cad.c **** {
+  95:BSP/u8g2/u8x8_cad.c ****   return u8x8->cad_cb(u8x8, U8X8_MSG_CAD_SEND_ARG, arg, NULL);
+  96:BSP/u8g2/u8x8_cad.c **** }
+  97:BSP/u8g2/u8x8_cad.c **** 
+  98:BSP/u8g2/u8x8_cad.c **** uint8_t u8x8_cad_SendMultipleArg(u8x8_t *u8x8, uint8_t cnt, uint8_t arg)
+  99:BSP/u8g2/u8x8_cad.c **** {
+ 100:BSP/u8g2/u8x8_cad.c ****   while( cnt > 0 )
+ 101:BSP/u8g2/u8x8_cad.c ****   {
+ 102:BSP/u8g2/u8x8_cad.c ****     u8x8->cad_cb(u8x8, U8X8_MSG_CAD_SEND_ARG, arg, NULL);
+ 103:BSP/u8g2/u8x8_cad.c ****     cnt--;
+ 104:BSP/u8g2/u8x8_cad.c ****   }
+ 105:BSP/u8g2/u8x8_cad.c ****   return 1;
+ 106:BSP/u8g2/u8x8_cad.c **** }
+ 107:BSP/u8g2/u8x8_cad.c **** 
+ 108:BSP/u8g2/u8x8_cad.c **** uint8_t u8x8_cad_SendData(u8x8_t *u8x8, uint8_t cnt, uint8_t *data)
+ 109:BSP/u8g2/u8x8_cad.c **** {
+ 110:BSP/u8g2/u8x8_cad.c ****   return u8x8->cad_cb(u8x8, U8X8_MSG_CAD_SEND_DATA, cnt, data);
+ 111:BSP/u8g2/u8x8_cad.c **** }
+ 112:BSP/u8g2/u8x8_cad.c **** 
+ 113:BSP/u8g2/u8x8_cad.c **** uint8_t u8x8_cad_StartTransfer(u8x8_t *u8x8)
+ 114:BSP/u8g2/u8x8_cad.c **** {
+ 115:BSP/u8g2/u8x8_cad.c ****   return u8x8->cad_cb(u8x8, U8X8_MSG_CAD_START_TRANSFER, 0, NULL);
+ 116:BSP/u8g2/u8x8_cad.c **** }
+ 117:BSP/u8g2/u8x8_cad.c **** 
+ 118:BSP/u8g2/u8x8_cad.c **** uint8_t u8x8_cad_EndTransfer(u8x8_t *u8x8)
+ 119:BSP/u8g2/u8x8_cad.c **** {
+ 120:BSP/u8g2/u8x8_cad.c ****   return u8x8->cad_cb(u8x8, U8X8_MSG_CAD_END_TRANSFER, 0, NULL);
+ 121:BSP/u8g2/u8x8_cad.c **** }
+ 122:BSP/u8g2/u8x8_cad.c **** 
+ 123:BSP/u8g2/u8x8_cad.c **** void u8x8_cad_vsendf(u8x8_t * u8x8, const char *fmt, va_list va)
+ 124:BSP/u8g2/u8x8_cad.c **** {
+ 125:BSP/u8g2/u8x8_cad.c ****   uint8_t d;
+ 126:BSP/u8g2/u8x8_cad.c ****   u8x8_cad_StartTransfer(u8x8);
+ 127:BSP/u8g2/u8x8_cad.c ****   while( *fmt != '\0' )
+ 128:BSP/u8g2/u8x8_cad.c ****   {
+ 129:BSP/u8g2/u8x8_cad.c ****     d = (uint8_t)va_arg(va, int);
+ 130:BSP/u8g2/u8x8_cad.c ****     switch(*fmt)
+ 131:BSP/u8g2/u8x8_cad.c ****     {
+ 132:BSP/u8g2/u8x8_cad.c ****       case 'a':  u8x8_cad_SendArg(u8x8, d); break;
+ 133:BSP/u8g2/u8x8_cad.c ****       case 'c':  u8x8_cad_SendCmd(u8x8, d); break;
+ 134:BSP/u8g2/u8x8_cad.c ****       case 'd':  u8x8_cad_SendData(u8x8, 1, &d); break;
+ 135:BSP/u8g2/u8x8_cad.c ****     }
+ 136:BSP/u8g2/u8x8_cad.c ****     fmt++;
+ 137:BSP/u8g2/u8x8_cad.c ****   }
+ 138:BSP/u8g2/u8x8_cad.c ****   u8x8_cad_EndTransfer(u8x8);
+ 139:BSP/u8g2/u8x8_cad.c **** }
+ 140:BSP/u8g2/u8x8_cad.c **** 
+ 141:BSP/u8g2/u8x8_cad.c **** void u8x8_SendF(u8x8_t * u8x8, const char *fmt, ...)
+ 142:BSP/u8g2/u8x8_cad.c **** {
+ 143:BSP/u8g2/u8x8_cad.c ****   va_list va;
+ 144:BSP/u8g2/u8x8_cad.c ****   va_start(va, fmt);
+ 145:BSP/u8g2/u8x8_cad.c ****   u8x8_cad_vsendf(u8x8, fmt, va);
+ 146:BSP/u8g2/u8x8_cad.c ****   va_end(va);
+ARM GAS  /tmp/cczpVMPO.s 			page 4
+
+
+ 147:BSP/u8g2/u8x8_cad.c **** }
+ 148:BSP/u8g2/u8x8_cad.c **** 
+ 149:BSP/u8g2/u8x8_cad.c **** /*
+ 150:BSP/u8g2/u8x8_cad.c ****   21 c		send command c
+ 151:BSP/u8g2/u8x8_cad.c ****   22 a		send arg a
+ 152:BSP/u8g2/u8x8_cad.c ****   23 d		send data d
+ 153:BSP/u8g2/u8x8_cad.c ****   24			CS on
+ 154:BSP/u8g2/u8x8_cad.c ****   25			CS off
+ 155:BSP/u8g2/u8x8_cad.c ****   254 milli	delay by milliseconds
+ 156:BSP/u8g2/u8x8_cad.c ****   255		end of sequence
+ 157:BSP/u8g2/u8x8_cad.c **** */
+ 158:BSP/u8g2/u8x8_cad.c **** 
+ 159:BSP/u8g2/u8x8_cad.c **** void u8x8_cad_SendSequence(u8x8_t *u8x8, uint8_t const *data)
+ 160:BSP/u8g2/u8x8_cad.c **** {
+ 161:BSP/u8g2/u8x8_cad.c ****   uint8_t cmd;
+ 162:BSP/u8g2/u8x8_cad.c ****   uint8_t v;
+ 163:BSP/u8g2/u8x8_cad.c **** 
+ 164:BSP/u8g2/u8x8_cad.c ****   for(;;)
+ 165:BSP/u8g2/u8x8_cad.c ****   {
+ 166:BSP/u8g2/u8x8_cad.c ****     cmd = *data;
+ 167:BSP/u8g2/u8x8_cad.c ****     data++;
+ 168:BSP/u8g2/u8x8_cad.c ****     switch( cmd )
+ 169:BSP/u8g2/u8x8_cad.c ****     {
+ 170:BSP/u8g2/u8x8_cad.c ****       case U8X8_MSG_CAD_SEND_CMD:
+ 171:BSP/u8g2/u8x8_cad.c ****       case U8X8_MSG_CAD_SEND_ARG:
+ 172:BSP/u8g2/u8x8_cad.c **** 	  v = *data;
+ 173:BSP/u8g2/u8x8_cad.c **** 	  u8x8->cad_cb(u8x8, cmd, v, NULL);
+ 174:BSP/u8g2/u8x8_cad.c **** 	  data++;
+ 175:BSP/u8g2/u8x8_cad.c **** 	  break;
+ 176:BSP/u8g2/u8x8_cad.c ****       case U8X8_MSG_CAD_SEND_DATA:
+ 177:BSP/u8g2/u8x8_cad.c **** 	  v = *data;
+ 178:BSP/u8g2/u8x8_cad.c **** 	  u8x8_cad_SendData(u8x8, 1, &v);
+ 179:BSP/u8g2/u8x8_cad.c **** 	  data++;
+ 180:BSP/u8g2/u8x8_cad.c **** 	  break;
+ 181:BSP/u8g2/u8x8_cad.c ****       case U8X8_MSG_CAD_START_TRANSFER:
+ 182:BSP/u8g2/u8x8_cad.c ****       case U8X8_MSG_CAD_END_TRANSFER:
+ 183:BSP/u8g2/u8x8_cad.c **** 	  u8x8->cad_cb(u8x8, cmd, 0, NULL);
+ 184:BSP/u8g2/u8x8_cad.c **** 	  break;
+ 185:BSP/u8g2/u8x8_cad.c ****       case 0x0fe:
+ 186:BSP/u8g2/u8x8_cad.c **** 	  v = *data;
+ 187:BSP/u8g2/u8x8_cad.c **** 	  u8x8_gpio_Delay(u8x8, U8X8_MSG_DELAY_MILLI, v);	    
+ 188:BSP/u8g2/u8x8_cad.c **** 	  data++;
+ 189:BSP/u8g2/u8x8_cad.c **** 	  break;
+ 190:BSP/u8g2/u8x8_cad.c ****       default:
+ 191:BSP/u8g2/u8x8_cad.c **** 	return;
+ 192:BSP/u8g2/u8x8_cad.c ****     }
+ 193:BSP/u8g2/u8x8_cad.c ****   }
+ 194:BSP/u8g2/u8x8_cad.c **** }
+ 195:BSP/u8g2/u8x8_cad.c **** 
+ 196:BSP/u8g2/u8x8_cad.c **** 
+ 197:BSP/u8g2/u8x8_cad.c **** uint8_t u8x8_cad_empty(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr)
+ 198:BSP/u8g2/u8x8_cad.c **** {
+ 199:BSP/u8g2/u8x8_cad.c ****   switch(msg)
+ 200:BSP/u8g2/u8x8_cad.c ****   {
+ 201:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_CMD:
+ 202:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, arg_int);
+ 203:BSP/u8g2/u8x8_cad.c ****       break;
+ARM GAS  /tmp/cczpVMPO.s 			page 5
+
+
+ 204:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_ARG:
+ 205:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, arg_int);
+ 206:BSP/u8g2/u8x8_cad.c ****       break;
+ 207:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_DATA:
+ 208:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_INIT:
+ 209:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_START_TRANSFER:
+ 210:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_END_TRANSFER:
+ 211:BSP/u8g2/u8x8_cad.c ****       return u8x8->byte_cb(u8x8, msg, arg_int, arg_ptr);
+ 212:BSP/u8g2/u8x8_cad.c ****     default:
+ 213:BSP/u8g2/u8x8_cad.c ****       return 0;
+ 214:BSP/u8g2/u8x8_cad.c ****   }
+ 215:BSP/u8g2/u8x8_cad.c ****   return 1;
+ 216:BSP/u8g2/u8x8_cad.c **** }
+ 217:BSP/u8g2/u8x8_cad.c **** 
+ 218:BSP/u8g2/u8x8_cad.c **** 
+ 219:BSP/u8g2/u8x8_cad.c **** /*
+ 220:BSP/u8g2/u8x8_cad.c ****   convert to bytes by using 
+ 221:BSP/u8g2/u8x8_cad.c ****     dc = 1 for commands and args and
+ 222:BSP/u8g2/u8x8_cad.c ****     dc = 0 for data
+ 223:BSP/u8g2/u8x8_cad.c **** */
+ 224:BSP/u8g2/u8x8_cad.c **** uint8_t u8x8_cad_110(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr)
+ 225:BSP/u8g2/u8x8_cad.c **** {
+ 226:BSP/u8g2/u8x8_cad.c ****   switch(msg)
+ 227:BSP/u8g2/u8x8_cad.c ****   {
+ 228:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_CMD:
+ 229:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SetDC(u8x8, 1);
+ 230:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, arg_int);
+ 231:BSP/u8g2/u8x8_cad.c ****       break;
+ 232:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_ARG:
+ 233:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SetDC(u8x8, 1);
+ 234:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, arg_int);
+ 235:BSP/u8g2/u8x8_cad.c ****       break;
+ 236:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_DATA:
+ 237:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SetDC(u8x8, 0);
+ 238:BSP/u8g2/u8x8_cad.c ****       //u8x8_byte_SendBytes(u8x8, arg_int, arg_ptr);
+ 239:BSP/u8g2/u8x8_cad.c ****       //break;
+ 240:BSP/u8g2/u8x8_cad.c ****       /* fall through */
+ 241:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_INIT:
+ 242:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_START_TRANSFER:
+ 243:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_END_TRANSFER:
+ 244:BSP/u8g2/u8x8_cad.c ****       return u8x8->byte_cb(u8x8, msg, arg_int, arg_ptr);
+ 245:BSP/u8g2/u8x8_cad.c ****     default:
+ 246:BSP/u8g2/u8x8_cad.c ****       return 0;
+ 247:BSP/u8g2/u8x8_cad.c ****   }
+ 248:BSP/u8g2/u8x8_cad.c ****   return 1;
+ 249:BSP/u8g2/u8x8_cad.c **** }
+ 250:BSP/u8g2/u8x8_cad.c **** 
+ 251:BSP/u8g2/u8x8_cad.c **** /*
+ 252:BSP/u8g2/u8x8_cad.c ****   convert to bytes by using 
+ 253:BSP/u8g2/u8x8_cad.c ****     dc = 1 for commands and args and
+ 254:BSP/u8g2/u8x8_cad.c ****     dc = 0 for data
+ 255:BSP/u8g2/u8x8_cad.c ****     t6963
+ 256:BSP/u8g2/u8x8_cad.c **** */
+ 257:BSP/u8g2/u8x8_cad.c **** uint8_t u8x8_cad_100(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr)
+ 258:BSP/u8g2/u8x8_cad.c **** {
+ 259:BSP/u8g2/u8x8_cad.c ****   switch(msg)
+ 260:BSP/u8g2/u8x8_cad.c ****   {
+ARM GAS  /tmp/cczpVMPO.s 			page 6
+
+
+ 261:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_CMD:
+ 262:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SetDC(u8x8, 1);
+ 263:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, arg_int);
+ 264:BSP/u8g2/u8x8_cad.c ****       break;
+ 265:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_ARG:
+ 266:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SetDC(u8x8, 0);
+ 267:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, arg_int);
+ 268:BSP/u8g2/u8x8_cad.c ****       break;
+ 269:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_DATA:
+ 270:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SetDC(u8x8, 0);
+ 271:BSP/u8g2/u8x8_cad.c ****       //u8x8_byte_SendBytes(u8x8, arg_int, arg_ptr);
+ 272:BSP/u8g2/u8x8_cad.c ****       //break;
+ 273:BSP/u8g2/u8x8_cad.c ****       /* fall through */
+ 274:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_INIT:
+ 275:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_START_TRANSFER:
+ 276:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_END_TRANSFER:
+ 277:BSP/u8g2/u8x8_cad.c ****       return u8x8->byte_cb(u8x8, msg, arg_int, arg_ptr);
+ 278:BSP/u8g2/u8x8_cad.c ****     default:
+ 279:BSP/u8g2/u8x8_cad.c ****       return 0;
+ 280:BSP/u8g2/u8x8_cad.c ****   }
+ 281:BSP/u8g2/u8x8_cad.c ****   return 1;
+ 282:BSP/u8g2/u8x8_cad.c **** }
+ 283:BSP/u8g2/u8x8_cad.c **** 
+ 284:BSP/u8g2/u8x8_cad.c **** /*
+ 285:BSP/u8g2/u8x8_cad.c ****   convert to bytes by using 
+ 286:BSP/u8g2/u8x8_cad.c ****     dc = 0 for commands and args and
+ 287:BSP/u8g2/u8x8_cad.c ****     dc = 1 for data
+ 288:BSP/u8g2/u8x8_cad.c **** */
+ 289:BSP/u8g2/u8x8_cad.c **** uint8_t u8x8_cad_001(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr)
+ 290:BSP/u8g2/u8x8_cad.c **** {
+ 291:BSP/u8g2/u8x8_cad.c ****   switch(msg)
+ 292:BSP/u8g2/u8x8_cad.c ****   {
+ 293:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_CMD:
+ 294:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SetDC(u8x8, 0);
+ 295:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, arg_int);
+ 296:BSP/u8g2/u8x8_cad.c ****       break;
+ 297:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_ARG:
+ 298:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SetDC(u8x8, 0);
+ 299:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, arg_int);
+ 300:BSP/u8g2/u8x8_cad.c ****       break;
+ 301:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_DATA:
+ 302:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SetDC(u8x8, 1);
+ 303:BSP/u8g2/u8x8_cad.c ****       //u8x8_byte_SendBytes(u8x8, arg_int, arg_ptr);
+ 304:BSP/u8g2/u8x8_cad.c ****       //break;
+ 305:BSP/u8g2/u8x8_cad.c ****       /* fall through */
+ 306:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_INIT:
+ 307:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_START_TRANSFER:
+ 308:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_END_TRANSFER:
+ 309:BSP/u8g2/u8x8_cad.c ****       return u8x8->byte_cb(u8x8, msg, arg_int, arg_ptr);
+ 310:BSP/u8g2/u8x8_cad.c ****     default:
+ 311:BSP/u8g2/u8x8_cad.c ****       return 0;
+ 312:BSP/u8g2/u8x8_cad.c ****   }
+ 313:BSP/u8g2/u8x8_cad.c ****   return 1;
+ 314:BSP/u8g2/u8x8_cad.c **** }
+ 315:BSP/u8g2/u8x8_cad.c **** 
+ 316:BSP/u8g2/u8x8_cad.c **** /*
+ 317:BSP/u8g2/u8x8_cad.c ****   convert to bytes by using 
+ARM GAS  /tmp/cczpVMPO.s 			page 7
+
+
+ 318:BSP/u8g2/u8x8_cad.c ****     dc = 0 for commands 
+ 319:BSP/u8g2/u8x8_cad.c ****     dc = 1 for args and data
+ 320:BSP/u8g2/u8x8_cad.c **** */
+ 321:BSP/u8g2/u8x8_cad.c **** uint8_t u8x8_cad_011(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr)
+ 322:BSP/u8g2/u8x8_cad.c **** {
+ 323:BSP/u8g2/u8x8_cad.c ****   switch(msg)
+ 324:BSP/u8g2/u8x8_cad.c ****   {
+ 325:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_CMD:
+ 326:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SetDC(u8x8, 0);
+ 327:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, arg_int);
+ 328:BSP/u8g2/u8x8_cad.c ****       break;
+ 329:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_ARG:
+ 330:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SetDC(u8x8, 1);
+ 331:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, arg_int);
+ 332:BSP/u8g2/u8x8_cad.c ****       break;
+ 333:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_DATA:
+ 334:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SetDC(u8x8, 1);
+ 335:BSP/u8g2/u8x8_cad.c ****       //u8x8_byte_SendBytes(u8x8, arg_int, arg_ptr);
+ 336:BSP/u8g2/u8x8_cad.c ****       //break;
+ 337:BSP/u8g2/u8x8_cad.c ****       /* fall through */
+ 338:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_INIT:
+ 339:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_START_TRANSFER:
+ 340:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_END_TRANSFER:
+ 341:BSP/u8g2/u8x8_cad.c ****       return u8x8->byte_cb(u8x8, msg, arg_int, arg_ptr);
+ 342:BSP/u8g2/u8x8_cad.c ****     default:
+ 343:BSP/u8g2/u8x8_cad.c ****       return 0;
+ 344:BSP/u8g2/u8x8_cad.c ****   }
+ 345:BSP/u8g2/u8x8_cad.c ****   return 1;
+ 346:BSP/u8g2/u8x8_cad.c **** }
+ 347:BSP/u8g2/u8x8_cad.c **** 
+ 348:BSP/u8g2/u8x8_cad.c **** /* cad procedure for the ST7920 in SPI mode */
+ 349:BSP/u8g2/u8x8_cad.c **** /* u8x8_byte_SetDC is not used */
+ 350:BSP/u8g2/u8x8_cad.c **** uint8_t u8x8_cad_st7920_spi(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr)
+ 351:BSP/u8g2/u8x8_cad.c **** {
+ 352:BSP/u8g2/u8x8_cad.c ****   uint8_t *data;
+ 353:BSP/u8g2/u8x8_cad.c ****   uint8_t b;
+ 354:BSP/u8g2/u8x8_cad.c ****   uint8_t i;
+ 355:BSP/u8g2/u8x8_cad.c ****   static uint8_t buf[16];
+ 356:BSP/u8g2/u8x8_cad.c ****   uint8_t *ptr;
+ 357:BSP/u8g2/u8x8_cad.c ****   
+ 358:BSP/u8g2/u8x8_cad.c ****   switch(msg)
+ 359:BSP/u8g2/u8x8_cad.c ****   {
+ 360:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_CMD:
+ 361:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, 0x0f8);
+ 362:BSP/u8g2/u8x8_cad.c ****       u8x8_gpio_Delay(u8x8, U8X8_MSG_DELAY_NANO, 1);
+ 363:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, arg_int & 0x0f0);
+ 364:BSP/u8g2/u8x8_cad.c ****       u8x8_gpio_Delay(u8x8, U8X8_MSG_DELAY_NANO, 1);
+ 365:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, arg_int << 4);
+ 366:BSP/u8g2/u8x8_cad.c ****       u8x8_gpio_Delay(u8x8, U8X8_MSG_DELAY_NANO, 1);
+ 367:BSP/u8g2/u8x8_cad.c ****       break;
+ 368:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_ARG:
+ 369:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, 0x0f8);
+ 370:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, arg_int & 0x0f0);
+ 371:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, arg_int << 4);
+ 372:BSP/u8g2/u8x8_cad.c ****       break;
+ 373:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_DATA:
+ 374:BSP/u8g2/u8x8_cad.c ****     
+ARM GAS  /tmp/cczpVMPO.s 			page 8
+
+
+ 375:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, 0x0fa);
+ 376:BSP/u8g2/u8x8_cad.c ****       u8x8_gpio_Delay(u8x8, U8X8_MSG_DELAY_NANO, 1);
+ 377:BSP/u8g2/u8x8_cad.c **** 
+ 378:BSP/u8g2/u8x8_cad.c ****       /* this loop should be optimized: multiple bytes should be sent */
+ 379:BSP/u8g2/u8x8_cad.c ****       /* u8x8_byte_SendBytes(u8x8, arg_int, arg_ptr); */
+ 380:BSP/u8g2/u8x8_cad.c ****       data = (uint8_t *)arg_ptr;
+ 381:BSP/u8g2/u8x8_cad.c ****     
+ 382:BSP/u8g2/u8x8_cad.c ****       /* the following loop increases speed by 20% */
+ 383:BSP/u8g2/u8x8_cad.c ****       while( arg_int >= 8 )
+ 384:BSP/u8g2/u8x8_cad.c ****       {
+ 385:BSP/u8g2/u8x8_cad.c **** 	i = 8;
+ 386:BSP/u8g2/u8x8_cad.c **** 	ptr = buf;
+ 387:BSP/u8g2/u8x8_cad.c **** 	do
+ 388:BSP/u8g2/u8x8_cad.c **** 	{
+ 389:BSP/u8g2/u8x8_cad.c **** 	  b = *data++;
+ 390:BSP/u8g2/u8x8_cad.c **** 	  *ptr++= b & 0x0f0;
+ 391:BSP/u8g2/u8x8_cad.c **** 	  b <<= 4;
+ 392:BSP/u8g2/u8x8_cad.c **** 	  *ptr++= b;
+ 393:BSP/u8g2/u8x8_cad.c **** 	  i--;
+ 394:BSP/u8g2/u8x8_cad.c **** 	} while( i > 0 );
+ 395:BSP/u8g2/u8x8_cad.c **** 	arg_int -= 8;
+ 396:BSP/u8g2/u8x8_cad.c **** 	u8x8_byte_SendBytes(u8x8, 16, buf); 
+ 397:BSP/u8g2/u8x8_cad.c ****       }
+ 398:BSP/u8g2/u8x8_cad.c ****       
+ 399:BSP/u8g2/u8x8_cad.c ****     
+ 400:BSP/u8g2/u8x8_cad.c ****       while( arg_int > 0 )
+ 401:BSP/u8g2/u8x8_cad.c ****       {
+ 402:BSP/u8g2/u8x8_cad.c **** 	b = *data;
+ 403:BSP/u8g2/u8x8_cad.c **** 	u8x8_byte_SendByte(u8x8, b & 0x0f0);
+ 404:BSP/u8g2/u8x8_cad.c **** 	u8x8_byte_SendByte(u8x8, b << 4);
+ 405:BSP/u8g2/u8x8_cad.c **** 	data++;
+ 406:BSP/u8g2/u8x8_cad.c **** 	arg_int--;
+ 407:BSP/u8g2/u8x8_cad.c ****       }
+ 408:BSP/u8g2/u8x8_cad.c ****       u8x8_gpio_Delay(u8x8, U8X8_MSG_DELAY_NANO, 1);
+ 409:BSP/u8g2/u8x8_cad.c ****       break;
+ 410:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_INIT:
+ 411:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_START_TRANSFER:
+ 412:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_END_TRANSFER:
+ 413:BSP/u8g2/u8x8_cad.c ****       return u8x8->byte_cb(u8x8, msg, arg_int, arg_ptr);
+ 414:BSP/u8g2/u8x8_cad.c ****     default:
+ 415:BSP/u8g2/u8x8_cad.c ****       return 0;
+ 416:BSP/u8g2/u8x8_cad.c ****   }
+ 417:BSP/u8g2/u8x8_cad.c ****   return 1;
+ 418:BSP/u8g2/u8x8_cad.c **** }
+ 419:BSP/u8g2/u8x8_cad.c **** 
+ 420:BSP/u8g2/u8x8_cad.c **** 
+ 421:BSP/u8g2/u8x8_cad.c **** /* cad procedure for the SSD13xx family in I2C mode */
+ 422:BSP/u8g2/u8x8_cad.c **** /* this procedure is also used by the ST7588 */
+ 423:BSP/u8g2/u8x8_cad.c **** /* u8x8_byte_SetDC is not used */
+ 424:BSP/u8g2/u8x8_cad.c **** /* U8X8_MSG_BYTE_START_TRANSFER starts i2c transfer, U8X8_MSG_BYTE_END_TRANSFER stops transfer */
+ 425:BSP/u8g2/u8x8_cad.c **** /* After transfer start, a full byte indicates command or data mode */
+ 426:BSP/u8g2/u8x8_cad.c **** 
+ 427:BSP/u8g2/u8x8_cad.c **** static void u8x8_i2c_data_transfer(u8x8_t *u8x8, uint8_t arg_int, void *arg_ptr) U8X8_NOINLINE;
+ 428:BSP/u8g2/u8x8_cad.c **** static void u8x8_i2c_data_transfer(u8x8_t *u8x8, uint8_t arg_int, void *arg_ptr)
+ 429:BSP/u8g2/u8x8_cad.c **** {
+  27              		.loc 1 429 1 view -0
+  28              		.cfi_startproc
+ARM GAS  /tmp/cczpVMPO.s 			page 9
+
+
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		.loc 1 429 1 is_stmt 0 view .LVU1
+  32 0000 70B5     		push	{r4, r5, r6, lr}
+  33              	.LCFI0:
+  34              		.cfi_def_cfa_offset 16
+  35              		.cfi_offset 4, -16
+  36              		.cfi_offset 5, -12
+  37              		.cfi_offset 6, -8
+  38              		.cfi_offset 14, -4
+  39 0002 0446     		mov	r4, r0
+  40 0004 0D46     		mov	r5, r1
+  41 0006 1646     		mov	r6, r2
+ 430:BSP/u8g2/u8x8_cad.c ****     u8x8_byte_StartTransfer(u8x8);    
+  42              		.loc 1 430 5 is_stmt 1 view .LVU2
+  43 0008 FFF7FEFF 		bl	u8x8_byte_StartTransfer
+  44              	.LVL1:
+ 431:BSP/u8g2/u8x8_cad.c ****     u8x8_byte_SendByte(u8x8, 0x040);
+  45              		.loc 1 431 5 view .LVU3
+  46 000c 4021     		movs	r1, #64
+  47 000e 2046     		mov	r0, r4
+  48 0010 FFF7FEFF 		bl	u8x8_byte_SendByte
+  49              	.LVL2:
+ 432:BSP/u8g2/u8x8_cad.c ****     u8x8->byte_cb(u8x8, U8X8_MSG_CAD_SEND_DATA, arg_int, arg_ptr);
+  50              		.loc 1 432 5 view .LVU4
+  51 0014 3346     		mov	r3, r6
+  52 0016 2A46     		mov	r2, r5
+  53 0018 1721     		movs	r1, #23
+  54 001a 2046     		mov	r0, r4
+  55 001c 2569     		ldr	r5, [r4, #16]
+  56              	.LVL3:
+  57              		.loc 1 432 5 is_stmt 0 view .LVU5
+  58 001e A847     		blx	r5
+  59              	.LVL4:
+ 433:BSP/u8g2/u8x8_cad.c ****     u8x8_byte_EndTransfer(u8x8);
+  60              		.loc 1 433 5 is_stmt 1 view .LVU6
+  61 0020 2046     		mov	r0, r4
+  62 0022 FFF7FEFF 		bl	u8x8_byte_EndTransfer
+  63              	.LVL5:
+ 434:BSP/u8g2/u8x8_cad.c **** }
+  64              		.loc 1 434 1 is_stmt 0 view .LVU7
+  65 0026 70BD     		pop	{r4, r5, r6, pc}
+  66              		.loc 1 434 1 view .LVU8
+  67              		.cfi_endproc
+  68              	.LFE15:
+  70              		.section	.text.u8x8_cad_SendCmd,"ax",%progbits
+  71              		.align	1
+  72              		.global	u8x8_cad_SendCmd
+  73              		.syntax unified
+  74              		.thumb
+  75              		.thumb_func
+  77              	u8x8_cad_SendCmd:
+  78              	.LVL6:
+  79              	.LFB0:
+  89:BSP/u8g2/u8x8_cad.c ****   return u8x8->cad_cb(u8x8, U8X8_MSG_CAD_SEND_CMD, cmd, NULL);
+  80              		.loc 1 89 1 is_stmt 1 view -0
+  81              		.cfi_startproc
+ARM GAS  /tmp/cczpVMPO.s 			page 10
+
+
+  82              		@ args = 0, pretend = 0, frame = 0
+  83              		@ frame_needed = 0, uses_anonymous_args = 0
+  89:BSP/u8g2/u8x8_cad.c ****   return u8x8->cad_cb(u8x8, U8X8_MSG_CAD_SEND_CMD, cmd, NULL);
+  84              		.loc 1 89 1 is_stmt 0 view .LVU10
+  85 0000 10B5     		push	{r4, lr}
+  86              	.LCFI1:
+  87              		.cfi_def_cfa_offset 8
+  88              		.cfi_offset 4, -8
+  89              		.cfi_offset 14, -4
+  90 0002 0A46     		mov	r2, r1
+  90:BSP/u8g2/u8x8_cad.c **** }
+  91              		.loc 1 90 3 is_stmt 1 view .LVU11
+  90:BSP/u8g2/u8x8_cad.c **** }
+  92              		.loc 1 90 14 is_stmt 0 view .LVU12
+  93 0004 C468     		ldr	r4, [r0, #12]
+  90:BSP/u8g2/u8x8_cad.c **** }
+  94              		.loc 1 90 10 view .LVU13
+  95 0006 0023     		movs	r3, #0
+  96 0008 1521     		movs	r1, #21
+  97              	.LVL7:
+  90:BSP/u8g2/u8x8_cad.c **** }
+  98              		.loc 1 90 10 view .LVU14
+  99 000a A047     		blx	r4
+ 100              	.LVL8:
+  91:BSP/u8g2/u8x8_cad.c **** 
+ 101              		.loc 1 91 1 view .LVU15
+ 102 000c 10BD     		pop	{r4, pc}
+ 103              		.cfi_endproc
+ 104              	.LFE0:
+ 106              		.section	.text.u8x8_cad_SendArg,"ax",%progbits
+ 107              		.align	1
+ 108              		.global	u8x8_cad_SendArg
+ 109              		.syntax unified
+ 110              		.thumb
+ 111              		.thumb_func
+ 113              	u8x8_cad_SendArg:
+ 114              	.LVL9:
+ 115              	.LFB1:
+  94:BSP/u8g2/u8x8_cad.c ****   return u8x8->cad_cb(u8x8, U8X8_MSG_CAD_SEND_ARG, arg, NULL);
+ 116              		.loc 1 94 1 is_stmt 1 view -0
+ 117              		.cfi_startproc
+ 118              		@ args = 0, pretend = 0, frame = 0
+ 119              		@ frame_needed = 0, uses_anonymous_args = 0
+  94:BSP/u8g2/u8x8_cad.c ****   return u8x8->cad_cb(u8x8, U8X8_MSG_CAD_SEND_ARG, arg, NULL);
+ 120              		.loc 1 94 1 is_stmt 0 view .LVU17
+ 121 0000 10B5     		push	{r4, lr}
+ 122              	.LCFI2:
+ 123              		.cfi_def_cfa_offset 8
+ 124              		.cfi_offset 4, -8
+ 125              		.cfi_offset 14, -4
+ 126 0002 0A46     		mov	r2, r1
+  95:BSP/u8g2/u8x8_cad.c **** }
+ 127              		.loc 1 95 3 is_stmt 1 view .LVU18
+  95:BSP/u8g2/u8x8_cad.c **** }
+ 128              		.loc 1 95 14 is_stmt 0 view .LVU19
+ 129 0004 C468     		ldr	r4, [r0, #12]
+  95:BSP/u8g2/u8x8_cad.c **** }
+ARM GAS  /tmp/cczpVMPO.s 			page 11
+
+
+ 130              		.loc 1 95 10 view .LVU20
+ 131 0006 0023     		movs	r3, #0
+ 132 0008 1621     		movs	r1, #22
+ 133              	.LVL10:
+  95:BSP/u8g2/u8x8_cad.c **** }
+ 134              		.loc 1 95 10 view .LVU21
+ 135 000a A047     		blx	r4
+ 136              	.LVL11:
+  96:BSP/u8g2/u8x8_cad.c **** 
+ 137              		.loc 1 96 1 view .LVU22
+ 138 000c 10BD     		pop	{r4, pc}
+ 139              		.cfi_endproc
+ 140              	.LFE1:
+ 142              		.section	.text.u8x8_cad_SendMultipleArg,"ax",%progbits
+ 143              		.align	1
+ 144              		.global	u8x8_cad_SendMultipleArg
+ 145              		.syntax unified
+ 146              		.thumb
+ 147              		.thumb_func
+ 149              	u8x8_cad_SendMultipleArg:
+ 150              	.LVL12:
+ 151              	.LFB2:
+  99:BSP/u8g2/u8x8_cad.c ****   while( cnt > 0 )
+ 152              		.loc 1 99 1 is_stmt 1 view -0
+ 153              		.cfi_startproc
+ 154              		@ args = 0, pretend = 0, frame = 0
+ 155              		@ frame_needed = 0, uses_anonymous_args = 0
+  99:BSP/u8g2/u8x8_cad.c ****   while( cnt > 0 )
+ 156              		.loc 1 99 1 is_stmt 0 view .LVU24
+ 157 0000 70B5     		push	{r4, r5, r6, lr}
+ 158              	.LCFI3:
+ 159              		.cfi_def_cfa_offset 16
+ 160              		.cfi_offset 4, -16
+ 161              		.cfi_offset 5, -12
+ 162              		.cfi_offset 6, -8
+ 163              		.cfi_offset 14, -4
+ 164 0002 0546     		mov	r5, r0
+ 165 0004 0C46     		mov	r4, r1
+ 166 0006 1646     		mov	r6, r2
+ 100:BSP/u8g2/u8x8_cad.c ****   {
+ 167              		.loc 1 100 3 is_stmt 1 view .LVU25
+ 100:BSP/u8g2/u8x8_cad.c ****   {
+ 168              		.loc 1 100 8 is_stmt 0 view .LVU26
+ 169 0008 08E0     		b	.L8
+ 170              	.LVL13:
+ 171              	.L9:
+ 102:BSP/u8g2/u8x8_cad.c ****     cnt--;
+ 172              		.loc 1 102 5 is_stmt 1 view .LVU27
+ 173 000a 0023     		movs	r3, #0
+ 174 000c 3246     		mov	r2, r6
+ 175 000e 1621     		movs	r1, #22
+ 176 0010 2846     		mov	r0, r5
+ 177 0012 D5F80CC0 		ldr	ip, [r5, #12]
+ 178 0016 E047     		blx	ip
+ 179              	.LVL14:
+ 103:BSP/u8g2/u8x8_cad.c ****   }
+ 180              		.loc 1 103 5 view .LVU28
+ARM GAS  /tmp/cczpVMPO.s 			page 12
+
+
+ 103:BSP/u8g2/u8x8_cad.c ****   }
+ 181              		.loc 1 103 8 is_stmt 0 view .LVU29
+ 182 0018 013C     		subs	r4, r4, #1
+ 183              	.LVL15:
+ 103:BSP/u8g2/u8x8_cad.c ****   }
+ 184              		.loc 1 103 8 view .LVU30
+ 185 001a E4B2     		uxtb	r4, r4
+ 186              	.LVL16:
+ 187              	.L8:
+ 100:BSP/u8g2/u8x8_cad.c ****   {
+ 188              		.loc 1 100 14 is_stmt 1 view .LVU31
+ 189 001c 002C     		cmp	r4, #0
+ 190 001e F4D1     		bne	.L9
+ 105:BSP/u8g2/u8x8_cad.c **** }
+ 191              		.loc 1 105 3 view .LVU32
+ 106:BSP/u8g2/u8x8_cad.c **** 
+ 192              		.loc 1 106 1 is_stmt 0 view .LVU33
+ 193 0020 0120     		movs	r0, #1
+ 194 0022 70BD     		pop	{r4, r5, r6, pc}
+ 106:BSP/u8g2/u8x8_cad.c **** 
+ 195              		.loc 1 106 1 view .LVU34
+ 196              		.cfi_endproc
+ 197              	.LFE2:
+ 199              		.section	.text.u8x8_cad_SendData,"ax",%progbits
+ 200              		.align	1
+ 201              		.global	u8x8_cad_SendData
+ 202              		.syntax unified
+ 203              		.thumb
+ 204              		.thumb_func
+ 206              	u8x8_cad_SendData:
+ 207              	.LVL17:
+ 208              	.LFB3:
+ 109:BSP/u8g2/u8x8_cad.c ****   return u8x8->cad_cb(u8x8, U8X8_MSG_CAD_SEND_DATA, cnt, data);
+ 209              		.loc 1 109 1 is_stmt 1 view -0
+ 210              		.cfi_startproc
+ 211              		@ args = 0, pretend = 0, frame = 0
+ 212              		@ frame_needed = 0, uses_anonymous_args = 0
+ 109:BSP/u8g2/u8x8_cad.c ****   return u8x8->cad_cb(u8x8, U8X8_MSG_CAD_SEND_DATA, cnt, data);
+ 213              		.loc 1 109 1 is_stmt 0 view .LVU36
+ 214 0000 10B5     		push	{r4, lr}
+ 215              	.LCFI4:
+ 216              		.cfi_def_cfa_offset 8
+ 217              		.cfi_offset 4, -8
+ 218              		.cfi_offset 14, -4
+ 219 0002 1346     		mov	r3, r2
+ 110:BSP/u8g2/u8x8_cad.c **** }
+ 220              		.loc 1 110 3 is_stmt 1 view .LVU37
+ 110:BSP/u8g2/u8x8_cad.c **** }
+ 221              		.loc 1 110 14 is_stmt 0 view .LVU38
+ 222 0004 C468     		ldr	r4, [r0, #12]
+ 110:BSP/u8g2/u8x8_cad.c **** }
+ 223              		.loc 1 110 10 view .LVU39
+ 224 0006 0A46     		mov	r2, r1
+ 225              	.LVL18:
+ 110:BSP/u8g2/u8x8_cad.c **** }
+ 226              		.loc 1 110 10 view .LVU40
+ 227 0008 1721     		movs	r1, #23
+ARM GAS  /tmp/cczpVMPO.s 			page 13
+
+
+ 228              	.LVL19:
+ 110:BSP/u8g2/u8x8_cad.c **** }
+ 229              		.loc 1 110 10 view .LVU41
+ 230 000a A047     		blx	r4
+ 231              	.LVL20:
+ 111:BSP/u8g2/u8x8_cad.c **** 
+ 232              		.loc 1 111 1 view .LVU42
+ 233 000c 10BD     		pop	{r4, pc}
+ 234              		.cfi_endproc
+ 235              	.LFE3:
+ 237              		.section	.text.u8x8_cad_StartTransfer,"ax",%progbits
+ 238              		.align	1
+ 239              		.global	u8x8_cad_StartTransfer
+ 240              		.syntax unified
+ 241              		.thumb
+ 242              		.thumb_func
+ 244              	u8x8_cad_StartTransfer:
+ 245              	.LVL21:
+ 246              	.LFB4:
+ 114:BSP/u8g2/u8x8_cad.c ****   return u8x8->cad_cb(u8x8, U8X8_MSG_CAD_START_TRANSFER, 0, NULL);
+ 247              		.loc 1 114 1 is_stmt 1 view -0
+ 248              		.cfi_startproc
+ 249              		@ args = 0, pretend = 0, frame = 0
+ 250              		@ frame_needed = 0, uses_anonymous_args = 0
+ 114:BSP/u8g2/u8x8_cad.c ****   return u8x8->cad_cb(u8x8, U8X8_MSG_CAD_START_TRANSFER, 0, NULL);
+ 251              		.loc 1 114 1 is_stmt 0 view .LVU44
+ 252 0000 10B5     		push	{r4, lr}
+ 253              	.LCFI5:
+ 254              		.cfi_def_cfa_offset 8
+ 255              		.cfi_offset 4, -8
+ 256              		.cfi_offset 14, -4
+ 115:BSP/u8g2/u8x8_cad.c **** }
+ 257              		.loc 1 115 3 is_stmt 1 view .LVU45
+ 115:BSP/u8g2/u8x8_cad.c **** }
+ 258              		.loc 1 115 14 is_stmt 0 view .LVU46
+ 259 0002 C468     		ldr	r4, [r0, #12]
+ 115:BSP/u8g2/u8x8_cad.c **** }
+ 260              		.loc 1 115 10 view .LVU47
+ 261 0004 0023     		movs	r3, #0
+ 262 0006 1A46     		mov	r2, r3
+ 263 0008 1821     		movs	r1, #24
+ 264 000a A047     		blx	r4
+ 265              	.LVL22:
+ 116:BSP/u8g2/u8x8_cad.c **** 
+ 266              		.loc 1 116 1 view .LVU48
+ 267 000c 10BD     		pop	{r4, pc}
+ 268              		.cfi_endproc
+ 269              	.LFE4:
+ 271              		.section	.text.u8x8_cad_EndTransfer,"ax",%progbits
+ 272              		.align	1
+ 273              		.global	u8x8_cad_EndTransfer
+ 274              		.syntax unified
+ 275              		.thumb
+ 276              		.thumb_func
+ 278              	u8x8_cad_EndTransfer:
+ 279              	.LVL23:
+ 280              	.LFB5:
+ARM GAS  /tmp/cczpVMPO.s 			page 14
+
+
+ 119:BSP/u8g2/u8x8_cad.c ****   return u8x8->cad_cb(u8x8, U8X8_MSG_CAD_END_TRANSFER, 0, NULL);
+ 281              		.loc 1 119 1 is_stmt 1 view -0
+ 282              		.cfi_startproc
+ 283              		@ args = 0, pretend = 0, frame = 0
+ 284              		@ frame_needed = 0, uses_anonymous_args = 0
+ 119:BSP/u8g2/u8x8_cad.c ****   return u8x8->cad_cb(u8x8, U8X8_MSG_CAD_END_TRANSFER, 0, NULL);
+ 285              		.loc 1 119 1 is_stmt 0 view .LVU50
+ 286 0000 10B5     		push	{r4, lr}
+ 287              	.LCFI6:
+ 288              		.cfi_def_cfa_offset 8
+ 289              		.cfi_offset 4, -8
+ 290              		.cfi_offset 14, -4
+ 120:BSP/u8g2/u8x8_cad.c **** }
+ 291              		.loc 1 120 3 is_stmt 1 view .LVU51
+ 120:BSP/u8g2/u8x8_cad.c **** }
+ 292              		.loc 1 120 14 is_stmt 0 view .LVU52
+ 293 0002 C468     		ldr	r4, [r0, #12]
+ 120:BSP/u8g2/u8x8_cad.c **** }
+ 294              		.loc 1 120 10 view .LVU53
+ 295 0004 0023     		movs	r3, #0
+ 296 0006 1A46     		mov	r2, r3
+ 297 0008 1921     		movs	r1, #25
+ 298 000a A047     		blx	r4
+ 299              	.LVL24:
+ 121:BSP/u8g2/u8x8_cad.c **** 
+ 300              		.loc 1 121 1 view .LVU54
+ 301 000c 10BD     		pop	{r4, pc}
+ 302              		.cfi_endproc
+ 303              	.LFE5:
+ 305              		.section	.text.u8x8_cad_vsendf,"ax",%progbits
+ 306              		.align	1
+ 307              		.global	u8x8_cad_vsendf
+ 308              		.syntax unified
+ 309              		.thumb
+ 310              		.thumb_func
+ 312              	u8x8_cad_vsendf:
+ 313              	.LVL25:
+ 314              	.LFB6:
+ 124:BSP/u8g2/u8x8_cad.c ****   uint8_t d;
+ 315              		.loc 1 124 1 is_stmt 1 view -0
+ 316              		.cfi_startproc
+ 317              		@ args = 0, pretend = 0, frame = 16
+ 318              		@ frame_needed = 0, uses_anonymous_args = 0
+ 124:BSP/u8g2/u8x8_cad.c ****   uint8_t d;
+ 319              		.loc 1 124 1 is_stmt 0 view .LVU56
+ 320 0000 30B5     		push	{r4, r5, lr}
+ 321              	.LCFI7:
+ 322              		.cfi_def_cfa_offset 12
+ 323              		.cfi_offset 4, -12
+ 324              		.cfi_offset 5, -8
+ 325              		.cfi_offset 14, -4
+ 326 0002 85B0     		sub	sp, sp, #20
+ 327              	.LCFI8:
+ 328              		.cfi_def_cfa_offset 32
+ 329 0004 0546     		mov	r5, r0
+ 330 0006 0C46     		mov	r4, r1
+ 331 0008 0192     		str	r2, [sp, #4]
+ARM GAS  /tmp/cczpVMPO.s 			page 15
+
+
+ 125:BSP/u8g2/u8x8_cad.c ****   u8x8_cad_StartTransfer(u8x8);
+ 332              		.loc 1 125 3 is_stmt 1 view .LVU57
+ 126:BSP/u8g2/u8x8_cad.c ****   while( *fmt != '\0' )
+ 333              		.loc 1 126 3 view .LVU58
+ 334 000a FFF7FEFF 		bl	u8x8_cad_StartTransfer
+ 335              	.LVL26:
+ 127:BSP/u8g2/u8x8_cad.c ****   {
+ 336              		.loc 1 127 3 view .LVU59
+ 127:BSP/u8g2/u8x8_cad.c ****   {
+ 337              		.loc 1 127 8 is_stmt 0 view .LVU60
+ 338 000e 03E0     		b	.L18
+ 339              	.L19:
+ 133:BSP/u8g2/u8x8_cad.c ****       case 'd':  u8x8_cad_SendData(u8x8, 1, &d); break;
+ 340              		.loc 1 133 18 is_stmt 1 view .LVU61
+ 341 0010 2846     		mov	r0, r5
+ 342 0012 FFF7FEFF 		bl	u8x8_cad_SendCmd
+ 343              	.LVL27:
+ 133:BSP/u8g2/u8x8_cad.c ****       case 'd':  u8x8_cad_SendData(u8x8, 1, &d); break;
+ 344              		.loc 1 133 45 discriminator 1 view .LVU62
+ 345              	.L21:
+ 136:BSP/u8g2/u8x8_cad.c ****   }
+ 346              		.loc 1 136 5 view .LVU63
+ 136:BSP/u8g2/u8x8_cad.c ****   }
+ 347              		.loc 1 136 8 is_stmt 0 view .LVU64
+ 348 0016 0134     		adds	r4, r4, #1
+ 349              	.LVL28:
+ 350              	.L18:
+ 127:BSP/u8g2/u8x8_cad.c ****   {
+ 351              		.loc 1 127 15 is_stmt 1 view .LVU65
+ 127:BSP/u8g2/u8x8_cad.c ****   {
+ 352              		.loc 1 127 10 is_stmt 0 view .LVU66
+ 353 0018 2378     		ldrb	r3, [r4]	@ zero_extendqisi2
+ 127:BSP/u8g2/u8x8_cad.c ****   {
+ 354              		.loc 1 127 15 view .LVU67
+ 355 001a BBB1     		cbz	r3, .L24
+ 129:BSP/u8g2/u8x8_cad.c ****     switch(*fmt)
+ 356              		.loc 1 129 5 is_stmt 1 view .LVU68
+ 129:BSP/u8g2/u8x8_cad.c ****     switch(*fmt)
+ 357              		.loc 1 129 18 is_stmt 0 view .LVU69
+ 358 001c 019B     		ldr	r3, [sp, #4]
+ 359 001e 1A1D     		adds	r2, r3, #4
+ 360 0020 0192     		str	r2, [sp, #4]
+ 129:BSP/u8g2/u8x8_cad.c ****     switch(*fmt)
+ 361              		.loc 1 129 9 discriminator 1 view .LVU70
+ 362 0022 1978     		ldrb	r1, [r3]	@ zero_extendqisi2
+ 129:BSP/u8g2/u8x8_cad.c ****     switch(*fmt)
+ 363              		.loc 1 129 7 discriminator 1 view .LVU71
+ 364 0024 8DF80F10 		strb	r1, [sp, #15]
+ 130:BSP/u8g2/u8x8_cad.c ****     {
+ 365              		.loc 1 130 5 is_stmt 1 view .LVU72
+ 130:BSP/u8g2/u8x8_cad.c ****     {
+ 366              		.loc 1 130 12 is_stmt 0 view .LVU73
+ 367 0028 2378     		ldrb	r3, [r4]	@ zero_extendqisi2
+ 130:BSP/u8g2/u8x8_cad.c ****     {
+ 368              		.loc 1 130 5 view .LVU74
+ 369 002a 632B     		cmp	r3, #99
+ 370 002c F0D0     		beq	.L19
+ARM GAS  /tmp/cczpVMPO.s 			page 16
+
+
+ 371 002e 642B     		cmp	r3, #100
+ 372 0030 05D0     		beq	.L20
+ 373 0032 612B     		cmp	r3, #97
+ 374 0034 EFD1     		bne	.L21
+ 132:BSP/u8g2/u8x8_cad.c ****       case 'c':  u8x8_cad_SendCmd(u8x8, d); break;
+ 375              		.loc 1 132 18 is_stmt 1 view .LVU75
+ 376 0036 2846     		mov	r0, r5
+ 377 0038 FFF7FEFF 		bl	u8x8_cad_SendArg
+ 378              	.LVL29:
+ 132:BSP/u8g2/u8x8_cad.c ****       case 'c':  u8x8_cad_SendCmd(u8x8, d); break;
+ 379              		.loc 1 132 45 discriminator 1 view .LVU76
+ 132:BSP/u8g2/u8x8_cad.c ****       case 'c':  u8x8_cad_SendCmd(u8x8, d); break;
+ 380              		.loc 1 132 45 is_stmt 0 view .LVU77
+ 381 003c EBE7     		b	.L21
+ 382              	.L20:
+ 134:BSP/u8g2/u8x8_cad.c ****     }
+ 383              		.loc 1 134 18 is_stmt 1 view .LVU78
+ 384 003e 0DF10F02 		add	r2, sp, #15
+ 385 0042 0121     		movs	r1, #1
+ 386 0044 2846     		mov	r0, r5
+ 387 0046 FFF7FEFF 		bl	u8x8_cad_SendData
+ 388              	.LVL30:
+ 134:BSP/u8g2/u8x8_cad.c ****     }
+ 389              		.loc 1 134 50 discriminator 1 view .LVU79
+ 134:BSP/u8g2/u8x8_cad.c ****     }
+ 390              		.loc 1 134 50 is_stmt 0 view .LVU80
+ 391 004a E4E7     		b	.L21
+ 392              	.L24:
+ 138:BSP/u8g2/u8x8_cad.c **** }
+ 393              		.loc 1 138 3 is_stmt 1 view .LVU81
+ 394 004c 2846     		mov	r0, r5
+ 395 004e FFF7FEFF 		bl	u8x8_cad_EndTransfer
+ 396              	.LVL31:
+ 139:BSP/u8g2/u8x8_cad.c **** 
+ 397              		.loc 1 139 1 is_stmt 0 view .LVU82
+ 398 0052 05B0     		add	sp, sp, #20
+ 399              	.LCFI9:
+ 400              		.cfi_def_cfa_offset 12
+ 401              		@ sp needed
+ 402 0054 30BD     		pop	{r4, r5, pc}
+ 139:BSP/u8g2/u8x8_cad.c **** 
+ 403              		.loc 1 139 1 view .LVU83
+ 404              		.cfi_endproc
+ 405              	.LFE6:
+ 407              		.section	.text.u8x8_SendF,"ax",%progbits
+ 408              		.align	1
+ 409              		.global	u8x8_SendF
+ 410              		.syntax unified
+ 411              		.thumb
+ 412              		.thumb_func
+ 414              	u8x8_SendF:
+ 415              	.LVL32:
+ 416              	.LFB7:
+ 142:BSP/u8g2/u8x8_cad.c ****   va_list va;
+ 417              		.loc 1 142 1 is_stmt 1 view -0
+ 418              		.cfi_startproc
+ 419              		@ args = 4, pretend = 12, frame = 8
+ARM GAS  /tmp/cczpVMPO.s 			page 17
+
+
+ 420              		@ frame_needed = 0, uses_anonymous_args = 1
+ 142:BSP/u8g2/u8x8_cad.c ****   va_list va;
+ 421              		.loc 1 142 1 is_stmt 0 view .LVU85
+ 422 0000 0EB4     		push	{r1, r2, r3}
+ 423              	.LCFI10:
+ 424              		.cfi_def_cfa_offset 12
+ 425              		.cfi_offset 1, -12
+ 426              		.cfi_offset 2, -8
+ 427              		.cfi_offset 3, -4
+ 428 0002 00B5     		push	{lr}
+ 429              	.LCFI11:
+ 430              		.cfi_def_cfa_offset 16
+ 431              		.cfi_offset 14, -16
+ 432 0004 82B0     		sub	sp, sp, #8
+ 433              	.LCFI12:
+ 434              		.cfi_def_cfa_offset 24
+ 435 0006 03AA     		add	r2, sp, #12
+ 436 0008 52F8041B 		ldr	r1, [r2], #4
+ 143:BSP/u8g2/u8x8_cad.c ****   va_start(va, fmt);
+ 437              		.loc 1 143 3 is_stmt 1 view .LVU86
+ 144:BSP/u8g2/u8x8_cad.c ****   u8x8_cad_vsendf(u8x8, fmt, va);
+ 438              		.loc 1 144 3 view .LVU87
+ 439 000c 0192     		str	r2, [sp, #4]
+ 145:BSP/u8g2/u8x8_cad.c ****   va_end(va);
+ 440              		.loc 1 145 3 view .LVU88
+ 441 000e FFF7FEFF 		bl	u8x8_cad_vsendf
+ 442              	.LVL33:
+ 146:BSP/u8g2/u8x8_cad.c **** }
+ 443              		.loc 1 146 3 view .LVU89
+ 147:BSP/u8g2/u8x8_cad.c **** 
+ 444              		.loc 1 147 1 is_stmt 0 view .LVU90
+ 445 0012 02B0     		add	sp, sp, #8
+ 446              	.LCFI13:
+ 447              		.cfi_def_cfa_offset 16
+ 448              		@ sp needed
+ 449 0014 5DF804EB 		ldr	lr, [sp], #4
+ 450              	.LCFI14:
+ 451              		.cfi_restore 14
+ 452              		.cfi_def_cfa_offset 12
+ 453 0018 03B0     		add	sp, sp, #12
+ 454              	.LCFI15:
+ 455              		.cfi_restore 3
+ 456              		.cfi_restore 2
+ 457              		.cfi_restore 1
+ 458              		.cfi_def_cfa_offset 0
+ 459 001a 7047     		bx	lr
+ 460              		.cfi_endproc
+ 461              	.LFE7:
+ 463              		.section	.text.u8x8_cad_SendSequence,"ax",%progbits
+ 464              		.align	1
+ 465              		.global	u8x8_cad_SendSequence
+ 466              		.syntax unified
+ 467              		.thumb
+ 468              		.thumb_func
+ 470              	u8x8_cad_SendSequence:
+ 471              	.LVL34:
+ 472              	.LFB8:
+ARM GAS  /tmp/cczpVMPO.s 			page 18
+
+
+ 160:BSP/u8g2/u8x8_cad.c ****   uint8_t cmd;
+ 473              		.loc 1 160 1 is_stmt 1 view -0
+ 474              		.cfi_startproc
+ 475              		@ args = 0, pretend = 0, frame = 8
+ 476              		@ frame_needed = 0, uses_anonymous_args = 0
+ 160:BSP/u8g2/u8x8_cad.c ****   uint8_t cmd;
+ 477              		.loc 1 160 1 is_stmt 0 view .LVU92
+ 478 0000 70B5     		push	{r4, r5, r6, lr}
+ 479              	.LCFI16:
+ 480              		.cfi_def_cfa_offset 16
+ 481              		.cfi_offset 4, -16
+ 482              		.cfi_offset 5, -12
+ 483              		.cfi_offset 6, -8
+ 484              		.cfi_offset 14, -4
+ 485 0002 82B0     		sub	sp, sp, #8
+ 486              	.LCFI17:
+ 487              		.cfi_def_cfa_offset 24
+ 488 0004 0646     		mov	r6, r0
+ 489 0006 0D46     		mov	r5, r1
+ 490 0008 09E0     		b	.L28
+ 491              	.LVL35:
+ 492              	.L38:
+ 168:BSP/u8g2/u8x8_cad.c ****     {
+ 493              		.loc 1 168 5 view .LVU93
+ 494 000a 1529     		cmp	r1, #21
+ 495 000c 2FD3     		bcc	.L27
+ 172:BSP/u8g2/u8x8_cad.c **** 	  u8x8->cad_cb(u8x8, cmd, v, NULL);
+ 496              		.loc 1 172 4 is_stmt 1 view .LVU94
+ 172:BSP/u8g2/u8x8_cad.c **** 	  u8x8->cad_cb(u8x8, cmd, v, NULL);
+ 497              		.loc 1 172 8 is_stmt 0 view .LVU95
+ 498 000e 2278     		ldrb	r2, [r4]	@ zero_extendqisi2
+ 172:BSP/u8g2/u8x8_cad.c **** 	  u8x8->cad_cb(u8x8, cmd, v, NULL);
+ 499              		.loc 1 172 6 view .LVU96
+ 500 0010 8DF80720 		strb	r2, [sp, #7]
+ 173:BSP/u8g2/u8x8_cad.c **** 	  data++;
+ 501              		.loc 1 173 4 is_stmt 1 view .LVU97
+ 173:BSP/u8g2/u8x8_cad.c **** 	  data++;
+ 502              		.loc 1 173 8 is_stmt 0 view .LVU98
+ 503 0014 F468     		ldr	r4, [r6, #12]
+ 504              	.LVL36:
+ 173:BSP/u8g2/u8x8_cad.c **** 	  data++;
+ 505              		.loc 1 173 4 view .LVU99
+ 506 0016 0023     		movs	r3, #0
+ 507 0018 3046     		mov	r0, r6
+ 508 001a A047     		blx	r4
+ 509              	.LVL37:
+ 174:BSP/u8g2/u8x8_cad.c **** 	  break;
+ 510              		.loc 1 174 4 is_stmt 1 view .LVU100
+ 174:BSP/u8g2/u8x8_cad.c **** 	  break;
+ 511              		.loc 1 174 8 is_stmt 0 view .LVU101
+ 512 001c 0235     		adds	r5, r5, #2
+ 513              	.LVL38:
+ 175:BSP/u8g2/u8x8_cad.c ****       case U8X8_MSG_CAD_SEND_DATA:
+ 514              		.loc 1 175 4 is_stmt 1 view .LVU102
+ 515              	.L28:
+ 161:BSP/u8g2/u8x8_cad.c ****   uint8_t v;
+ 516              		.loc 1 161 3 view .LVU103
+ARM GAS  /tmp/cczpVMPO.s 			page 19
+
+
+ 162:BSP/u8g2/u8x8_cad.c **** 
+ 517              		.loc 1 162 3 view .LVU104
+ 164:BSP/u8g2/u8x8_cad.c ****   {
+ 518              		.loc 1 164 3 view .LVU105
+ 166:BSP/u8g2/u8x8_cad.c ****     data++;
+ 519              		.loc 1 166 5 view .LVU106
+ 166:BSP/u8g2/u8x8_cad.c ****     data++;
+ 520              		.loc 1 166 9 is_stmt 0 view .LVU107
+ 521 001e 2C46     		mov	r4, r5
+ 522 0020 14F8011B 		ldrb	r1, [r4], #1	@ zero_extendqisi2
+ 523              	.LVL39:
+ 167:BSP/u8g2/u8x8_cad.c ****     switch( cmd )
+ 524              		.loc 1 167 5 is_stmt 1 view .LVU108
+ 168:BSP/u8g2/u8x8_cad.c ****     {
+ 525              		.loc 1 168 5 view .LVU109
+ 526 0024 1929     		cmp	r1, #25
+ 527 0026 10D8     		bhi	.L29
+ 528 0028 1829     		cmp	r1, #24
+ 529 002a 19D2     		bcs	.L30
+ 530 002c 1629     		cmp	r1, #22
+ 531 002e ECD9     		bls	.L38
+ 532 0030 1729     		cmp	r1, #23
+ 533 0032 1CD1     		bne	.L27
+ 177:BSP/u8g2/u8x8_cad.c **** 	  u8x8_cad_SendData(u8x8, 1, &v);
+ 534              		.loc 1 177 4 view .LVU110
+ 177:BSP/u8g2/u8x8_cad.c **** 	  u8x8_cad_SendData(u8x8, 1, &v);
+ 535              		.loc 1 177 8 is_stmt 0 view .LVU111
+ 536 0034 2378     		ldrb	r3, [r4]	@ zero_extendqisi2
+ 177:BSP/u8g2/u8x8_cad.c **** 	  u8x8_cad_SendData(u8x8, 1, &v);
+ 537              		.loc 1 177 6 view .LVU112
+ 538 0036 8DF80730 		strb	r3, [sp, #7]
+ 178:BSP/u8g2/u8x8_cad.c **** 	  data++;
+ 539              		.loc 1 178 4 is_stmt 1 view .LVU113
+ 540 003a 0DF10702 		add	r2, sp, #7
+ 541 003e 0121     		movs	r1, #1
+ 542              	.LVL40:
+ 178:BSP/u8g2/u8x8_cad.c **** 	  data++;
+ 543              		.loc 1 178 4 is_stmt 0 view .LVU114
+ 544 0040 3046     		mov	r0, r6
+ 545 0042 FFF7FEFF 		bl	u8x8_cad_SendData
+ 546              	.LVL41:
+ 179:BSP/u8g2/u8x8_cad.c **** 	  break;
+ 547              		.loc 1 179 4 is_stmt 1 view .LVU115
+ 179:BSP/u8g2/u8x8_cad.c **** 	  break;
+ 548              		.loc 1 179 8 is_stmt 0 view .LVU116
+ 549 0046 0235     		adds	r5, r5, #2
+ 550              	.LVL42:
+ 180:BSP/u8g2/u8x8_cad.c ****       case U8X8_MSG_CAD_START_TRANSFER:
+ 551              		.loc 1 180 4 is_stmt 1 view .LVU117
+ 552 0048 E9E7     		b	.L28
+ 553              	.LVL43:
+ 554              	.L29:
+ 168:BSP/u8g2/u8x8_cad.c ****     {
+ 555              		.loc 1 168 5 is_stmt 0 view .LVU118
+ 556 004a FE29     		cmp	r1, #254
+ 557 004c 0FD1     		bne	.L27
+ 186:BSP/u8g2/u8x8_cad.c **** 	  u8x8_gpio_Delay(u8x8, U8X8_MSG_DELAY_MILLI, v);	    
+ARM GAS  /tmp/cczpVMPO.s 			page 20
+
+
+ 558              		.loc 1 186 4 is_stmt 1 view .LVU119
+ 186:BSP/u8g2/u8x8_cad.c **** 	  u8x8_gpio_Delay(u8x8, U8X8_MSG_DELAY_MILLI, v);	    
+ 559              		.loc 1 186 8 is_stmt 0 view .LVU120
+ 560 004e 2278     		ldrb	r2, [r4]	@ zero_extendqisi2
+ 186:BSP/u8g2/u8x8_cad.c **** 	  u8x8_gpio_Delay(u8x8, U8X8_MSG_DELAY_MILLI, v);	    
+ 561              		.loc 1 186 6 view .LVU121
+ 562 0050 8DF80720 		strb	r2, [sp, #7]
+ 187:BSP/u8g2/u8x8_cad.c **** 	  data++;
+ 563              		.loc 1 187 4 is_stmt 1 view .LVU122
+ 564 0054 2921     		movs	r1, #41
+ 565              	.LVL44:
+ 187:BSP/u8g2/u8x8_cad.c **** 	  data++;
+ 566              		.loc 1 187 4 is_stmt 0 view .LVU123
+ 567 0056 3046     		mov	r0, r6
+ 568 0058 FFF7FEFF 		bl	u8x8_gpio_call
+ 569              	.LVL45:
+ 188:BSP/u8g2/u8x8_cad.c **** 	  break;
+ 570              		.loc 1 188 4 is_stmt 1 view .LVU124
+ 188:BSP/u8g2/u8x8_cad.c **** 	  break;
+ 571              		.loc 1 188 8 is_stmt 0 view .LVU125
+ 572 005c 0235     		adds	r5, r5, #2
+ 573              	.LVL46:
+ 189:BSP/u8g2/u8x8_cad.c ****       default:
+ 574              		.loc 1 189 4 is_stmt 1 view .LVU126
+ 575 005e DEE7     		b	.L28
+ 576              	.LVL47:
+ 577              	.L30:
+ 183:BSP/u8g2/u8x8_cad.c **** 	  break;
+ 578              		.loc 1 183 4 view .LVU127
+ 183:BSP/u8g2/u8x8_cad.c **** 	  break;
+ 579              		.loc 1 183 8 is_stmt 0 view .LVU128
+ 580 0060 F568     		ldr	r5, [r6, #12]
+ 183:BSP/u8g2/u8x8_cad.c **** 	  break;
+ 581              		.loc 1 183 4 view .LVU129
+ 582 0062 0023     		movs	r3, #0
+ 583 0064 1A46     		mov	r2, r3
+ 584 0066 3046     		mov	r0, r6
+ 585 0068 A847     		blx	r5
+ 586              	.LVL48:
+ 184:BSP/u8g2/u8x8_cad.c ****       case 0x0fe:
+ 587              		.loc 1 184 4 is_stmt 1 view .LVU130
+ 167:BSP/u8g2/u8x8_cad.c ****     switch( cmd )
+ 588              		.loc 1 167 9 is_stmt 0 view .LVU131
+ 589 006a 2546     		mov	r5, r4
+ 184:BSP/u8g2/u8x8_cad.c ****       case 0x0fe:
+ 590              		.loc 1 184 4 view .LVU132
+ 591 006c D7E7     		b	.L28
+ 592              	.LVL49:
+ 593              	.L27:
+ 194:BSP/u8g2/u8x8_cad.c **** 
+ 594              		.loc 1 194 1 view .LVU133
+ 595 006e 02B0     		add	sp, sp, #8
+ 596              	.LCFI18:
+ 597              		.cfi_def_cfa_offset 16
+ 598              		@ sp needed
+ 599 0070 70BD     		pop	{r4, r5, r6, pc}
+ 194:BSP/u8g2/u8x8_cad.c **** 
+ARM GAS  /tmp/cczpVMPO.s 			page 21
+
+
+ 600              		.loc 1 194 1 view .LVU134
+ 601              		.cfi_endproc
+ 602              	.LFE8:
+ 604              		.section	.text.u8x8_cad_empty,"ax",%progbits
+ 605              		.align	1
+ 606              		.global	u8x8_cad_empty
+ 607              		.syntax unified
+ 608              		.thumb
+ 609              		.thumb_func
+ 611              	u8x8_cad_empty:
+ 612              	.LVL50:
+ 613              	.LFB9:
+ 198:BSP/u8g2/u8x8_cad.c ****   switch(msg)
+ 614              		.loc 1 198 1 is_stmt 1 view -0
+ 615              		.cfi_startproc
+ 616              		@ args = 0, pretend = 0, frame = 0
+ 617              		@ frame_needed = 0, uses_anonymous_args = 0
+ 198:BSP/u8g2/u8x8_cad.c ****   switch(msg)
+ 618              		.loc 1 198 1 is_stmt 0 view .LVU136
+ 619 0000 10B5     		push	{r4, lr}
+ 620              	.LCFI19:
+ 621              		.cfi_def_cfa_offset 8
+ 622              		.cfi_offset 4, -8
+ 623              		.cfi_offset 14, -4
+ 624 0002 8C46     		mov	ip, r1
+ 199:BSP/u8g2/u8x8_cad.c ****   {
+ 625              		.loc 1 199 3 is_stmt 1 view .LVU137
+ 626 0004 1439     		subs	r1, r1, #20
+ 627              	.LVL51:
+ 199:BSP/u8g2/u8x8_cad.c ****   {
+ 628              		.loc 1 199 3 is_stmt 0 view .LVU138
+ 629 0006 0529     		cmp	r1, #5
+ 630 0008 12D8     		bhi	.L45
+ 631 000a DFE801F0 		tbb	[pc, r1]
+ 632              	.L42:
+ 633 000e 0D       		.byte	(.L41-.L42)/2
+ 634 000f 03       		.byte	(.L44-.L42)/2
+ 635 0010 08       		.byte	(.L43-.L42)/2
+ 636 0011 0D       		.byte	(.L41-.L42)/2
+ 637 0012 0D       		.byte	(.L41-.L42)/2
+ 638 0013 0D       		.byte	(.L41-.L42)/2
+ 639              		.p2align 1
+ 640              	.L44:
+ 202:BSP/u8g2/u8x8_cad.c ****       break;
+ 641              		.loc 1 202 7 is_stmt 1 view .LVU139
+ 642 0014 1146     		mov	r1, r2
+ 643 0016 FFF7FEFF 		bl	u8x8_byte_SendByte
+ 644              	.LVL52:
+ 203:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_ARG:
+ 645              		.loc 1 203 7 view .LVU140
+ 215:BSP/u8g2/u8x8_cad.c **** }
+ 646              		.loc 1 215 10 is_stmt 0 view .LVU141
+ 647 001a 0120     		movs	r0, #1
+ 648              	.L40:
+ 216:BSP/u8g2/u8x8_cad.c **** 
+ 649              		.loc 1 216 1 view .LVU142
+ 650 001c 10BD     		pop	{r4, pc}
+ARM GAS  /tmp/cczpVMPO.s 			page 22
+
+
+ 651              	.LVL53:
+ 652              	.L43:
+ 205:BSP/u8g2/u8x8_cad.c ****       break;
+ 653              		.loc 1 205 7 is_stmt 1 view .LVU143
+ 654 001e 1146     		mov	r1, r2
+ 655 0020 FFF7FEFF 		bl	u8x8_byte_SendByte
+ 656              	.LVL54:
+ 206:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_DATA:
+ 657              		.loc 1 206 7 view .LVU144
+ 215:BSP/u8g2/u8x8_cad.c **** }
+ 658              		.loc 1 215 10 is_stmt 0 view .LVU145
+ 659 0024 0120     		movs	r0, #1
+ 206:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_DATA:
+ 660              		.loc 1 206 7 view .LVU146
+ 661 0026 F9E7     		b	.L40
+ 662              	.LVL55:
+ 663              	.L41:
+ 211:BSP/u8g2/u8x8_cad.c ****     default:
+ 664              		.loc 1 211 7 is_stmt 1 view .LVU147
+ 211:BSP/u8g2/u8x8_cad.c ****     default:
+ 665              		.loc 1 211 18 is_stmt 0 view .LVU148
+ 666 0028 0469     		ldr	r4, [r0, #16]
+ 211:BSP/u8g2/u8x8_cad.c ****     default:
+ 667              		.loc 1 211 14 view .LVU149
+ 668 002a 6146     		mov	r1, ip
+ 669 002c A047     		blx	r4
+ 670              	.LVL56:
+ 211:BSP/u8g2/u8x8_cad.c ****     default:
+ 671              		.loc 1 211 14 view .LVU150
+ 672 002e F5E7     		b	.L40
+ 673              	.LVL57:
+ 674              	.L45:
+ 199:BSP/u8g2/u8x8_cad.c ****   {
+ 675              		.loc 1 199 3 view .LVU151
+ 676 0030 0020     		movs	r0, #0
+ 677              	.LVL58:
+ 199:BSP/u8g2/u8x8_cad.c ****   {
+ 678              		.loc 1 199 3 view .LVU152
+ 679 0032 F3E7     		b	.L40
+ 680              		.cfi_endproc
+ 681              	.LFE9:
+ 683              		.section	.text.u8x8_cad_110,"ax",%progbits
+ 684              		.align	1
+ 685              		.global	u8x8_cad_110
+ 686              		.syntax unified
+ 687              		.thumb
+ 688              		.thumb_func
+ 690              	u8x8_cad_110:
+ 691              	.LVL59:
+ 692              	.LFB10:
+ 225:BSP/u8g2/u8x8_cad.c ****   switch(msg)
+ 693              		.loc 1 225 1 is_stmt 1 view -0
+ 694              		.cfi_startproc
+ 695              		@ args = 0, pretend = 0, frame = 0
+ 696              		@ frame_needed = 0, uses_anonymous_args = 0
+ 225:BSP/u8g2/u8x8_cad.c ****   switch(msg)
+ 697              		.loc 1 225 1 is_stmt 0 view .LVU154
+ARM GAS  /tmp/cczpVMPO.s 			page 23
+
+
+ 698 0000 2DE9F041 		push	{r4, r5, r6, r7, r8, lr}
+ 699              	.LCFI20:
+ 700              		.cfi_def_cfa_offset 24
+ 701              		.cfi_offset 4, -24
+ 702              		.cfi_offset 5, -20
+ 703              		.cfi_offset 6, -16
+ 704              		.cfi_offset 7, -12
+ 705              		.cfi_offset 8, -8
+ 706              		.cfi_offset 14, -4
+ 707 0004 0446     		mov	r4, r0
+ 708 0006 0D46     		mov	r5, r1
+ 709 0008 1646     		mov	r6, r2
+ 710 000a 1F46     		mov	r7, r3
+ 226:BSP/u8g2/u8x8_cad.c ****   {
+ 711              		.loc 1 226 3 is_stmt 1 view .LVU155
+ 712 000c A1F11403 		sub	r3, r1, #20
+ 713              	.LVL60:
+ 226:BSP/u8g2/u8x8_cad.c ****   {
+ 714              		.loc 1 226 3 is_stmt 0 view .LVU156
+ 715 0010 052B     		cmp	r3, #5
+ 716 0012 22D8     		bhi	.L54
+ 717 0014 DFE803F0 		tbb	[pc, r3]
+ 718              	.LVL61:
+ 719              	.L50:
+ 720 0018 18       		.byte	(.L49-.L50)/2
+ 721 0019 03       		.byte	(.L53-.L50)/2
+ 722 001a 0C       		.byte	(.L52-.L50)/2
+ 723 001b 15       		.byte	(.L51-.L50)/2
+ 724 001c 18       		.byte	(.L49-.L50)/2
+ 725 001d 18       		.byte	(.L49-.L50)/2
+ 726              		.p2align 1
+ 727              	.L53:
+ 229:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, arg_int);
+ 728              		.loc 1 229 7 is_stmt 1 view .LVU157
+ 729 001e 0121     		movs	r1, #1
+ 730              	.LVL62:
+ 229:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, arg_int);
+ 731              		.loc 1 229 7 is_stmt 0 view .LVU158
+ 732 0020 FFF7FEFF 		bl	u8x8_byte_SetDC
+ 733              	.LVL63:
+ 230:BSP/u8g2/u8x8_cad.c ****       break;
+ 734              		.loc 1 230 7 is_stmt 1 view .LVU159
+ 735 0024 3146     		mov	r1, r6
+ 736 0026 2046     		mov	r0, r4
+ 737 0028 FFF7FEFF 		bl	u8x8_byte_SendByte
+ 738              	.LVL64:
+ 231:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_ARG:
+ 739              		.loc 1 231 7 view .LVU160
+ 248:BSP/u8g2/u8x8_cad.c **** }
+ 740              		.loc 1 248 10 is_stmt 0 view .LVU161
+ 741 002c 0120     		movs	r0, #1
+ 231:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_ARG:
+ 742              		.loc 1 231 7 view .LVU162
+ 743 002e 12E0     		b	.L48
+ 744              	.LVL65:
+ 745              	.L52:
+ 233:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, arg_int);
+ARM GAS  /tmp/cczpVMPO.s 			page 24
+
+
+ 746              		.loc 1 233 7 is_stmt 1 view .LVU163
+ 747 0030 0121     		movs	r1, #1
+ 748              	.LVL66:
+ 233:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, arg_int);
+ 749              		.loc 1 233 7 is_stmt 0 view .LVU164
+ 750 0032 FFF7FEFF 		bl	u8x8_byte_SetDC
+ 751              	.LVL67:
+ 234:BSP/u8g2/u8x8_cad.c ****       break;
+ 752              		.loc 1 234 7 is_stmt 1 view .LVU165
+ 753 0036 3146     		mov	r1, r6
+ 754 0038 2046     		mov	r0, r4
+ 755 003a FFF7FEFF 		bl	u8x8_byte_SendByte
+ 756              	.LVL68:
+ 235:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_DATA:
+ 757              		.loc 1 235 7 view .LVU166
+ 248:BSP/u8g2/u8x8_cad.c **** }
+ 758              		.loc 1 248 10 is_stmt 0 view .LVU167
+ 759 003e 0120     		movs	r0, #1
+ 235:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_DATA:
+ 760              		.loc 1 235 7 view .LVU168
+ 761 0040 09E0     		b	.L48
+ 762              	.LVL69:
+ 763              	.L51:
+ 237:BSP/u8g2/u8x8_cad.c ****       //u8x8_byte_SendBytes(u8x8, arg_int, arg_ptr);
+ 764              		.loc 1 237 7 is_stmt 1 view .LVU169
+ 765 0042 0021     		movs	r1, #0
+ 766              	.LVL70:
+ 237:BSP/u8g2/u8x8_cad.c ****       //u8x8_byte_SendBytes(u8x8, arg_int, arg_ptr);
+ 767              		.loc 1 237 7 is_stmt 0 view .LVU170
+ 768 0044 FFF7FEFF 		bl	u8x8_byte_SetDC
+ 769              	.LVL71:
+ 770              	.L49:
+ 244:BSP/u8g2/u8x8_cad.c ****     default:
+ 771              		.loc 1 244 7 is_stmt 1 view .LVU171
+ 244:BSP/u8g2/u8x8_cad.c ****     default:
+ 772              		.loc 1 244 18 is_stmt 0 view .LVU172
+ 773 0048 D4F81080 		ldr	r8, [r4, #16]
+ 244:BSP/u8g2/u8x8_cad.c ****     default:
+ 774              		.loc 1 244 14 view .LVU173
+ 775 004c 3B46     		mov	r3, r7
+ 776 004e 3246     		mov	r2, r6
+ 777 0050 2946     		mov	r1, r5
+ 778 0052 2046     		mov	r0, r4
+ 779 0054 C047     		blx	r8
+ 780              	.LVL72:
+ 781              	.L48:
+ 249:BSP/u8g2/u8x8_cad.c **** 
+ 782              		.loc 1 249 1 view .LVU174
+ 783 0056 BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
+ 784              	.LVL73:
+ 785              	.L54:
+ 226:BSP/u8g2/u8x8_cad.c ****   {
+ 786              		.loc 1 226 3 view .LVU175
+ 787 005a 0020     		movs	r0, #0
+ 788              	.LVL74:
+ 226:BSP/u8g2/u8x8_cad.c ****   {
+ 789              		.loc 1 226 3 view .LVU176
+ARM GAS  /tmp/cczpVMPO.s 			page 25
+
+
+ 790 005c FBE7     		b	.L48
+ 791              		.cfi_endproc
+ 792              	.LFE10:
+ 794              		.section	.text.u8x8_cad_100,"ax",%progbits
+ 795              		.align	1
+ 796              		.global	u8x8_cad_100
+ 797              		.syntax unified
+ 798              		.thumb
+ 799              		.thumb_func
+ 801              	u8x8_cad_100:
+ 802              	.LVL75:
+ 803              	.LFB11:
+ 258:BSP/u8g2/u8x8_cad.c ****   switch(msg)
+ 804              		.loc 1 258 1 is_stmt 1 view -0
+ 805              		.cfi_startproc
+ 806              		@ args = 0, pretend = 0, frame = 0
+ 807              		@ frame_needed = 0, uses_anonymous_args = 0
+ 258:BSP/u8g2/u8x8_cad.c ****   switch(msg)
+ 808              		.loc 1 258 1 is_stmt 0 view .LVU178
+ 809 0000 2DE9F041 		push	{r4, r5, r6, r7, r8, lr}
+ 810              	.LCFI21:
+ 811              		.cfi_def_cfa_offset 24
+ 812              		.cfi_offset 4, -24
+ 813              		.cfi_offset 5, -20
+ 814              		.cfi_offset 6, -16
+ 815              		.cfi_offset 7, -12
+ 816              		.cfi_offset 8, -8
+ 817              		.cfi_offset 14, -4
+ 818 0004 0446     		mov	r4, r0
+ 819 0006 0D46     		mov	r5, r1
+ 820 0008 1646     		mov	r6, r2
+ 821 000a 1F46     		mov	r7, r3
+ 259:BSP/u8g2/u8x8_cad.c ****   {
+ 822              		.loc 1 259 3 is_stmt 1 view .LVU179
+ 823 000c A1F11403 		sub	r3, r1, #20
+ 824              	.LVL76:
+ 259:BSP/u8g2/u8x8_cad.c ****   {
+ 825              		.loc 1 259 3 is_stmt 0 view .LVU180
+ 826 0010 052B     		cmp	r3, #5
+ 827 0012 22D8     		bhi	.L64
+ 828 0014 DFE803F0 		tbb	[pc, r3]
+ 829              	.LVL77:
+ 830              	.L60:
+ 831 0018 18       		.byte	(.L59-.L60)/2
+ 832 0019 03       		.byte	(.L63-.L60)/2
+ 833 001a 0C       		.byte	(.L62-.L60)/2
+ 834 001b 15       		.byte	(.L61-.L60)/2
+ 835 001c 18       		.byte	(.L59-.L60)/2
+ 836 001d 18       		.byte	(.L59-.L60)/2
+ 837              		.p2align 1
+ 838              	.L63:
+ 262:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, arg_int);
+ 839              		.loc 1 262 7 is_stmt 1 view .LVU181
+ 840 001e 0121     		movs	r1, #1
+ 841              	.LVL78:
+ 262:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, arg_int);
+ 842              		.loc 1 262 7 is_stmt 0 view .LVU182
+ARM GAS  /tmp/cczpVMPO.s 			page 26
+
+
+ 843 0020 FFF7FEFF 		bl	u8x8_byte_SetDC
+ 844              	.LVL79:
+ 263:BSP/u8g2/u8x8_cad.c ****       break;
+ 845              		.loc 1 263 7 is_stmt 1 view .LVU183
+ 846 0024 3146     		mov	r1, r6
+ 847 0026 2046     		mov	r0, r4
+ 848 0028 FFF7FEFF 		bl	u8x8_byte_SendByte
+ 849              	.LVL80:
+ 264:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_ARG:
+ 850              		.loc 1 264 7 view .LVU184
+ 281:BSP/u8g2/u8x8_cad.c **** }
+ 851              		.loc 1 281 10 is_stmt 0 view .LVU185
+ 852 002c 0120     		movs	r0, #1
+ 264:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_ARG:
+ 853              		.loc 1 264 7 view .LVU186
+ 854 002e 12E0     		b	.L58
+ 855              	.LVL81:
+ 856              	.L62:
+ 266:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, arg_int);
+ 857              		.loc 1 266 7 is_stmt 1 view .LVU187
+ 858 0030 0021     		movs	r1, #0
+ 859              	.LVL82:
+ 266:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, arg_int);
+ 860              		.loc 1 266 7 is_stmt 0 view .LVU188
+ 861 0032 FFF7FEFF 		bl	u8x8_byte_SetDC
+ 862              	.LVL83:
+ 267:BSP/u8g2/u8x8_cad.c ****       break;
+ 863              		.loc 1 267 7 is_stmt 1 view .LVU189
+ 864 0036 3146     		mov	r1, r6
+ 865 0038 2046     		mov	r0, r4
+ 866 003a FFF7FEFF 		bl	u8x8_byte_SendByte
+ 867              	.LVL84:
+ 268:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_DATA:
+ 868              		.loc 1 268 7 view .LVU190
+ 281:BSP/u8g2/u8x8_cad.c **** }
+ 869              		.loc 1 281 10 is_stmt 0 view .LVU191
+ 870 003e 0120     		movs	r0, #1
+ 268:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_DATA:
+ 871              		.loc 1 268 7 view .LVU192
+ 872 0040 09E0     		b	.L58
+ 873              	.LVL85:
+ 874              	.L61:
+ 270:BSP/u8g2/u8x8_cad.c ****       //u8x8_byte_SendBytes(u8x8, arg_int, arg_ptr);
+ 875              		.loc 1 270 7 is_stmt 1 view .LVU193
+ 876 0042 0021     		movs	r1, #0
+ 877              	.LVL86:
+ 270:BSP/u8g2/u8x8_cad.c ****       //u8x8_byte_SendBytes(u8x8, arg_int, arg_ptr);
+ 878              		.loc 1 270 7 is_stmt 0 view .LVU194
+ 879 0044 FFF7FEFF 		bl	u8x8_byte_SetDC
+ 880              	.LVL87:
+ 881              	.L59:
+ 277:BSP/u8g2/u8x8_cad.c ****     default:
+ 882              		.loc 1 277 7 is_stmt 1 view .LVU195
+ 277:BSP/u8g2/u8x8_cad.c ****     default:
+ 883              		.loc 1 277 18 is_stmt 0 view .LVU196
+ 884 0048 D4F81080 		ldr	r8, [r4, #16]
+ 277:BSP/u8g2/u8x8_cad.c ****     default:
+ARM GAS  /tmp/cczpVMPO.s 			page 27
+
+
+ 885              		.loc 1 277 14 view .LVU197
+ 886 004c 3B46     		mov	r3, r7
+ 887 004e 3246     		mov	r2, r6
+ 888 0050 2946     		mov	r1, r5
+ 889 0052 2046     		mov	r0, r4
+ 890 0054 C047     		blx	r8
+ 891              	.LVL88:
+ 892              	.L58:
+ 282:BSP/u8g2/u8x8_cad.c **** 
+ 893              		.loc 1 282 1 view .LVU198
+ 894 0056 BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
+ 895              	.LVL89:
+ 896              	.L64:
+ 259:BSP/u8g2/u8x8_cad.c ****   {
+ 897              		.loc 1 259 3 view .LVU199
+ 898 005a 0020     		movs	r0, #0
+ 899              	.LVL90:
+ 259:BSP/u8g2/u8x8_cad.c ****   {
+ 900              		.loc 1 259 3 view .LVU200
+ 901 005c FBE7     		b	.L58
+ 902              		.cfi_endproc
+ 903              	.LFE11:
+ 905              		.section	.text.u8x8_cad_001,"ax",%progbits
+ 906              		.align	1
+ 907              		.global	u8x8_cad_001
+ 908              		.syntax unified
+ 909              		.thumb
+ 910              		.thumb_func
+ 912              	u8x8_cad_001:
+ 913              	.LVL91:
+ 914              	.LFB12:
+ 290:BSP/u8g2/u8x8_cad.c ****   switch(msg)
+ 915              		.loc 1 290 1 is_stmt 1 view -0
+ 916              		.cfi_startproc
+ 917              		@ args = 0, pretend = 0, frame = 0
+ 918              		@ frame_needed = 0, uses_anonymous_args = 0
+ 290:BSP/u8g2/u8x8_cad.c ****   switch(msg)
+ 919              		.loc 1 290 1 is_stmt 0 view .LVU202
+ 920 0000 2DE9F041 		push	{r4, r5, r6, r7, r8, lr}
+ 921              	.LCFI22:
+ 922              		.cfi_def_cfa_offset 24
+ 923              		.cfi_offset 4, -24
+ 924              		.cfi_offset 5, -20
+ 925              		.cfi_offset 6, -16
+ 926              		.cfi_offset 7, -12
+ 927              		.cfi_offset 8, -8
+ 928              		.cfi_offset 14, -4
+ 929 0004 0446     		mov	r4, r0
+ 930 0006 0D46     		mov	r5, r1
+ 931 0008 1646     		mov	r6, r2
+ 932 000a 1F46     		mov	r7, r3
+ 291:BSP/u8g2/u8x8_cad.c ****   {
+ 933              		.loc 1 291 3 is_stmt 1 view .LVU203
+ 934 000c A1F11403 		sub	r3, r1, #20
+ 935              	.LVL92:
+ 291:BSP/u8g2/u8x8_cad.c ****   {
+ 936              		.loc 1 291 3 is_stmt 0 view .LVU204
+ARM GAS  /tmp/cczpVMPO.s 			page 28
+
+
+ 937 0010 052B     		cmp	r3, #5
+ 938 0012 22D8     		bhi	.L74
+ 939 0014 DFE803F0 		tbb	[pc, r3]
+ 940              	.LVL93:
+ 941              	.L70:
+ 942 0018 18       		.byte	(.L69-.L70)/2
+ 943 0019 03       		.byte	(.L73-.L70)/2
+ 944 001a 0C       		.byte	(.L72-.L70)/2
+ 945 001b 15       		.byte	(.L71-.L70)/2
+ 946 001c 18       		.byte	(.L69-.L70)/2
+ 947 001d 18       		.byte	(.L69-.L70)/2
+ 948              		.p2align 1
+ 949              	.L73:
+ 294:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, arg_int);
+ 950              		.loc 1 294 7 is_stmt 1 view .LVU205
+ 951 001e 0021     		movs	r1, #0
+ 952              	.LVL94:
+ 294:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, arg_int);
+ 953              		.loc 1 294 7 is_stmt 0 view .LVU206
+ 954 0020 FFF7FEFF 		bl	u8x8_byte_SetDC
+ 955              	.LVL95:
+ 295:BSP/u8g2/u8x8_cad.c ****       break;
+ 956              		.loc 1 295 7 is_stmt 1 view .LVU207
+ 957 0024 3146     		mov	r1, r6
+ 958 0026 2046     		mov	r0, r4
+ 959 0028 FFF7FEFF 		bl	u8x8_byte_SendByte
+ 960              	.LVL96:
+ 296:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_ARG:
+ 961              		.loc 1 296 7 view .LVU208
+ 313:BSP/u8g2/u8x8_cad.c **** }
+ 962              		.loc 1 313 10 is_stmt 0 view .LVU209
+ 963 002c 0120     		movs	r0, #1
+ 296:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_ARG:
+ 964              		.loc 1 296 7 view .LVU210
+ 965 002e 12E0     		b	.L68
+ 966              	.LVL97:
+ 967              	.L72:
+ 298:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, arg_int);
+ 968              		.loc 1 298 7 is_stmt 1 view .LVU211
+ 969 0030 0021     		movs	r1, #0
+ 970              	.LVL98:
+ 298:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, arg_int);
+ 971              		.loc 1 298 7 is_stmt 0 view .LVU212
+ 972 0032 FFF7FEFF 		bl	u8x8_byte_SetDC
+ 973              	.LVL99:
+ 299:BSP/u8g2/u8x8_cad.c ****       break;
+ 974              		.loc 1 299 7 is_stmt 1 view .LVU213
+ 975 0036 3146     		mov	r1, r6
+ 976 0038 2046     		mov	r0, r4
+ 977 003a FFF7FEFF 		bl	u8x8_byte_SendByte
+ 978              	.LVL100:
+ 300:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_DATA:
+ 979              		.loc 1 300 7 view .LVU214
+ 313:BSP/u8g2/u8x8_cad.c **** }
+ 980              		.loc 1 313 10 is_stmt 0 view .LVU215
+ 981 003e 0120     		movs	r0, #1
+ 300:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_DATA:
+ARM GAS  /tmp/cczpVMPO.s 			page 29
+
+
+ 982              		.loc 1 300 7 view .LVU216
+ 983 0040 09E0     		b	.L68
+ 984              	.LVL101:
+ 985              	.L71:
+ 302:BSP/u8g2/u8x8_cad.c ****       //u8x8_byte_SendBytes(u8x8, arg_int, arg_ptr);
+ 986              		.loc 1 302 7 is_stmt 1 view .LVU217
+ 987 0042 0121     		movs	r1, #1
+ 988              	.LVL102:
+ 302:BSP/u8g2/u8x8_cad.c ****       //u8x8_byte_SendBytes(u8x8, arg_int, arg_ptr);
+ 989              		.loc 1 302 7 is_stmt 0 view .LVU218
+ 990 0044 FFF7FEFF 		bl	u8x8_byte_SetDC
+ 991              	.LVL103:
+ 992              	.L69:
+ 309:BSP/u8g2/u8x8_cad.c ****     default:
+ 993              		.loc 1 309 7 is_stmt 1 view .LVU219
+ 309:BSP/u8g2/u8x8_cad.c ****     default:
+ 994              		.loc 1 309 18 is_stmt 0 view .LVU220
+ 995 0048 D4F81080 		ldr	r8, [r4, #16]
+ 309:BSP/u8g2/u8x8_cad.c ****     default:
+ 996              		.loc 1 309 14 view .LVU221
+ 997 004c 3B46     		mov	r3, r7
+ 998 004e 3246     		mov	r2, r6
+ 999 0050 2946     		mov	r1, r5
+ 1000 0052 2046     		mov	r0, r4
+ 1001 0054 C047     		blx	r8
+ 1002              	.LVL104:
+ 1003              	.L68:
+ 314:BSP/u8g2/u8x8_cad.c **** 
+ 1004              		.loc 1 314 1 view .LVU222
+ 1005 0056 BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
+ 1006              	.LVL105:
+ 1007              	.L74:
+ 291:BSP/u8g2/u8x8_cad.c ****   {
+ 1008              		.loc 1 291 3 view .LVU223
+ 1009 005a 0020     		movs	r0, #0
+ 1010              	.LVL106:
+ 291:BSP/u8g2/u8x8_cad.c ****   {
+ 1011              		.loc 1 291 3 view .LVU224
+ 1012 005c FBE7     		b	.L68
+ 1013              		.cfi_endproc
+ 1014              	.LFE12:
+ 1016              		.section	.text.u8x8_cad_011,"ax",%progbits
+ 1017              		.align	1
+ 1018              		.global	u8x8_cad_011
+ 1019              		.syntax unified
+ 1020              		.thumb
+ 1021              		.thumb_func
+ 1023              	u8x8_cad_011:
+ 1024              	.LVL107:
+ 1025              	.LFB13:
+ 322:BSP/u8g2/u8x8_cad.c ****   switch(msg)
+ 1026              		.loc 1 322 1 is_stmt 1 view -0
+ 1027              		.cfi_startproc
+ 1028              		@ args = 0, pretend = 0, frame = 0
+ 1029              		@ frame_needed = 0, uses_anonymous_args = 0
+ 322:BSP/u8g2/u8x8_cad.c ****   switch(msg)
+ 1030              		.loc 1 322 1 is_stmt 0 view .LVU226
+ARM GAS  /tmp/cczpVMPO.s 			page 30
+
+
+ 1031 0000 2DE9F041 		push	{r4, r5, r6, r7, r8, lr}
+ 1032              	.LCFI23:
+ 1033              		.cfi_def_cfa_offset 24
+ 1034              		.cfi_offset 4, -24
+ 1035              		.cfi_offset 5, -20
+ 1036              		.cfi_offset 6, -16
+ 1037              		.cfi_offset 7, -12
+ 1038              		.cfi_offset 8, -8
+ 1039              		.cfi_offset 14, -4
+ 1040 0004 0446     		mov	r4, r0
+ 1041 0006 0D46     		mov	r5, r1
+ 1042 0008 1646     		mov	r6, r2
+ 1043 000a 1F46     		mov	r7, r3
+ 323:BSP/u8g2/u8x8_cad.c ****   {
+ 1044              		.loc 1 323 3 is_stmt 1 view .LVU227
+ 1045 000c A1F11403 		sub	r3, r1, #20
+ 1046              	.LVL108:
+ 323:BSP/u8g2/u8x8_cad.c ****   {
+ 1047              		.loc 1 323 3 is_stmt 0 view .LVU228
+ 1048 0010 052B     		cmp	r3, #5
+ 1049 0012 22D8     		bhi	.L84
+ 1050 0014 DFE803F0 		tbb	[pc, r3]
+ 1051              	.LVL109:
+ 1052              	.L80:
+ 1053 0018 18       		.byte	(.L79-.L80)/2
+ 1054 0019 03       		.byte	(.L83-.L80)/2
+ 1055 001a 0C       		.byte	(.L82-.L80)/2
+ 1056 001b 15       		.byte	(.L81-.L80)/2
+ 1057 001c 18       		.byte	(.L79-.L80)/2
+ 1058 001d 18       		.byte	(.L79-.L80)/2
+ 1059              		.p2align 1
+ 1060              	.L83:
+ 326:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, arg_int);
+ 1061              		.loc 1 326 7 is_stmt 1 view .LVU229
+ 1062 001e 0021     		movs	r1, #0
+ 1063              	.LVL110:
+ 326:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, arg_int);
+ 1064              		.loc 1 326 7 is_stmt 0 view .LVU230
+ 1065 0020 FFF7FEFF 		bl	u8x8_byte_SetDC
+ 1066              	.LVL111:
+ 327:BSP/u8g2/u8x8_cad.c ****       break;
+ 1067              		.loc 1 327 7 is_stmt 1 view .LVU231
+ 1068 0024 3146     		mov	r1, r6
+ 1069 0026 2046     		mov	r0, r4
+ 1070 0028 FFF7FEFF 		bl	u8x8_byte_SendByte
+ 1071              	.LVL112:
+ 328:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_ARG:
+ 1072              		.loc 1 328 7 view .LVU232
+ 345:BSP/u8g2/u8x8_cad.c **** }
+ 1073              		.loc 1 345 10 is_stmt 0 view .LVU233
+ 1074 002c 0120     		movs	r0, #1
+ 328:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_ARG:
+ 1075              		.loc 1 328 7 view .LVU234
+ 1076 002e 12E0     		b	.L78
+ 1077              	.LVL113:
+ 1078              	.L82:
+ 330:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, arg_int);
+ARM GAS  /tmp/cczpVMPO.s 			page 31
+
+
+ 1079              		.loc 1 330 7 is_stmt 1 view .LVU235
+ 1080 0030 0121     		movs	r1, #1
+ 1081              	.LVL114:
+ 330:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, arg_int);
+ 1082              		.loc 1 330 7 is_stmt 0 view .LVU236
+ 1083 0032 FFF7FEFF 		bl	u8x8_byte_SetDC
+ 1084              	.LVL115:
+ 331:BSP/u8g2/u8x8_cad.c ****       break;
+ 1085              		.loc 1 331 7 is_stmt 1 view .LVU237
+ 1086 0036 3146     		mov	r1, r6
+ 1087 0038 2046     		mov	r0, r4
+ 1088 003a FFF7FEFF 		bl	u8x8_byte_SendByte
+ 1089              	.LVL116:
+ 332:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_DATA:
+ 1090              		.loc 1 332 7 view .LVU238
+ 345:BSP/u8g2/u8x8_cad.c **** }
+ 1091              		.loc 1 345 10 is_stmt 0 view .LVU239
+ 1092 003e 0120     		movs	r0, #1
+ 332:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_DATA:
+ 1093              		.loc 1 332 7 view .LVU240
+ 1094 0040 09E0     		b	.L78
+ 1095              	.LVL117:
+ 1096              	.L81:
+ 334:BSP/u8g2/u8x8_cad.c ****       //u8x8_byte_SendBytes(u8x8, arg_int, arg_ptr);
+ 1097              		.loc 1 334 7 is_stmt 1 view .LVU241
+ 1098 0042 0121     		movs	r1, #1
+ 1099              	.LVL118:
+ 334:BSP/u8g2/u8x8_cad.c ****       //u8x8_byte_SendBytes(u8x8, arg_int, arg_ptr);
+ 1100              		.loc 1 334 7 is_stmt 0 view .LVU242
+ 1101 0044 FFF7FEFF 		bl	u8x8_byte_SetDC
+ 1102              	.LVL119:
+ 1103              	.L79:
+ 341:BSP/u8g2/u8x8_cad.c ****     default:
+ 1104              		.loc 1 341 7 is_stmt 1 view .LVU243
+ 341:BSP/u8g2/u8x8_cad.c ****     default:
+ 1105              		.loc 1 341 18 is_stmt 0 view .LVU244
+ 1106 0048 D4F81080 		ldr	r8, [r4, #16]
+ 341:BSP/u8g2/u8x8_cad.c ****     default:
+ 1107              		.loc 1 341 14 view .LVU245
+ 1108 004c 3B46     		mov	r3, r7
+ 1109 004e 3246     		mov	r2, r6
+ 1110 0050 2946     		mov	r1, r5
+ 1111 0052 2046     		mov	r0, r4
+ 1112 0054 C047     		blx	r8
+ 1113              	.LVL120:
+ 1114              	.L78:
+ 346:BSP/u8g2/u8x8_cad.c **** 
+ 1115              		.loc 1 346 1 view .LVU246
+ 1116 0056 BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
+ 1117              	.LVL121:
+ 1118              	.L84:
+ 323:BSP/u8g2/u8x8_cad.c ****   {
+ 1119              		.loc 1 323 3 view .LVU247
+ 1120 005a 0020     		movs	r0, #0
+ 1121              	.LVL122:
+ 323:BSP/u8g2/u8x8_cad.c ****   {
+ 1122              		.loc 1 323 3 view .LVU248
+ARM GAS  /tmp/cczpVMPO.s 			page 32
+
+
+ 1123 005c FBE7     		b	.L78
+ 1124              		.cfi_endproc
+ 1125              	.LFE13:
+ 1127              		.section	.text.u8x8_cad_st7920_spi,"ax",%progbits
+ 1128              		.align	1
+ 1129              		.global	u8x8_cad_st7920_spi
+ 1130              		.syntax unified
+ 1131              		.thumb
+ 1132              		.thumb_func
+ 1134              	u8x8_cad_st7920_spi:
+ 1135              	.LVL123:
+ 1136              	.LFB14:
+ 351:BSP/u8g2/u8x8_cad.c ****   uint8_t *data;
+ 1137              		.loc 1 351 1 is_stmt 1 view -0
+ 1138              		.cfi_startproc
+ 1139              		@ args = 0, pretend = 0, frame = 0
+ 1140              		@ frame_needed = 0, uses_anonymous_args = 0
+ 351:BSP/u8g2/u8x8_cad.c ****   uint8_t *data;
+ 1141              		.loc 1 351 1 is_stmt 0 view .LVU250
+ 1142 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 1143              	.LCFI24:
+ 1144              		.cfi_def_cfa_offset 24
+ 1145              		.cfi_offset 3, -24
+ 1146              		.cfi_offset 4, -20
+ 1147              		.cfi_offset 5, -16
+ 1148              		.cfi_offset 6, -12
+ 1149              		.cfi_offset 7, -8
+ 1150              		.cfi_offset 14, -4
+ 1151 0002 0746     		mov	r7, r0
+ 1152 0004 1646     		mov	r6, r2
+ 1153 0006 1D46     		mov	r5, r3
+ 352:BSP/u8g2/u8x8_cad.c ****   uint8_t b;
+ 1154              		.loc 1 352 3 is_stmt 1 view .LVU251
+ 353:BSP/u8g2/u8x8_cad.c ****   uint8_t i;
+ 1155              		.loc 1 353 3 view .LVU252
+ 354:BSP/u8g2/u8x8_cad.c ****   static uint8_t buf[16];
+ 1156              		.loc 1 354 3 view .LVU253
+ 355:BSP/u8g2/u8x8_cad.c ****   uint8_t *ptr;
+ 1157              		.loc 1 355 3 view .LVU254
+ 356:BSP/u8g2/u8x8_cad.c ****   
+ 1158              		.loc 1 356 3 view .LVU255
+ 358:BSP/u8g2/u8x8_cad.c ****   {
+ 1159              		.loc 1 358 3 view .LVU256
+ 1160 0008 A1F11403 		sub	r3, r1, #20
+ 1161              	.LVL124:
+ 358:BSP/u8g2/u8x8_cad.c ****   {
+ 1162              		.loc 1 358 3 is_stmt 0 view .LVU257
+ 1163 000c 052B     		cmp	r3, #5
+ 1164 000e 74D8     		bhi	.L98
+ 1165 0010 DFE803F0 		tbb	[pc, r3]
+ 1166              	.LVL125:
+ 1167              	.L90:
+ 1168 0014 6E       		.byte	(.L89-.L90)/2
+ 1169 0015 03       		.byte	(.L93-.L90)/2
+ 1170 0016 22       		.byte	(.L92-.L90)/2
+ 1171 0017 32       		.byte	(.L91-.L90)/2
+ 1172 0018 6E       		.byte	(.L89-.L90)/2
+ARM GAS  /tmp/cczpVMPO.s 			page 33
+
+
+ 1173 0019 6E       		.byte	(.L89-.L90)/2
+ 1174              		.p2align 1
+ 1175              	.L93:
+ 361:BSP/u8g2/u8x8_cad.c ****       u8x8_gpio_Delay(u8x8, U8X8_MSG_DELAY_NANO, 1);
+ 1176              		.loc 1 361 7 is_stmt 1 view .LVU258
+ 1177 001a F821     		movs	r1, #248
+ 1178              	.LVL126:
+ 361:BSP/u8g2/u8x8_cad.c ****       u8x8_gpio_Delay(u8x8, U8X8_MSG_DELAY_NANO, 1);
+ 1179              		.loc 1 361 7 is_stmt 0 view .LVU259
+ 1180 001c FFF7FEFF 		bl	u8x8_byte_SendByte
+ 1181              	.LVL127:
+ 362:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, arg_int & 0x0f0);
+ 1182              		.loc 1 362 7 is_stmt 1 view .LVU260
+ 1183 0020 0122     		movs	r2, #1
+ 1184 0022 2C21     		movs	r1, #44
+ 1185 0024 3846     		mov	r0, r7
+ 1186 0026 FFF7FEFF 		bl	u8x8_gpio_call
+ 1187              	.LVL128:
+ 363:BSP/u8g2/u8x8_cad.c ****       u8x8_gpio_Delay(u8x8, U8X8_MSG_DELAY_NANO, 1);
+ 1188              		.loc 1 363 7 view .LVU261
+ 1189 002a 06F0F001 		and	r1, r6, #240
+ 1190 002e 3846     		mov	r0, r7
+ 1191 0030 FFF7FEFF 		bl	u8x8_byte_SendByte
+ 1192              	.LVL129:
+ 364:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, arg_int << 4);
+ 1193              		.loc 1 364 7 view .LVU262
+ 1194 0034 0122     		movs	r2, #1
+ 1195 0036 2C21     		movs	r1, #44
+ 1196 0038 3846     		mov	r0, r7
+ 1197 003a FFF7FEFF 		bl	u8x8_gpio_call
+ 1198              	.LVL130:
+ 365:BSP/u8g2/u8x8_cad.c ****       u8x8_gpio_Delay(u8x8, U8X8_MSG_DELAY_NANO, 1);
+ 1199              		.loc 1 365 7 view .LVU263
+ 1200 003e 3101     		lsls	r1, r6, #4
+ 1201 0040 01F0F001 		and	r1, r1, #240
+ 1202 0044 3846     		mov	r0, r7
+ 1203 0046 FFF7FEFF 		bl	u8x8_byte_SendByte
+ 1204              	.LVL131:
+ 366:BSP/u8g2/u8x8_cad.c ****       break;
+ 1205              		.loc 1 366 7 view .LVU264
+ 1206 004a 0122     		movs	r2, #1
+ 1207 004c 2C21     		movs	r1, #44
+ 1208 004e 3846     		mov	r0, r7
+ 1209 0050 FFF7FEFF 		bl	u8x8_gpio_call
+ 1210              	.LVL132:
+ 367:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_ARG:
+ 1211              		.loc 1 367 7 view .LVU265
+ 417:BSP/u8g2/u8x8_cad.c **** }
+ 1212              		.loc 1 417 10 is_stmt 0 view .LVU266
+ 1213 0054 0120     		movs	r0, #1
+ 1214              	.LVL133:
+ 1215              	.L88:
+ 418:BSP/u8g2/u8x8_cad.c **** 
+ 1216              		.loc 1 418 1 view .LVU267
+ 1217 0056 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 1218              	.LVL134:
+ 1219              	.L92:
+ARM GAS  /tmp/cczpVMPO.s 			page 34
+
+
+ 369:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, arg_int & 0x0f0);
+ 1220              		.loc 1 369 7 is_stmt 1 view .LVU268
+ 1221 0058 F821     		movs	r1, #248
+ 1222              	.LVL135:
+ 369:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, arg_int & 0x0f0);
+ 1223              		.loc 1 369 7 is_stmt 0 view .LVU269
+ 1224 005a FFF7FEFF 		bl	u8x8_byte_SendByte
+ 1225              	.LVL136:
+ 370:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, arg_int << 4);
+ 1226              		.loc 1 370 7 is_stmt 1 view .LVU270
+ 1227 005e 06F0F001 		and	r1, r6, #240
+ 1228 0062 3846     		mov	r0, r7
+ 1229 0064 FFF7FEFF 		bl	u8x8_byte_SendByte
+ 1230              	.LVL137:
+ 371:BSP/u8g2/u8x8_cad.c ****       break;
+ 1231              		.loc 1 371 7 view .LVU271
+ 1232 0068 3101     		lsls	r1, r6, #4
+ 1233 006a 01F0F001 		and	r1, r1, #240
+ 1234 006e 3846     		mov	r0, r7
+ 1235 0070 FFF7FEFF 		bl	u8x8_byte_SendByte
+ 1236              	.LVL138:
+ 372:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_DATA:
+ 1237              		.loc 1 372 7 view .LVU272
+ 417:BSP/u8g2/u8x8_cad.c **** }
+ 1238              		.loc 1 417 10 is_stmt 0 view .LVU273
+ 1239 0074 0120     		movs	r0, #1
+ 372:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_DATA:
+ 1240              		.loc 1 372 7 view .LVU274
+ 1241 0076 EEE7     		b	.L88
+ 1242              	.LVL139:
+ 1243              	.L91:
+ 375:BSP/u8g2/u8x8_cad.c ****       u8x8_gpio_Delay(u8x8, U8X8_MSG_DELAY_NANO, 1);
+ 1244              		.loc 1 375 7 is_stmt 1 view .LVU275
+ 1245 0078 FA21     		movs	r1, #250
+ 1246              	.LVL140:
+ 375:BSP/u8g2/u8x8_cad.c ****       u8x8_gpio_Delay(u8x8, U8X8_MSG_DELAY_NANO, 1);
+ 1247              		.loc 1 375 7 is_stmt 0 view .LVU276
+ 1248 007a FFF7FEFF 		bl	u8x8_byte_SendByte
+ 1249              	.LVL141:
+ 376:BSP/u8g2/u8x8_cad.c **** 
+ 1250              		.loc 1 376 7 is_stmt 1 view .LVU277
+ 1251 007e 0122     		movs	r2, #1
+ 1252 0080 2C21     		movs	r1, #44
+ 1253 0082 3846     		mov	r0, r7
+ 1254 0084 FFF7FEFF 		bl	u8x8_gpio_call
+ 1255              	.LVL142:
+ 380:BSP/u8g2/u8x8_cad.c ****     
+ 1256              		.loc 1 380 7 view .LVU278
+ 383:BSP/u8g2/u8x8_cad.c ****       {
+ 1257              		.loc 1 383 7 view .LVU279
+ 383:BSP/u8g2/u8x8_cad.c ****       {
+ 1258              		.loc 1 383 12 is_stmt 0 view .LVU280
+ 1259 0088 17E0     		b	.L94
+ 1260              	.LVL143:
+ 1261              	.L99:
+ 386:BSP/u8g2/u8x8_cad.c **** 	do
+ 1262              		.loc 1 386 6 view .LVU281
+ARM GAS  /tmp/cczpVMPO.s 			page 35
+
+
+ 1263 008a 1D4C     		ldr	r4, .L101
+ 385:BSP/u8g2/u8x8_cad.c **** 	ptr = buf;
+ 1264              		.loc 1 385 4 view .LVU282
+ 1265 008c 0821     		movs	r1, #8
+ 1266              	.LVL144:
+ 1267              	.L95:
+ 387:BSP/u8g2/u8x8_cad.c **** 	{
+ 1268              		.loc 1 387 2 is_stmt 1 view .LVU283
+ 389:BSP/u8g2/u8x8_cad.c **** 	  *ptr++= b & 0x0f0;
+ 1269              		.loc 1 389 4 view .LVU284
+ 389:BSP/u8g2/u8x8_cad.c **** 	  *ptr++= b & 0x0f0;
+ 1270              		.loc 1 389 6 is_stmt 0 view .LVU285
+ 1271 008e 95F800C0 		ldrb	ip, [r5]	@ zero_extendqisi2
+ 1272 0092 0135     		adds	r5, r5, #1
+ 1273              	.LVL145:
+ 390:BSP/u8g2/u8x8_cad.c **** 	  b <<= 4;
+ 1274              		.loc 1 390 4 is_stmt 1 view .LVU286
+ 390:BSP/u8g2/u8x8_cad.c **** 	  b <<= 4;
+ 1275              		.loc 1 390 14 is_stmt 0 view .LVU287
+ 1276 0094 0CF0F003 		and	r3, ip, #240
+ 390:BSP/u8g2/u8x8_cad.c **** 	  b <<= 4;
+ 1277              		.loc 1 390 10 view .LVU288
+ 1278 0098 2370     		strb	r3, [r4]
+ 391:BSP/u8g2/u8x8_cad.c **** 	  *ptr++= b;
+ 1279              		.loc 1 391 4 is_stmt 1 view .LVU289
+ 391:BSP/u8g2/u8x8_cad.c **** 	  *ptr++= b;
+ 1280              		.loc 1 391 6 is_stmt 0 view .LVU290
+ 1281 009a 4FEA0C1C 		lsl	ip, ip, #4
+ 1282              	.LVL146:
+ 392:BSP/u8g2/u8x8_cad.c **** 	  i--;
+ 1283              		.loc 1 392 4 is_stmt 1 view .LVU291
+ 392:BSP/u8g2/u8x8_cad.c **** 	  i--;
+ 1284              		.loc 1 392 10 is_stmt 0 view .LVU292
+ 1285 009e 84F801C0 		strb	ip, [r4, #1]
+ 1286 00a2 0234     		adds	r4, r4, #2
+ 1287              	.LVL147:
+ 393:BSP/u8g2/u8x8_cad.c **** 	} while( i > 0 );
+ 1288              		.loc 1 393 4 is_stmt 1 view .LVU293
+ 393:BSP/u8g2/u8x8_cad.c **** 	} while( i > 0 );
+ 1289              		.loc 1 393 5 is_stmt 0 view .LVU294
+ 1290 00a4 0139     		subs	r1, r1, #1
+ 1291              	.LVL148:
+ 394:BSP/u8g2/u8x8_cad.c **** 	arg_int -= 8;
+ 1292              		.loc 1 394 13 is_stmt 1 discriminator 1 view .LVU295
+ 1293 00a6 11F0FF01 		ands	r1, r1, #255
+ 1294              	.LVL149:
+ 394:BSP/u8g2/u8x8_cad.c **** 	arg_int -= 8;
+ 1295              		.loc 1 394 13 is_stmt 0 discriminator 1 view .LVU296
+ 1296 00aa F0D1     		bne	.L95
+ 395:BSP/u8g2/u8x8_cad.c **** 	u8x8_byte_SendBytes(u8x8, 16, buf); 
+ 1297              		.loc 1 395 2 is_stmt 1 view .LVU297
+ 395:BSP/u8g2/u8x8_cad.c **** 	u8x8_byte_SendBytes(u8x8, 16, buf); 
+ 1298              		.loc 1 395 10 is_stmt 0 view .LVU298
+ 1299 00ac 083E     		subs	r6, r6, #8
+ 1300              	.LVL150:
+ 395:BSP/u8g2/u8x8_cad.c **** 	u8x8_byte_SendBytes(u8x8, 16, buf); 
+ 1301              		.loc 1 395 10 view .LVU299
+ARM GAS  /tmp/cczpVMPO.s 			page 36
+
+
+ 1302 00ae F6B2     		uxtb	r6, r6
+ 1303              	.LVL151:
+ 396:BSP/u8g2/u8x8_cad.c ****       }
+ 1304              		.loc 1 396 2 is_stmt 1 view .LVU300
+ 1305 00b0 134A     		ldr	r2, .L101
+ 1306 00b2 1021     		movs	r1, #16
+ 1307 00b4 3846     		mov	r0, r7
+ 1308 00b6 FFF7FEFF 		bl	u8x8_byte_SendBytes
+ 1309              	.LVL152:
+ 1310              	.L94:
+ 383:BSP/u8g2/u8x8_cad.c ****       {
+ 1311              		.loc 1 383 22 view .LVU301
+ 1312 00ba 072E     		cmp	r6, #7
+ 1313 00bc E5D8     		bhi	.L99
+ 1314 00be 0EE0     		b	.L96
+ 1315              	.L97:
+ 402:BSP/u8g2/u8x8_cad.c **** 	u8x8_byte_SendByte(u8x8, b & 0x0f0);
+ 1316              		.loc 1 402 2 view .LVU302
+ 402:BSP/u8g2/u8x8_cad.c **** 	u8x8_byte_SendByte(u8x8, b & 0x0f0);
+ 1317              		.loc 1 402 4 is_stmt 0 view .LVU303
+ 1318 00c0 15F8014B 		ldrb	r4, [r5], #1	@ zero_extendqisi2
+ 1319              	.LVL153:
+ 403:BSP/u8g2/u8x8_cad.c **** 	u8x8_byte_SendByte(u8x8, b << 4);
+ 1320              		.loc 1 403 2 is_stmt 1 view .LVU304
+ 1321 00c4 04F0F001 		and	r1, r4, #240
+ 1322 00c8 3846     		mov	r0, r7
+ 1323 00ca FFF7FEFF 		bl	u8x8_byte_SendByte
+ 1324              	.LVL154:
+ 404:BSP/u8g2/u8x8_cad.c **** 	data++;
+ 1325              		.loc 1 404 2 view .LVU305
+ 1326 00ce 2101     		lsls	r1, r4, #4
+ 1327 00d0 01F0F001 		and	r1, r1, #240
+ 1328 00d4 3846     		mov	r0, r7
+ 1329 00d6 FFF7FEFF 		bl	u8x8_byte_SendByte
+ 1330              	.LVL155:
+ 405:BSP/u8g2/u8x8_cad.c **** 	arg_int--;
+ 1331              		.loc 1 405 2 view .LVU306
+ 406:BSP/u8g2/u8x8_cad.c ****       }
+ 1332              		.loc 1 406 2 view .LVU307
+ 406:BSP/u8g2/u8x8_cad.c ****       }
+ 1333              		.loc 1 406 9 is_stmt 0 view .LVU308
+ 1334 00da 013E     		subs	r6, r6, #1
+ 1335              	.LVL156:
+ 406:BSP/u8g2/u8x8_cad.c ****       }
+ 1336              		.loc 1 406 9 view .LVU309
+ 1337 00dc F6B2     		uxtb	r6, r6
+ 1338              	.LVL157:
+ 1339              	.L96:
+ 400:BSP/u8g2/u8x8_cad.c ****       {
+ 1340              		.loc 1 400 22 is_stmt 1 view .LVU310
+ 1341 00de 002E     		cmp	r6, #0
+ 1342 00e0 EED1     		bne	.L97
+ 408:BSP/u8g2/u8x8_cad.c ****       break;
+ 1343              		.loc 1 408 7 view .LVU311
+ 1344 00e2 0122     		movs	r2, #1
+ 1345 00e4 2C21     		movs	r1, #44
+ 1346 00e6 3846     		mov	r0, r7
+ARM GAS  /tmp/cczpVMPO.s 			page 37
+
+
+ 1347 00e8 FFF7FEFF 		bl	u8x8_gpio_call
+ 1348              	.LVL158:
+ 409:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_INIT:
+ 1349              		.loc 1 409 7 view .LVU312
+ 417:BSP/u8g2/u8x8_cad.c **** }
+ 1350              		.loc 1 417 10 is_stmt 0 view .LVU313
+ 1351 00ec 0120     		movs	r0, #1
+ 409:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_INIT:
+ 1352              		.loc 1 409 7 view .LVU314
+ 1353 00ee B2E7     		b	.L88
+ 1354              	.LVL159:
+ 1355              	.L89:
+ 413:BSP/u8g2/u8x8_cad.c ****     default:
+ 1356              		.loc 1 413 7 is_stmt 1 view .LVU315
+ 413:BSP/u8g2/u8x8_cad.c ****     default:
+ 1357              		.loc 1 413 18 is_stmt 0 view .LVU316
+ 1358 00f0 0469     		ldr	r4, [r0, #16]
+ 413:BSP/u8g2/u8x8_cad.c ****     default:
+ 1359              		.loc 1 413 14 view .LVU317
+ 1360 00f2 2B46     		mov	r3, r5
+ 1361 00f4 3246     		mov	r2, r6
+ 1362 00f6 A047     		blx	r4
+ 1363              	.LVL160:
+ 413:BSP/u8g2/u8x8_cad.c ****     default:
+ 1364              		.loc 1 413 14 view .LVU318
+ 1365 00f8 ADE7     		b	.L88
+ 1366              	.LVL161:
+ 1367              	.L98:
+ 358:BSP/u8g2/u8x8_cad.c ****   {
+ 1368              		.loc 1 358 3 view .LVU319
+ 1369 00fa 0020     		movs	r0, #0
+ 1370              	.LVL162:
+ 358:BSP/u8g2/u8x8_cad.c ****   {
+ 1371              		.loc 1 358 3 view .LVU320
+ 1372 00fc ABE7     		b	.L88
+ 1373              	.L102:
+ 1374 00fe 00BF     		.align	2
+ 1375              	.L101:
+ 1376 0100 00000000 		.word	buf.4
+ 1377              		.cfi_endproc
+ 1378              	.LFE14:
+ 1380              		.section	.text.u8x8_cad_ssd13xx_i2c,"ax",%progbits
+ 1381              		.align	1
+ 1382              		.global	u8x8_cad_ssd13xx_i2c
+ 1383              		.syntax unified
+ 1384              		.thumb
+ 1385              		.thumb_func
+ 1387              	u8x8_cad_ssd13xx_i2c:
+ 1388              	.LVL163:
+ 1389              	.LFB16:
+ 435:BSP/u8g2/u8x8_cad.c **** 
+ 436:BSP/u8g2/u8x8_cad.c **** /* classic version: will put a start/stop condition around each command and arg */
+ 437:BSP/u8g2/u8x8_cad.c **** uint8_t u8x8_cad_ssd13xx_i2c(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr)
+ 438:BSP/u8g2/u8x8_cad.c **** {
+ 1390              		.loc 1 438 1 is_stmt 1 view -0
+ 1391              		.cfi_startproc
+ 1392              		@ args = 0, pretend = 0, frame = 0
+ARM GAS  /tmp/cczpVMPO.s 			page 38
+
+
+ 1393              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1394              		.loc 1 438 1 is_stmt 0 view .LVU322
+ 1395 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 1396              	.LCFI25:
+ 1397              		.cfi_def_cfa_offset 24
+ 1398              		.cfi_offset 3, -24
+ 1399              		.cfi_offset 4, -20
+ 1400              		.cfi_offset 5, -16
+ 1401              		.cfi_offset 6, -12
+ 1402              		.cfi_offset 7, -8
+ 1403              		.cfi_offset 14, -4
+ 1404 0002 0546     		mov	r5, r0
+ 1405 0004 1446     		mov	r4, r2
+ 1406 0006 1E46     		mov	r6, r3
+ 439:BSP/u8g2/u8x8_cad.c ****   uint8_t *p;
+ 1407              		.loc 1 439 3 is_stmt 1 view .LVU323
+ 440:BSP/u8g2/u8x8_cad.c ****   switch(msg)
+ 1408              		.loc 1 440 3 view .LVU324
+ 1409 0008 A1F1140C 		sub	ip, r1, #20
+ 1410 000c BCF1050F 		cmp	ip, #5
+ 1411 0010 04D8     		bhi	.L104
+ 1412 0012 DFE80CF0 		tbb	[pc, ip]
+ 1413              	.LVL164:
+ 1414              	.L106:
+ 1415 0016 25       		.byte	(.L109-.L106)/2
+ 1416 0017 05       		.byte	(.L108-.L106)/2
+ 1417 0018 05       		.byte	(.L108-.L106)/2
+ 1418 0019 1C       		.byte	(.L107-.L106)/2
+ 1419 001a 33       		.byte	(.L112-.L106)/2
+ 1420 001b 33       		.byte	(.L112-.L106)/2
+ 1421              		.p2align 1
+ 1422              	.L104:
+ 1423              		.loc 1 440 3 is_stmt 0 view .LVU325
+ 1424 001c 0020     		movs	r0, #0
+ 1425              	.LVL165:
+ 1426              		.loc 1 440 3 view .LVU326
+ 1427 001e 2EE0     		b	.L105
+ 1428              	.LVL166:
+ 1429              	.L108:
+ 441:BSP/u8g2/u8x8_cad.c ****   {
+ 442:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_CMD:
+ 443:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_ARG:
+ 444:BSP/u8g2/u8x8_cad.c ****       /* 7 Nov 2016: Can this be improved?  */
+ 445:BSP/u8g2/u8x8_cad.c ****       //u8x8_byte_SetDC(u8x8, 0);
+ 446:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_StartTransfer(u8x8);
+ 1430              		.loc 1 446 7 is_stmt 1 view .LVU327
+ 1431 0020 FFF7FEFF 		bl	u8x8_byte_StartTransfer
+ 1432              	.LVL167:
+ 447:BSP/u8g2/u8x8_cad.c ****       //u8x8_byte_SendByte(u8x8, u8x8_GetI2CAddress(u8x8));
+ 448:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, 0x000);
+ 1433              		.loc 1 448 7 view .LVU328
+ 1434 0024 0021     		movs	r1, #0
+ 1435 0026 2846     		mov	r0, r5
+ 1436 0028 FFF7FEFF 		bl	u8x8_byte_SendByte
+ 1437              	.LVL168:
+ 449:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, arg_int);
+ 1438              		.loc 1 449 7 view .LVU329
+ARM GAS  /tmp/cczpVMPO.s 			page 39
+
+
+ 1439 002c 2146     		mov	r1, r4
+ 1440 002e 2846     		mov	r0, r5
+ 1441 0030 FFF7FEFF 		bl	u8x8_byte_SendByte
+ 1442              	.LVL169:
+ 450:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_EndTransfer(u8x8);      
+ 1443              		.loc 1 450 7 view .LVU330
+ 1444 0034 2846     		mov	r0, r5
+ 1445 0036 FFF7FEFF 		bl	u8x8_byte_EndTransfer
+ 1446              	.LVL170:
+ 451:BSP/u8g2/u8x8_cad.c ****       break;
+ 1447              		.loc 1 451 7 view .LVU331
+ 452:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_DATA:
+ 453:BSP/u8g2/u8x8_cad.c ****       //u8x8_byte_SetDC(u8x8, 1);
+ 454:BSP/u8g2/u8x8_cad.c ****     
+ 455:BSP/u8g2/u8x8_cad.c ****       /* the FeatherWing OLED with the 32u4 transfer of long byte */
+ 456:BSP/u8g2/u8x8_cad.c ****       /* streams was not possible. This is broken down to */
+ 457:BSP/u8g2/u8x8_cad.c ****       /* smaller streams, 32 seems to be the limit... */
+ 458:BSP/u8g2/u8x8_cad.c ****       /* I guess this is related to the size of the Wire buffers in Arduino */
+ 459:BSP/u8g2/u8x8_cad.c ****       /* Unfortunately, this can not be handled in the byte level drivers, */
+ 460:BSP/u8g2/u8x8_cad.c ****       /* so this is done here. Even further, only 24 bytes will be sent, */
+ 461:BSP/u8g2/u8x8_cad.c ****       /* because there will be another byte (DC) required during the transfer */
+ 462:BSP/u8g2/u8x8_cad.c ****       p = arg_ptr;
+ 463:BSP/u8g2/u8x8_cad.c ****        while( arg_int > 24 )
+ 464:BSP/u8g2/u8x8_cad.c ****       {
+ 465:BSP/u8g2/u8x8_cad.c **** 	u8x8_i2c_data_transfer(u8x8, 24, p);
+ 466:BSP/u8g2/u8x8_cad.c **** 	arg_int-=24;
+ 467:BSP/u8g2/u8x8_cad.c **** 	p+=24;
+ 468:BSP/u8g2/u8x8_cad.c ****       }
+ 469:BSP/u8g2/u8x8_cad.c ****       u8x8_i2c_data_transfer(u8x8, arg_int, p);
+ 470:BSP/u8g2/u8x8_cad.c ****       break;
+ 471:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_INIT:
+ 472:BSP/u8g2/u8x8_cad.c ****       /* apply default i2c adr if required so that the start transfer msg can use this */
+ 473:BSP/u8g2/u8x8_cad.c ****       if ( u8x8->i2c_address == 255 )
+ 474:BSP/u8g2/u8x8_cad.c **** 	u8x8->i2c_address = 0x078;
+ 475:BSP/u8g2/u8x8_cad.c ****       return u8x8->byte_cb(u8x8, msg, arg_int, arg_ptr);
+ 476:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_START_TRANSFER:
+ 477:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_END_TRANSFER:
+ 478:BSP/u8g2/u8x8_cad.c ****       /* cad transfer commands are ignored */
+ 479:BSP/u8g2/u8x8_cad.c ****       break;
+ 480:BSP/u8g2/u8x8_cad.c ****     default:
+ 481:BSP/u8g2/u8x8_cad.c ****       return 0;
+ 482:BSP/u8g2/u8x8_cad.c ****   }
+ 483:BSP/u8g2/u8x8_cad.c ****   return 1;
+ 1448              		.loc 1 483 10 is_stmt 0 view .LVU332
+ 1449 003a 0120     		movs	r0, #1
+ 451:BSP/u8g2/u8x8_cad.c ****       break;
+ 1450              		.loc 1 451 7 view .LVU333
+ 1451 003c 1FE0     		b	.L105
+ 1452              	.LVL171:
+ 1453              	.L110:
+ 465:BSP/u8g2/u8x8_cad.c **** 	arg_int-=24;
+ 1454              		.loc 1 465 2 is_stmt 1 view .LVU334
+ 1455 003e 3246     		mov	r2, r6
+ 1456 0040 1821     		movs	r1, #24
+ 1457 0042 2846     		mov	r0, r5
+ 1458 0044 FFF7FEFF 		bl	u8x8_i2c_data_transfer
+ 1459              	.LVL172:
+ARM GAS  /tmp/cczpVMPO.s 			page 40
+
+
+ 466:BSP/u8g2/u8x8_cad.c **** 	p+=24;
+ 1460              		.loc 1 466 2 view .LVU335
+ 466:BSP/u8g2/u8x8_cad.c **** 	p+=24;
+ 1461              		.loc 1 466 9 is_stmt 0 view .LVU336
+ 1462 0048 183C     		subs	r4, r4, #24
+ 1463              	.LVL173:
+ 466:BSP/u8g2/u8x8_cad.c **** 	p+=24;
+ 1464              		.loc 1 466 9 view .LVU337
+ 1465 004a E4B2     		uxtb	r4, r4
+ 1466              	.LVL174:
+ 467:BSP/u8g2/u8x8_cad.c ****       }
+ 1467              		.loc 1 467 2 is_stmt 1 view .LVU338
+ 467:BSP/u8g2/u8x8_cad.c ****       }
+ 1468              		.loc 1 467 3 is_stmt 0 view .LVU339
+ 1469 004c 1836     		adds	r6, r6, #24
+ 1470              	.LVL175:
+ 1471              	.L107:
+ 463:BSP/u8g2/u8x8_cad.c ****       {
+ 1472              		.loc 1 463 23 is_stmt 1 view .LVU340
+ 1473 004e 182C     		cmp	r4, #24
+ 1474 0050 F5D8     		bhi	.L110
+ 469:BSP/u8g2/u8x8_cad.c ****       break;
+ 1475              		.loc 1 469 7 view .LVU341
+ 1476 0052 3246     		mov	r2, r6
+ 1477 0054 2146     		mov	r1, r4
+ 1478 0056 2846     		mov	r0, r5
+ 1479 0058 FFF7FEFF 		bl	u8x8_i2c_data_transfer
+ 1480              	.LVL176:
+ 470:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_INIT:
+ 1481              		.loc 1 470 7 view .LVU342
+ 1482              		.loc 1 483 10 is_stmt 0 view .LVU343
+ 1483 005c 0120     		movs	r0, #1
+ 470:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_INIT:
+ 1484              		.loc 1 470 7 view .LVU344
+ 1485 005e 0EE0     		b	.L105
+ 1486              	.LVL177:
+ 1487              	.L109:
+ 473:BSP/u8g2/u8x8_cad.c **** 	u8x8->i2c_address = 0x078;
+ 1488              		.loc 1 473 7 is_stmt 1 view .LVU345
+ 473:BSP/u8g2/u8x8_cad.c **** 	u8x8->i2c_address = 0x078;
+ 1489              		.loc 1 473 16 is_stmt 0 view .LVU346
+ 1490 0060 90F82430 		ldrb	r3, [r0, #36]	@ zero_extendqisi2
+ 473:BSP/u8g2/u8x8_cad.c **** 	u8x8->i2c_address = 0x078;
+ 1491              		.loc 1 473 10 view .LVU347
+ 1492 0064 FF2B     		cmp	r3, #255
+ 1493 0066 05D0     		beq	.L115
+ 1494              	.L111:
+ 475:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_START_TRANSFER:
+ 1495              		.loc 1 475 7 is_stmt 1 view .LVU348
+ 475:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_START_TRANSFER:
+ 1496              		.loc 1 475 18 is_stmt 0 view .LVU349
+ 1497 0068 2F69     		ldr	r7, [r5, #16]
+ 475:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_START_TRANSFER:
+ 1498              		.loc 1 475 14 view .LVU350
+ 1499 006a 3346     		mov	r3, r6
+ 1500 006c 2246     		mov	r2, r4
+ 1501              	.LVL178:
+ARM GAS  /tmp/cczpVMPO.s 			page 41
+
+
+ 475:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_START_TRANSFER:
+ 1502              		.loc 1 475 14 view .LVU351
+ 1503 006e 2846     		mov	r0, r5
+ 1504              	.LVL179:
+ 475:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_START_TRANSFER:
+ 1505              		.loc 1 475 14 view .LVU352
+ 1506 0070 B847     		blx	r7
+ 1507              	.LVL180:
+ 475:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_START_TRANSFER:
+ 1508              		.loc 1 475 14 view .LVU353
+ 1509 0072 04E0     		b	.L105
+ 1510              	.LVL181:
+ 1511              	.L115:
+ 474:BSP/u8g2/u8x8_cad.c ****       return u8x8->byte_cb(u8x8, msg, arg_int, arg_ptr);
+ 1512              		.loc 1 474 2 is_stmt 1 view .LVU354
+ 474:BSP/u8g2/u8x8_cad.c ****       return u8x8->byte_cb(u8x8, msg, arg_int, arg_ptr);
+ 1513              		.loc 1 474 20 is_stmt 0 view .LVU355
+ 1514 0074 7823     		movs	r3, #120
+ 1515 0076 80F82430 		strb	r3, [r0, #36]
+ 1516 007a F5E7     		b	.L111
+ 1517              	.L112:
+ 1518              		.loc 1 483 10 view .LVU356
+ 1519 007c 0120     		movs	r0, #1
+ 1520              	.LVL182:
+ 1521              	.L105:
+ 484:BSP/u8g2/u8x8_cad.c **** }
+ 1522              		.loc 1 484 1 view .LVU357
+ 1523 007e F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 1524              		.loc 1 484 1 view .LVU358
+ 1525              		.cfi_endproc
+ 1526              	.LFE16:
+ 1528              		.section	.text.u8x8_cad_ssd13xx_fast_i2c,"ax",%progbits
+ 1529              		.align	1
+ 1530              		.global	u8x8_cad_ssd13xx_fast_i2c
+ 1531              		.syntax unified
+ 1532              		.thumb
+ 1533              		.thumb_func
+ 1535              	u8x8_cad_ssd13xx_fast_i2c:
+ 1536              	.LVL183:
+ 1537              	.LFB17:
+ 485:BSP/u8g2/u8x8_cad.c **** 
+ 486:BSP/u8g2/u8x8_cad.c **** 
+ 487:BSP/u8g2/u8x8_cad.c **** /* fast version with reduced data start/stops, issue 735 */
+ 488:BSP/u8g2/u8x8_cad.c **** uint8_t u8x8_cad_ssd13xx_fast_i2c(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr)
+ 489:BSP/u8g2/u8x8_cad.c **** {
+ 1538              		.loc 1 489 1 is_stmt 1 view -0
+ 1539              		.cfi_startproc
+ 1540              		@ args = 0, pretend = 0, frame = 0
+ 1541              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1542              		.loc 1 489 1 is_stmt 0 view .LVU360
+ 1543 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 1544              	.LCFI26:
+ 1545              		.cfi_def_cfa_offset 24
+ 1546              		.cfi_offset 3, -24
+ 1547              		.cfi_offset 4, -20
+ 1548              		.cfi_offset 5, -16
+ 1549              		.cfi_offset 6, -12
+ARM GAS  /tmp/cczpVMPO.s 			page 42
+
+
+ 1550              		.cfi_offset 7, -8
+ 1551              		.cfi_offset 14, -4
+ 1552 0002 0546     		mov	r5, r0
+ 1553 0004 1446     		mov	r4, r2
+ 1554 0006 1E46     		mov	r6, r3
+ 490:BSP/u8g2/u8x8_cad.c ****   static uint8_t in_transfer = 0;
+ 1555              		.loc 1 490 3 is_stmt 1 view .LVU361
+ 491:BSP/u8g2/u8x8_cad.c ****   uint8_t *p;
+ 1556              		.loc 1 491 3 view .LVU362
+ 492:BSP/u8g2/u8x8_cad.c ****   switch(msg)
+ 1557              		.loc 1 492 3 view .LVU363
+ 1558 0008 A1F1140C 		sub	ip, r1, #20
+ 1559 000c BCF1050F 		cmp	ip, #5
+ 1560 0010 56D8     		bhi	.L131
+ 1561 0012 DFE80CF0 		tbb	[pc, ip]
+ 1562              	.LVL184:
+ 1563              	.L119:
+ 1564 0016 37       		.byte	(.L124-.L119)/2
+ 1565 0017 03       		.byte	(.L123-.L119)/2
+ 1566 0018 18       		.byte	(.L122-.L119)/2
+ 1567 0019 1D       		.byte	(.L121-.L119)/2
+ 1568 001a 45       		.byte	(.L120-.L119)/2
+ 1569 001b 4A       		.byte	(.L118-.L119)/2
+ 1570              		.p2align 1
+ 1571              	.L123:
+ 493:BSP/u8g2/u8x8_cad.c ****   {
+ 494:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_CMD:
+ 495:BSP/u8g2/u8x8_cad.c ****       /* improved version, takeover from ld7032 */
+ 496:BSP/u8g2/u8x8_cad.c ****       /* assumes, that the args of a command is not longer than 31 bytes */
+ 497:BSP/u8g2/u8x8_cad.c ****       /* speed improvement is about 4% compared to the classic version */
+ 498:BSP/u8g2/u8x8_cad.c ****       if ( in_transfer != 0 )
+ 1572              		.loc 1 498 7 view .LVU364
+ 1573              		.loc 1 498 24 is_stmt 0 view .LVU365
+ 1574 001c 294B     		ldr	r3, .L136
+ 1575 001e 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 1576              		.loc 1 498 10 view .LVU366
+ 1577 0020 73B9     		cbnz	r3, .L133
+ 1578              	.LVL185:
+ 1579              	.L125:
+ 499:BSP/u8g2/u8x8_cad.c **** 	 u8x8_byte_EndTransfer(u8x8); 
+ 500:BSP/u8g2/u8x8_cad.c ****       
+ 501:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_StartTransfer(u8x8);
+ 1580              		.loc 1 501 7 is_stmt 1 view .LVU367
+ 1581 0022 2846     		mov	r0, r5
+ 1582 0024 FFF7FEFF 		bl	u8x8_byte_StartTransfer
+ 1583              	.LVL186:
+ 502:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, 0x000);	/* cmd byte for ssd13xx controller */
+ 1584              		.loc 1 502 7 view .LVU368
+ 1585 0028 0021     		movs	r1, #0
+ 1586 002a 2846     		mov	r0, r5
+ 1587 002c FFF7FEFF 		bl	u8x8_byte_SendByte
+ 1588              	.LVL187:
+ 503:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, arg_int);
+ 1589              		.loc 1 503 7 view .LVU369
+ 1590 0030 2146     		mov	r1, r4
+ 1591 0032 2846     		mov	r0, r5
+ 1592 0034 FFF7FEFF 		bl	u8x8_byte_SendByte
+ARM GAS  /tmp/cczpVMPO.s 			page 43
+
+
+ 1593              	.LVL188:
+ 504:BSP/u8g2/u8x8_cad.c ****       in_transfer = 1;
+ 1594              		.loc 1 504 7 view .LVU370
+ 1595              		.loc 1 504 19 is_stmt 0 view .LVU371
+ 1596 0038 0120     		movs	r0, #1
+ 1597 003a 224B     		ldr	r3, .L136
+ 1598 003c 1870     		strb	r0, [r3]
+ 505:BSP/u8g2/u8x8_cad.c ****       /* lightning version: can replace the improved version from above */
+ 506:BSP/u8g2/u8x8_cad.c ****       /* the drawback of the lightning version is this: The complete init sequence */
+ 507:BSP/u8g2/u8x8_cad.c ****       /* must fit into the 32 byte Arduino Wire buffer, which might not always be the case */
+ 508:BSP/u8g2/u8x8_cad.c ****       /* speed improvement is about 6% compared to the classic version */
+ 509:BSP/u8g2/u8x8_cad.c ****       // if ( in_transfer == 0 )
+ 510:BSP/u8g2/u8x8_cad.c **** 	// {
+ 511:BSP/u8g2/u8x8_cad.c **** 	//   u8x8_byte_StartTransfer(u8x8);
+ 512:BSP/u8g2/u8x8_cad.c **** 	//   u8x8_byte_SendByte(u8x8, 0x000);	/* cmd byte for ssd13xx controller */
+ 513:BSP/u8g2/u8x8_cad.c **** 	//   in_transfer = 1;
+ 514:BSP/u8g2/u8x8_cad.c **** 	// }
+ 515:BSP/u8g2/u8x8_cad.c **** 	//u8x8_byte_SendByte(u8x8, arg_int);
+ 516:BSP/u8g2/u8x8_cad.c ****       break;
+ 1599              		.loc 1 516 7 is_stmt 1 view .LVU372
+ 1600              	.LVL189:
+ 1601              	.L117:
+ 517:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_ARG:
+ 518:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, arg_int);
+ 519:BSP/u8g2/u8x8_cad.c ****       break;      
+ 520:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_DATA:
+ 521:BSP/u8g2/u8x8_cad.c ****       if ( in_transfer != 0 )
+ 522:BSP/u8g2/u8x8_cad.c **** 	u8x8_byte_EndTransfer(u8x8); 
+ 523:BSP/u8g2/u8x8_cad.c ****       
+ 524:BSP/u8g2/u8x8_cad.c ****     
+ 525:BSP/u8g2/u8x8_cad.c ****       /* the FeatherWing OLED with the 32u4 transfer of long byte */
+ 526:BSP/u8g2/u8x8_cad.c ****       /* streams was not possible. This is broken down to */
+ 527:BSP/u8g2/u8x8_cad.c ****       /* smaller streams, 32 seems to be the limit... */
+ 528:BSP/u8g2/u8x8_cad.c ****       /* I guess this is related to the size of the Wire buffers in Arduino */
+ 529:BSP/u8g2/u8x8_cad.c ****       /* Unfortunately, this can not be handled in the byte level drivers, */
+ 530:BSP/u8g2/u8x8_cad.c ****       /* so this is done here. Even further, only 24 bytes will be sent, */
+ 531:BSP/u8g2/u8x8_cad.c ****       /* because there will be another byte (DC) required during the transfer */
+ 532:BSP/u8g2/u8x8_cad.c ****       p = arg_ptr;
+ 533:BSP/u8g2/u8x8_cad.c ****        while( arg_int > 24 )
+ 534:BSP/u8g2/u8x8_cad.c ****       {
+ 535:BSP/u8g2/u8x8_cad.c **** 	u8x8_i2c_data_transfer(u8x8, 24, p);
+ 536:BSP/u8g2/u8x8_cad.c **** 	arg_int-=24;
+ 537:BSP/u8g2/u8x8_cad.c **** 	p+=24;
+ 538:BSP/u8g2/u8x8_cad.c ****       }
+ 539:BSP/u8g2/u8x8_cad.c ****       u8x8_i2c_data_transfer(u8x8, arg_int, p);
+ 540:BSP/u8g2/u8x8_cad.c ****       in_transfer = 0;
+ 541:BSP/u8g2/u8x8_cad.c ****       break;
+ 542:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_INIT:
+ 543:BSP/u8g2/u8x8_cad.c ****       /* apply default i2c adr if required so that the start transfer msg can use this */
+ 544:BSP/u8g2/u8x8_cad.c ****       if ( u8x8->i2c_address == 255 )
+ 545:BSP/u8g2/u8x8_cad.c **** 	u8x8->i2c_address = 0x078;
+ 546:BSP/u8g2/u8x8_cad.c ****       return u8x8->byte_cb(u8x8, msg, arg_int, arg_ptr);
+ 547:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_START_TRANSFER:
+ 548:BSP/u8g2/u8x8_cad.c ****       in_transfer = 0;
+ 549:BSP/u8g2/u8x8_cad.c ****       break;
+ 550:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_END_TRANSFER:
+ 551:BSP/u8g2/u8x8_cad.c ****       if ( in_transfer != 0 )
+ARM GAS  /tmp/cczpVMPO.s 			page 44
+
+
+ 552:BSP/u8g2/u8x8_cad.c **** 	u8x8_byte_EndTransfer(u8x8); 
+ 553:BSP/u8g2/u8x8_cad.c ****       in_transfer = 0;
+ 554:BSP/u8g2/u8x8_cad.c ****       break;
+ 555:BSP/u8g2/u8x8_cad.c ****     default:
+ 556:BSP/u8g2/u8x8_cad.c ****       return 0;
+ 557:BSP/u8g2/u8x8_cad.c ****   }
+ 558:BSP/u8g2/u8x8_cad.c ****   return 1;
+ 559:BSP/u8g2/u8x8_cad.c **** }
+ 1602              		.loc 1 559 1 is_stmt 0 view .LVU373
+ 1603 003e F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 1604              	.LVL190:
+ 1605              	.L133:
+ 499:BSP/u8g2/u8x8_cad.c ****       
+ 1606              		.loc 1 499 3 is_stmt 1 view .LVU374
+ 1607 0040 FFF7FEFF 		bl	u8x8_byte_EndTransfer
+ 1608              	.LVL191:
+ 499:BSP/u8g2/u8x8_cad.c ****       
+ 1609              		.loc 1 499 3 is_stmt 0 view .LVU375
+ 1610 0044 EDE7     		b	.L125
+ 1611              	.LVL192:
+ 1612              	.L122:
+ 518:BSP/u8g2/u8x8_cad.c ****       break;      
+ 1613              		.loc 1 518 7 is_stmt 1 view .LVU376
+ 1614 0046 1146     		mov	r1, r2
+ 1615              	.LVL193:
+ 518:BSP/u8g2/u8x8_cad.c ****       break;      
+ 1616              		.loc 1 518 7 is_stmt 0 view .LVU377
+ 1617 0048 FFF7FEFF 		bl	u8x8_byte_SendByte
+ 1618              	.LVL194:
+ 519:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_DATA:
+ 1619              		.loc 1 519 7 is_stmt 1 view .LVU378
+ 558:BSP/u8g2/u8x8_cad.c **** }
+ 1620              		.loc 1 558 10 is_stmt 0 view .LVU379
+ 1621 004c 0120     		movs	r0, #1
+ 519:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_DATA:
+ 1622              		.loc 1 519 7 view .LVU380
+ 1623 004e F6E7     		b	.L117
+ 1624              	.LVL195:
+ 1625              	.L121:
+ 521:BSP/u8g2/u8x8_cad.c **** 	u8x8_byte_EndTransfer(u8x8); 
+ 1626              		.loc 1 521 7 is_stmt 1 view .LVU381
+ 521:BSP/u8g2/u8x8_cad.c **** 	u8x8_byte_EndTransfer(u8x8); 
+ 1627              		.loc 1 521 24 is_stmt 0 view .LVU382
+ 1628 0050 1C4B     		ldr	r3, .L136
+ 1629 0052 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 521:BSP/u8g2/u8x8_cad.c **** 	u8x8_byte_EndTransfer(u8x8); 
+ 1630              		.loc 1 521 10 view .LVU383
+ 1631 0054 53B1     		cbz	r3, .L127
+ 522:BSP/u8g2/u8x8_cad.c ****       
+ 1632              		.loc 1 522 2 is_stmt 1 view .LVU384
+ 1633 0056 FFF7FEFF 		bl	u8x8_byte_EndTransfer
+ 1634              	.LVL196:
+ 522:BSP/u8g2/u8x8_cad.c ****       
+ 1635              		.loc 1 522 2 is_stmt 0 view .LVU385
+ 1636 005a 07E0     		b	.L127
+ 1637              	.LVL197:
+ 1638              	.L128:
+ARM GAS  /tmp/cczpVMPO.s 			page 45
+
+
+ 535:BSP/u8g2/u8x8_cad.c **** 	arg_int-=24;
+ 1639              		.loc 1 535 2 is_stmt 1 view .LVU386
+ 1640 005c 3246     		mov	r2, r6
+ 1641 005e 1821     		movs	r1, #24
+ 1642 0060 2846     		mov	r0, r5
+ 1643 0062 FFF7FEFF 		bl	u8x8_i2c_data_transfer
+ 1644              	.LVL198:
+ 536:BSP/u8g2/u8x8_cad.c **** 	p+=24;
+ 1645              		.loc 1 536 2 view .LVU387
+ 536:BSP/u8g2/u8x8_cad.c **** 	p+=24;
+ 1646              		.loc 1 536 9 is_stmt 0 view .LVU388
+ 1647 0066 183C     		subs	r4, r4, #24
+ 1648              	.LVL199:
+ 536:BSP/u8g2/u8x8_cad.c **** 	p+=24;
+ 1649              		.loc 1 536 9 view .LVU389
+ 1650 0068 E4B2     		uxtb	r4, r4
+ 1651              	.LVL200:
+ 537:BSP/u8g2/u8x8_cad.c ****       }
+ 1652              		.loc 1 537 2 is_stmt 1 view .LVU390
+ 537:BSP/u8g2/u8x8_cad.c ****       }
+ 1653              		.loc 1 537 3 is_stmt 0 view .LVU391
+ 1654 006a 1836     		adds	r6, r6, #24
+ 1655              	.LVL201:
+ 1656              	.L127:
+ 533:BSP/u8g2/u8x8_cad.c ****       {
+ 1657              		.loc 1 533 23 is_stmt 1 view .LVU392
+ 1658 006c 182C     		cmp	r4, #24
+ 1659 006e F5D8     		bhi	.L128
+ 539:BSP/u8g2/u8x8_cad.c ****       in_transfer = 0;
+ 1660              		.loc 1 539 7 view .LVU393
+ 1661 0070 3246     		mov	r2, r6
+ 1662 0072 2146     		mov	r1, r4
+ 1663 0074 2846     		mov	r0, r5
+ 1664 0076 FFF7FEFF 		bl	u8x8_i2c_data_transfer
+ 1665              	.LVL202:
+ 540:BSP/u8g2/u8x8_cad.c ****       break;
+ 1666              		.loc 1 540 7 view .LVU394
+ 540:BSP/u8g2/u8x8_cad.c ****       break;
+ 1667              		.loc 1 540 19 is_stmt 0 view .LVU395
+ 1668 007a 124B     		ldr	r3, .L136
+ 1669 007c 0022     		movs	r2, #0
+ 1670 007e 1A70     		strb	r2, [r3]
+ 541:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_INIT:
+ 1671              		.loc 1 541 7 is_stmt 1 view .LVU396
+ 558:BSP/u8g2/u8x8_cad.c **** }
+ 1672              		.loc 1 558 10 is_stmt 0 view .LVU397
+ 1673 0080 0120     		movs	r0, #1
+ 541:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_INIT:
+ 1674              		.loc 1 541 7 view .LVU398
+ 1675 0082 DCE7     		b	.L117
+ 1676              	.LVL203:
+ 1677              	.L124:
+ 544:BSP/u8g2/u8x8_cad.c **** 	u8x8->i2c_address = 0x078;
+ 1678              		.loc 1 544 7 is_stmt 1 view .LVU399
+ 544:BSP/u8g2/u8x8_cad.c **** 	u8x8->i2c_address = 0x078;
+ 1679              		.loc 1 544 16 is_stmt 0 view .LVU400
+ 1680 0084 90F82430 		ldrb	r3, [r0, #36]	@ zero_extendqisi2
+ARM GAS  /tmp/cczpVMPO.s 			page 46
+
+
+ 544:BSP/u8g2/u8x8_cad.c **** 	u8x8->i2c_address = 0x078;
+ 1681              		.loc 1 544 10 view .LVU401
+ 1682 0088 FF2B     		cmp	r3, #255
+ 1683 008a 05D0     		beq	.L134
+ 1684              	.L129:
+ 546:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_START_TRANSFER:
+ 1685              		.loc 1 546 7 is_stmt 1 view .LVU402
+ 546:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_START_TRANSFER:
+ 1686              		.loc 1 546 18 is_stmt 0 view .LVU403
+ 1687 008c 2F69     		ldr	r7, [r5, #16]
+ 546:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_START_TRANSFER:
+ 1688              		.loc 1 546 14 view .LVU404
+ 1689 008e 3346     		mov	r3, r6
+ 1690 0090 2246     		mov	r2, r4
+ 1691              	.LVL204:
+ 546:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_START_TRANSFER:
+ 1692              		.loc 1 546 14 view .LVU405
+ 1693 0092 2846     		mov	r0, r5
+ 1694              	.LVL205:
+ 546:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_START_TRANSFER:
+ 1695              		.loc 1 546 14 view .LVU406
+ 1696 0094 B847     		blx	r7
+ 1697              	.LVL206:
+ 546:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_START_TRANSFER:
+ 1698              		.loc 1 546 14 view .LVU407
+ 1699 0096 D2E7     		b	.L117
+ 1700              	.LVL207:
+ 1701              	.L134:
+ 545:BSP/u8g2/u8x8_cad.c ****       return u8x8->byte_cb(u8x8, msg, arg_int, arg_ptr);
+ 1702              		.loc 1 545 2 is_stmt 1 view .LVU408
+ 545:BSP/u8g2/u8x8_cad.c ****       return u8x8->byte_cb(u8x8, msg, arg_int, arg_ptr);
+ 1703              		.loc 1 545 20 is_stmt 0 view .LVU409
+ 1704 0098 7823     		movs	r3, #120
+ 1705 009a 80F82430 		strb	r3, [r0, #36]
+ 1706 009e F5E7     		b	.L129
+ 1707              	.L120:
+ 548:BSP/u8g2/u8x8_cad.c ****       break;
+ 1708              		.loc 1 548 7 is_stmt 1 view .LVU410
+ 548:BSP/u8g2/u8x8_cad.c ****       break;
+ 1709              		.loc 1 548 19 is_stmt 0 view .LVU411
+ 1710 00a0 084B     		ldr	r3, .L136
+ 1711 00a2 0022     		movs	r2, #0
+ 1712              	.LVL208:
+ 548:BSP/u8g2/u8x8_cad.c ****       break;
+ 1713              		.loc 1 548 19 view .LVU412
+ 1714 00a4 1A70     		strb	r2, [r3]
+ 549:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_END_TRANSFER:
+ 1715              		.loc 1 549 7 is_stmt 1 view .LVU413
+ 558:BSP/u8g2/u8x8_cad.c **** }
+ 1716              		.loc 1 558 10 is_stmt 0 view .LVU414
+ 1717 00a6 0120     		movs	r0, #1
+ 1718              	.LVL209:
+ 549:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_END_TRANSFER:
+ 1719              		.loc 1 549 7 view .LVU415
+ 1720 00a8 C9E7     		b	.L117
+ 1721              	.LVL210:
+ 1722              	.L118:
+ARM GAS  /tmp/cczpVMPO.s 			page 47
+
+
+ 551:BSP/u8g2/u8x8_cad.c **** 	u8x8_byte_EndTransfer(u8x8); 
+ 1723              		.loc 1 551 7 is_stmt 1 view .LVU416
+ 551:BSP/u8g2/u8x8_cad.c **** 	u8x8_byte_EndTransfer(u8x8); 
+ 1724              		.loc 1 551 24 is_stmt 0 view .LVU417
+ 1725 00aa 064B     		ldr	r3, .L136
+ 1726 00ac 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 551:BSP/u8g2/u8x8_cad.c **** 	u8x8_byte_EndTransfer(u8x8); 
+ 1727              		.loc 1 551 10 view .LVU418
+ 1728 00ae 23B9     		cbnz	r3, .L135
+ 1729              	.LVL211:
+ 1730              	.L130:
+ 553:BSP/u8g2/u8x8_cad.c ****       break;
+ 1731              		.loc 1 553 7 is_stmt 1 view .LVU419
+ 553:BSP/u8g2/u8x8_cad.c ****       break;
+ 1732              		.loc 1 553 19 is_stmt 0 view .LVU420
+ 1733 00b0 044B     		ldr	r3, .L136
+ 1734 00b2 0022     		movs	r2, #0
+ 1735 00b4 1A70     		strb	r2, [r3]
+ 554:BSP/u8g2/u8x8_cad.c ****     default:
+ 1736              		.loc 1 554 7 is_stmt 1 view .LVU421
+ 558:BSP/u8g2/u8x8_cad.c **** }
+ 1737              		.loc 1 558 10 is_stmt 0 view .LVU422
+ 1738 00b6 0120     		movs	r0, #1
+ 554:BSP/u8g2/u8x8_cad.c ****     default:
+ 1739              		.loc 1 554 7 view .LVU423
+ 1740 00b8 C1E7     		b	.L117
+ 1741              	.LVL212:
+ 1742              	.L135:
+ 552:BSP/u8g2/u8x8_cad.c ****       in_transfer = 0;
+ 1743              		.loc 1 552 2 is_stmt 1 view .LVU424
+ 1744 00ba FFF7FEFF 		bl	u8x8_byte_EndTransfer
+ 1745              	.LVL213:
+ 552:BSP/u8g2/u8x8_cad.c ****       in_transfer = 0;
+ 1746              		.loc 1 552 2 is_stmt 0 view .LVU425
+ 1747 00be F7E7     		b	.L130
+ 1748              	.LVL214:
+ 1749              	.L131:
+ 492:BSP/u8g2/u8x8_cad.c ****   {
+ 1750              		.loc 1 492 3 view .LVU426
+ 1751 00c0 0020     		movs	r0, #0
+ 1752              	.LVL215:
+ 492:BSP/u8g2/u8x8_cad.c ****   {
+ 1753              		.loc 1 492 3 view .LVU427
+ 1754 00c2 BCE7     		b	.L117
+ 1755              	.L137:
+ 1756              		.align	2
+ 1757              	.L136:
+ 1758 00c4 00000000 		.word	in_transfer.3
+ 1759              		.cfi_endproc
+ 1760              	.LFE17:
+ 1762              		.section	.text.u8x8_cad_st75256_i2c,"ax",%progbits
+ 1763              		.align	1
+ 1764              		.global	u8x8_cad_st75256_i2c
+ 1765              		.syntax unified
+ 1766              		.thumb
+ 1767              		.thumb_func
+ 1769              	u8x8_cad_st75256_i2c:
+ARM GAS  /tmp/cczpVMPO.s 			page 48
+
+
+ 1770              	.LVL216:
+ 1771              	.LFB18:
+ 560:BSP/u8g2/u8x8_cad.c **** 
+ 561:BSP/u8g2/u8x8_cad.c **** 
+ 562:BSP/u8g2/u8x8_cad.c **** 
+ 563:BSP/u8g2/u8x8_cad.c **** /* the st75256 i2c driver is a copy of the ssd13xx driver, but with arg=1 */
+ 564:BSP/u8g2/u8x8_cad.c **** /* modified from cad001 (ssd13xx) to cad011 */
+ 565:BSP/u8g2/u8x8_cad.c **** uint8_t u8x8_cad_st75256_i2c(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr)
+ 566:BSP/u8g2/u8x8_cad.c **** {
+ 1772              		.loc 1 566 1 is_stmt 1 view -0
+ 1773              		.cfi_startproc
+ 1774              		@ args = 0, pretend = 0, frame = 0
+ 1775              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1776              		.loc 1 566 1 is_stmt 0 view .LVU429
+ 1777 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 1778              	.LCFI27:
+ 1779              		.cfi_def_cfa_offset 24
+ 1780              		.cfi_offset 3, -24
+ 1781              		.cfi_offset 4, -20
+ 1782              		.cfi_offset 5, -16
+ 1783              		.cfi_offset 6, -12
+ 1784              		.cfi_offset 7, -8
+ 1785              		.cfi_offset 14, -4
+ 1786 0002 0546     		mov	r5, r0
+ 1787 0004 1446     		mov	r4, r2
+ 1788 0006 1E46     		mov	r6, r3
+ 567:BSP/u8g2/u8x8_cad.c ****   uint8_t *p;
+ 1789              		.loc 1 567 3 is_stmt 1 view .LVU430
+ 568:BSP/u8g2/u8x8_cad.c ****   switch(msg)
+ 1790              		.loc 1 568 3 view .LVU431
+ 1791 0008 A1F1140C 		sub	ip, r1, #20
+ 1792 000c BCF1050F 		cmp	ip, #5
+ 1793 0010 04D8     		bhi	.L139
+ 1794 0012 DFE80CF0 		tbb	[pc, ip]
+ 1795              	.LVL217:
+ 1796              	.L141:
+ 1797 0016 34       		.byte	(.L145-.L141)/2
+ 1798 0017 05       		.byte	(.L144-.L141)/2
+ 1799 0018 14       		.byte	(.L143-.L141)/2
+ 1800 0019 2B       		.byte	(.L142-.L141)/2
+ 1801 001a 42       		.byte	(.L148-.L141)/2
+ 1802 001b 42       		.byte	(.L148-.L141)/2
+ 1803              		.p2align 1
+ 1804              	.L139:
+ 1805              		.loc 1 568 3 is_stmt 0 view .LVU432
+ 1806 001c 0020     		movs	r0, #0
+ 1807              	.LVL218:
+ 1808              		.loc 1 568 3 view .LVU433
+ 1809 001e 3DE0     		b	.L140
+ 1810              	.LVL219:
+ 1811              	.L144:
+ 569:BSP/u8g2/u8x8_cad.c ****   {
+ 570:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_CMD:
+ 571:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_StartTransfer(u8x8);
+ 1812              		.loc 1 571 7 is_stmt 1 view .LVU434
+ 1813 0020 FFF7FEFF 		bl	u8x8_byte_StartTransfer
+ 1814              	.LVL220:
+ARM GAS  /tmp/cczpVMPO.s 			page 49
+
+
+ 572:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, 0x000);
+ 1815              		.loc 1 572 7 view .LVU435
+ 1816 0024 0021     		movs	r1, #0
+ 1817 0026 2846     		mov	r0, r5
+ 1818 0028 FFF7FEFF 		bl	u8x8_byte_SendByte
+ 1819              	.LVL221:
+ 573:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, arg_int);
+ 1820              		.loc 1 573 7 view .LVU436
+ 1821 002c 2146     		mov	r1, r4
+ 1822 002e 2846     		mov	r0, r5
+ 1823 0030 FFF7FEFF 		bl	u8x8_byte_SendByte
+ 1824              	.LVL222:
+ 574:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_EndTransfer(u8x8);      
+ 1825              		.loc 1 574 7 view .LVU437
+ 1826 0034 2846     		mov	r0, r5
+ 1827 0036 FFF7FEFF 		bl	u8x8_byte_EndTransfer
+ 1828              	.LVL223:
+ 575:BSP/u8g2/u8x8_cad.c ****       break;
+ 1829              		.loc 1 575 7 view .LVU438
+ 576:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_ARG:
+ 577:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_StartTransfer(u8x8);
+ 578:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, 0x040);
+ 579:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, arg_int);
+ 580:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_EndTransfer(u8x8);
+ 581:BSP/u8g2/u8x8_cad.c ****       break;
+ 582:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_DATA:
+ 583:BSP/u8g2/u8x8_cad.c ****       /* see ssd13xx driver */
+ 584:BSP/u8g2/u8x8_cad.c ****       p = arg_ptr;
+ 585:BSP/u8g2/u8x8_cad.c ****        while( arg_int > 24 )
+ 586:BSP/u8g2/u8x8_cad.c ****       {
+ 587:BSP/u8g2/u8x8_cad.c **** 	u8x8_i2c_data_transfer(u8x8, 24, p);
+ 588:BSP/u8g2/u8x8_cad.c **** 	arg_int-=24;
+ 589:BSP/u8g2/u8x8_cad.c **** 	p+=24;
+ 590:BSP/u8g2/u8x8_cad.c ****       }
+ 591:BSP/u8g2/u8x8_cad.c ****       u8x8_i2c_data_transfer(u8x8, arg_int, p);
+ 592:BSP/u8g2/u8x8_cad.c ****       break;
+ 593:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_INIT:
+ 594:BSP/u8g2/u8x8_cad.c ****       /* apply default i2c adr if required so that the start transfer msg can use this */
+ 595:BSP/u8g2/u8x8_cad.c ****       if ( u8x8->i2c_address == 255 )
+ 596:BSP/u8g2/u8x8_cad.c **** 	u8x8->i2c_address = 0x078;	/* ST75256, often this is 0x07e */
+ 597:BSP/u8g2/u8x8_cad.c ****       return u8x8->byte_cb(u8x8, msg, arg_int, arg_ptr);
+ 598:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_START_TRANSFER:
+ 599:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_END_TRANSFER:
+ 600:BSP/u8g2/u8x8_cad.c ****       /* cad transfer commands are ignored */
+ 601:BSP/u8g2/u8x8_cad.c ****       break;
+ 602:BSP/u8g2/u8x8_cad.c ****     default:
+ 603:BSP/u8g2/u8x8_cad.c ****       return 0;
+ 604:BSP/u8g2/u8x8_cad.c ****   }
+ 605:BSP/u8g2/u8x8_cad.c ****   return 1;
+ 1830              		.loc 1 605 10 is_stmt 0 view .LVU439
+ 1831 003a 0120     		movs	r0, #1
+ 575:BSP/u8g2/u8x8_cad.c ****       break;
+ 1832              		.loc 1 575 7 view .LVU440
+ 1833 003c 2EE0     		b	.L140
+ 1834              	.LVL224:
+ 1835              	.L143:
+ 577:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, 0x040);
+ARM GAS  /tmp/cczpVMPO.s 			page 50
+
+
+ 1836              		.loc 1 577 7 is_stmt 1 view .LVU441
+ 1837 003e FFF7FEFF 		bl	u8x8_byte_StartTransfer
+ 1838              	.LVL225:
+ 578:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, arg_int);
+ 1839              		.loc 1 578 7 view .LVU442
+ 1840 0042 4021     		movs	r1, #64
+ 1841 0044 2846     		mov	r0, r5
+ 1842 0046 FFF7FEFF 		bl	u8x8_byte_SendByte
+ 1843              	.LVL226:
+ 579:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_EndTransfer(u8x8);
+ 1844              		.loc 1 579 7 view .LVU443
+ 1845 004a 2146     		mov	r1, r4
+ 1846 004c 2846     		mov	r0, r5
+ 1847 004e FFF7FEFF 		bl	u8x8_byte_SendByte
+ 1848              	.LVL227:
+ 580:BSP/u8g2/u8x8_cad.c ****       break;
+ 1849              		.loc 1 580 7 view .LVU444
+ 1850 0052 2846     		mov	r0, r5
+ 1851 0054 FFF7FEFF 		bl	u8x8_byte_EndTransfer
+ 1852              	.LVL228:
+ 581:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_DATA:
+ 1853              		.loc 1 581 7 view .LVU445
+ 1854              		.loc 1 605 10 is_stmt 0 view .LVU446
+ 1855 0058 0120     		movs	r0, #1
+ 581:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_DATA:
+ 1856              		.loc 1 581 7 view .LVU447
+ 1857 005a 1FE0     		b	.L140
+ 1858              	.LVL229:
+ 1859              	.L146:
+ 587:BSP/u8g2/u8x8_cad.c **** 	arg_int-=24;
+ 1860              		.loc 1 587 2 is_stmt 1 view .LVU448
+ 1861 005c 3246     		mov	r2, r6
+ 1862 005e 1821     		movs	r1, #24
+ 1863 0060 2846     		mov	r0, r5
+ 1864 0062 FFF7FEFF 		bl	u8x8_i2c_data_transfer
+ 1865              	.LVL230:
+ 588:BSP/u8g2/u8x8_cad.c **** 	p+=24;
+ 1866              		.loc 1 588 2 view .LVU449
+ 588:BSP/u8g2/u8x8_cad.c **** 	p+=24;
+ 1867              		.loc 1 588 9 is_stmt 0 view .LVU450
+ 1868 0066 183C     		subs	r4, r4, #24
+ 1869              	.LVL231:
+ 588:BSP/u8g2/u8x8_cad.c **** 	p+=24;
+ 1870              		.loc 1 588 9 view .LVU451
+ 1871 0068 E4B2     		uxtb	r4, r4
+ 1872              	.LVL232:
+ 589:BSP/u8g2/u8x8_cad.c ****       }
+ 1873              		.loc 1 589 2 is_stmt 1 view .LVU452
+ 589:BSP/u8g2/u8x8_cad.c ****       }
+ 1874              		.loc 1 589 3 is_stmt 0 view .LVU453
+ 1875 006a 1836     		adds	r6, r6, #24
+ 1876              	.LVL233:
+ 1877              	.L142:
+ 585:BSP/u8g2/u8x8_cad.c ****       {
+ 1878              		.loc 1 585 23 is_stmt 1 view .LVU454
+ 1879 006c 182C     		cmp	r4, #24
+ 1880 006e F5D8     		bhi	.L146
+ARM GAS  /tmp/cczpVMPO.s 			page 51
+
+
+ 591:BSP/u8g2/u8x8_cad.c ****       break;
+ 1881              		.loc 1 591 7 view .LVU455
+ 1882 0070 3246     		mov	r2, r6
+ 1883 0072 2146     		mov	r1, r4
+ 1884 0074 2846     		mov	r0, r5
+ 1885 0076 FFF7FEFF 		bl	u8x8_i2c_data_transfer
+ 1886              	.LVL234:
+ 592:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_INIT:
+ 1887              		.loc 1 592 7 view .LVU456
+ 1888              		.loc 1 605 10 is_stmt 0 view .LVU457
+ 1889 007a 0120     		movs	r0, #1
+ 592:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_INIT:
+ 1890              		.loc 1 592 7 view .LVU458
+ 1891 007c 0EE0     		b	.L140
+ 1892              	.LVL235:
+ 1893              	.L145:
+ 595:BSP/u8g2/u8x8_cad.c **** 	u8x8->i2c_address = 0x078;	/* ST75256, often this is 0x07e */
+ 1894              		.loc 1 595 7 is_stmt 1 view .LVU459
+ 595:BSP/u8g2/u8x8_cad.c **** 	u8x8->i2c_address = 0x078;	/* ST75256, often this is 0x07e */
+ 1895              		.loc 1 595 16 is_stmt 0 view .LVU460
+ 1896 007e 90F82430 		ldrb	r3, [r0, #36]	@ zero_extendqisi2
+ 595:BSP/u8g2/u8x8_cad.c **** 	u8x8->i2c_address = 0x078;	/* ST75256, often this is 0x07e */
+ 1897              		.loc 1 595 10 view .LVU461
+ 1898 0082 FF2B     		cmp	r3, #255
+ 1899 0084 05D0     		beq	.L151
+ 1900              	.L147:
+ 597:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_START_TRANSFER:
+ 1901              		.loc 1 597 7 is_stmt 1 view .LVU462
+ 597:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_START_TRANSFER:
+ 1902              		.loc 1 597 18 is_stmt 0 view .LVU463
+ 1903 0086 2F69     		ldr	r7, [r5, #16]
+ 597:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_START_TRANSFER:
+ 1904              		.loc 1 597 14 view .LVU464
+ 1905 0088 3346     		mov	r3, r6
+ 1906 008a 2246     		mov	r2, r4
+ 1907              	.LVL236:
+ 597:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_START_TRANSFER:
+ 1908              		.loc 1 597 14 view .LVU465
+ 1909 008c 2846     		mov	r0, r5
+ 1910              	.LVL237:
+ 597:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_START_TRANSFER:
+ 1911              		.loc 1 597 14 view .LVU466
+ 1912 008e B847     		blx	r7
+ 1913              	.LVL238:
+ 597:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_START_TRANSFER:
+ 1914              		.loc 1 597 14 view .LVU467
+ 1915 0090 04E0     		b	.L140
+ 1916              	.LVL239:
+ 1917              	.L151:
+ 596:BSP/u8g2/u8x8_cad.c ****       return u8x8->byte_cb(u8x8, msg, arg_int, arg_ptr);
+ 1918              		.loc 1 596 2 is_stmt 1 view .LVU468
+ 596:BSP/u8g2/u8x8_cad.c ****       return u8x8->byte_cb(u8x8, msg, arg_int, arg_ptr);
+ 1919              		.loc 1 596 20 is_stmt 0 view .LVU469
+ 1920 0092 7823     		movs	r3, #120
+ 1921 0094 80F82430 		strb	r3, [r0, #36]
+ 1922 0098 F5E7     		b	.L147
+ 1923              	.L148:
+ARM GAS  /tmp/cczpVMPO.s 			page 52
+
+
+ 1924              		.loc 1 605 10 view .LVU470
+ 1925 009a 0120     		movs	r0, #1
+ 1926              	.LVL240:
+ 1927              	.L140:
+ 606:BSP/u8g2/u8x8_cad.c **** }
+ 1928              		.loc 1 606 1 view .LVU471
+ 1929 009c F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 1930              		.loc 1 606 1 view .LVU472
+ 1931              		.cfi_endproc
+ 1932              	.LFE18:
+ 1934              		.section	.text.u8x8_cad_ld7032_i2c,"ax",%progbits
+ 1935              		.align	1
+ 1936              		.global	u8x8_cad_ld7032_i2c
+ 1937              		.syntax unified
+ 1938              		.thumb
+ 1939              		.thumb_func
+ 1941              	u8x8_cad_ld7032_i2c:
+ 1942              	.LVL241:
+ 1943              	.LFB19:
+ 607:BSP/u8g2/u8x8_cad.c **** 
+ 608:BSP/u8g2/u8x8_cad.c **** /* cad i2c procedure for the ld7032 controller */
+ 609:BSP/u8g2/u8x8_cad.c **** uint8_t u8x8_cad_ld7032_i2c(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr)
+ 610:BSP/u8g2/u8x8_cad.c **** {
+ 1944              		.loc 1 610 1 is_stmt 1 view -0
+ 1945              		.cfi_startproc
+ 1946              		@ args = 0, pretend = 0, frame = 0
+ 1947              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1948              		.loc 1 610 1 is_stmt 0 view .LVU474
+ 1949 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 1950              	.LCFI28:
+ 1951              		.cfi_def_cfa_offset 24
+ 1952              		.cfi_offset 3, -24
+ 1953              		.cfi_offset 4, -20
+ 1954              		.cfi_offset 5, -16
+ 1955              		.cfi_offset 6, -12
+ 1956              		.cfi_offset 7, -8
+ 1957              		.cfi_offset 14, -4
+ 1958 0002 0446     		mov	r4, r0
+ 1959 0004 1546     		mov	r5, r2
+ 1960 0006 1E46     		mov	r6, r3
+ 611:BSP/u8g2/u8x8_cad.c ****   static uint8_t in_transfer = 0;
+ 1961              		.loc 1 611 3 is_stmt 1 view .LVU475
+ 612:BSP/u8g2/u8x8_cad.c ****   uint8_t *p;
+ 1962              		.loc 1 612 3 view .LVU476
+ 613:BSP/u8g2/u8x8_cad.c ****   switch(msg)
+ 1963              		.loc 1 613 3 view .LVU477
+ 1964 0008 A1F11402 		sub	r2, r1, #20
+ 1965              	.LVL242:
+ 1966              		.loc 1 613 3 is_stmt 0 view .LVU478
+ 1967 000c 052A     		cmp	r2, #5
+ 1968 000e 53D8     		bhi	.L164
+ 1969 0010 DFE802F0 		tbb	[pc, r2]
+ 1970              	.LVL243:
+ 1971              	.L155:
+ 1972 0014 36       		.byte	(.L160-.L155)/2
+ 1973 0015 03       		.byte	(.L159-.L155)/2
+ 1974 0016 14       		.byte	(.L158-.L155)/2
+ARM GAS  /tmp/cczpVMPO.s 			page 53
+
+
+ 1975 0017 2C       		.byte	(.L157-.L155)/2
+ 1976 0018 44       		.byte	(.L156-.L155)/2
+ 1977 0019 49       		.byte	(.L154-.L155)/2
+ 1978              		.p2align 1
+ 1979              	.L159:
+ 614:BSP/u8g2/u8x8_cad.c ****   {
+ 615:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_CMD:
+ 616:BSP/u8g2/u8x8_cad.c ****       if ( in_transfer != 0 )
+ 1980              		.loc 1 616 7 is_stmt 1 view .LVU479
+ 1981              		.loc 1 616 24 is_stmt 0 view .LVU480
+ 1982 001a 284B     		ldr	r3, .L171
+ 1983 001c 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 1984              		.loc 1 616 10 view .LVU481
+ 1985 001e 53B9     		cbnz	r3, .L168
+ 1986              	.LVL244:
+ 1987              	.L161:
+ 617:BSP/u8g2/u8x8_cad.c **** 	u8x8_byte_EndTransfer(u8x8); 
+ 618:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_StartTransfer(u8x8);
+ 1988              		.loc 1 618 7 is_stmt 1 view .LVU482
+ 1989 0020 2046     		mov	r0, r4
+ 1990 0022 FFF7FEFF 		bl	u8x8_byte_StartTransfer
+ 1991              	.LVL245:
+ 619:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, arg_int);
+ 1992              		.loc 1 619 7 view .LVU483
+ 1993 0026 2946     		mov	r1, r5
+ 1994 0028 2046     		mov	r0, r4
+ 1995 002a FFF7FEFF 		bl	u8x8_byte_SendByte
+ 1996              	.LVL246:
+ 620:BSP/u8g2/u8x8_cad.c ****       in_transfer = 1;
+ 1997              		.loc 1 620 7 view .LVU484
+ 1998              		.loc 1 620 19 is_stmt 0 view .LVU485
+ 1999 002e 0120     		movs	r0, #1
+ 2000 0030 224B     		ldr	r3, .L171
+ 2001 0032 1870     		strb	r0, [r3]
+ 621:BSP/u8g2/u8x8_cad.c ****       break;
+ 2002              		.loc 1 621 7 is_stmt 1 view .LVU486
+ 2003              	.LVL247:
+ 2004              	.L153:
+ 622:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_ARG:
+ 623:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, arg_int);
+ 624:BSP/u8g2/u8x8_cad.c ****       break;
+ 625:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_DATA:
+ 626:BSP/u8g2/u8x8_cad.c ****       //u8x8_byte_SetDC(u8x8, 1);
+ 627:BSP/u8g2/u8x8_cad.c ****     
+ 628:BSP/u8g2/u8x8_cad.c ****       /* the FeatherWing OLED with the 32u4 transfer of long byte */
+ 629:BSP/u8g2/u8x8_cad.c ****       /* streams was not possible. This is broken down to */
+ 630:BSP/u8g2/u8x8_cad.c ****       /* smaller streams, 32 seems to be the limit... */
+ 631:BSP/u8g2/u8x8_cad.c ****       /* I guess this is related to the size of the Wire buffers in Arduino */
+ 632:BSP/u8g2/u8x8_cad.c ****       /* Unfortunately, this can not be handled in the byte level drivers, */
+ 633:BSP/u8g2/u8x8_cad.c ****       /* so this is done here. Even further, only 24 bytes will be sent, */
+ 634:BSP/u8g2/u8x8_cad.c ****       /* because there will be another byte (DC) required during the transfer */
+ 635:BSP/u8g2/u8x8_cad.c ****       p = arg_ptr;
+ 636:BSP/u8g2/u8x8_cad.c ****        while( arg_int > 24 )
+ 637:BSP/u8g2/u8x8_cad.c ****       {
+ 638:BSP/u8g2/u8x8_cad.c **** 	u8x8->byte_cb(u8x8, U8X8_MSG_CAD_SEND_DATA, 24, p);
+ 639:BSP/u8g2/u8x8_cad.c **** 	arg_int-=24;
+ 640:BSP/u8g2/u8x8_cad.c **** 	p+=24;
+ARM GAS  /tmp/cczpVMPO.s 			page 54
+
+
+ 641:BSP/u8g2/u8x8_cad.c **** 	u8x8_byte_EndTransfer(u8x8); 
+ 642:BSP/u8g2/u8x8_cad.c **** 	u8x8_byte_StartTransfer(u8x8);
+ 643:BSP/u8g2/u8x8_cad.c **** 	u8x8_byte_SendByte(u8x8, 0x08);	/* data write for LD7032 */
+ 644:BSP/u8g2/u8x8_cad.c ****       }
+ 645:BSP/u8g2/u8x8_cad.c ****       u8x8->byte_cb(u8x8, U8X8_MSG_CAD_SEND_DATA, arg_int, p);
+ 646:BSP/u8g2/u8x8_cad.c ****       break;
+ 647:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_INIT:
+ 648:BSP/u8g2/u8x8_cad.c ****       /* apply default i2c adr if required so that the start transfer msg can use this */
+ 649:BSP/u8g2/u8x8_cad.c ****       if ( u8x8->i2c_address == 255 )
+ 650:BSP/u8g2/u8x8_cad.c **** 	u8x8->i2c_address = 0x060;
+ 651:BSP/u8g2/u8x8_cad.c ****       return u8x8->byte_cb(u8x8, msg, arg_int, arg_ptr);
+ 652:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_START_TRANSFER:
+ 653:BSP/u8g2/u8x8_cad.c ****       in_transfer = 0;
+ 654:BSP/u8g2/u8x8_cad.c ****       break;
+ 655:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_END_TRANSFER:
+ 656:BSP/u8g2/u8x8_cad.c ****       if ( in_transfer != 0 )
+ 657:BSP/u8g2/u8x8_cad.c **** 	u8x8_byte_EndTransfer(u8x8); 
+ 658:BSP/u8g2/u8x8_cad.c ****       break;
+ 659:BSP/u8g2/u8x8_cad.c ****     default:
+ 660:BSP/u8g2/u8x8_cad.c ****       return 0;
+ 661:BSP/u8g2/u8x8_cad.c ****   }
+ 662:BSP/u8g2/u8x8_cad.c ****   return 1;
+ 663:BSP/u8g2/u8x8_cad.c **** }
+ 2005              		.loc 1 663 1 is_stmt 0 view .LVU487
+ 2006 0034 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 2007              	.LVL248:
+ 2008              	.L168:
+ 617:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_StartTransfer(u8x8);
+ 2009              		.loc 1 617 2 is_stmt 1 view .LVU488
+ 2010 0036 FFF7FEFF 		bl	u8x8_byte_EndTransfer
+ 2011              	.LVL249:
+ 617:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_StartTransfer(u8x8);
+ 2012              		.loc 1 617 2 is_stmt 0 view .LVU489
+ 2013 003a F1E7     		b	.L161
+ 2014              	.LVL250:
+ 2015              	.L158:
+ 623:BSP/u8g2/u8x8_cad.c ****       break;
+ 2016              		.loc 1 623 7 is_stmt 1 view .LVU490
+ 2017 003c 2946     		mov	r1, r5
+ 2018              	.LVL251:
+ 623:BSP/u8g2/u8x8_cad.c ****       break;
+ 2019              		.loc 1 623 7 is_stmt 0 view .LVU491
+ 2020 003e FFF7FEFF 		bl	u8x8_byte_SendByte
+ 2021              	.LVL252:
+ 624:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_DATA:
+ 2022              		.loc 1 624 7 is_stmt 1 view .LVU492
+ 662:BSP/u8g2/u8x8_cad.c **** }
+ 2023              		.loc 1 662 10 is_stmt 0 view .LVU493
+ 2024 0042 0120     		movs	r0, #1
+ 624:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_DATA:
+ 2025              		.loc 1 624 7 view .LVU494
+ 2026 0044 F6E7     		b	.L153
+ 2027              	.LVL253:
+ 2028              	.L162:
+ 638:BSP/u8g2/u8x8_cad.c **** 	arg_int-=24;
+ 2029              		.loc 1 638 2 is_stmt 1 view .LVU495
+ 2030 0046 3346     		mov	r3, r6
+ARM GAS  /tmp/cczpVMPO.s 			page 55
+
+
+ 2031 0048 1822     		movs	r2, #24
+ 2032 004a 1721     		movs	r1, #23
+ 2033 004c 2046     		mov	r0, r4
+ 2034 004e 2769     		ldr	r7, [r4, #16]
+ 2035 0050 B847     		blx	r7
+ 2036              	.LVL254:
+ 639:BSP/u8g2/u8x8_cad.c **** 	p+=24;
+ 2037              		.loc 1 639 2 view .LVU496
+ 639:BSP/u8g2/u8x8_cad.c **** 	p+=24;
+ 2038              		.loc 1 639 9 is_stmt 0 view .LVU497
+ 2039 0052 183D     		subs	r5, r5, #24
+ 2040              	.LVL255:
+ 639:BSP/u8g2/u8x8_cad.c **** 	p+=24;
+ 2041              		.loc 1 639 9 view .LVU498
+ 2042 0054 EDB2     		uxtb	r5, r5
+ 2043              	.LVL256:
+ 640:BSP/u8g2/u8x8_cad.c **** 	u8x8_byte_EndTransfer(u8x8); 
+ 2044              		.loc 1 640 2 is_stmt 1 view .LVU499
+ 640:BSP/u8g2/u8x8_cad.c **** 	u8x8_byte_EndTransfer(u8x8); 
+ 2045              		.loc 1 640 3 is_stmt 0 view .LVU500
+ 2046 0056 1836     		adds	r6, r6, #24
+ 2047              	.LVL257:
+ 641:BSP/u8g2/u8x8_cad.c **** 	u8x8_byte_StartTransfer(u8x8);
+ 2048              		.loc 1 641 2 is_stmt 1 view .LVU501
+ 2049 0058 2046     		mov	r0, r4
+ 2050 005a FFF7FEFF 		bl	u8x8_byte_EndTransfer
+ 2051              	.LVL258:
+ 642:BSP/u8g2/u8x8_cad.c **** 	u8x8_byte_SendByte(u8x8, 0x08);	/* data write for LD7032 */
+ 2052              		.loc 1 642 2 view .LVU502
+ 2053 005e 2046     		mov	r0, r4
+ 2054 0060 FFF7FEFF 		bl	u8x8_byte_StartTransfer
+ 2055              	.LVL259:
+ 643:BSP/u8g2/u8x8_cad.c ****       }
+ 2056              		.loc 1 643 2 view .LVU503
+ 2057 0064 0821     		movs	r1, #8
+ 2058 0066 2046     		mov	r0, r4
+ 2059 0068 FFF7FEFF 		bl	u8x8_byte_SendByte
+ 2060              	.LVL260:
+ 2061              	.L157:
+ 636:BSP/u8g2/u8x8_cad.c ****       {
+ 2062              		.loc 1 636 23 view .LVU504
+ 2063 006c 182D     		cmp	r5, #24
+ 2064 006e EAD8     		bhi	.L162
+ 645:BSP/u8g2/u8x8_cad.c ****       break;
+ 2065              		.loc 1 645 7 view .LVU505
+ 645:BSP/u8g2/u8x8_cad.c ****       break;
+ 2066              		.loc 1 645 11 is_stmt 0 view .LVU506
+ 2067 0070 2769     		ldr	r7, [r4, #16]
+ 645:BSP/u8g2/u8x8_cad.c ****       break;
+ 2068              		.loc 1 645 7 view .LVU507
+ 2069 0072 3346     		mov	r3, r6
+ 2070 0074 2A46     		mov	r2, r5
+ 2071 0076 1721     		movs	r1, #23
+ 2072 0078 2046     		mov	r0, r4
+ 2073 007a B847     		blx	r7
+ 2074              	.LVL261:
+ 646:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_INIT:
+ARM GAS  /tmp/cczpVMPO.s 			page 56
+
+
+ 2075              		.loc 1 646 7 is_stmt 1 view .LVU508
+ 662:BSP/u8g2/u8x8_cad.c **** }
+ 2076              		.loc 1 662 10 is_stmt 0 view .LVU509
+ 2077 007c 0120     		movs	r0, #1
+ 646:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_INIT:
+ 2078              		.loc 1 646 7 view .LVU510
+ 2079 007e D9E7     		b	.L153
+ 2080              	.LVL262:
+ 2081              	.L160:
+ 649:BSP/u8g2/u8x8_cad.c **** 	u8x8->i2c_address = 0x060;
+ 2082              		.loc 1 649 7 is_stmt 1 view .LVU511
+ 649:BSP/u8g2/u8x8_cad.c **** 	u8x8->i2c_address = 0x060;
+ 2083              		.loc 1 649 16 is_stmt 0 view .LVU512
+ 2084 0080 90F82430 		ldrb	r3, [r0, #36]	@ zero_extendqisi2
+ 649:BSP/u8g2/u8x8_cad.c **** 	u8x8->i2c_address = 0x060;
+ 2085              		.loc 1 649 10 view .LVU513
+ 2086 0084 FF2B     		cmp	r3, #255
+ 2087 0086 05D0     		beq	.L169
+ 2088              	.L163:
+ 651:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_START_TRANSFER:
+ 2089              		.loc 1 651 7 is_stmt 1 view .LVU514
+ 651:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_START_TRANSFER:
+ 2090              		.loc 1 651 18 is_stmt 0 view .LVU515
+ 2091 0088 2769     		ldr	r7, [r4, #16]
+ 651:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_START_TRANSFER:
+ 2092              		.loc 1 651 14 view .LVU516
+ 2093 008a 3346     		mov	r3, r6
+ 2094 008c 2A46     		mov	r2, r5
+ 2095 008e 2046     		mov	r0, r4
+ 2096              	.LVL263:
+ 651:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_START_TRANSFER:
+ 2097              		.loc 1 651 14 view .LVU517
+ 2098 0090 B847     		blx	r7
+ 2099              	.LVL264:
+ 651:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_START_TRANSFER:
+ 2100              		.loc 1 651 14 view .LVU518
+ 2101 0092 CFE7     		b	.L153
+ 2102              	.LVL265:
+ 2103              	.L169:
+ 650:BSP/u8g2/u8x8_cad.c ****       return u8x8->byte_cb(u8x8, msg, arg_int, arg_ptr);
+ 2104              		.loc 1 650 2 is_stmt 1 view .LVU519
+ 650:BSP/u8g2/u8x8_cad.c ****       return u8x8->byte_cb(u8x8, msg, arg_int, arg_ptr);
+ 2105              		.loc 1 650 20 is_stmt 0 view .LVU520
+ 2106 0094 6023     		movs	r3, #96
+ 2107 0096 80F82430 		strb	r3, [r0, #36]
+ 2108 009a F5E7     		b	.L163
+ 2109              	.L156:
+ 653:BSP/u8g2/u8x8_cad.c ****       break;
+ 2110              		.loc 1 653 7 is_stmt 1 view .LVU521
+ 653:BSP/u8g2/u8x8_cad.c ****       break;
+ 2111              		.loc 1 653 19 is_stmt 0 view .LVU522
+ 2112 009c 074B     		ldr	r3, .L171
+ 2113 009e 0022     		movs	r2, #0
+ 2114 00a0 1A70     		strb	r2, [r3]
+ 654:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_END_TRANSFER:
+ 2115              		.loc 1 654 7 is_stmt 1 view .LVU523
+ 662:BSP/u8g2/u8x8_cad.c **** }
+ARM GAS  /tmp/cczpVMPO.s 			page 57
+
+
+ 2116              		.loc 1 662 10 is_stmt 0 view .LVU524
+ 2117 00a2 0120     		movs	r0, #1
+ 2118              	.LVL266:
+ 654:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_END_TRANSFER:
+ 2119              		.loc 1 654 7 view .LVU525
+ 2120 00a4 C6E7     		b	.L153
+ 2121              	.LVL267:
+ 2122              	.L154:
+ 656:BSP/u8g2/u8x8_cad.c **** 	u8x8_byte_EndTransfer(u8x8); 
+ 2123              		.loc 1 656 7 is_stmt 1 view .LVU526
+ 656:BSP/u8g2/u8x8_cad.c **** 	u8x8_byte_EndTransfer(u8x8); 
+ 2124              		.loc 1 656 24 is_stmt 0 view .LVU527
+ 2125 00a6 054B     		ldr	r3, .L171
+ 2126 00a8 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 656:BSP/u8g2/u8x8_cad.c **** 	u8x8_byte_EndTransfer(u8x8); 
+ 2127              		.loc 1 656 10 view .LVU528
+ 2128 00aa 0BB9     		cbnz	r3, .L170
+ 662:BSP/u8g2/u8x8_cad.c **** }
+ 2129              		.loc 1 662 10 view .LVU529
+ 2130 00ac 0120     		movs	r0, #1
+ 2131              	.LVL268:
+ 662:BSP/u8g2/u8x8_cad.c **** }
+ 2132              		.loc 1 662 10 view .LVU530
+ 2133 00ae C1E7     		b	.L153
+ 2134              	.LVL269:
+ 2135              	.L170:
+ 657:BSP/u8g2/u8x8_cad.c ****       break;
+ 2136              		.loc 1 657 2 is_stmt 1 view .LVU531
+ 2137 00b0 FFF7FEFF 		bl	u8x8_byte_EndTransfer
+ 2138              	.LVL270:
+ 662:BSP/u8g2/u8x8_cad.c **** }
+ 2139              		.loc 1 662 10 is_stmt 0 view .LVU532
+ 2140 00b4 0120     		movs	r0, #1
+ 2141 00b6 BDE7     		b	.L153
+ 2142              	.LVL271:
+ 2143              	.L164:
+ 613:BSP/u8g2/u8x8_cad.c ****   {
+ 2144              		.loc 1 613 3 view .LVU533
+ 2145 00b8 0020     		movs	r0, #0
+ 2146              	.LVL272:
+ 613:BSP/u8g2/u8x8_cad.c ****   {
+ 2147              		.loc 1 613 3 view .LVU534
+ 2148 00ba BBE7     		b	.L153
+ 2149              	.L172:
+ 2150              		.align	2
+ 2151              	.L171:
+ 2152 00bc 00000000 		.word	in_transfer.2
+ 2153              		.cfi_endproc
+ 2154              	.LFE19:
+ 2156              		.section	.text.u8x8_cad_uc16xx_i2c,"ax",%progbits
+ 2157              		.align	1
+ 2158              		.global	u8x8_cad_uc16xx_i2c
+ 2159              		.syntax unified
+ 2160              		.thumb
+ 2161              		.thumb_func
+ 2163              	u8x8_cad_uc16xx_i2c:
+ 2164              	.LVL273:
+ARM GAS  /tmp/cczpVMPO.s 			page 58
+
+
+ 2165              	.LFB20:
+ 664:BSP/u8g2/u8x8_cad.c **** 
+ 665:BSP/u8g2/u8x8_cad.c **** /* cad procedure for the UC16xx family in I2C mode */
+ 666:BSP/u8g2/u8x8_cad.c **** /* u8x8_byte_SetDC is not used */
+ 667:BSP/u8g2/u8x8_cad.c **** /* DC bit is encoded into the adr byte */
+ 668:BSP/u8g2/u8x8_cad.c **** uint8_t u8x8_cad_uc16xx_i2c(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr)
+ 669:BSP/u8g2/u8x8_cad.c **** {
+ 2166              		.loc 1 669 1 is_stmt 1 view -0
+ 2167              		.cfi_startproc
+ 2168              		@ args = 0, pretend = 0, frame = 0
+ 2169              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2170              		.loc 1 669 1 is_stmt 0 view .LVU536
+ 2171 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 2172              	.LCFI29:
+ 2173              		.cfi_def_cfa_offset 24
+ 2174              		.cfi_offset 3, -24
+ 2175              		.cfi_offset 4, -20
+ 2176              		.cfi_offset 5, -16
+ 2177              		.cfi_offset 6, -12
+ 2178              		.cfi_offset 7, -8
+ 2179              		.cfi_offset 14, -4
+ 2180 0002 0546     		mov	r5, r0
+ 2181 0004 1446     		mov	r4, r2
+ 2182 0006 1E46     		mov	r6, r3
+ 670:BSP/u8g2/u8x8_cad.c ****   static uint8_t in_transfer = 0;	
+ 2183              		.loc 1 670 3 is_stmt 1 view .LVU537
+ 671:BSP/u8g2/u8x8_cad.c ****   static uint8_t is_data = 0;
+ 2184              		.loc 1 671 3 view .LVU538
+ 672:BSP/u8g2/u8x8_cad.c ****   uint8_t *p;
+ 2185              		.loc 1 672 3 view .LVU539
+ 673:BSP/u8g2/u8x8_cad.c ****   switch(msg)
+ 2186              		.loc 1 673 3 view .LVU540
+ 2187 0008 A1F11402 		sub	r2, r1, #20
+ 2188              	.LVL274:
+ 2189              		.loc 1 673 3 is_stmt 0 view .LVU541
+ 2190 000c 052A     		cmp	r2, #5
+ 2191 000e 6ED8     		bhi	.L188
+ 2192 0010 DFE802F0 		tbb	[pc, r2]
+ 2193              	.LVL275:
+ 2194              	.L176:
+ 2195 0014 4F       		.byte	(.L180-.L176)/2
+ 2196 0015 03       		.byte	(.L179-.L176)/2
+ 2197 0016 03       		.byte	(.L179-.L176)/2
+ 2198 0017 17       		.byte	(.L178-.L176)/2
+ 2199 0018 5D       		.byte	(.L177-.L176)/2
+ 2200 0019 62       		.byte	(.L175-.L176)/2
+ 2201              		.p2align 1
+ 2202              	.L179:
+ 674:BSP/u8g2/u8x8_cad.c ****   {
+ 675:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_CMD:
+ 676:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_ARG:
+ 677:BSP/u8g2/u8x8_cad.c ****       if ( in_transfer != 0 )
+ 2203              		.loc 1 677 7 is_stmt 1 view .LVU542
+ 2204              		.loc 1 677 24 is_stmt 0 view .LVU543
+ 2205 001a 364B     		ldr	r3, .L193
+ 2206 001c 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 2207              		.loc 1 677 10 view .LVU544
+ARM GAS  /tmp/cczpVMPO.s 			page 59
+
+
+ 2208 001e 3BB1     		cbz	r3, .L190
+ 2209              	.LVL276:
+ 2210              	.L181:
+ 678:BSP/u8g2/u8x8_cad.c ****       {
+ 679:BSP/u8g2/u8x8_cad.c **** 	if ( is_data != 0 )
+ 680:BSP/u8g2/u8x8_cad.c **** 	{
+ 681:BSP/u8g2/u8x8_cad.c **** 	  /* transfer mode is active, but data transfer */
+ 682:BSP/u8g2/u8x8_cad.c **** 	  u8x8_byte_EndTransfer(u8x8); 
+ 683:BSP/u8g2/u8x8_cad.c **** 	  /* clear the lowest two bits of the adr */
+ 684:BSP/u8g2/u8x8_cad.c **** 	  u8x8_SetI2CAddress( u8x8, u8x8_GetI2CAddress(u8x8)&0x0fc );
+ 685:BSP/u8g2/u8x8_cad.c **** 	  u8x8_byte_StartTransfer(u8x8); 
+ 686:BSP/u8g2/u8x8_cad.c **** 	}
+ 687:BSP/u8g2/u8x8_cad.c ****       }
+ 688:BSP/u8g2/u8x8_cad.c ****       else
+ 689:BSP/u8g2/u8x8_cad.c ****       {
+ 690:BSP/u8g2/u8x8_cad.c **** 	/* clear the lowest two bits of the adr */
+ 691:BSP/u8g2/u8x8_cad.c **** 	u8x8_SetI2CAddress( u8x8, u8x8_GetI2CAddress(u8x8)&0x0fc );
+ 692:BSP/u8g2/u8x8_cad.c **** 	u8x8_byte_StartTransfer(u8x8);
+ 693:BSP/u8g2/u8x8_cad.c ****       }
+ 694:BSP/u8g2/u8x8_cad.c ****       u8x8_byte_SendByte(u8x8, arg_int);
+ 2211              		.loc 1 694 7 is_stmt 1 view .LVU545
+ 2212 0020 2146     		mov	r1, r4
+ 2213 0022 2846     		mov	r0, r5
+ 2214 0024 FFF7FEFF 		bl	u8x8_byte_SendByte
+ 2215              	.LVL277:
+ 695:BSP/u8g2/u8x8_cad.c ****       in_transfer = 1;
+ 2216              		.loc 1 695 7 view .LVU546
+ 2217              		.loc 1 695 19 is_stmt 0 view .LVU547
+ 2218 0028 0120     		movs	r0, #1
+ 2219 002a 324B     		ldr	r3, .L193
+ 2220 002c 1870     		strb	r0, [r3]
+ 696:BSP/u8g2/u8x8_cad.c ****       break;
+ 2221              		.loc 1 696 7 is_stmt 1 view .LVU548
+ 2222              	.LVL278:
+ 2223              	.L174:
+ 697:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_SEND_DATA:
+ 698:BSP/u8g2/u8x8_cad.c ****       if ( in_transfer != 0 )
+ 699:BSP/u8g2/u8x8_cad.c ****       {
+ 700:BSP/u8g2/u8x8_cad.c **** 	if ( is_data == 0 )
+ 701:BSP/u8g2/u8x8_cad.c **** 	{
+ 702:BSP/u8g2/u8x8_cad.c **** 	  /* transfer mode is active, but data transfer */
+ 703:BSP/u8g2/u8x8_cad.c **** 	  u8x8_byte_EndTransfer(u8x8); 
+ 704:BSP/u8g2/u8x8_cad.c **** 	  /* clear the lowest two bits of the adr */
+ 705:BSP/u8g2/u8x8_cad.c **** 	  u8x8_SetI2CAddress( u8x8, (u8x8_GetI2CAddress(u8x8)&0x0fc)|2 );
+ 706:BSP/u8g2/u8x8_cad.c **** 	  u8x8_byte_StartTransfer(u8x8); 
+ 707:BSP/u8g2/u8x8_cad.c **** 	}
+ 708:BSP/u8g2/u8x8_cad.c ****       }
+ 709:BSP/u8g2/u8x8_cad.c ****       else
+ 710:BSP/u8g2/u8x8_cad.c ****       {
+ 711:BSP/u8g2/u8x8_cad.c **** 	/* clear the lowest two bits of the adr */
+ 712:BSP/u8g2/u8x8_cad.c **** 	u8x8_SetI2CAddress( u8x8, (u8x8_GetI2CAddress(u8x8)&0x0fc)|2 );
+ 713:BSP/u8g2/u8x8_cad.c **** 	u8x8_byte_StartTransfer(u8x8);
+ 714:BSP/u8g2/u8x8_cad.c ****       }
+ 715:BSP/u8g2/u8x8_cad.c ****       in_transfer = 1;
+ 716:BSP/u8g2/u8x8_cad.c ****       
+ 717:BSP/u8g2/u8x8_cad.c ****       p = arg_ptr;
+ 718:BSP/u8g2/u8x8_cad.c ****       while( arg_int > 24 )
+ARM GAS  /tmp/cczpVMPO.s 			page 60
+
+
+ 719:BSP/u8g2/u8x8_cad.c ****       {
+ 720:BSP/u8g2/u8x8_cad.c **** 	u8x8->byte_cb(u8x8, U8X8_MSG_CAD_SEND_DATA, 24, p);
+ 721:BSP/u8g2/u8x8_cad.c **** 	arg_int-=24;
+ 722:BSP/u8g2/u8x8_cad.c **** 	p+=24;
+ 723:BSP/u8g2/u8x8_cad.c **** 	u8x8_byte_EndTransfer(u8x8); 
+ 724:BSP/u8g2/u8x8_cad.c **** 	u8x8_byte_StartTransfer(u8x8);
+ 725:BSP/u8g2/u8x8_cad.c ****       }
+ 726:BSP/u8g2/u8x8_cad.c ****       u8x8->byte_cb(u8x8, U8X8_MSG_CAD_SEND_DATA, arg_int, p);
+ 727:BSP/u8g2/u8x8_cad.c ****       
+ 728:BSP/u8g2/u8x8_cad.c ****       break;
+ 729:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_INIT:
+ 730:BSP/u8g2/u8x8_cad.c ****       /* apply default i2c adr if required so that the start transfer msg can use this */
+ 731:BSP/u8g2/u8x8_cad.c ****       if ( u8x8->i2c_address == 255 )
+ 732:BSP/u8g2/u8x8_cad.c **** 	u8x8->i2c_address = 0x070;
+ 733:BSP/u8g2/u8x8_cad.c ****       return u8x8->byte_cb(u8x8, msg, arg_int, arg_ptr);
+ 734:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_START_TRANSFER:
+ 735:BSP/u8g2/u8x8_cad.c ****       in_transfer = 0;    
+ 736:BSP/u8g2/u8x8_cad.c ****       /* actual start is delayed, because we do not whether this is data or cmd transfer */
+ 737:BSP/u8g2/u8x8_cad.c ****       break;
+ 738:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_END_TRANSFER:
+ 739:BSP/u8g2/u8x8_cad.c ****       if ( in_transfer != 0 )
+ 740:BSP/u8g2/u8x8_cad.c **** 	u8x8_byte_EndTransfer(u8x8);
+ 741:BSP/u8g2/u8x8_cad.c ****       in_transfer = 0;
+ 742:BSP/u8g2/u8x8_cad.c ****       break;
+ 743:BSP/u8g2/u8x8_cad.c ****     default:
+ 744:BSP/u8g2/u8x8_cad.c ****       return 0;
+ 745:BSP/u8g2/u8x8_cad.c ****   }
+ 746:BSP/u8g2/u8x8_cad.c ****   return 1;
+ 747:BSP/u8g2/u8x8_cad.c **** }
+ 2224              		.loc 1 747 1 is_stmt 0 view .LVU549
+ 2225 002e F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 2226              	.LVL279:
+ 2227              	.L190:
+ 691:BSP/u8g2/u8x8_cad.c **** 	u8x8_byte_StartTransfer(u8x8);
+ 2228              		.loc 1 691 2 is_stmt 1 view .LVU550
+ 2229 0030 90F82430 		ldrb	r3, [r0, #36]	@ zero_extendqisi2
+ 2230 0034 03F0FC03 		and	r3, r3, #252
+ 2231 0038 80F82430 		strb	r3, [r0, #36]
+ 692:BSP/u8g2/u8x8_cad.c ****       }
+ 2232              		.loc 1 692 2 view .LVU551
+ 2233 003c FFF7FEFF 		bl	u8x8_byte_StartTransfer
+ 2234              	.LVL280:
+ 692:BSP/u8g2/u8x8_cad.c ****       }
+ 2235              		.loc 1 692 2 is_stmt 0 view .LVU552
+ 2236 0040 EEE7     		b	.L181
+ 2237              	.LVL281:
+ 2238              	.L178:
+ 698:BSP/u8g2/u8x8_cad.c ****       {
+ 2239              		.loc 1 698 7 is_stmt 1 view .LVU553
+ 698:BSP/u8g2/u8x8_cad.c ****       {
+ 2240              		.loc 1 698 24 is_stmt 0 view .LVU554
+ 2241 0042 2C4B     		ldr	r3, .L193
+ 2242 0044 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 698:BSP/u8g2/u8x8_cad.c ****       {
+ 2243              		.loc 1 698 10 view .LVU555
+ 2244 0046 6BB1     		cbz	r3, .L182
+ 700:BSP/u8g2/u8x8_cad.c **** 	{
+ARM GAS  /tmp/cczpVMPO.s 			page 61
+
+
+ 2245              		.loc 1 700 2 is_stmt 1 view .LVU556
+ 703:BSP/u8g2/u8x8_cad.c **** 	  /* clear the lowest two bits of the adr */
+ 2246              		.loc 1 703 4 view .LVU557
+ 2247 0048 FFF7FEFF 		bl	u8x8_byte_EndTransfer
+ 2248              	.LVL282:
+ 705:BSP/u8g2/u8x8_cad.c **** 	  u8x8_byte_StartTransfer(u8x8); 
+ 2249              		.loc 1 705 4 view .LVU558
+ 2250 004c 95F82430 		ldrb	r3, [r5, #36]	@ zero_extendqisi2
+ 2251 0050 23F00303 		bic	r3, r3, #3
+ 2252 0054 43F00203 		orr	r3, r3, #2
+ 2253 0058 85F82430 		strb	r3, [r5, #36]
+ 706:BSP/u8g2/u8x8_cad.c **** 	}
+ 2254              		.loc 1 706 4 view .LVU559
+ 2255 005c 2846     		mov	r0, r5
+ 2256 005e FFF7FEFF 		bl	u8x8_byte_StartTransfer
+ 2257              	.LVL283:
+ 2258 0062 09E0     		b	.L183
+ 2259              	.LVL284:
+ 2260              	.L182:
+ 712:BSP/u8g2/u8x8_cad.c **** 	u8x8_byte_StartTransfer(u8x8);
+ 2261              		.loc 1 712 2 view .LVU560
+ 2262 0064 90F82430 		ldrb	r3, [r0, #36]	@ zero_extendqisi2
+ 2263 0068 23F00303 		bic	r3, r3, #3
+ 2264 006c 43F00203 		orr	r3, r3, #2
+ 2265 0070 80F82430 		strb	r3, [r0, #36]
+ 713:BSP/u8g2/u8x8_cad.c ****       }
+ 2266              		.loc 1 713 2 view .LVU561
+ 2267 0074 FFF7FEFF 		bl	u8x8_byte_StartTransfer
+ 2268              	.LVL285:
+ 2269              	.L183:
+ 715:BSP/u8g2/u8x8_cad.c ****       
+ 2270              		.loc 1 715 7 view .LVU562
+ 715:BSP/u8g2/u8x8_cad.c ****       
+ 2271              		.loc 1 715 19 is_stmt 0 view .LVU563
+ 2272 0078 1E4B     		ldr	r3, .L193
+ 2273 007a 0122     		movs	r2, #1
+ 2274 007c 1A70     		strb	r2, [r3]
+ 717:BSP/u8g2/u8x8_cad.c ****       while( arg_int > 24 )
+ 2275              		.loc 1 717 7 is_stmt 1 view .LVU564
+ 2276              	.LVL286:
+ 718:BSP/u8g2/u8x8_cad.c ****       {
+ 2277              		.loc 1 718 7 view .LVU565
+ 718:BSP/u8g2/u8x8_cad.c ****       {
+ 2278              		.loc 1 718 12 is_stmt 0 view .LVU566
+ 2279 007e 0EE0     		b	.L184
+ 2280              	.LVL287:
+ 2281              	.L185:
+ 720:BSP/u8g2/u8x8_cad.c **** 	arg_int-=24;
+ 2282              		.loc 1 720 2 is_stmt 1 view .LVU567
+ 2283 0080 3346     		mov	r3, r6
+ 2284 0082 1822     		movs	r2, #24
+ 2285 0084 1721     		movs	r1, #23
+ 2286 0086 2846     		mov	r0, r5
+ 2287 0088 2F69     		ldr	r7, [r5, #16]
+ 2288 008a B847     		blx	r7
+ 2289              	.LVL288:
+ 721:BSP/u8g2/u8x8_cad.c **** 	p+=24;
+ARM GAS  /tmp/cczpVMPO.s 			page 62
+
+
+ 2290              		.loc 1 721 2 view .LVU568
+ 721:BSP/u8g2/u8x8_cad.c **** 	p+=24;
+ 2291              		.loc 1 721 9 is_stmt 0 view .LVU569
+ 2292 008c 183C     		subs	r4, r4, #24
+ 2293              	.LVL289:
+ 721:BSP/u8g2/u8x8_cad.c **** 	p+=24;
+ 2294              		.loc 1 721 9 view .LVU570
+ 2295 008e E4B2     		uxtb	r4, r4
+ 2296              	.LVL290:
+ 722:BSP/u8g2/u8x8_cad.c **** 	u8x8_byte_EndTransfer(u8x8); 
+ 2297              		.loc 1 722 2 is_stmt 1 view .LVU571
+ 722:BSP/u8g2/u8x8_cad.c **** 	u8x8_byte_EndTransfer(u8x8); 
+ 2298              		.loc 1 722 3 is_stmt 0 view .LVU572
+ 2299 0090 1836     		adds	r6, r6, #24
+ 2300              	.LVL291:
+ 723:BSP/u8g2/u8x8_cad.c **** 	u8x8_byte_StartTransfer(u8x8);
+ 2301              		.loc 1 723 2 is_stmt 1 view .LVU573
+ 2302 0092 2846     		mov	r0, r5
+ 2303 0094 FFF7FEFF 		bl	u8x8_byte_EndTransfer
+ 2304              	.LVL292:
+ 724:BSP/u8g2/u8x8_cad.c ****       }
+ 2305              		.loc 1 724 2 view .LVU574
+ 2306 0098 2846     		mov	r0, r5
+ 2307 009a FFF7FEFF 		bl	u8x8_byte_StartTransfer
+ 2308              	.LVL293:
+ 2309              	.L184:
+ 718:BSP/u8g2/u8x8_cad.c ****       {
+ 2310              		.loc 1 718 22 view .LVU575
+ 2311 009e 182C     		cmp	r4, #24
+ 2312 00a0 EED8     		bhi	.L185
+ 726:BSP/u8g2/u8x8_cad.c ****       
+ 2313              		.loc 1 726 7 view .LVU576
+ 726:BSP/u8g2/u8x8_cad.c ****       
+ 2314              		.loc 1 726 11 is_stmt 0 view .LVU577
+ 2315 00a2 2F69     		ldr	r7, [r5, #16]
+ 726:BSP/u8g2/u8x8_cad.c ****       
+ 2316              		.loc 1 726 7 view .LVU578
+ 2317 00a4 3346     		mov	r3, r6
+ 2318 00a6 2246     		mov	r2, r4
+ 2319 00a8 1721     		movs	r1, #23
+ 2320 00aa 2846     		mov	r0, r5
+ 2321 00ac B847     		blx	r7
+ 2322              	.LVL294:
+ 728:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_INIT:
+ 2323              		.loc 1 728 7 is_stmt 1 view .LVU579
+ 746:BSP/u8g2/u8x8_cad.c **** }
+ 2324              		.loc 1 746 10 is_stmt 0 view .LVU580
+ 2325 00ae 0120     		movs	r0, #1
+ 728:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_INIT:
+ 2326              		.loc 1 728 7 view .LVU581
+ 2327 00b0 BDE7     		b	.L174
+ 2328              	.LVL295:
+ 2329              	.L180:
+ 731:BSP/u8g2/u8x8_cad.c **** 	u8x8->i2c_address = 0x070;
+ 2330              		.loc 1 731 7 is_stmt 1 view .LVU582
+ 731:BSP/u8g2/u8x8_cad.c **** 	u8x8->i2c_address = 0x070;
+ 2331              		.loc 1 731 16 is_stmt 0 view .LVU583
+ARM GAS  /tmp/cczpVMPO.s 			page 63
+
+
+ 2332 00b2 90F82430 		ldrb	r3, [r0, #36]	@ zero_extendqisi2
+ 731:BSP/u8g2/u8x8_cad.c **** 	u8x8->i2c_address = 0x070;
+ 2333              		.loc 1 731 10 view .LVU584
+ 2334 00b6 FF2B     		cmp	r3, #255
+ 2335 00b8 05D0     		beq	.L191
+ 2336              	.L186:
+ 733:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_START_TRANSFER:
+ 2337              		.loc 1 733 7 is_stmt 1 view .LVU585
+ 733:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_START_TRANSFER:
+ 2338              		.loc 1 733 18 is_stmt 0 view .LVU586
+ 2339 00ba 2F69     		ldr	r7, [r5, #16]
+ 733:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_START_TRANSFER:
+ 2340              		.loc 1 733 14 view .LVU587
+ 2341 00bc 3346     		mov	r3, r6
+ 2342 00be 2246     		mov	r2, r4
+ 2343 00c0 2846     		mov	r0, r5
+ 2344              	.LVL296:
+ 733:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_START_TRANSFER:
+ 2345              		.loc 1 733 14 view .LVU588
+ 2346 00c2 B847     		blx	r7
+ 2347              	.LVL297:
+ 733:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_START_TRANSFER:
+ 2348              		.loc 1 733 14 view .LVU589
+ 2349 00c4 B3E7     		b	.L174
+ 2350              	.LVL298:
+ 2351              	.L191:
+ 732:BSP/u8g2/u8x8_cad.c ****       return u8x8->byte_cb(u8x8, msg, arg_int, arg_ptr);
+ 2352              		.loc 1 732 2 is_stmt 1 view .LVU590
+ 732:BSP/u8g2/u8x8_cad.c ****       return u8x8->byte_cb(u8x8, msg, arg_int, arg_ptr);
+ 2353              		.loc 1 732 20 is_stmt 0 view .LVU591
+ 2354 00c6 7023     		movs	r3, #112
+ 2355 00c8 80F82430 		strb	r3, [r0, #36]
+ 2356 00cc F5E7     		b	.L186
+ 2357              	.L177:
+ 735:BSP/u8g2/u8x8_cad.c ****       /* actual start is delayed, because we do not whether this is data or cmd transfer */
+ 2358              		.loc 1 735 7 is_stmt 1 view .LVU592
+ 735:BSP/u8g2/u8x8_cad.c ****       /* actual start is delayed, because we do not whether this is data or cmd transfer */
+ 2359              		.loc 1 735 19 is_stmt 0 view .LVU593
+ 2360 00ce 094B     		ldr	r3, .L193
+ 2361 00d0 0022     		movs	r2, #0
+ 2362 00d2 1A70     		strb	r2, [r3]
+ 737:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_END_TRANSFER:
+ 2363              		.loc 1 737 7 is_stmt 1 view .LVU594
+ 746:BSP/u8g2/u8x8_cad.c **** }
+ 2364              		.loc 1 746 10 is_stmt 0 view .LVU595
+ 2365 00d4 0120     		movs	r0, #1
+ 2366              	.LVL299:
+ 737:BSP/u8g2/u8x8_cad.c ****     case U8X8_MSG_CAD_END_TRANSFER:
+ 2367              		.loc 1 737 7 view .LVU596
+ 2368 00d6 AAE7     		b	.L174
+ 2369              	.LVL300:
+ 2370              	.L175:
+ 739:BSP/u8g2/u8x8_cad.c **** 	u8x8_byte_EndTransfer(u8x8);
+ 2371              		.loc 1 739 7 is_stmt 1 view .LVU597
+ 739:BSP/u8g2/u8x8_cad.c **** 	u8x8_byte_EndTransfer(u8x8);
+ 2372              		.loc 1 739 24 is_stmt 0 view .LVU598
+ 2373 00d8 064B     		ldr	r3, .L193
+ARM GAS  /tmp/cczpVMPO.s 			page 64
+
+
+ 2374 00da 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 739:BSP/u8g2/u8x8_cad.c **** 	u8x8_byte_EndTransfer(u8x8);
+ 2375              		.loc 1 739 10 view .LVU599
+ 2376 00dc 23B9     		cbnz	r3, .L192
+ 2377              	.LVL301:
+ 2378              	.L187:
+ 741:BSP/u8g2/u8x8_cad.c ****       break;
+ 2379              		.loc 1 741 7 is_stmt 1 view .LVU600
+ 741:BSP/u8g2/u8x8_cad.c ****       break;
+ 2380              		.loc 1 741 19 is_stmt 0 view .LVU601
+ 2381 00de 054B     		ldr	r3, .L193
+ 2382 00e0 0022     		movs	r2, #0
+ 2383 00e2 1A70     		strb	r2, [r3]
+ 742:BSP/u8g2/u8x8_cad.c ****     default:
+ 2384              		.loc 1 742 7 is_stmt 1 view .LVU602
+ 746:BSP/u8g2/u8x8_cad.c **** }
+ 2385              		.loc 1 746 10 is_stmt 0 view .LVU603
+ 2386 00e4 0120     		movs	r0, #1
+ 742:BSP/u8g2/u8x8_cad.c ****     default:
+ 2387              		.loc 1 742 7 view .LVU604
+ 2388 00e6 A2E7     		b	.L174
+ 2389              	.LVL302:
+ 2390              	.L192:
+ 740:BSP/u8g2/u8x8_cad.c ****       in_transfer = 0;
+ 2391              		.loc 1 740 2 is_stmt 1 view .LVU605
+ 2392 00e8 FFF7FEFF 		bl	u8x8_byte_EndTransfer
+ 2393              	.LVL303:
+ 740:BSP/u8g2/u8x8_cad.c ****       in_transfer = 0;
+ 2394              		.loc 1 740 2 is_stmt 0 view .LVU606
+ 2395 00ec F7E7     		b	.L187
+ 2396              	.LVL304:
+ 2397              	.L188:
+ 673:BSP/u8g2/u8x8_cad.c ****   {
+ 2398              		.loc 1 673 3 view .LVU607
+ 2399 00ee 0020     		movs	r0, #0
+ 2400              	.LVL305:
+ 673:BSP/u8g2/u8x8_cad.c ****   {
+ 2401              		.loc 1 673 3 view .LVU608
+ 2402 00f0 9DE7     		b	.L174
+ 2403              	.L194:
+ 2404 00f2 00BF     		.align	2
+ 2405              	.L193:
+ 2406 00f4 00000000 		.word	in_transfer.1
+ 2407              		.cfi_endproc
+ 2408              	.LFE20:
+ 2410              		.section	.bss.in_transfer.1,"aw",%nobits
+ 2413              	in_transfer.1:
+ 2414 0000 00       		.space	1
+ 2415              		.section	.bss.in_transfer.2,"aw",%nobits
+ 2418              	in_transfer.2:
+ 2419 0000 00       		.space	1
+ 2420              		.section	.bss.in_transfer.3,"aw",%nobits
+ 2423              	in_transfer.3:
+ 2424 0000 00       		.space	1
+ 2425              		.section	.bss.buf.4,"aw",%nobits
+ 2426              		.align	2
+ 2429              	buf.4:
+ARM GAS  /tmp/cczpVMPO.s 			page 65
+
+
+ 2430 0000 00000000 		.space	16
+ 2430      00000000 
+ 2430      00000000 
+ 2430      00000000 
+ 2431              		.text
+ 2432              	.Letext0:
+ 2433              		.file 2 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ 2434              		.file 3 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdarg.h"
+ 2435              		.file 4 "BSP/u8g2/u8x8.h"
+ 2436              		.file 5 "<built-in>"
+ARM GAS  /tmp/cczpVMPO.s 			page 66
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 u8x8_cad.c
+     /tmp/cczpVMPO.s:19     .text.u8x8_i2c_data_transfer:00000000 $t
+     /tmp/cczpVMPO.s:24     .text.u8x8_i2c_data_transfer:00000000 u8x8_i2c_data_transfer
+     /tmp/cczpVMPO.s:71     .text.u8x8_cad_SendCmd:00000000 $t
+     /tmp/cczpVMPO.s:77     .text.u8x8_cad_SendCmd:00000000 u8x8_cad_SendCmd
+     /tmp/cczpVMPO.s:107    .text.u8x8_cad_SendArg:00000000 $t
+     /tmp/cczpVMPO.s:113    .text.u8x8_cad_SendArg:00000000 u8x8_cad_SendArg
+     /tmp/cczpVMPO.s:143    .text.u8x8_cad_SendMultipleArg:00000000 $t
+     /tmp/cczpVMPO.s:149    .text.u8x8_cad_SendMultipleArg:00000000 u8x8_cad_SendMultipleArg
+     /tmp/cczpVMPO.s:200    .text.u8x8_cad_SendData:00000000 $t
+     /tmp/cczpVMPO.s:206    .text.u8x8_cad_SendData:00000000 u8x8_cad_SendData
+     /tmp/cczpVMPO.s:238    .text.u8x8_cad_StartTransfer:00000000 $t
+     /tmp/cczpVMPO.s:244    .text.u8x8_cad_StartTransfer:00000000 u8x8_cad_StartTransfer
+     /tmp/cczpVMPO.s:272    .text.u8x8_cad_EndTransfer:00000000 $t
+     /tmp/cczpVMPO.s:278    .text.u8x8_cad_EndTransfer:00000000 u8x8_cad_EndTransfer
+     /tmp/cczpVMPO.s:306    .text.u8x8_cad_vsendf:00000000 $t
+     /tmp/cczpVMPO.s:312    .text.u8x8_cad_vsendf:00000000 u8x8_cad_vsendf
+     /tmp/cczpVMPO.s:408    .text.u8x8_SendF:00000000 $t
+     /tmp/cczpVMPO.s:414    .text.u8x8_SendF:00000000 u8x8_SendF
+     /tmp/cczpVMPO.s:464    .text.u8x8_cad_SendSequence:00000000 $t
+     /tmp/cczpVMPO.s:470    .text.u8x8_cad_SendSequence:00000000 u8x8_cad_SendSequence
+     /tmp/cczpVMPO.s:605    .text.u8x8_cad_empty:00000000 $t
+     /tmp/cczpVMPO.s:611    .text.u8x8_cad_empty:00000000 u8x8_cad_empty
+     /tmp/cczpVMPO.s:633    .text.u8x8_cad_empty:0000000e $d
+     /tmp/cczpVMPO.s:639    .text.u8x8_cad_empty:00000014 $t
+     /tmp/cczpVMPO.s:684    .text.u8x8_cad_110:00000000 $t
+     /tmp/cczpVMPO.s:690    .text.u8x8_cad_110:00000000 u8x8_cad_110
+     /tmp/cczpVMPO.s:720    .text.u8x8_cad_110:00000018 $d
+     /tmp/cczpVMPO.s:726    .text.u8x8_cad_110:0000001e $t
+     /tmp/cczpVMPO.s:795    .text.u8x8_cad_100:00000000 $t
+     /tmp/cczpVMPO.s:801    .text.u8x8_cad_100:00000000 u8x8_cad_100
+     /tmp/cczpVMPO.s:831    .text.u8x8_cad_100:00000018 $d
+     /tmp/cczpVMPO.s:837    .text.u8x8_cad_100:0000001e $t
+     /tmp/cczpVMPO.s:906    .text.u8x8_cad_001:00000000 $t
+     /tmp/cczpVMPO.s:912    .text.u8x8_cad_001:00000000 u8x8_cad_001
+     /tmp/cczpVMPO.s:942    .text.u8x8_cad_001:00000018 $d
+     /tmp/cczpVMPO.s:948    .text.u8x8_cad_001:0000001e $t
+     /tmp/cczpVMPO.s:1017   .text.u8x8_cad_011:00000000 $t
+     /tmp/cczpVMPO.s:1023   .text.u8x8_cad_011:00000000 u8x8_cad_011
+     /tmp/cczpVMPO.s:1053   .text.u8x8_cad_011:00000018 $d
+     /tmp/cczpVMPO.s:1059   .text.u8x8_cad_011:0000001e $t
+     /tmp/cczpVMPO.s:1128   .text.u8x8_cad_st7920_spi:00000000 $t
+     /tmp/cczpVMPO.s:1134   .text.u8x8_cad_st7920_spi:00000000 u8x8_cad_st7920_spi
+     /tmp/cczpVMPO.s:1168   .text.u8x8_cad_st7920_spi:00000014 $d
+     /tmp/cczpVMPO.s:1174   .text.u8x8_cad_st7920_spi:0000001a $t
+     /tmp/cczpVMPO.s:1376   .text.u8x8_cad_st7920_spi:00000100 $d
+     /tmp/cczpVMPO.s:2429   .bss.buf.4:00000000 buf.4
+     /tmp/cczpVMPO.s:1381   .text.u8x8_cad_ssd13xx_i2c:00000000 $t
+     /tmp/cczpVMPO.s:1387   .text.u8x8_cad_ssd13xx_i2c:00000000 u8x8_cad_ssd13xx_i2c
+     /tmp/cczpVMPO.s:1415   .text.u8x8_cad_ssd13xx_i2c:00000016 $d
+     /tmp/cczpVMPO.s:1421   .text.u8x8_cad_ssd13xx_i2c:0000001c $t
+     /tmp/cczpVMPO.s:1529   .text.u8x8_cad_ssd13xx_fast_i2c:00000000 $t
+     /tmp/cczpVMPO.s:1535   .text.u8x8_cad_ssd13xx_fast_i2c:00000000 u8x8_cad_ssd13xx_fast_i2c
+     /tmp/cczpVMPO.s:1564   .text.u8x8_cad_ssd13xx_fast_i2c:00000016 $d
+     /tmp/cczpVMPO.s:1570   .text.u8x8_cad_ssd13xx_fast_i2c:0000001c $t
+     /tmp/cczpVMPO.s:1758   .text.u8x8_cad_ssd13xx_fast_i2c:000000c4 $d
+ARM GAS  /tmp/cczpVMPO.s 			page 67
+
+
+     /tmp/cczpVMPO.s:2423   .bss.in_transfer.3:00000000 in_transfer.3
+     /tmp/cczpVMPO.s:1763   .text.u8x8_cad_st75256_i2c:00000000 $t
+     /tmp/cczpVMPO.s:1769   .text.u8x8_cad_st75256_i2c:00000000 u8x8_cad_st75256_i2c
+     /tmp/cczpVMPO.s:1797   .text.u8x8_cad_st75256_i2c:00000016 $d
+     /tmp/cczpVMPO.s:1803   .text.u8x8_cad_st75256_i2c:0000001c $t
+     /tmp/cczpVMPO.s:1935   .text.u8x8_cad_ld7032_i2c:00000000 $t
+     /tmp/cczpVMPO.s:1941   .text.u8x8_cad_ld7032_i2c:00000000 u8x8_cad_ld7032_i2c
+     /tmp/cczpVMPO.s:1972   .text.u8x8_cad_ld7032_i2c:00000014 $d
+     /tmp/cczpVMPO.s:1978   .text.u8x8_cad_ld7032_i2c:0000001a $t
+     /tmp/cczpVMPO.s:2152   .text.u8x8_cad_ld7032_i2c:000000bc $d
+     /tmp/cczpVMPO.s:2418   .bss.in_transfer.2:00000000 in_transfer.2
+     /tmp/cczpVMPO.s:2157   .text.u8x8_cad_uc16xx_i2c:00000000 $t
+     /tmp/cczpVMPO.s:2163   .text.u8x8_cad_uc16xx_i2c:00000000 u8x8_cad_uc16xx_i2c
+     /tmp/cczpVMPO.s:2195   .text.u8x8_cad_uc16xx_i2c:00000014 $d
+     /tmp/cczpVMPO.s:2201   .text.u8x8_cad_uc16xx_i2c:0000001a $t
+     /tmp/cczpVMPO.s:2406   .text.u8x8_cad_uc16xx_i2c:000000f4 $d
+     /tmp/cczpVMPO.s:2413   .bss.in_transfer.1:00000000 in_transfer.1
+     /tmp/cczpVMPO.s:2414   .bss.in_transfer.1:00000000 $d
+     /tmp/cczpVMPO.s:2419   .bss.in_transfer.2:00000000 $d
+     /tmp/cczpVMPO.s:2424   .bss.in_transfer.3:00000000 $d
+     /tmp/cczpVMPO.s:2426   .bss.buf.4:00000000 $d
+
+UNDEFINED SYMBOLS
+u8x8_byte_StartTransfer
+u8x8_byte_SendByte
+u8x8_byte_EndTransfer
+u8x8_gpio_call
+u8x8_byte_SetDC
+u8x8_byte_SendBytes

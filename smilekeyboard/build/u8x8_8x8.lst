@@ -1,0 +1,2708 @@
+ARM GAS  /tmp/ccC5rntL.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.arch armv7-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"u8x8_8x8.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.file 1 "BSP/u8g2/u8x8_8x8.c"
+  18              		.section	.text.u8x8_get_glyph_data,"ax",%progbits
+  19              		.align	1
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  24              	u8x8_get_glyph_data:
+  25              	.LVL0:
+  26              	.LFB1:
+   1:BSP/u8g2/u8x8_8x8.c **** /*
+   2:BSP/u8g2/u8x8_8x8.c **** 
+   3:BSP/u8g2/u8x8_8x8.c ****   u8x8_8x8.c
+   4:BSP/u8g2/u8x8_8x8.c ****   
+   5:BSP/u8g2/u8x8_8x8.c ****   font procedures, directly interfaces display procedures
+   6:BSP/u8g2/u8x8_8x8.c ****   
+   7:BSP/u8g2/u8x8_8x8.c ****   Universal 8bit Graphics Library (https://github.com/olikraus/u8g2/)
+   8:BSP/u8g2/u8x8_8x8.c **** 
+   9:BSP/u8g2/u8x8_8x8.c ****   Copyright (c) 2016, olikraus@gmail.com
+  10:BSP/u8g2/u8x8_8x8.c ****   All rights reserved.
+  11:BSP/u8g2/u8x8_8x8.c **** 
+  12:BSP/u8g2/u8x8_8x8.c ****   Redistribution and use in source and binary forms, with or without modification, 
+  13:BSP/u8g2/u8x8_8x8.c ****   are permitted provided that the following conditions are met:
+  14:BSP/u8g2/u8x8_8x8.c **** 
+  15:BSP/u8g2/u8x8_8x8.c ****   * Redistributions of source code must retain the above copyright notice, this list 
+  16:BSP/u8g2/u8x8_8x8.c ****     of conditions and the following disclaimer.
+  17:BSP/u8g2/u8x8_8x8.c ****     
+  18:BSP/u8g2/u8x8_8x8.c ****   * Redistributions in binary form must reproduce the above copyright notice, this 
+  19:BSP/u8g2/u8x8_8x8.c ****     list of conditions and the following disclaimer in the documentation and/or other 
+  20:BSP/u8g2/u8x8_8x8.c ****     materials provided with the distribution.
+  21:BSP/u8g2/u8x8_8x8.c **** 
+  22:BSP/u8g2/u8x8_8x8.c ****   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND 
+  23:BSP/u8g2/u8x8_8x8.c ****   CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, 
+  24:BSP/u8g2/u8x8_8x8.c ****   INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF 
+  25:BSP/u8g2/u8x8_8x8.c ****   MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
+  26:BSP/u8g2/u8x8_8x8.c ****   DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR 
+  27:BSP/u8g2/u8x8_8x8.c ****   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+  28:BSP/u8g2/u8x8_8x8.c ****   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+  29:BSP/u8g2/u8x8_8x8.c ****   NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
+  30:BSP/u8g2/u8x8_8x8.c ****   LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
+  31:BSP/u8g2/u8x8_8x8.c ****   CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, 
+  32:BSP/u8g2/u8x8_8x8.c ****   STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+ARM GAS  /tmp/ccC5rntL.s 			page 2
+
+
+  33:BSP/u8g2/u8x8_8x8.c ****   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
+  34:BSP/u8g2/u8x8_8x8.c ****   ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.    
+  35:BSP/u8g2/u8x8_8x8.c **** 
+  36:BSP/u8g2/u8x8_8x8.c **** */
+  37:BSP/u8g2/u8x8_8x8.c **** 
+  38:BSP/u8g2/u8x8_8x8.c **** #include "u8x8.h"
+  39:BSP/u8g2/u8x8_8x8.c **** 
+  40:BSP/u8g2/u8x8_8x8.c **** #if defined(ESP8266)
+  41:BSP/u8g2/u8x8_8x8.c **** uint8_t u8x8_pgm_read_esp(const uint8_t * addr) 
+  42:BSP/u8g2/u8x8_8x8.c **** {
+  43:BSP/u8g2/u8x8_8x8.c ****     uint32_t bytes;
+  44:BSP/u8g2/u8x8_8x8.c ****     bytes = *(uint32_t*)((uint32_t)addr & ~3);
+  45:BSP/u8g2/u8x8_8x8.c ****     return ((uint8_t*)&bytes)[(uint32_t)addr & 3];
+  46:BSP/u8g2/u8x8_8x8.c **** }
+  47:BSP/u8g2/u8x8_8x8.c **** #endif
+  48:BSP/u8g2/u8x8_8x8.c **** 
+  49:BSP/u8g2/u8x8_8x8.c **** 
+  50:BSP/u8g2/u8x8_8x8.c **** void u8x8_SetFont(u8x8_t *u8x8, const uint8_t *font_8x8)
+  51:BSP/u8g2/u8x8_8x8.c **** {
+  52:BSP/u8g2/u8x8_8x8.c ****   u8x8->font = font_8x8;
+  53:BSP/u8g2/u8x8_8x8.c **** }
+  54:BSP/u8g2/u8x8_8x8.c **** 
+  55:BSP/u8g2/u8x8_8x8.c **** /*
+  56:BSP/u8g2/u8x8_8x8.c ****  Args:
+  57:BSP/u8g2/u8x8_8x8.c ****    u8x8: ptr to u8x8 structure
+  58:BSP/u8g2/u8x8_8x8.c ****    encoding: glyph for which the data is requested (must be between 0 and 255)
+  59:BSP/u8g2/u8x8_8x8.c ****    buf: pointer to 8 bytes
+  60:BSP/u8g2/u8x8_8x8.c **** */
+  61:BSP/u8g2/u8x8_8x8.c **** static void u8x8_get_glyph_data(u8x8_t *u8x8, uint8_t encoding, uint8_t *buf, uint8_t tile_offset) 
+  62:BSP/u8g2/u8x8_8x8.c **** static void u8x8_get_glyph_data(u8x8_t *u8x8, uint8_t encoding, uint8_t *buf, uint8_t tile_offset) 
+  63:BSP/u8g2/u8x8_8x8.c **** {
+  27              		.loc 1 63 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		.loc 1 63 1 is_stmt 0 view .LVU1
+  32 0000 70B5     		push	{r4, r5, r6, lr}
+  33              	.LCFI0:
+  34              		.cfi_def_cfa_offset 16
+  35              		.cfi_offset 4, -16
+  36              		.cfi_offset 5, -12
+  37              		.cfi_offset 6, -8
+  38              		.cfi_offset 14, -4
+  64:BSP/u8g2/u8x8_8x8.c ****   uint8_t first, last, tiles, i;
+  39              		.loc 1 64 3 is_stmt 1 view .LVU2
+  65:BSP/u8g2/u8x8_8x8.c ****   uint16_t offset;
+  40              		.loc 1 65 3 view .LVU3
+  66:BSP/u8g2/u8x8_8x8.c ****   first = u8x8_pgm_read(u8x8->font+0);
+  41              		.loc 1 66 3 view .LVU4
+  42              		.loc 1 66 11 is_stmt 0 view .LVU5
+  43 0002 C469     		ldr	r4, [r0, #28]
+  44              		.loc 1 66 9 view .LVU6
+  45 0004 94F800E0 		ldrb	lr, [r4]	@ zero_extendqisi2
+  46              	.LVL1:
+  67:BSP/u8g2/u8x8_8x8.c ****   last = u8x8_pgm_read(u8x8->font+1);
+  47              		.loc 1 67 3 is_stmt 1 view .LVU7
+  48              		.loc 1 67 8 is_stmt 0 view .LVU8
+ARM GAS  /tmp/ccC5rntL.s 			page 3
+
+
+  49 0008 6678     		ldrb	r6, [r4, #1]	@ zero_extendqisi2
+  50              	.LVL2:
+  68:BSP/u8g2/u8x8_8x8.c ****   tiles = u8x8_pgm_read(u8x8->font+2);		/* new 2019 format */
+  51              		.loc 1 68 3 is_stmt 1 view .LVU9
+  52              		.loc 1 68 9 is_stmt 0 view .LVU10
+  53 000a A578     		ldrb	r5, [r4, #2]	@ zero_extendqisi2
+  54              	.LVL3:
+  69:BSP/u8g2/u8x8_8x8.c ****   tiles *= u8x8_pgm_read(u8x8->font+3);	/* new 2019 format */
+  55              		.loc 1 69 3 is_stmt 1 view .LVU11
+  56              		.loc 1 69 12 is_stmt 0 view .LVU12
+  57 000c 94F803C0 		ldrb	ip, [r4, #3]	@ zero_extendqisi2
+  58              		.loc 1 69 9 view .LVU13
+  59 0010 05FB0CFC 		mul	ip, r5, ip
+  60              	.LVL4:
+  70:BSP/u8g2/u8x8_8x8.c ****   
+  71:BSP/u8g2/u8x8_8x8.c ****   /* get the glyph bitmap from the font */
+  72:BSP/u8g2/u8x8_8x8.c ****   if ( first <= encoding && encoding <= last )
+  61              		.loc 1 72 3 is_stmt 1 view .LVU14
+  62              		.loc 1 72 6 is_stmt 0 view .LVU15
+  63 0014 8E45     		cmp	lr, r1
+  64 0016 26D8     		bhi	.L11
+  65 0018 5FFA8CFC 		uxtb	ip, ip
+  66              		.loc 1 72 26 discriminator 1 view .LVU16
+  67 001c 8E42     		cmp	r6, r1
+  68 001e 24D3     		bcc	.L12
+  73:BSP/u8g2/u8x8_8x8.c ****   {
+  74:BSP/u8g2/u8x8_8x8.c ****     offset = encoding;
+  69              		.loc 1 74 5 is_stmt 1 view .LVU17
+  70              	.LVL5:
+  75:BSP/u8g2/u8x8_8x8.c ****     offset -= first;
+  71              		.loc 1 75 5 view .LVU18
+  72              		.loc 1 75 12 is_stmt 0 view .LVU19
+  73 0020 A1EB0E01 		sub	r1, r1, lr
+  74              	.LVL6:
+  75              		.loc 1 75 12 view .LVU20
+  76 0024 89B2     		uxth	r1, r1
+  77              	.LVL7:
+  76:BSP/u8g2/u8x8_8x8.c ****     offset *= tiles;		/* new 2019 format */
+  78              		.loc 1 76 5 is_stmt 1 view .LVU21
+  79              		.loc 1 76 12 is_stmt 0 view .LVU22
+  80 0026 01FB0CFC 		mul	ip, r1, ip
+  81              	.LVL8:
+  82              		.loc 1 76 12 view .LVU23
+  83 002a 1FFA8CFC 		uxth	ip, ip
+  84              	.LVL9:
+  77:BSP/u8g2/u8x8_8x8.c ****     offset += tile_offset;	/* new 2019 format */
+  85              		.loc 1 77 5 is_stmt 1 view .LVU24
+  86              		.loc 1 77 12 is_stmt 0 view .LVU25
+  87 002e 6344     		add	r3, r3, ip
+  88              	.LVL10:
+  89              		.loc 1 77 12 view .LVU26
+  90 0030 9BB2     		uxth	r3, r3
+  91              	.LVL11:
+  78:BSP/u8g2/u8x8_8x8.c ****     offset *= 8;
+  92              		.loc 1 78 5 is_stmt 1 view .LVU27
+  93              		.loc 1 78 12 is_stmt 0 view .LVU28
+  94 0032 DB00     		lsls	r3, r3, #3
+ARM GAS  /tmp/ccC5rntL.s 			page 4
+
+
+  95              	.LVL12:
+  96              		.loc 1 78 12 view .LVU29
+  97 0034 9BB2     		uxth	r3, r3
+  98              	.LVL13:
+  79:BSP/u8g2/u8x8_8x8.c ****     offset +=4;			/* changed from 2 to 4, new 2019 format */
+  99              		.loc 1 79 5 is_stmt 1 view .LVU30
+ 100              		.loc 1 79 12 is_stmt 0 view .LVU31
+ 101 0036 0433     		adds	r3, r3, #4
+ 102              	.LVL14:
+ 103              		.loc 1 79 12 view .LVU32
+ 104 0038 9BB2     		uxth	r3, r3
+ 105              	.LVL15:
+  80:BSP/u8g2/u8x8_8x8.c ****     for( i = 0; i < 8; i++ )
+ 106              		.loc 1 80 5 is_stmt 1 view .LVU33
+ 107              		.loc 1 80 12 is_stmt 0 view .LVU34
+ 108 003a 0021     		movs	r1, #0
+ 109              		.loc 1 80 5 view .LVU35
+ 110 003c 06E0     		b	.L3
+ 111              	.LVL16:
+ 112              	.L4:
+  81:BSP/u8g2/u8x8_8x8.c ****     {
+  82:BSP/u8g2/u8x8_8x8.c ****       buf[i] = u8x8_pgm_read(u8x8->font+offset);
+ 113              		.loc 1 82 7 is_stmt 1 view .LVU36
+ 114              		.loc 1 82 16 is_stmt 0 view .LVU37
+ 115 003e C469     		ldr	r4, [r0, #28]
+ 116 0040 E45C     		ldrb	r4, [r4, r3]	@ zero_extendqisi2
+ 117              		.loc 1 82 14 view .LVU38
+ 118 0042 5454     		strb	r4, [r2, r1]
+  83:BSP/u8g2/u8x8_8x8.c ****       offset++;
+ 119              		.loc 1 83 7 is_stmt 1 view .LVU39
+ 120              		.loc 1 83 13 is_stmt 0 view .LVU40
+ 121 0044 0133     		adds	r3, r3, #1
+ 122              	.LVL17:
+ 123              		.loc 1 83 13 view .LVU41
+ 124 0046 9BB2     		uxth	r3, r3
+ 125              	.LVL18:
+  80:BSP/u8g2/u8x8_8x8.c ****     for( i = 0; i < 8; i++ )
+ 126              		.loc 1 80 25 is_stmt 1 discriminator 3 view .LVU42
+ 127 0048 0131     		adds	r1, r1, #1
+ 128              	.LVL19:
+  80:BSP/u8g2/u8x8_8x8.c ****     for( i = 0; i < 8; i++ )
+ 129              		.loc 1 80 25 is_stmt 0 discriminator 3 view .LVU43
+ 130 004a C9B2     		uxtb	r1, r1
+ 131              	.LVL20:
+ 132              	.L3:
+  80:BSP/u8g2/u8x8_8x8.c ****     for( i = 0; i < 8; i++ )
+ 133              		.loc 1 80 19 is_stmt 1 discriminator 1 view .LVU44
+ 134 004c 0729     		cmp	r1, #7
+ 135 004e F6D9     		bls	.L4
+  80:BSP/u8g2/u8x8_8x8.c ****     for( i = 0; i < 8; i++ )
+ 136              		.loc 1 80 19 is_stmt 0 discriminator 1 view .LVU45
+ 137 0050 05E0     		b	.L5
+ 138              	.LVL21:
+ 139              	.L7:
+  84:BSP/u8g2/u8x8_8x8.c ****     }
+  85:BSP/u8g2/u8x8_8x8.c ****   }
+  86:BSP/u8g2/u8x8_8x8.c ****   else
+ARM GAS  /tmp/ccC5rntL.s 			page 5
+
+
+  87:BSP/u8g2/u8x8_8x8.c ****   {
+  88:BSP/u8g2/u8x8_8x8.c ****     for( i = 0; i < 8; i++ )
+  89:BSP/u8g2/u8x8_8x8.c ****     {
+  90:BSP/u8g2/u8x8_8x8.c ****       buf[i] = 0;
+ 140              		.loc 1 90 7 is_stmt 1 view .LVU46
+ 141              		.loc 1 90 14 is_stmt 0 view .LVU47
+ 142 0052 0021     		movs	r1, #0
+ 143 0054 D154     		strb	r1, [r2, r3]
+  88:BSP/u8g2/u8x8_8x8.c ****     {
+ 144              		.loc 1 88 25 is_stmt 1 discriminator 3 view .LVU48
+ 145 0056 0133     		adds	r3, r3, #1
+ 146              	.LVL22:
+  88:BSP/u8g2/u8x8_8x8.c ****     {
+ 147              		.loc 1 88 25 is_stmt 0 discriminator 3 view .LVU49
+ 148 0058 DBB2     		uxtb	r3, r3
+ 149              	.LVL23:
+ 150              	.L6:
+  88:BSP/u8g2/u8x8_8x8.c ****     {
+ 151              		.loc 1 88 19 is_stmt 1 discriminator 1 view .LVU50
+ 152 005a 072B     		cmp	r3, #7
+ 153 005c F9D9     		bls	.L7
+ 154              	.LVL24:
+ 155              	.L5:
+  91:BSP/u8g2/u8x8_8x8.c ****     }
+  92:BSP/u8g2/u8x8_8x8.c ****   }
+  93:BSP/u8g2/u8x8_8x8.c ****   
+  94:BSP/u8g2/u8x8_8x8.c ****   /* invert the bitmap if required */
+  95:BSP/u8g2/u8x8_8x8.c ****   if ( u8x8->is_font_inverse_mode )
+ 156              		.loc 1 95 3 view .LVU51
+ 157              		.loc 1 95 12 is_stmt 0 view .LVU52
+ 158 005e 90F82330 		ldrb	r3, [r0, #35]	@ zero_extendqisi2
+ 159              		.loc 1 95 6 view .LVU53
+ 160 0062 63B9     		cbnz	r3, .L13
+ 161              	.L1:
+  96:BSP/u8g2/u8x8_8x8.c ****   {
+  97:BSP/u8g2/u8x8_8x8.c ****     for( i = 0; i < 8; i++ )
+  98:BSP/u8g2/u8x8_8x8.c ****     {
+  99:BSP/u8g2/u8x8_8x8.c ****       buf[i] ^= 255;
+ 100:BSP/u8g2/u8x8_8x8.c ****     }
+ 101:BSP/u8g2/u8x8_8x8.c ****   }
+ 102:BSP/u8g2/u8x8_8x8.c ****   
+ 103:BSP/u8g2/u8x8_8x8.c **** }
+ 162              		.loc 1 103 1 view .LVU54
+ 163 0064 70BD     		pop	{r4, r5, r6, pc}
+ 164              	.LVL25:
+ 165              	.L11:
+ 166              		.loc 1 103 1 view .LVU55
+ 167 0066 0023     		movs	r3, #0
+ 168              	.LVL26:
+ 169              		.loc 1 103 1 view .LVU56
+ 170 0068 F7E7     		b	.L6
+ 171              	.LVL27:
+ 172              	.L12:
+ 173              		.loc 1 103 1 view .LVU57
+ 174 006a 0023     		movs	r3, #0
+ 175              	.LVL28:
+ 176              		.loc 1 103 1 view .LVU58
+ARM GAS  /tmp/ccC5rntL.s 			page 6
+
+
+ 177 006c F5E7     		b	.L6
+ 178              	.LVL29:
+ 179              	.L10:
+  99:BSP/u8g2/u8x8_8x8.c ****     }
+ 180              		.loc 1 99 7 is_stmt 1 view .LVU59
+  99:BSP/u8g2/u8x8_8x8.c ****     }
+ 181              		.loc 1 99 10 is_stmt 0 view .LVU60
+ 182 006e D15C     		ldrb	r1, [r2, r3]	@ zero_extendqisi2
+  99:BSP/u8g2/u8x8_8x8.c ****     }
+ 183              		.loc 1 99 14 view .LVU61
+ 184 0070 C943     		mvns	r1, r1
+ 185 0072 D154     		strb	r1, [r2, r3]
+  97:BSP/u8g2/u8x8_8x8.c ****     {
+ 186              		.loc 1 97 25 is_stmt 1 discriminator 3 view .LVU62
+ 187 0074 0133     		adds	r3, r3, #1
+ 188              	.LVL30:
+  97:BSP/u8g2/u8x8_8x8.c ****     {
+ 189              		.loc 1 97 25 is_stmt 0 discriminator 3 view .LVU63
+ 190 0076 DBB2     		uxtb	r3, r3
+ 191              	.LVL31:
+ 192              	.L8:
+  97:BSP/u8g2/u8x8_8x8.c ****     {
+ 193              		.loc 1 97 19 is_stmt 1 discriminator 1 view .LVU64
+ 194 0078 072B     		cmp	r3, #7
+ 195 007a F8D9     		bls	.L10
+ 196 007c F2E7     		b	.L1
+ 197              	.LVL32:
+ 198              	.L13:
+  97:BSP/u8g2/u8x8_8x8.c ****     {
+ 199              		.loc 1 97 12 is_stmt 0 view .LVU65
+ 200 007e 0023     		movs	r3, #0
+ 201 0080 FAE7     		b	.L8
+ 202              		.cfi_endproc
+ 203              	.LFE1:
+ 205              		.section	.text.u8x8_upscale_buf,"ax",%progbits
+ 206              		.align	1
+ 207              		.syntax unified
+ 208              		.thumb
+ 209              		.thumb_func
+ 211              	u8x8_upscale_buf:
+ 212              	.LVL33:
+ 213              	.LFB4:
+ 104:BSP/u8g2/u8x8_8x8.c **** 
+ 105:BSP/u8g2/u8x8_8x8.c **** void u8x8_DrawGlyph(u8x8_t *u8x8, uint8_t x, uint8_t y, uint8_t encoding)
+ 106:BSP/u8g2/u8x8_8x8.c **** {
+ 107:BSP/u8g2/u8x8_8x8.c ****   uint8_t th = u8x8_pgm_read(u8x8->font+2);		/* new 2019 format */
+ 108:BSP/u8g2/u8x8_8x8.c ****   uint8_t tv = u8x8_pgm_read(u8x8->font+3);	/* new 2019 format */
+ 109:BSP/u8g2/u8x8_8x8.c ****   uint8_t xx, tile;
+ 110:BSP/u8g2/u8x8_8x8.c ****   uint8_t buf[8];
+ 111:BSP/u8g2/u8x8_8x8.c ****   th += x;
+ 112:BSP/u8g2/u8x8_8x8.c ****   tv += y;
+ 113:BSP/u8g2/u8x8_8x8.c ****   tile = 0;
+ 114:BSP/u8g2/u8x8_8x8.c ****   do
+ 115:BSP/u8g2/u8x8_8x8.c ****   {
+ 116:BSP/u8g2/u8x8_8x8.c ****     xx = x;
+ 117:BSP/u8g2/u8x8_8x8.c ****     do
+ 118:BSP/u8g2/u8x8_8x8.c ****     {
+ARM GAS  /tmp/ccC5rntL.s 			page 7
+
+
+ 119:BSP/u8g2/u8x8_8x8.c ****       u8x8_get_glyph_data(u8x8, encoding, buf, tile);
+ 120:BSP/u8g2/u8x8_8x8.c ****       u8x8_DrawTile(u8x8, xx, y, 1, buf);
+ 121:BSP/u8g2/u8x8_8x8.c ****       tile++;
+ 122:BSP/u8g2/u8x8_8x8.c ****       xx++;
+ 123:BSP/u8g2/u8x8_8x8.c ****     } while( xx < th );
+ 124:BSP/u8g2/u8x8_8x8.c ****     y++;
+ 125:BSP/u8g2/u8x8_8x8.c ****   } while( y < tv );
+ 126:BSP/u8g2/u8x8_8x8.c **** }
+ 127:BSP/u8g2/u8x8_8x8.c **** 
+ 128:BSP/u8g2/u8x8_8x8.c **** 
+ 129:BSP/u8g2/u8x8_8x8.c **** /*
+ 130:BSP/u8g2/u8x8_8x8.c ****   Source: http://graphics.stanford.edu/~seander/bithacks.html
+ 131:BSP/u8g2/u8x8_8x8.c **** 	Section: Interleave bits by Binary Magic Numbers 
+ 132:BSP/u8g2/u8x8_8x8.c ****    Original codes is here:
+ 133:BSP/u8g2/u8x8_8x8.c **** 		static const unsigned int B[] = {0x55555555, 0x33333333, 0x0F0F0F0F, 0x00FF00FF};
+ 134:BSP/u8g2/u8x8_8x8.c **** 		static const unsigned int S[] = {1, 2, 4, 8};
+ 135:BSP/u8g2/u8x8_8x8.c **** 
+ 136:BSP/u8g2/u8x8_8x8.c **** 		unsigned int x; // Interleave lower 16 bits of x and y, so the bits of x
+ 137:BSP/u8g2/u8x8_8x8.c **** 		unsigned int y; // are in the even positions and bits from y in the odd;
+ 138:BSP/u8g2/u8x8_8x8.c **** 		unsigned int z; // z gets the resulting 32-bit Morton Number.  
+ 139:BSP/u8g2/u8x8_8x8.c **** 				// x and y must initially be less than 65536.
+ 140:BSP/u8g2/u8x8_8x8.c **** 
+ 141:BSP/u8g2/u8x8_8x8.c **** 		x = (x | (x << S[3])) & B[3];
+ 142:BSP/u8g2/u8x8_8x8.c **** 		x = (x | (x << S[2])) & B[2];
+ 143:BSP/u8g2/u8x8_8x8.c **** 		x = (x | (x << S[1])) & B[1];
+ 144:BSP/u8g2/u8x8_8x8.c **** 		x = (x | (x << S[0])) & B[0];
+ 145:BSP/u8g2/u8x8_8x8.c **** 
+ 146:BSP/u8g2/u8x8_8x8.c **** 		y = (y | (y << S[3])) & B[3];
+ 147:BSP/u8g2/u8x8_8x8.c **** 		y = (y | (y << S[2])) & B[2];
+ 148:BSP/u8g2/u8x8_8x8.c **** 		y = (y | (y << S[1])) & B[1];
+ 149:BSP/u8g2/u8x8_8x8.c **** 		y = (y | (y << S[0])) & B[0];
+ 150:BSP/u8g2/u8x8_8x8.c **** 
+ 151:BSP/u8g2/u8x8_8x8.c **** 		z = x | (y << 1);
+ 152:BSP/u8g2/u8x8_8x8.c **** */
+ 153:BSP/u8g2/u8x8_8x8.c **** uint16_t u8x8_upscale_byte(uint8_t x) 
+ 154:BSP/u8g2/u8x8_8x8.c **** {
+ 155:BSP/u8g2/u8x8_8x8.c **** 	uint16_t y = x;
+ 156:BSP/u8g2/u8x8_8x8.c **** 	y |= (y << 4);		// x = (x | (x << S[2])) & B[2];
+ 157:BSP/u8g2/u8x8_8x8.c **** 	y &= 0x0f0f;
+ 158:BSP/u8g2/u8x8_8x8.c **** 	y |= (y << 2);		// x = (x | (x << S[1])) & B[1];
+ 159:BSP/u8g2/u8x8_8x8.c **** 	y &= 0x3333;
+ 160:BSP/u8g2/u8x8_8x8.c **** 	y |= (y << 1);		// x = (x | (x << S[0])) & B[0];
+ 161:BSP/u8g2/u8x8_8x8.c **** 	y &= 0x5555;
+ 162:BSP/u8g2/u8x8_8x8.c ****   
+ 163:BSP/u8g2/u8x8_8x8.c **** 	y |= (y << 1);		// z = x | (y << 1);
+ 164:BSP/u8g2/u8x8_8x8.c **** 	return y;
+ 165:BSP/u8g2/u8x8_8x8.c **** }
+ 166:BSP/u8g2/u8x8_8x8.c **** 
+ 167:BSP/u8g2/u8x8_8x8.c **** static void u8x8_upscale_buf(uint8_t *src, uint8_t *dest) U8X8_NOINLINE;
+ 168:BSP/u8g2/u8x8_8x8.c **** static void u8x8_upscale_buf(uint8_t *src, uint8_t *dest)
+ 169:BSP/u8g2/u8x8_8x8.c **** {
+ 214              		.loc 1 169 1 is_stmt 1 view -0
+ 215              		.cfi_startproc
+ 216              		@ args = 0, pretend = 0, frame = 0
+ 217              		@ frame_needed = 0, uses_anonymous_args = 0
+ 218              		@ link register save eliminated.
+ 170:BSP/u8g2/u8x8_8x8.c ****   uint8_t i = 4;  
+ARM GAS  /tmp/ccC5rntL.s 			page 8
+
+
+ 219              		.loc 1 170 3 view .LVU67
+ 220              		.loc 1 170 11 is_stmt 0 view .LVU68
+ 221 0000 0423     		movs	r3, #4
+ 222              	.LVL34:
+ 223              	.L16:
+ 171:BSP/u8g2/u8x8_8x8.c ****   do 
+ 224              		.loc 1 171 3 is_stmt 1 view .LVU69
+ 172:BSP/u8g2/u8x8_8x8.c ****   {
+ 173:BSP/u8g2/u8x8_8x8.c ****     *dest++ = *src;
+ 225              		.loc 1 173 5 view .LVU70
+ 226              		.loc 1 173 15 is_stmt 0 view .LVU71
+ 227 0002 10F801CB 		ldrb	ip, [r0], #1	@ zero_extendqisi2
+ 228              	.LVL35:
+ 229              		.loc 1 173 13 view .LVU72
+ 230 0006 81F800C0 		strb	ip, [r1]
+ 174:BSP/u8g2/u8x8_8x8.c ****     *dest++ = *src++;
+ 231              		.loc 1 174 5 is_stmt 1 view .LVU73
+ 232              	.LVL36:
+ 233              		.loc 1 174 13 is_stmt 0 view .LVU74
+ 234 000a 81F801C0 		strb	ip, [r1, #1]
+ 235 000e 0231     		adds	r1, r1, #2
+ 236              	.LVL37:
+ 175:BSP/u8g2/u8x8_8x8.c ****     i--;
+ 237              		.loc 1 175 5 is_stmt 1 view .LVU75
+ 238              		.loc 1 175 6 is_stmt 0 view .LVU76
+ 239 0010 013B     		subs	r3, r3, #1
+ 240              	.LVL38:
+ 176:BSP/u8g2/u8x8_8x8.c ****   } while( i > 0 );
+ 241              		.loc 1 176 14 is_stmt 1 discriminator 1 view .LVU77
+ 242 0012 13F0FF03 		ands	r3, r3, #255
+ 243              	.LVL39:
+ 244              		.loc 1 176 14 is_stmt 0 discriminator 1 view .LVU78
+ 245 0016 F4D1     		bne	.L16
+ 177:BSP/u8g2/u8x8_8x8.c **** }
+ 246              		.loc 1 177 1 view .LVU79
+ 247 0018 7047     		bx	lr
+ 248              		.cfi_endproc
+ 249              	.LFE4:
+ 251              		.section	.text.u8x8_ascii_next,"ax",%progbits
+ 252              		.align	1
+ 253              		.global	u8x8_ascii_next
+ 254              		.syntax unified
+ 255              		.thumb
+ 256              		.thumb_func
+ 258              	u8x8_ascii_next:
+ 259              	.LVL40:
+ 260              	.LFB10:
+ 178:BSP/u8g2/u8x8_8x8.c **** 
+ 179:BSP/u8g2/u8x8_8x8.c **** static void u8x8_draw_2x2_subglyph(u8x8_t *u8x8, uint8_t x, uint8_t y, uint8_t encoding, uint8_t ti
+ 180:BSP/u8g2/u8x8_8x8.c **** {
+ 181:BSP/u8g2/u8x8_8x8.c ****   uint8_t i;
+ 182:BSP/u8g2/u8x8_8x8.c ****   uint16_t t;
+ 183:BSP/u8g2/u8x8_8x8.c ****   uint8_t buf[8];
+ 184:BSP/u8g2/u8x8_8x8.c ****   uint8_t buf1[8];
+ 185:BSP/u8g2/u8x8_8x8.c ****   uint8_t buf2[8];
+ 186:BSP/u8g2/u8x8_8x8.c ****   u8x8_get_glyph_data(u8x8, encoding, buf, tile);
+ 187:BSP/u8g2/u8x8_8x8.c ****   for( i = 0; i < 8; i ++ )
+ARM GAS  /tmp/ccC5rntL.s 			page 9
+
+
+ 188:BSP/u8g2/u8x8_8x8.c ****   {
+ 189:BSP/u8g2/u8x8_8x8.c ****       t = u8x8_upscale_byte(buf[i]);
+ 190:BSP/u8g2/u8x8_8x8.c ****       buf1[i] = t >> 8;
+ 191:BSP/u8g2/u8x8_8x8.c ****       buf2[i] = t & 255;
+ 192:BSP/u8g2/u8x8_8x8.c ****   }
+ 193:BSP/u8g2/u8x8_8x8.c ****   u8x8_upscale_buf(buf2, buf);
+ 194:BSP/u8g2/u8x8_8x8.c ****   u8x8_DrawTile(u8x8, x, y, 1, buf);
+ 195:BSP/u8g2/u8x8_8x8.c ****   
+ 196:BSP/u8g2/u8x8_8x8.c ****   u8x8_upscale_buf(buf2+4, buf);
+ 197:BSP/u8g2/u8x8_8x8.c ****   u8x8_DrawTile(u8x8, x+1, y, 1, buf);
+ 198:BSP/u8g2/u8x8_8x8.c ****   
+ 199:BSP/u8g2/u8x8_8x8.c ****   u8x8_upscale_buf(buf1, buf);
+ 200:BSP/u8g2/u8x8_8x8.c ****   u8x8_DrawTile(u8x8, x, y+1, 1, buf);
+ 201:BSP/u8g2/u8x8_8x8.c ****   
+ 202:BSP/u8g2/u8x8_8x8.c ****   u8x8_upscale_buf(buf1+4, buf);
+ 203:BSP/u8g2/u8x8_8x8.c ****   u8x8_DrawTile(u8x8, x+1, y+1, 1, buf);  
+ 204:BSP/u8g2/u8x8_8x8.c **** }
+ 205:BSP/u8g2/u8x8_8x8.c **** 
+ 206:BSP/u8g2/u8x8_8x8.c **** 
+ 207:BSP/u8g2/u8x8_8x8.c **** void u8x8_Draw2x2Glyph(u8x8_t *u8x8, uint8_t x, uint8_t y, uint8_t encoding)
+ 208:BSP/u8g2/u8x8_8x8.c **** {
+ 209:BSP/u8g2/u8x8_8x8.c ****   uint8_t th = u8x8_pgm_read(u8x8->font+2);		/* new 2019 format */
+ 210:BSP/u8g2/u8x8_8x8.c ****   uint8_t tv = u8x8_pgm_read(u8x8->font+3);	/* new 2019 format */
+ 211:BSP/u8g2/u8x8_8x8.c ****   uint8_t xx, tile;
+ 212:BSP/u8g2/u8x8_8x8.c ****   th *= 2;
+ 213:BSP/u8g2/u8x8_8x8.c ****   th += x;
+ 214:BSP/u8g2/u8x8_8x8.c ****   tv *= 2;
+ 215:BSP/u8g2/u8x8_8x8.c ****   tv += y;
+ 216:BSP/u8g2/u8x8_8x8.c ****   tile = 0;
+ 217:BSP/u8g2/u8x8_8x8.c ****   do
+ 218:BSP/u8g2/u8x8_8x8.c ****   {
+ 219:BSP/u8g2/u8x8_8x8.c ****     xx = x;
+ 220:BSP/u8g2/u8x8_8x8.c ****     do
+ 221:BSP/u8g2/u8x8_8x8.c ****     {
+ 222:BSP/u8g2/u8x8_8x8.c ****       u8x8_draw_2x2_subglyph(u8x8, xx, y, encoding, tile);
+ 223:BSP/u8g2/u8x8_8x8.c ****       tile++;
+ 224:BSP/u8g2/u8x8_8x8.c ****       xx+=2;
+ 225:BSP/u8g2/u8x8_8x8.c ****     } while( xx < th );
+ 226:BSP/u8g2/u8x8_8x8.c ****     y+=2;
+ 227:BSP/u8g2/u8x8_8x8.c ****   } while( y < tv );  
+ 228:BSP/u8g2/u8x8_8x8.c **** }
+ 229:BSP/u8g2/u8x8_8x8.c **** 
+ 230:BSP/u8g2/u8x8_8x8.c **** /* https://github.com/olikraus/u8g2/issues/474 */
+ 231:BSP/u8g2/u8x8_8x8.c **** static void u8x8_draw_1x2_subglyph(u8x8_t *u8x8, uint8_t x, uint8_t y, uint8_t encoding, uint8_t ti
+ 232:BSP/u8g2/u8x8_8x8.c **** {
+ 233:BSP/u8g2/u8x8_8x8.c ****   uint8_t i;
+ 234:BSP/u8g2/u8x8_8x8.c ****   uint16_t t;
+ 235:BSP/u8g2/u8x8_8x8.c ****   uint8_t buf[8];
+ 236:BSP/u8g2/u8x8_8x8.c ****   uint8_t buf1[8];
+ 237:BSP/u8g2/u8x8_8x8.c ****   uint8_t buf2[8];
+ 238:BSP/u8g2/u8x8_8x8.c ****   u8x8_get_glyph_data(u8x8, encoding, buf, tile);
+ 239:BSP/u8g2/u8x8_8x8.c ****   for( i = 0; i < 8; i ++ )
+ 240:BSP/u8g2/u8x8_8x8.c ****   {
+ 241:BSP/u8g2/u8x8_8x8.c ****       t = u8x8_upscale_byte(buf[i]);
+ 242:BSP/u8g2/u8x8_8x8.c ****       buf1[i] = t >> 8;
+ 243:BSP/u8g2/u8x8_8x8.c ****       buf2[i] = t & 255;
+ 244:BSP/u8g2/u8x8_8x8.c ****   }
+ARM GAS  /tmp/ccC5rntL.s 			page 10
+
+
+ 245:BSP/u8g2/u8x8_8x8.c ****   u8x8_DrawTile(u8x8, x,   y, 1, buf2);
+ 246:BSP/u8g2/u8x8_8x8.c ****   u8x8_DrawTile(u8x8, x, y+1, 1, buf1);
+ 247:BSP/u8g2/u8x8_8x8.c **** }
+ 248:BSP/u8g2/u8x8_8x8.c **** 
+ 249:BSP/u8g2/u8x8_8x8.c **** void u8x8_Draw1x2Glyph(u8x8_t *u8x8, uint8_t x, uint8_t y, uint8_t encoding)
+ 250:BSP/u8g2/u8x8_8x8.c **** {
+ 251:BSP/u8g2/u8x8_8x8.c ****   uint8_t th = u8x8_pgm_read(u8x8->font+2);		/* new 2019 format */
+ 252:BSP/u8g2/u8x8_8x8.c ****   uint8_t tv = u8x8_pgm_read(u8x8->font+3);	/* new 2019 format */
+ 253:BSP/u8g2/u8x8_8x8.c ****   uint8_t xx, tile;
+ 254:BSP/u8g2/u8x8_8x8.c ****   th += x;
+ 255:BSP/u8g2/u8x8_8x8.c ****   tv *= 2;
+ 256:BSP/u8g2/u8x8_8x8.c ****   tv += y;
+ 257:BSP/u8g2/u8x8_8x8.c ****   tile = 0;
+ 258:BSP/u8g2/u8x8_8x8.c ****   do
+ 259:BSP/u8g2/u8x8_8x8.c ****   {
+ 260:BSP/u8g2/u8x8_8x8.c ****     xx = x;
+ 261:BSP/u8g2/u8x8_8x8.c ****     do
+ 262:BSP/u8g2/u8x8_8x8.c ****     {
+ 263:BSP/u8g2/u8x8_8x8.c ****       u8x8_draw_1x2_subglyph(u8x8, xx, y, encoding, tile);
+ 264:BSP/u8g2/u8x8_8x8.c ****       tile++;
+ 265:BSP/u8g2/u8x8_8x8.c ****       xx++;
+ 266:BSP/u8g2/u8x8_8x8.c ****     } while( xx < th );
+ 267:BSP/u8g2/u8x8_8x8.c ****     y+=2;
+ 268:BSP/u8g2/u8x8_8x8.c ****   } while( y < tv );  
+ 269:BSP/u8g2/u8x8_8x8.c **** }
+ 270:BSP/u8g2/u8x8_8x8.c **** 
+ 271:BSP/u8g2/u8x8_8x8.c **** /*
+ 272:BSP/u8g2/u8x8_8x8.c **** source: https://en.wikipedia.org/wiki/UTF-8
+ 273:BSP/u8g2/u8x8_8x8.c **** Bits	from 		to			bytes	Byte 1 		Byte 2 		Byte 3 		Byte 4 		Byte 5 		Byte 6
+ 274:BSP/u8g2/u8x8_8x8.c ****   7 	U+0000 		U+007F 		1 		0xxxxxxx
+ 275:BSP/u8g2/u8x8_8x8.c **** 11 	U+0080 		U+07FF 		2 		110xxxxx 	10xxxxxx
+ 276:BSP/u8g2/u8x8_8x8.c **** 16 	U+0800 		U+FFFF 		3 		1110xxxx 	10xxxxxx 	10xxxxxx
+ 277:BSP/u8g2/u8x8_8x8.c **** 21 	U+10000 	U+1FFFFF 	4 		11110xxx 	10xxxxxx 	10xxxxxx 	10xxxxxx
+ 278:BSP/u8g2/u8x8_8x8.c **** 26 	U+200000 	U+3FFFFFF 	5 		111110xx 	10xxxxxx 	10xxxxxx 	10xxxxxx 	10xxxxxx
+ 279:BSP/u8g2/u8x8_8x8.c **** 31 	U+4000000 	U+7FFFFFFF 	6 		1111110x 	10xxxxxx 	10xxxxxx 	10xxxxxx 	10xxxxxx 	10xxxxxx  
+ 280:BSP/u8g2/u8x8_8x8.c **** 
+ 281:BSP/u8g2/u8x8_8x8.c **** 
+ 282:BSP/u8g2/u8x8_8x8.c **** */
+ 283:BSP/u8g2/u8x8_8x8.c **** 
+ 284:BSP/u8g2/u8x8_8x8.c **** /* reset the internal state machine */
+ 285:BSP/u8g2/u8x8_8x8.c **** void u8x8_utf8_init(u8x8_t *u8x8)
+ 286:BSP/u8g2/u8x8_8x8.c **** {
+ 287:BSP/u8g2/u8x8_8x8.c ****   u8x8->utf8_state = 0;	/* also reset during u8x8_SetupDefaults() */
+ 288:BSP/u8g2/u8x8_8x8.c **** }
+ 289:BSP/u8g2/u8x8_8x8.c **** 
+ 290:BSP/u8g2/u8x8_8x8.c **** uint16_t u8x8_ascii_next(U8X8_UNUSED u8x8_t *u8x8, uint8_t b)
+ 291:BSP/u8g2/u8x8_8x8.c **** {
+ 261              		.loc 1 291 1 is_stmt 1 view -0
+ 262              		.cfi_startproc
+ 263              		@ args = 0, pretend = 0, frame = 0
+ 264              		@ frame_needed = 0, uses_anonymous_args = 0
+ 265              		@ link register save eliminated.
+ 292:BSP/u8g2/u8x8_8x8.c ****   if ( b == 0 || b == '\n' ) /* '\n' terminates the string to support the string list procedures */
+ 266              		.loc 1 292 3 view .LVU81
+ 267              		.loc 1 292 6 is_stmt 0 view .LVU82
+ 268 0000 0846     		mov	r0, r1
+ 269              	.LVL41:
+ARM GAS  /tmp/ccC5rntL.s 			page 11
+
+
+ 270              		.loc 1 292 6 view .LVU83
+ 271 0002 11B1     		cbz	r1, .L19
+ 272              		.loc 1 292 15 discriminator 1 view .LVU84
+ 273 0004 0A29     		cmp	r1, #10
+ 274 0006 03D0     		beq	.L20
+ 293:BSP/u8g2/u8x8_8x8.c ****     return 0x0ffff;	/* end of string detected*/
+ 294:BSP/u8g2/u8x8_8x8.c ****   return b;
+ 275              		.loc 1 294 3 is_stmt 1 view .LVU85
+ 276              		.loc 1 294 10 is_stmt 0 view .LVU86
+ 277 0008 7047     		bx	lr
+ 278              	.L19:
+ 293:BSP/u8g2/u8x8_8x8.c ****     return 0x0ffff;	/* end of string detected*/
+ 279              		.loc 1 293 12 view .LVU87
+ 280 000a 4FF6FF70 		movw	r0, #65535
+ 281 000e 7047     		bx	lr
+ 282              	.L20:
+ 283 0010 4FF6FF70 		movw	r0, #65535
+ 295:BSP/u8g2/u8x8_8x8.c **** }
+ 284              		.loc 1 295 1 view .LVU88
+ 285 0014 7047     		bx	lr
+ 286              		.cfi_endproc
+ 287              	.LFE10:
+ 289              		.section	.text.u8x8_utf8_next,"ax",%progbits
+ 290              		.align	1
+ 291              		.global	u8x8_utf8_next
+ 292              		.syntax unified
+ 293              		.thumb
+ 294              		.thumb_func
+ 296              	u8x8_utf8_next:
+ 297              	.LVL42:
+ 298              	.LFB11:
+ 296:BSP/u8g2/u8x8_8x8.c **** 
+ 297:BSP/u8g2/u8x8_8x8.c **** /*
+ 298:BSP/u8g2/u8x8_8x8.c ****   pass a byte from an utf8 encoded string to the utf8 decoder state machine
+ 299:BSP/u8g2/u8x8_8x8.c ****   returns 
+ 300:BSP/u8g2/u8x8_8x8.c ****     0x0fffe: no glyph, just continue
+ 301:BSP/u8g2/u8x8_8x8.c ****     0x0ffff: end of string
+ 302:BSP/u8g2/u8x8_8x8.c ****     anything else: The decoded encoding
+ 303:BSP/u8g2/u8x8_8x8.c **** */
+ 304:BSP/u8g2/u8x8_8x8.c **** uint16_t u8x8_utf8_next(u8x8_t *u8x8, uint8_t b)
+ 305:BSP/u8g2/u8x8_8x8.c **** {
+ 299              		.loc 1 305 1 is_stmt 1 view -0
+ 300              		.cfi_startproc
+ 301              		@ args = 0, pretend = 0, frame = 0
+ 302              		@ frame_needed = 0, uses_anonymous_args = 0
+ 303              		@ link register save eliminated.
+ 304              		.loc 1 305 1 is_stmt 0 view .LVU90
+ 305 0000 0246     		mov	r2, r0
+ 306:BSP/u8g2/u8x8_8x8.c ****   if ( b == 0 || b == '\n' )	/* '\n' terminates the string to support the string list procedures */
+ 306              		.loc 1 306 3 is_stmt 1 view .LVU91
+ 307              		.loc 1 306 6 is_stmt 0 view .LVU92
+ 308 0002 0B46     		mov	r3, r1
+ 309 0004 0029     		cmp	r1, #0
+ 310 0006 3FD0     		beq	.L30
+ 311              		.loc 1 306 15 discriminator 1 view .LVU93
+ 312 0008 0A29     		cmp	r1, #10
+ 313 000a 40D0     		beq	.L31
+ARM GAS  /tmp/ccC5rntL.s 			page 12
+
+
+ 307:BSP/u8g2/u8x8_8x8.c ****     return 0x0ffff;	/* end of string detected, pending UTF8 is discarded */
+ 308:BSP/u8g2/u8x8_8x8.c ****   if ( u8x8->utf8_state == 0 )
+ 314              		.loc 1 308 3 is_stmt 1 view .LVU94
+ 315              		.loc 1 308 12 is_stmt 0 view .LVU95
+ 316 000c 90F82710 		ldrb	r1, [r0, #39]	@ zero_extendqisi2
+ 317              	.LVL43:
+ 318              		.loc 1 308 6 view .LVU96
+ 319 0010 61BB     		cbnz	r1, .L23
+ 309:BSP/u8g2/u8x8_8x8.c ****   {
+ 310:BSP/u8g2/u8x8_8x8.c ****     if ( b >= 0xfc )	/* 6 byte sequence */
+ 320              		.loc 1 310 5 is_stmt 1 view .LVU97
+ 321              		.loc 1 310 8 is_stmt 0 view .LVU98
+ 322 0012 FB2B     		cmp	r3, #251
+ 323 0014 09D8     		bhi	.L33
+ 311:BSP/u8g2/u8x8_8x8.c ****     {
+ 312:BSP/u8g2/u8x8_8x8.c ****       u8x8->utf8_state = 5;
+ 313:BSP/u8g2/u8x8_8x8.c ****       b &= 1;
+ 314:BSP/u8g2/u8x8_8x8.c ****     }
+ 315:BSP/u8g2/u8x8_8x8.c ****     else if ( b >= 0xf8 )
+ 324              		.loc 1 315 10 is_stmt 1 view .LVU99
+ 325              		.loc 1 315 13 is_stmt 0 view .LVU100
+ 326 0016 F72B     		cmp	r3, #247
+ 327 0018 10D8     		bhi	.L34
+ 316:BSP/u8g2/u8x8_8x8.c ****     {
+ 317:BSP/u8g2/u8x8_8x8.c ****       u8x8->utf8_state = 4;
+ 318:BSP/u8g2/u8x8_8x8.c ****       b &= 3;
+ 319:BSP/u8g2/u8x8_8x8.c ****     }
+ 320:BSP/u8g2/u8x8_8x8.c ****     else if ( b >= 0xf0 )
+ 328              		.loc 1 320 10 is_stmt 1 view .LVU101
+ 329              		.loc 1 320 13 is_stmt 0 view .LVU102
+ 330 001a EF2B     		cmp	r3, #239
+ 331 001c 14D8     		bhi	.L35
+ 321:BSP/u8g2/u8x8_8x8.c ****     {
+ 322:BSP/u8g2/u8x8_8x8.c ****       u8x8->utf8_state = 3;
+ 323:BSP/u8g2/u8x8_8x8.c ****       b &= 7;      
+ 324:BSP/u8g2/u8x8_8x8.c ****     }
+ 325:BSP/u8g2/u8x8_8x8.c ****     else if ( b >= 0xe0 )
+ 332              		.loc 1 325 10 is_stmt 1 view .LVU103
+ 333              		.loc 1 325 13 is_stmt 0 view .LVU104
+ 334 001e DF2B     		cmp	r3, #223
+ 335 0020 18D8     		bhi	.L36
+ 326:BSP/u8g2/u8x8_8x8.c ****     {
+ 327:BSP/u8g2/u8x8_8x8.c ****       u8x8->utf8_state = 2;
+ 328:BSP/u8g2/u8x8_8x8.c ****       b &= 15;
+ 329:BSP/u8g2/u8x8_8x8.c ****     }
+ 330:BSP/u8g2/u8x8_8x8.c ****     else if ( b >= 0xc0 )
+ 336              		.loc 1 330 10 is_stmt 1 view .LVU105
+ 337              		.loc 1 330 13 is_stmt 0 view .LVU106
+ 338 0022 BF2B     		cmp	r3, #191
+ 339 0024 1CD8     		bhi	.L37
+ 331:BSP/u8g2/u8x8_8x8.c ****     {
+ 332:BSP/u8g2/u8x8_8x8.c ****       u8x8->utf8_state = 1;
+ 333:BSP/u8g2/u8x8_8x8.c ****       b &= 0x01f;
+ 334:BSP/u8g2/u8x8_8x8.c ****     }
+ 335:BSP/u8g2/u8x8_8x8.c ****     else
+ 336:BSP/u8g2/u8x8_8x8.c ****     {
+ 337:BSP/u8g2/u8x8_8x8.c ****       /* do nothing, just use the value as encoding */
+ARM GAS  /tmp/ccC5rntL.s 			page 13
+
+
+ 338:BSP/u8g2/u8x8_8x8.c ****       return b;
+ 340              		.loc 1 338 7 is_stmt 1 view .LVU107
+ 341              		.loc 1 338 14 is_stmt 0 view .LVU108
+ 342 0026 1846     		mov	r0, r3
+ 343              	.LVL44:
+ 344              		.loc 1 338 14 view .LVU109
+ 345 0028 7047     		bx	lr
+ 346              	.LVL45:
+ 347              	.L33:
+ 312:BSP/u8g2/u8x8_8x8.c ****       b &= 1;
+ 348              		.loc 1 312 7 is_stmt 1 view .LVU110
+ 312:BSP/u8g2/u8x8_8x8.c ****       b &= 1;
+ 349              		.loc 1 312 24 is_stmt 0 view .LVU111
+ 350 002a 0521     		movs	r1, #5
+ 351 002c 80F82710 		strb	r1, [r0, #39]
+ 313:BSP/u8g2/u8x8_8x8.c ****     }
+ 352              		.loc 1 313 7 is_stmt 1 view .LVU112
+ 313:BSP/u8g2/u8x8_8x8.c ****     }
+ 353              		.loc 1 313 9 is_stmt 0 view .LVU113
+ 354 0030 03F00103 		and	r3, r3, #1
+ 355              	.LVL46:
+ 356              	.L25:
+ 339:BSP/u8g2/u8x8_8x8.c ****     }
+ 340:BSP/u8g2/u8x8_8x8.c ****     u8x8->encoding = b;
+ 357              		.loc 1 340 5 is_stmt 1 view .LVU114
+ 358              		.loc 1 340 20 is_stmt 0 view .LVU115
+ 359 0034 1384     		strh	r3, [r2, #32]	@ movhi
+ 341:BSP/u8g2/u8x8_8x8.c ****     return 0x0fffe;
+ 360              		.loc 1 341 5 is_stmt 1 view .LVU116
+ 361              		.loc 1 341 12 is_stmt 0 view .LVU117
+ 362 0036 4FF6FE70 		movw	r0, #65534
+ 363              	.LVL47:
+ 364              		.loc 1 341 12 view .LVU118
+ 365 003a 7047     		bx	lr
+ 366              	.LVL48:
+ 367              	.L34:
+ 317:BSP/u8g2/u8x8_8x8.c ****       b &= 3;
+ 368              		.loc 1 317 7 is_stmt 1 view .LVU119
+ 317:BSP/u8g2/u8x8_8x8.c ****       b &= 3;
+ 369              		.loc 1 317 24 is_stmt 0 view .LVU120
+ 370 003c 0421     		movs	r1, #4
+ 371 003e 80F82710 		strb	r1, [r0, #39]
+ 318:BSP/u8g2/u8x8_8x8.c ****     }
+ 372              		.loc 1 318 7 is_stmt 1 view .LVU121
+ 318:BSP/u8g2/u8x8_8x8.c ****     }
+ 373              		.loc 1 318 9 is_stmt 0 view .LVU122
+ 374 0042 03F00303 		and	r3, r3, #3
+ 375              	.LVL49:
+ 318:BSP/u8g2/u8x8_8x8.c ****     }
+ 376              		.loc 1 318 9 view .LVU123
+ 377 0046 F5E7     		b	.L25
+ 378              	.LVL50:
+ 379              	.L35:
+ 322:BSP/u8g2/u8x8_8x8.c ****       b &= 7;      
+ 380              		.loc 1 322 7 is_stmt 1 view .LVU124
+ 322:BSP/u8g2/u8x8_8x8.c ****       b &= 7;      
+ 381              		.loc 1 322 24 is_stmt 0 view .LVU125
+ARM GAS  /tmp/ccC5rntL.s 			page 14
+
+
+ 382 0048 0321     		movs	r1, #3
+ 383 004a 80F82710 		strb	r1, [r0, #39]
+ 323:BSP/u8g2/u8x8_8x8.c ****     }
+ 384              		.loc 1 323 7 is_stmt 1 view .LVU126
+ 323:BSP/u8g2/u8x8_8x8.c ****     }
+ 385              		.loc 1 323 9 is_stmt 0 view .LVU127
+ 386 004e 03F00703 		and	r3, r3, #7
+ 387              	.LVL51:
+ 323:BSP/u8g2/u8x8_8x8.c ****     }
+ 388              		.loc 1 323 9 view .LVU128
+ 389 0052 EFE7     		b	.L25
+ 390              	.LVL52:
+ 391              	.L36:
+ 327:BSP/u8g2/u8x8_8x8.c ****       b &= 15;
+ 392              		.loc 1 327 7 is_stmt 1 view .LVU129
+ 327:BSP/u8g2/u8x8_8x8.c ****       b &= 15;
+ 393              		.loc 1 327 24 is_stmt 0 view .LVU130
+ 394 0054 0221     		movs	r1, #2
+ 395 0056 80F82710 		strb	r1, [r0, #39]
+ 328:BSP/u8g2/u8x8_8x8.c ****     }
+ 396              		.loc 1 328 7 is_stmt 1 view .LVU131
+ 328:BSP/u8g2/u8x8_8x8.c ****     }
+ 397              		.loc 1 328 9 is_stmt 0 view .LVU132
+ 398 005a 03F00F03 		and	r3, r3, #15
+ 399              	.LVL53:
+ 328:BSP/u8g2/u8x8_8x8.c ****     }
+ 400              		.loc 1 328 9 view .LVU133
+ 401 005e E9E7     		b	.L25
+ 402              	.LVL54:
+ 403              	.L37:
+ 332:BSP/u8g2/u8x8_8x8.c ****       b &= 0x01f;
+ 404              		.loc 1 332 7 is_stmt 1 view .LVU134
+ 332:BSP/u8g2/u8x8_8x8.c ****       b &= 0x01f;
+ 405              		.loc 1 332 24 is_stmt 0 view .LVU135
+ 406 0060 0121     		movs	r1, #1
+ 407 0062 80F82710 		strb	r1, [r0, #39]
+ 333:BSP/u8g2/u8x8_8x8.c ****     }
+ 408              		.loc 1 333 7 is_stmt 1 view .LVU136
+ 333:BSP/u8g2/u8x8_8x8.c ****     }
+ 409              		.loc 1 333 9 is_stmt 0 view .LVU137
+ 410 0066 03F01F03 		and	r3, r3, #31
+ 411              	.LVL55:
+ 333:BSP/u8g2/u8x8_8x8.c ****     }
+ 412              		.loc 1 333 9 view .LVU138
+ 413 006a E3E7     		b	.L25
+ 414              	.LVL56:
+ 415              	.L23:
+ 342:BSP/u8g2/u8x8_8x8.c ****   }
+ 343:BSP/u8g2/u8x8_8x8.c ****   else
+ 344:BSP/u8g2/u8x8_8x8.c ****   {
+ 345:BSP/u8g2/u8x8_8x8.c ****     u8x8->utf8_state--;
+ 416              		.loc 1 345 5 is_stmt 1 view .LVU139
+ 417              		.loc 1 345 21 is_stmt 0 view .LVU140
+ 418 006c 0139     		subs	r1, r1, #1
+ 419 006e C9B2     		uxtb	r1, r1
+ 420 0070 80F82710 		strb	r1, [r0, #39]
+ 346:BSP/u8g2/u8x8_8x8.c ****     /* The case b < 0x080 (an illegal UTF8 encoding) is not checked here. */
+ARM GAS  /tmp/ccC5rntL.s 			page 15
+
+
+ 347:BSP/u8g2/u8x8_8x8.c ****     u8x8->encoding<<=6;
+ 421              		.loc 1 347 5 is_stmt 1 view .LVU141
+ 422              		.loc 1 347 9 is_stmt 0 view .LVU142
+ 423 0074 008C     		ldrh	r0, [r0, #32]
+ 424              	.LVL57:
+ 425              		.loc 1 347 19 view .LVU143
+ 426 0076 8001     		lsls	r0, r0, #6
+ 427 0078 80B2     		uxth	r0, r0
+ 428 007a 1084     		strh	r0, [r2, #32]	@ movhi
+ 348:BSP/u8g2/u8x8_8x8.c ****     b &= 0x03f;
+ 429              		.loc 1 348 5 is_stmt 1 view .LVU144
+ 430              		.loc 1 348 7 is_stmt 0 view .LVU145
+ 431 007c 03F03F03 		and	r3, r3, #63
+ 432              	.LVL58:
+ 349:BSP/u8g2/u8x8_8x8.c ****     u8x8->encoding |= b;
+ 433              		.loc 1 349 5 is_stmt 1 view .LVU146
+ 434              		.loc 1 349 20 is_stmt 0 view .LVU147
+ 435 0080 1843     		orrs	r0, r0, r3
+ 436 0082 1084     		strh	r0, [r2, #32]	@ movhi
+ 350:BSP/u8g2/u8x8_8x8.c ****     if ( u8x8->utf8_state != 0 )
+ 437              		.loc 1 350 5 is_stmt 1 view .LVU148
+ 438              		.loc 1 350 8 is_stmt 0 view .LVU149
+ 439 0084 31B9     		cbnz	r1, .L38
+ 440              	.L22:
+ 351:BSP/u8g2/u8x8_8x8.c ****       return 0x0fffe;	/* nothing to do yet */
+ 352:BSP/u8g2/u8x8_8x8.c ****   }
+ 353:BSP/u8g2/u8x8_8x8.c ****   return u8x8->encoding;
+ 354:BSP/u8g2/u8x8_8x8.c **** }
+ 441              		.loc 1 354 1 view .LVU150
+ 442 0086 7047     		bx	lr
+ 443              	.LVL59:
+ 444              	.L30:
+ 307:BSP/u8g2/u8x8_8x8.c ****   if ( u8x8->utf8_state == 0 )
+ 445              		.loc 1 307 12 view .LVU151
+ 446 0088 4FF6FF70 		movw	r0, #65535
+ 447              	.LVL60:
+ 307:BSP/u8g2/u8x8_8x8.c ****   if ( u8x8->utf8_state == 0 )
+ 448              		.loc 1 307 12 view .LVU152
+ 449 008c 7047     		bx	lr
+ 450              	.LVL61:
+ 451              	.L31:
+ 307:BSP/u8g2/u8x8_8x8.c ****   if ( u8x8->utf8_state == 0 )
+ 452              		.loc 1 307 12 view .LVU153
+ 453 008e 4FF6FF70 		movw	r0, #65535
+ 454              	.LVL62:
+ 307:BSP/u8g2/u8x8_8x8.c ****   if ( u8x8->utf8_state == 0 )
+ 455              		.loc 1 307 12 view .LVU154
+ 456 0092 7047     		bx	lr
+ 457              	.LVL63:
+ 458              	.L38:
+ 351:BSP/u8g2/u8x8_8x8.c ****       return 0x0fffe;	/* nothing to do yet */
+ 459              		.loc 1 351 14 view .LVU155
+ 460 0094 4FF6FE70 		movw	r0, #65534
+ 461 0098 F5E7     		b	.L22
+ 462              		.cfi_endproc
+ 463              	.LFE11:
+ 465              		.section	.text.u8x8_SetFont,"ax",%progbits
+ARM GAS  /tmp/ccC5rntL.s 			page 16
+
+
+ 466              		.align	1
+ 467              		.global	u8x8_SetFont
+ 468              		.syntax unified
+ 469              		.thumb
+ 470              		.thumb_func
+ 472              	u8x8_SetFont:
+ 473              	.LVL64:
+ 474              	.LFB0:
+  51:BSP/u8g2/u8x8_8x8.c ****   u8x8->font = font_8x8;
+ 475              		.loc 1 51 1 is_stmt 1 view -0
+ 476              		.cfi_startproc
+ 477              		@ args = 0, pretend = 0, frame = 0
+ 478              		@ frame_needed = 0, uses_anonymous_args = 0
+ 479              		@ link register save eliminated.
+  52:BSP/u8g2/u8x8_8x8.c **** }
+ 480              		.loc 1 52 3 view .LVU157
+  52:BSP/u8g2/u8x8_8x8.c **** }
+ 481              		.loc 1 52 14 is_stmt 0 view .LVU158
+ 482 0000 C161     		str	r1, [r0, #28]
+  53:BSP/u8g2/u8x8_8x8.c **** 
+ 483              		.loc 1 53 1 view .LVU159
+ 484 0002 7047     		bx	lr
+ 485              		.cfi_endproc
+ 486              	.LFE0:
+ 488              		.section	.text.u8x8_DrawGlyph,"ax",%progbits
+ 489              		.align	1
+ 490              		.global	u8x8_DrawGlyph
+ 491              		.syntax unified
+ 492              		.thumb
+ 493              		.thumb_func
+ 495              	u8x8_DrawGlyph:
+ 496              	.LVL65:
+ 497              	.LFB2:
+ 106:BSP/u8g2/u8x8_8x8.c ****   uint8_t th = u8x8_pgm_read(u8x8->font+2);		/* new 2019 format */
+ 498              		.loc 1 106 1 is_stmt 1 view -0
+ 499              		.cfi_startproc
+ 500              		@ args = 0, pretend = 0, frame = 16
+ 501              		@ frame_needed = 0, uses_anonymous_args = 0
+ 106:BSP/u8g2/u8x8_8x8.c ****   uint8_t th = u8x8_pgm_read(u8x8->font+2);		/* new 2019 format */
+ 502              		.loc 1 106 1 is_stmt 0 view .LVU161
+ 503 0000 2DE9F04F 		push	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
+ 504              	.LCFI1:
+ 505              		.cfi_def_cfa_offset 36
+ 506              		.cfi_offset 4, -36
+ 507              		.cfi_offset 5, -32
+ 508              		.cfi_offset 6, -28
+ 509              		.cfi_offset 7, -24
+ 510              		.cfi_offset 8, -20
+ 511              		.cfi_offset 9, -16
+ 512              		.cfi_offset 10, -12
+ 513              		.cfi_offset 11, -8
+ 514              		.cfi_offset 14, -4
+ 515 0004 87B0     		sub	sp, sp, #28
+ 516              	.LCFI2:
+ 517              		.cfi_def_cfa_offset 64
+ 518 0006 0746     		mov	r7, r0
+ 519 0008 9946     		mov	r9, r3
+ARM GAS  /tmp/ccC5rntL.s 			page 17
+
+
+ 107:BSP/u8g2/u8x8_8x8.c ****   uint8_t tv = u8x8_pgm_read(u8x8->font+3);	/* new 2019 format */
+ 520              		.loc 1 107 3 is_stmt 1 view .LVU162
+ 107:BSP/u8g2/u8x8_8x8.c ****   uint8_t tv = u8x8_pgm_read(u8x8->font+3);	/* new 2019 format */
+ 521              		.loc 1 107 16 is_stmt 0 view .LVU163
+ 522 000a C369     		ldr	r3, [r0, #28]
+ 523              	.LVL66:
+ 107:BSP/u8g2/u8x8_8x8.c ****   uint8_t tv = u8x8_pgm_read(u8x8->font+3);	/* new 2019 format */
+ 524              		.loc 1 107 11 view .LVU164
+ 525 000c 93F80280 		ldrb	r8, [r3, #2]	@ zero_extendqisi2
+ 526              	.LVL67:
+ 108:BSP/u8g2/u8x8_8x8.c ****   uint8_t xx, tile;
+ 527              		.loc 1 108 3 is_stmt 1 view .LVU165
+ 108:BSP/u8g2/u8x8_8x8.c ****   uint8_t xx, tile;
+ 528              		.loc 1 108 11 is_stmt 0 view .LVU166
+ 529 0010 DE78     		ldrb	r6, [r3, #3]	@ zero_extendqisi2
+ 530              	.LVL68:
+ 109:BSP/u8g2/u8x8_8x8.c ****   uint8_t buf[8];
+ 531              		.loc 1 109 3 is_stmt 1 view .LVU167
+ 110:BSP/u8g2/u8x8_8x8.c ****   th += x;
+ 532              		.loc 1 110 3 view .LVU168
+ 111:BSP/u8g2/u8x8_8x8.c ****   tv += y;
+ 533              		.loc 1 111 3 view .LVU169
+ 111:BSP/u8g2/u8x8_8x8.c ****   tv += y;
+ 534              		.loc 1 111 6 is_stmt 0 view .LVU170
+ 535 0012 8844     		add	r8, r8, r1
+ 536 0014 5FFA88F8 		uxtb	r8, r8
+ 537              	.LVL69:
+ 112:BSP/u8g2/u8x8_8x8.c ****   tile = 0;
+ 538              		.loc 1 112 3 is_stmt 1 view .LVU171
+ 112:BSP/u8g2/u8x8_8x8.c ****   tile = 0;
+ 539              		.loc 1 112 6 is_stmt 0 view .LVU172
+ 540 0018 1644     		add	r6, r6, r2
+ 541 001a F6B2     		uxtb	r6, r6
+ 542              	.LVL70:
+ 113:BSP/u8g2/u8x8_8x8.c ****   do
+ 543              		.loc 1 113 3 is_stmt 1 view .LVU173
+ 113:BSP/u8g2/u8x8_8x8.c ****   do
+ 544              		.loc 1 113 8 is_stmt 0 view .LVU174
+ 545 001c 0025     		movs	r5, #0
+ 546 001e 0396     		str	r6, [sp, #12]
+ 547 0020 0E46     		mov	r6, r1
+ 548              	.LVL71:
+ 113:BSP/u8g2/u8x8_8x8.c ****   do
+ 549              		.loc 1 113 8 view .LVU175
+ 550 0022 9346     		mov	fp, r2
+ 551              	.LVL72:
+ 552              	.L42:
+ 114:BSP/u8g2/u8x8_8x8.c ****   {
+ 553              		.loc 1 114 3 is_stmt 1 view .LVU176
+ 116:BSP/u8g2/u8x8_8x8.c ****     do
+ 554              		.loc 1 116 5 view .LVU177
+ 116:BSP/u8g2/u8x8_8x8.c ****     do
+ 555              		.loc 1 116 8 is_stmt 0 view .LVU178
+ 556 0024 3446     		mov	r4, r6
+ 557 0026 B246     		mov	r10, r6
+ 558              	.LVL73:
+ 559              	.L41:
+ARM GAS  /tmp/ccC5rntL.s 			page 18
+
+
+ 117:BSP/u8g2/u8x8_8x8.c ****     {
+ 560              		.loc 1 117 5 is_stmt 1 view .LVU179
+ 119:BSP/u8g2/u8x8_8x8.c ****       u8x8_DrawTile(u8x8, xx, y, 1, buf);
+ 561              		.loc 1 119 7 view .LVU180
+ 562 0028 04AE     		add	r6, sp, #16
+ 563 002a 2B46     		mov	r3, r5
+ 564 002c 3246     		mov	r2, r6
+ 565 002e 4946     		mov	r1, r9
+ 566 0030 3846     		mov	r0, r7
+ 567 0032 FFF7FEFF 		bl	u8x8_get_glyph_data
+ 568              	.LVL74:
+ 120:BSP/u8g2/u8x8_8x8.c ****       tile++;
+ 569              		.loc 1 120 7 view .LVU181
+ 570 0036 0096     		str	r6, [sp]
+ 571 0038 0123     		movs	r3, #1
+ 572 003a 5A46     		mov	r2, fp
+ 573 003c 2146     		mov	r1, r4
+ 574 003e 3846     		mov	r0, r7
+ 575 0040 FFF7FEFF 		bl	u8x8_DrawTile
+ 576              	.LVL75:
+ 121:BSP/u8g2/u8x8_8x8.c ****       xx++;
+ 577              		.loc 1 121 7 view .LVU182
+ 121:BSP/u8g2/u8x8_8x8.c ****       xx++;
+ 578              		.loc 1 121 11 is_stmt 0 view .LVU183
+ 579 0044 0135     		adds	r5, r5, #1
+ 580              	.LVL76:
+ 121:BSP/u8g2/u8x8_8x8.c ****       xx++;
+ 581              		.loc 1 121 11 view .LVU184
+ 582 0046 EDB2     		uxtb	r5, r5
+ 583              	.LVL77:
+ 122:BSP/u8g2/u8x8_8x8.c ****     } while( xx < th );
+ 584              		.loc 1 122 7 is_stmt 1 view .LVU185
+ 122:BSP/u8g2/u8x8_8x8.c ****     } while( xx < th );
+ 585              		.loc 1 122 9 is_stmt 0 view .LVU186
+ 586 0048 0134     		adds	r4, r4, #1
+ 587              	.LVL78:
+ 122:BSP/u8g2/u8x8_8x8.c ****     } while( xx < th );
+ 588              		.loc 1 122 9 view .LVU187
+ 589 004a E4B2     		uxtb	r4, r4
+ 590              	.LVL79:
+ 123:BSP/u8g2/u8x8_8x8.c ****     y++;
+ 591              		.loc 1 123 17 is_stmt 1 discriminator 1 view .LVU188
+ 592 004c A045     		cmp	r8, r4
+ 593 004e EBD8     		bhi	.L41
+ 124:BSP/u8g2/u8x8_8x8.c ****   } while( y < tv );
+ 594              		.loc 1 124 6 is_stmt 0 view .LVU189
+ 595 0050 5646     		mov	r6, r10
+ 124:BSP/u8g2/u8x8_8x8.c ****   } while( y < tv );
+ 596              		.loc 1 124 5 is_stmt 1 view .LVU190
+ 124:BSP/u8g2/u8x8_8x8.c ****   } while( y < tv );
+ 597              		.loc 1 124 6 is_stmt 0 view .LVU191
+ 598 0052 0BF10103 		add	r3, fp, #1
+ 599 0056 5FFA83FB 		uxtb	fp, r3
+ 600              	.LVL80:
+ 125:BSP/u8g2/u8x8_8x8.c **** }
+ 601              		.loc 1 125 14 is_stmt 1 view .LVU192
+ 602 005a 039B     		ldr	r3, [sp, #12]
+ARM GAS  /tmp/ccC5rntL.s 			page 19
+
+
+ 603 005c 5B45     		cmp	r3, fp
+ 604 005e E1D8     		bhi	.L42
+ 605              	.LVL81:
+ 126:BSP/u8g2/u8x8_8x8.c **** 
+ 606              		.loc 1 126 1 is_stmt 0 view .LVU193
+ 607 0060 07B0     		add	sp, sp, #28
+ 608              	.LCFI3:
+ 609              		.cfi_def_cfa_offset 36
+ 610              		@ sp needed
+ 611 0062 BDE8F08F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 126:BSP/u8g2/u8x8_8x8.c **** 
+ 612              		.loc 1 126 1 view .LVU194
+ 613              		.cfi_endproc
+ 614              	.LFE2:
+ 616              		.section	.text.u8x8_upscale_byte,"ax",%progbits
+ 617              		.align	1
+ 618              		.global	u8x8_upscale_byte
+ 619              		.syntax unified
+ 620              		.thumb
+ 621              		.thumb_func
+ 623              	u8x8_upscale_byte:
+ 624              	.LVL82:
+ 625              	.LFB3:
+ 154:BSP/u8g2/u8x8_8x8.c **** 	uint16_t y = x;
+ 626              		.loc 1 154 1 is_stmt 1 view -0
+ 627              		.cfi_startproc
+ 628              		@ args = 0, pretend = 0, frame = 0
+ 629              		@ frame_needed = 0, uses_anonymous_args = 0
+ 630              		@ link register save eliminated.
+ 155:BSP/u8g2/u8x8_8x8.c **** 	y |= (y << 4);		// x = (x | (x << S[2])) & B[2];
+ 631              		.loc 1 155 2 view .LVU196
+ 156:BSP/u8g2/u8x8_8x8.c **** 	y &= 0x0f0f;
+ 632              		.loc 1 156 2 view .LVU197
+ 156:BSP/u8g2/u8x8_8x8.c **** 	y &= 0x0f0f;
+ 633              		.loc 1 156 4 is_stmt 0 view .LVU198
+ 634 0000 40EA0010 		orr	r0, r0, r0, lsl #4
+ 635              	.LVL83:
+ 157:BSP/u8g2/u8x8_8x8.c **** 	y |= (y << 2);		// x = (x | (x << S[1])) & B[1];
+ 636              		.loc 1 157 2 is_stmt 1 view .LVU199
+ 637 0004 20F0F000 		bic	r0, r0, #240
+ 638              	.LVL84:
+ 157:BSP/u8g2/u8x8_8x8.c **** 	y |= (y << 2);		// x = (x | (x << S[1])) & B[1];
+ 639              		.loc 1 157 2 is_stmt 0 view .LVU200
+ 640 0008 0005     		lsls	r0, r0, #20
+ 641 000a 000D     		lsrs	r0, r0, #20
+ 642              	.LVL85:
+ 158:BSP/u8g2/u8x8_8x8.c **** 	y &= 0x3333;
+ 643              		.loc 1 158 2 is_stmt 1 view .LVU201
+ 158:BSP/u8g2/u8x8_8x8.c **** 	y &= 0x3333;
+ 644              		.loc 1 158 4 is_stmt 0 view .LVU202
+ 645 000c 40EA8000 		orr	r0, r0, r0, lsl #2
+ 646              	.LVL86:
+ 159:BSP/u8g2/u8x8_8x8.c **** 	y |= (y << 1);		// x = (x | (x << S[0])) & B[0];
+ 647              		.loc 1 159 2 is_stmt 1 view .LVU203
+ 648 0010 20F44C60 		bic	r0, r0, #3264
+ 649              	.LVL87:
+ 159:BSP/u8g2/u8x8_8x8.c **** 	y |= (y << 1);		// x = (x | (x << S[0])) & B[0];
+ARM GAS  /tmp/ccC5rntL.s 			page 20
+
+
+ 650              		.loc 1 159 2 is_stmt 0 view .LVU204
+ 651 0014 20F00C00 		bic	r0, r0, #12
+ 652 0018 8004     		lsls	r0, r0, #18
+ 653 001a 800C     		lsrs	r0, r0, #18
+ 654              	.LVL88:
+ 160:BSP/u8g2/u8x8_8x8.c **** 	y &= 0x5555;
+ 655              		.loc 1 160 2 is_stmt 1 view .LVU205
+ 160:BSP/u8g2/u8x8_8x8.c **** 	y &= 0x5555;
+ 656              		.loc 1 160 4 is_stmt 0 view .LVU206
+ 657 001c 40EA4000 		orr	r0, r0, r0, lsl #1
+ 658              	.LVL89:
+ 161:BSP/u8g2/u8x8_8x8.c ****   
+ 659              		.loc 1 161 2 is_stmt 1 view .LVU207
+ 660 0020 20F42A50 		bic	r0, r0, #10880
+ 661              	.LVL90:
+ 161:BSP/u8g2/u8x8_8x8.c ****   
+ 662              		.loc 1 161 2 is_stmt 0 view .LVU208
+ 663 0024 20F02A00 		bic	r0, r0, #42
+ 664 0028 4004     		lsls	r0, r0, #17
+ 665 002a 400C     		lsrs	r0, r0, #17
+ 666              	.LVL91:
+ 163:BSP/u8g2/u8x8_8x8.c **** 	return y;
+ 667              		.loc 1 163 2 is_stmt 1 view .LVU209
+ 164:BSP/u8g2/u8x8_8x8.c **** }
+ 668              		.loc 1 164 2 view .LVU210
+ 165:BSP/u8g2/u8x8_8x8.c **** 
+ 669              		.loc 1 165 1 is_stmt 0 view .LVU211
+ 670 002c 40EA4000 		orr	r0, r0, r0, lsl #1
+ 671              	.LVL92:
+ 165:BSP/u8g2/u8x8_8x8.c **** 
+ 672              		.loc 1 165 1 view .LVU212
+ 673 0030 7047     		bx	lr
+ 674              		.cfi_endproc
+ 675              	.LFE3:
+ 677              		.section	.text.u8x8_draw_2x2_subglyph,"ax",%progbits
+ 678              		.align	1
+ 679              		.syntax unified
+ 680              		.thumb
+ 681              		.thumb_func
+ 683              	u8x8_draw_2x2_subglyph:
+ 684              	.LVL93:
+ 685              	.LFB5:
+ 180:BSP/u8g2/u8x8_8x8.c ****   uint8_t i;
+ 686              		.loc 1 180 1 is_stmt 1 view -0
+ 687              		.cfi_startproc
+ 688              		@ args = 4, pretend = 0, frame = 24
+ 689              		@ frame_needed = 0, uses_anonymous_args = 0
+ 180:BSP/u8g2/u8x8_8x8.c ****   uint8_t i;
+ 690              		.loc 1 180 1 is_stmt 0 view .LVU214
+ 691 0000 2DE9F041 		push	{r4, r5, r6, r7, r8, lr}
+ 692              	.LCFI4:
+ 693              		.cfi_def_cfa_offset 24
+ 694              		.cfi_offset 4, -24
+ 695              		.cfi_offset 5, -20
+ 696              		.cfi_offset 6, -16
+ 697              		.cfi_offset 7, -12
+ 698              		.cfi_offset 8, -8
+ARM GAS  /tmp/ccC5rntL.s 			page 21
+
+
+ 699              		.cfi_offset 14, -4
+ 700 0004 88B0     		sub	sp, sp, #32
+ 701              	.LCFI5:
+ 702              		.cfi_def_cfa_offset 56
+ 703 0006 0746     		mov	r7, r0
+ 704 0008 8846     		mov	r8, r1
+ 705 000a 1646     		mov	r6, r2
+ 706 000c 1946     		mov	r1, r3
+ 707              	.LVL94:
+ 181:BSP/u8g2/u8x8_8x8.c ****   uint16_t t;
+ 708              		.loc 1 181 3 is_stmt 1 view .LVU215
+ 182:BSP/u8g2/u8x8_8x8.c ****   uint8_t buf[8];
+ 709              		.loc 1 182 3 view .LVU216
+ 183:BSP/u8g2/u8x8_8x8.c ****   uint8_t buf1[8];
+ 710              		.loc 1 183 3 view .LVU217
+ 184:BSP/u8g2/u8x8_8x8.c ****   uint8_t buf2[8];
+ 711              		.loc 1 184 3 view .LVU218
+ 185:BSP/u8g2/u8x8_8x8.c ****   u8x8_get_glyph_data(u8x8, encoding, buf, tile);
+ 712              		.loc 1 185 3 view .LVU219
+ 186:BSP/u8g2/u8x8_8x8.c ****   for( i = 0; i < 8; i ++ )
+ 713              		.loc 1 186 3 view .LVU220
+ 714 000e 9DF83830 		ldrb	r3, [sp, #56]	@ zero_extendqisi2
+ 715              	.LVL95:
+ 186:BSP/u8g2/u8x8_8x8.c ****   for( i = 0; i < 8; i ++ )
+ 716              		.loc 1 186 3 is_stmt 0 view .LVU221
+ 717 0012 06AA     		add	r2, sp, #24
+ 718              	.LVL96:
+ 186:BSP/u8g2/u8x8_8x8.c ****   for( i = 0; i < 8; i ++ )
+ 719              		.loc 1 186 3 view .LVU222
+ 720 0014 FFF7FEFF 		bl	u8x8_get_glyph_data
+ 721              	.LVL97:
+ 187:BSP/u8g2/u8x8_8x8.c ****   {
+ 722              		.loc 1 187 3 is_stmt 1 view .LVU223
+ 187:BSP/u8g2/u8x8_8x8.c ****   {
+ 723              		.loc 1 187 10 is_stmt 0 view .LVU224
+ 724 0018 0024     		movs	r4, #0
+ 187:BSP/u8g2/u8x8_8x8.c ****   {
+ 725              		.loc 1 187 3 view .LVU225
+ 726 001a 0EE0     		b	.L46
+ 727              	.LVL98:
+ 728              	.L47:
+ 189:BSP/u8g2/u8x8_8x8.c ****       buf1[i] = t >> 8;
+ 729              		.loc 1 189 7 is_stmt 1 view .LVU226
+ 189:BSP/u8g2/u8x8_8x8.c ****       buf1[i] = t >> 8;
+ 730              		.loc 1 189 11 is_stmt 0 view .LVU227
+ 731 001c 04F12003 		add	r3, r4, #32
+ 732 0020 0DEB0305 		add	r5, sp, r3
+ 733 0024 15F8080C 		ldrb	r0, [r5, #-8]	@ zero_extendqisi2
+ 734 0028 FFF7FEFF 		bl	u8x8_upscale_byte
+ 735              	.LVL99:
+ 190:BSP/u8g2/u8x8_8x8.c ****       buf2[i] = t & 255;
+ 736              		.loc 1 190 7 is_stmt 1 view .LVU228
+ 190:BSP/u8g2/u8x8_8x8.c ****       buf2[i] = t & 255;
+ 737              		.loc 1 190 15 is_stmt 0 view .LVU229
+ 738 002c 030A     		lsrs	r3, r0, #8
+ 739 002e 05F8103C 		strb	r3, [r5, #-16]
+ 191:BSP/u8g2/u8x8_8x8.c ****   }
+ARM GAS  /tmp/ccC5rntL.s 			page 22
+
+
+ 740              		.loc 1 191 7 is_stmt 1 view .LVU230
+ 191:BSP/u8g2/u8x8_8x8.c ****   }
+ 741              		.loc 1 191 15 is_stmt 0 view .LVU231
+ 742 0032 05F8180C 		strb	r0, [r5, #-24]
+ 187:BSP/u8g2/u8x8_8x8.c ****   {
+ 743              		.loc 1 187 24 is_stmt 1 discriminator 3 view .LVU232
+ 744 0036 0134     		adds	r4, r4, #1
+ 745              	.LVL100:
+ 187:BSP/u8g2/u8x8_8x8.c ****   {
+ 746              		.loc 1 187 24 is_stmt 0 discriminator 3 view .LVU233
+ 747 0038 E4B2     		uxtb	r4, r4
+ 748              	.LVL101:
+ 749              	.L46:
+ 187:BSP/u8g2/u8x8_8x8.c ****   {
+ 750              		.loc 1 187 17 is_stmt 1 discriminator 1 view .LVU234
+ 751 003a 072C     		cmp	r4, #7
+ 752 003c EED9     		bls	.L47
+ 193:BSP/u8g2/u8x8_8x8.c ****   u8x8_DrawTile(u8x8, x, y, 1, buf);
+ 753              		.loc 1 193 3 view .LVU235
+ 754 003e 06AC     		add	r4, sp, #24
+ 755              	.LVL102:
+ 193:BSP/u8g2/u8x8_8x8.c ****   u8x8_DrawTile(u8x8, x, y, 1, buf);
+ 756              		.loc 1 193 3 is_stmt 0 view .LVU236
+ 757 0040 2146     		mov	r1, r4
+ 758 0042 02A8     		add	r0, sp, #8
+ 759 0044 FFF7FEFF 		bl	u8x8_upscale_buf
+ 760              	.LVL103:
+ 194:BSP/u8g2/u8x8_8x8.c ****   
+ 761              		.loc 1 194 3 is_stmt 1 view .LVU237
+ 762 0048 0094     		str	r4, [sp]
+ 763 004a 0123     		movs	r3, #1
+ 764 004c 3246     		mov	r2, r6
+ 765 004e 4146     		mov	r1, r8
+ 766 0050 3846     		mov	r0, r7
+ 767 0052 FFF7FEFF 		bl	u8x8_DrawTile
+ 768              	.LVL104:
+ 196:BSP/u8g2/u8x8_8x8.c ****   u8x8_DrawTile(u8x8, x+1, y, 1, buf);
+ 769              		.loc 1 196 3 view .LVU238
+ 770 0056 2146     		mov	r1, r4
+ 771 0058 03A8     		add	r0, sp, #12
+ 772 005a FFF7FEFF 		bl	u8x8_upscale_buf
+ 773              	.LVL105:
+ 197:BSP/u8g2/u8x8_8x8.c ****   
+ 774              		.loc 1 197 3 view .LVU239
+ 775 005e 08F10105 		add	r5, r8, #1
+ 776 0062 EDB2     		uxtb	r5, r5
+ 777 0064 0094     		str	r4, [sp]
+ 778 0066 0123     		movs	r3, #1
+ 779 0068 3246     		mov	r2, r6
+ 780 006a 2946     		mov	r1, r5
+ 781 006c 3846     		mov	r0, r7
+ 782 006e FFF7FEFF 		bl	u8x8_DrawTile
+ 783              	.LVL106:
+ 199:BSP/u8g2/u8x8_8x8.c ****   u8x8_DrawTile(u8x8, x, y+1, 1, buf);
+ 784              		.loc 1 199 3 view .LVU240
+ 785 0072 2146     		mov	r1, r4
+ 786 0074 04A8     		add	r0, sp, #16
+ARM GAS  /tmp/ccC5rntL.s 			page 23
+
+
+ 787 0076 FFF7FEFF 		bl	u8x8_upscale_buf
+ 788              	.LVL107:
+ 200:BSP/u8g2/u8x8_8x8.c ****   
+ 789              		.loc 1 200 3 view .LVU241
+ 790 007a 0136     		adds	r6, r6, #1
+ 791              	.LVL108:
+ 200:BSP/u8g2/u8x8_8x8.c ****   
+ 792              		.loc 1 200 3 is_stmt 0 view .LVU242
+ 793 007c F6B2     		uxtb	r6, r6
+ 794              	.LVL109:
+ 200:BSP/u8g2/u8x8_8x8.c ****   
+ 795              		.loc 1 200 3 view .LVU243
+ 796 007e 0094     		str	r4, [sp]
+ 797 0080 0123     		movs	r3, #1
+ 798 0082 3246     		mov	r2, r6
+ 799 0084 4146     		mov	r1, r8
+ 800 0086 3846     		mov	r0, r7
+ 801 0088 FFF7FEFF 		bl	u8x8_DrawTile
+ 802              	.LVL110:
+ 202:BSP/u8g2/u8x8_8x8.c ****   u8x8_DrawTile(u8x8, x+1, y+1, 1, buf);  
+ 803              		.loc 1 202 3 is_stmt 1 view .LVU244
+ 804 008c 2146     		mov	r1, r4
+ 805 008e 05A8     		add	r0, sp, #20
+ 806 0090 FFF7FEFF 		bl	u8x8_upscale_buf
+ 807              	.LVL111:
+ 203:BSP/u8g2/u8x8_8x8.c **** }
+ 808              		.loc 1 203 3 view .LVU245
+ 809 0094 0094     		str	r4, [sp]
+ 810 0096 0123     		movs	r3, #1
+ 811 0098 3246     		mov	r2, r6
+ 812 009a 2946     		mov	r1, r5
+ 813 009c 3846     		mov	r0, r7
+ 814 009e FFF7FEFF 		bl	u8x8_DrawTile
+ 815              	.LVL112:
+ 204:BSP/u8g2/u8x8_8x8.c **** 
+ 816              		.loc 1 204 1 is_stmt 0 view .LVU246
+ 817 00a2 08B0     		add	sp, sp, #32
+ 818              	.LCFI6:
+ 819              		.cfi_def_cfa_offset 24
+ 820              		@ sp needed
+ 821 00a4 BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
+ 204:BSP/u8g2/u8x8_8x8.c **** 
+ 822              		.loc 1 204 1 view .LVU247
+ 823              		.cfi_endproc
+ 824              	.LFE5:
+ 826              		.section	.text.u8x8_draw_1x2_subglyph,"ax",%progbits
+ 827              		.align	1
+ 828              		.syntax unified
+ 829              		.thumb
+ 830              		.thumb_func
+ 832              	u8x8_draw_1x2_subglyph:
+ 833              	.LVL113:
+ 834              	.LFB7:
+ 232:BSP/u8g2/u8x8_8x8.c ****   uint8_t i;
+ 835              		.loc 1 232 1 is_stmt 1 view -0
+ 836              		.cfi_startproc
+ 837              		@ args = 4, pretend = 0, frame = 24
+ARM GAS  /tmp/ccC5rntL.s 			page 24
+
+
+ 838              		@ frame_needed = 0, uses_anonymous_args = 0
+ 232:BSP/u8g2/u8x8_8x8.c ****   uint8_t i;
+ 839              		.loc 1 232 1 is_stmt 0 view .LVU249
+ 840 0000 2DE9F041 		push	{r4, r5, r6, r7, r8, lr}
+ 841              	.LCFI7:
+ 842              		.cfi_def_cfa_offset 24
+ 843              		.cfi_offset 4, -24
+ 844              		.cfi_offset 5, -20
+ 845              		.cfi_offset 6, -16
+ 846              		.cfi_offset 7, -12
+ 847              		.cfi_offset 8, -8
+ 848              		.cfi_offset 14, -4
+ 849 0004 88B0     		sub	sp, sp, #32
+ 850              	.LCFI8:
+ 851              		.cfi_def_cfa_offset 56
+ 852 0006 0746     		mov	r7, r0
+ 853 0008 8846     		mov	r8, r1
+ 854 000a 1646     		mov	r6, r2
+ 855 000c 1946     		mov	r1, r3
+ 856              	.LVL114:
+ 233:BSP/u8g2/u8x8_8x8.c ****   uint16_t t;
+ 857              		.loc 1 233 3 is_stmt 1 view .LVU250
+ 234:BSP/u8g2/u8x8_8x8.c ****   uint8_t buf[8];
+ 858              		.loc 1 234 3 view .LVU251
+ 235:BSP/u8g2/u8x8_8x8.c ****   uint8_t buf1[8];
+ 859              		.loc 1 235 3 view .LVU252
+ 236:BSP/u8g2/u8x8_8x8.c ****   uint8_t buf2[8];
+ 860              		.loc 1 236 3 view .LVU253
+ 237:BSP/u8g2/u8x8_8x8.c ****   u8x8_get_glyph_data(u8x8, encoding, buf, tile);
+ 861              		.loc 1 237 3 view .LVU254
+ 238:BSP/u8g2/u8x8_8x8.c ****   for( i = 0; i < 8; i ++ )
+ 862              		.loc 1 238 3 view .LVU255
+ 863 000e 9DF83830 		ldrb	r3, [sp, #56]	@ zero_extendqisi2
+ 864              	.LVL115:
+ 238:BSP/u8g2/u8x8_8x8.c ****   for( i = 0; i < 8; i ++ )
+ 865              		.loc 1 238 3 is_stmt 0 view .LVU256
+ 866 0012 06AA     		add	r2, sp, #24
+ 867              	.LVL116:
+ 238:BSP/u8g2/u8x8_8x8.c ****   for( i = 0; i < 8; i ++ )
+ 868              		.loc 1 238 3 view .LVU257
+ 869 0014 FFF7FEFF 		bl	u8x8_get_glyph_data
+ 870              	.LVL117:
+ 239:BSP/u8g2/u8x8_8x8.c ****   {
+ 871              		.loc 1 239 3 is_stmt 1 view .LVU258
+ 239:BSP/u8g2/u8x8_8x8.c ****   {
+ 872              		.loc 1 239 10 is_stmt 0 view .LVU259
+ 873 0018 0024     		movs	r4, #0
+ 239:BSP/u8g2/u8x8_8x8.c ****   {
+ 874              		.loc 1 239 3 view .LVU260
+ 875 001a 0EE0     		b	.L50
+ 876              	.LVL118:
+ 877              	.L51:
+ 241:BSP/u8g2/u8x8_8x8.c ****       buf1[i] = t >> 8;
+ 878              		.loc 1 241 7 is_stmt 1 view .LVU261
+ 241:BSP/u8g2/u8x8_8x8.c ****       buf1[i] = t >> 8;
+ 879              		.loc 1 241 11 is_stmt 0 view .LVU262
+ 880 001c 04F12003 		add	r3, r4, #32
+ARM GAS  /tmp/ccC5rntL.s 			page 25
+
+
+ 881 0020 0DEB0305 		add	r5, sp, r3
+ 882 0024 15F8080C 		ldrb	r0, [r5, #-8]	@ zero_extendqisi2
+ 883 0028 FFF7FEFF 		bl	u8x8_upscale_byte
+ 884              	.LVL119:
+ 242:BSP/u8g2/u8x8_8x8.c ****       buf2[i] = t & 255;
+ 885              		.loc 1 242 7 is_stmt 1 view .LVU263
+ 242:BSP/u8g2/u8x8_8x8.c ****       buf2[i] = t & 255;
+ 886              		.loc 1 242 15 is_stmt 0 view .LVU264
+ 887 002c 030A     		lsrs	r3, r0, #8
+ 888 002e 05F8103C 		strb	r3, [r5, #-16]
+ 243:BSP/u8g2/u8x8_8x8.c ****   }
+ 889              		.loc 1 243 7 is_stmt 1 view .LVU265
+ 243:BSP/u8g2/u8x8_8x8.c ****   }
+ 890              		.loc 1 243 15 is_stmt 0 view .LVU266
+ 891 0032 05F8180C 		strb	r0, [r5, #-24]
+ 239:BSP/u8g2/u8x8_8x8.c ****   {
+ 892              		.loc 1 239 24 is_stmt 1 discriminator 3 view .LVU267
+ 893 0036 0134     		adds	r4, r4, #1
+ 894              	.LVL120:
+ 239:BSP/u8g2/u8x8_8x8.c ****   {
+ 895              		.loc 1 239 24 is_stmt 0 discriminator 3 view .LVU268
+ 896 0038 E4B2     		uxtb	r4, r4
+ 897              	.LVL121:
+ 898              	.L50:
+ 239:BSP/u8g2/u8x8_8x8.c ****   {
+ 899              		.loc 1 239 17 is_stmt 1 discriminator 1 view .LVU269
+ 900 003a 072C     		cmp	r4, #7
+ 901 003c EED9     		bls	.L51
+ 245:BSP/u8g2/u8x8_8x8.c ****   u8x8_DrawTile(u8x8, x, y+1, 1, buf1);
+ 902              		.loc 1 245 3 view .LVU270
+ 903 003e 02AB     		add	r3, sp, #8
+ 904 0040 0093     		str	r3, [sp]
+ 905 0042 0123     		movs	r3, #1
+ 906 0044 3246     		mov	r2, r6
+ 907 0046 4146     		mov	r1, r8
+ 908 0048 3846     		mov	r0, r7
+ 909 004a FFF7FEFF 		bl	u8x8_DrawTile
+ 910              	.LVL122:
+ 246:BSP/u8g2/u8x8_8x8.c **** }
+ 911              		.loc 1 246 3 view .LVU271
+ 912 004e 721C     		adds	r2, r6, #1
+ 913 0050 04AB     		add	r3, sp, #16
+ 914 0052 0093     		str	r3, [sp]
+ 915 0054 0123     		movs	r3, #1
+ 916 0056 D2B2     		uxtb	r2, r2
+ 917 0058 4146     		mov	r1, r8
+ 918 005a 3846     		mov	r0, r7
+ 919 005c FFF7FEFF 		bl	u8x8_DrawTile
+ 920              	.LVL123:
+ 247:BSP/u8g2/u8x8_8x8.c **** 
+ 921              		.loc 1 247 1 is_stmt 0 view .LVU272
+ 922 0060 08B0     		add	sp, sp, #32
+ 923              	.LCFI9:
+ 924              		.cfi_def_cfa_offset 24
+ 925              		@ sp needed
+ 926 0062 BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
+ 247:BSP/u8g2/u8x8_8x8.c **** 
+ARM GAS  /tmp/ccC5rntL.s 			page 26
+
+
+ 927              		.loc 1 247 1 view .LVU273
+ 928              		.cfi_endproc
+ 929              	.LFE7:
+ 931              		.section	.text.u8x8_Draw2x2Glyph,"ax",%progbits
+ 932              		.align	1
+ 933              		.global	u8x8_Draw2x2Glyph
+ 934              		.syntax unified
+ 935              		.thumb
+ 936              		.thumb_func
+ 938              	u8x8_Draw2x2Glyph:
+ 939              	.LVL124:
+ 940              	.LFB6:
+ 208:BSP/u8g2/u8x8_8x8.c ****   uint8_t th = u8x8_pgm_read(u8x8->font+2);		/* new 2019 format */
+ 941              		.loc 1 208 1 is_stmt 1 view -0
+ 942              		.cfi_startproc
+ 943              		@ args = 0, pretend = 0, frame = 0
+ 944              		@ frame_needed = 0, uses_anonymous_args = 0
+ 208:BSP/u8g2/u8x8_8x8.c ****   uint8_t th = u8x8_pgm_read(u8x8->font+2);		/* new 2019 format */
+ 945              		.loc 1 208 1 is_stmt 0 view .LVU275
+ 946 0000 2DE9F04F 		push	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
+ 947              	.LCFI10:
+ 948              		.cfi_def_cfa_offset 36
+ 949              		.cfi_offset 4, -36
+ 950              		.cfi_offset 5, -32
+ 951              		.cfi_offset 6, -28
+ 952              		.cfi_offset 7, -24
+ 953              		.cfi_offset 8, -20
+ 954              		.cfi_offset 9, -16
+ 955              		.cfi_offset 10, -12
+ 956              		.cfi_offset 11, -8
+ 957              		.cfi_offset 14, -4
+ 958 0004 83B0     		sub	sp, sp, #12
+ 959              	.LCFI11:
+ 960              		.cfi_def_cfa_offset 48
+ 961 0006 8046     		mov	r8, r0
+ 962 0008 8B46     		mov	fp, r1
+ 963 000a 1646     		mov	r6, r2
+ 964 000c 9946     		mov	r9, r3
+ 209:BSP/u8g2/u8x8_8x8.c ****   uint8_t tv = u8x8_pgm_read(u8x8->font+3);	/* new 2019 format */
+ 965              		.loc 1 209 3 is_stmt 1 view .LVU276
+ 209:BSP/u8g2/u8x8_8x8.c ****   uint8_t tv = u8x8_pgm_read(u8x8->font+3);	/* new 2019 format */
+ 966              		.loc 1 209 16 is_stmt 0 view .LVU277
+ 967 000e C369     		ldr	r3, [r0, #28]
+ 968              	.LVL125:
+ 209:BSP/u8g2/u8x8_8x8.c ****   uint8_t tv = u8x8_pgm_read(u8x8->font+3);	/* new 2019 format */
+ 969              		.loc 1 209 11 view .LVU278
+ 970 0010 9F78     		ldrb	r7, [r3, #2]	@ zero_extendqisi2
+ 971              	.LVL126:
+ 210:BSP/u8g2/u8x8_8x8.c ****   uint8_t xx, tile;
+ 972              		.loc 1 210 3 is_stmt 1 view .LVU279
+ 210:BSP/u8g2/u8x8_8x8.c ****   uint8_t xx, tile;
+ 973              		.loc 1 210 11 is_stmt 0 view .LVU280
+ 974 0012 93F803A0 		ldrb	r10, [r3, #3]	@ zero_extendqisi2
+ 975              	.LVL127:
+ 211:BSP/u8g2/u8x8_8x8.c ****   th *= 2;
+ 976              		.loc 1 211 3 is_stmt 1 view .LVU281
+ 212:BSP/u8g2/u8x8_8x8.c ****   th += x;
+ARM GAS  /tmp/ccC5rntL.s 			page 27
+
+
+ 977              		.loc 1 212 3 view .LVU282
+ 212:BSP/u8g2/u8x8_8x8.c ****   th += x;
+ 978              		.loc 1 212 6 is_stmt 0 view .LVU283
+ 979 0016 7F00     		lsls	r7, r7, #1
+ 980 0018 FFB2     		uxtb	r7, r7
+ 981              	.LVL128:
+ 213:BSP/u8g2/u8x8_8x8.c ****   tv *= 2;
+ 982              		.loc 1 213 3 is_stmt 1 view .LVU284
+ 213:BSP/u8g2/u8x8_8x8.c ****   tv *= 2;
+ 983              		.loc 1 213 6 is_stmt 0 view .LVU285
+ 984 001a 0F44     		add	r7, r7, r1
+ 985              	.LVL129:
+ 213:BSP/u8g2/u8x8_8x8.c ****   tv *= 2;
+ 986              		.loc 1 213 6 view .LVU286
+ 987 001c FFB2     		uxtb	r7, r7
+ 988              	.LVL130:
+ 214:BSP/u8g2/u8x8_8x8.c ****   tv += y;
+ 989              		.loc 1 214 3 is_stmt 1 view .LVU287
+ 214:BSP/u8g2/u8x8_8x8.c ****   tv += y;
+ 990              		.loc 1 214 6 is_stmt 0 view .LVU288
+ 991 001e 4FEA4A0A 		lsl	r10, r10, #1
+ 992 0022 5FFA8AFA 		uxtb	r10, r10
+ 993              	.LVL131:
+ 215:BSP/u8g2/u8x8_8x8.c ****   tile = 0;
+ 994              		.loc 1 215 3 is_stmt 1 view .LVU289
+ 215:BSP/u8g2/u8x8_8x8.c ****   tile = 0;
+ 995              		.loc 1 215 6 is_stmt 0 view .LVU290
+ 996 0026 9244     		add	r10, r10, r2
+ 997              	.LVL132:
+ 215:BSP/u8g2/u8x8_8x8.c ****   tile = 0;
+ 998              		.loc 1 215 6 view .LVU291
+ 999 0028 5FFA8AFA 		uxtb	r10, r10
+ 1000              	.LVL133:
+ 216:BSP/u8g2/u8x8_8x8.c ****   do
+ 1001              		.loc 1 216 3 is_stmt 1 view .LVU292
+ 216:BSP/u8g2/u8x8_8x8.c ****   do
+ 1002              		.loc 1 216 8 is_stmt 0 view .LVU293
+ 1003 002c 0025     		movs	r5, #0
+ 1004              	.LVL134:
+ 1005              	.L55:
+ 217:BSP/u8g2/u8x8_8x8.c ****   {
+ 1006              		.loc 1 217 3 is_stmt 1 view .LVU294
+ 219:BSP/u8g2/u8x8_8x8.c ****     do
+ 1007              		.loc 1 219 5 view .LVU295
+ 219:BSP/u8g2/u8x8_8x8.c ****     do
+ 1008              		.loc 1 219 8 is_stmt 0 view .LVU296
+ 1009 002e 5C46     		mov	r4, fp
+ 1010              	.LVL135:
+ 1011              	.L54:
+ 220:BSP/u8g2/u8x8_8x8.c ****     {
+ 1012              		.loc 1 220 5 is_stmt 1 view .LVU297
+ 222:BSP/u8g2/u8x8_8x8.c ****       tile++;
+ 1013              		.loc 1 222 7 view .LVU298
+ 1014 0030 0095     		str	r5, [sp]
+ 1015 0032 4B46     		mov	r3, r9
+ 1016 0034 3246     		mov	r2, r6
+ 1017 0036 2146     		mov	r1, r4
+ARM GAS  /tmp/ccC5rntL.s 			page 28
+
+
+ 1018 0038 4046     		mov	r0, r8
+ 1019 003a FFF7FEFF 		bl	u8x8_draw_2x2_subglyph
+ 1020              	.LVL136:
+ 223:BSP/u8g2/u8x8_8x8.c ****       xx+=2;
+ 1021              		.loc 1 223 7 view .LVU299
+ 223:BSP/u8g2/u8x8_8x8.c ****       xx+=2;
+ 1022              		.loc 1 223 11 is_stmt 0 view .LVU300
+ 1023 003e 0135     		adds	r5, r5, #1
+ 1024              	.LVL137:
+ 223:BSP/u8g2/u8x8_8x8.c ****       xx+=2;
+ 1025              		.loc 1 223 11 view .LVU301
+ 1026 0040 EDB2     		uxtb	r5, r5
+ 1027              	.LVL138:
+ 224:BSP/u8g2/u8x8_8x8.c ****     } while( xx < th );
+ 1028              		.loc 1 224 7 is_stmt 1 view .LVU302
+ 224:BSP/u8g2/u8x8_8x8.c ****     } while( xx < th );
+ 1029              		.loc 1 224 9 is_stmt 0 view .LVU303
+ 1030 0042 0234     		adds	r4, r4, #2
+ 1031              	.LVL139:
+ 224:BSP/u8g2/u8x8_8x8.c ****     } while( xx < th );
+ 1032              		.loc 1 224 9 view .LVU304
+ 1033 0044 E4B2     		uxtb	r4, r4
+ 1034              	.LVL140:
+ 225:BSP/u8g2/u8x8_8x8.c ****     y+=2;
+ 1035              		.loc 1 225 17 is_stmt 1 discriminator 1 view .LVU305
+ 1036 0046 A742     		cmp	r7, r4
+ 1037 0048 F2D8     		bhi	.L54
+ 226:BSP/u8g2/u8x8_8x8.c ****   } while( y < tv );  
+ 1038              		.loc 1 226 5 view .LVU306
+ 226:BSP/u8g2/u8x8_8x8.c ****   } while( y < tv );  
+ 1039              		.loc 1 226 6 is_stmt 0 view .LVU307
+ 1040 004a 0236     		adds	r6, r6, #2
+ 1041              	.LVL141:
+ 226:BSP/u8g2/u8x8_8x8.c ****   } while( y < tv );  
+ 1042              		.loc 1 226 6 view .LVU308
+ 1043 004c F6B2     		uxtb	r6, r6
+ 1044              	.LVL142:
+ 227:BSP/u8g2/u8x8_8x8.c **** }
+ 1045              		.loc 1 227 14 is_stmt 1 view .LVU309
+ 1046 004e B245     		cmp	r10, r6
+ 1047 0050 EDD8     		bhi	.L55
+ 228:BSP/u8g2/u8x8_8x8.c **** 
+ 1048              		.loc 1 228 1 is_stmt 0 view .LVU310
+ 1049 0052 03B0     		add	sp, sp, #12
+ 1050              	.LCFI12:
+ 1051              		.cfi_def_cfa_offset 36
+ 1052              		@ sp needed
+ 1053 0054 BDE8F08F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 228:BSP/u8g2/u8x8_8x8.c **** 
+ 1054              		.loc 1 228 1 view .LVU311
+ 1055              		.cfi_endproc
+ 1056              	.LFE6:
+ 1058              		.section	.text.u8x8_Draw1x2Glyph,"ax",%progbits
+ 1059              		.align	1
+ 1060              		.global	u8x8_Draw1x2Glyph
+ 1061              		.syntax unified
+ 1062              		.thumb
+ARM GAS  /tmp/ccC5rntL.s 			page 29
+
+
+ 1063              		.thumb_func
+ 1065              	u8x8_Draw1x2Glyph:
+ 1066              	.LVL143:
+ 1067              	.LFB8:
+ 250:BSP/u8g2/u8x8_8x8.c ****   uint8_t th = u8x8_pgm_read(u8x8->font+2);		/* new 2019 format */
+ 1068              		.loc 1 250 1 is_stmt 1 view -0
+ 1069              		.cfi_startproc
+ 1070              		@ args = 0, pretend = 0, frame = 0
+ 1071              		@ frame_needed = 0, uses_anonymous_args = 0
+ 250:BSP/u8g2/u8x8_8x8.c ****   uint8_t th = u8x8_pgm_read(u8x8->font+2);		/* new 2019 format */
+ 1072              		.loc 1 250 1 is_stmt 0 view .LVU313
+ 1073 0000 2DE9F04F 		push	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
+ 1074              	.LCFI13:
+ 1075              		.cfi_def_cfa_offset 36
+ 1076              		.cfi_offset 4, -36
+ 1077              		.cfi_offset 5, -32
+ 1078              		.cfi_offset 6, -28
+ 1079              		.cfi_offset 7, -24
+ 1080              		.cfi_offset 8, -20
+ 1081              		.cfi_offset 9, -16
+ 1082              		.cfi_offset 10, -12
+ 1083              		.cfi_offset 11, -8
+ 1084              		.cfi_offset 14, -4
+ 1085 0004 83B0     		sub	sp, sp, #12
+ 1086              	.LCFI14:
+ 1087              		.cfi_def_cfa_offset 48
+ 1088 0006 8046     		mov	r8, r0
+ 1089 0008 8B46     		mov	fp, r1
+ 1090 000a 1646     		mov	r6, r2
+ 1091 000c 9946     		mov	r9, r3
+ 251:BSP/u8g2/u8x8_8x8.c ****   uint8_t tv = u8x8_pgm_read(u8x8->font+3);	/* new 2019 format */
+ 1092              		.loc 1 251 3 is_stmt 1 view .LVU314
+ 251:BSP/u8g2/u8x8_8x8.c ****   uint8_t tv = u8x8_pgm_read(u8x8->font+3);	/* new 2019 format */
+ 1093              		.loc 1 251 16 is_stmt 0 view .LVU315
+ 1094 000e C369     		ldr	r3, [r0, #28]
+ 1095              	.LVL144:
+ 251:BSP/u8g2/u8x8_8x8.c ****   uint8_t tv = u8x8_pgm_read(u8x8->font+3);	/* new 2019 format */
+ 1096              		.loc 1 251 11 view .LVU316
+ 1097 0010 9F78     		ldrb	r7, [r3, #2]	@ zero_extendqisi2
+ 1098              	.LVL145:
+ 252:BSP/u8g2/u8x8_8x8.c ****   uint8_t xx, tile;
+ 1099              		.loc 1 252 3 is_stmt 1 view .LVU317
+ 252:BSP/u8g2/u8x8_8x8.c ****   uint8_t xx, tile;
+ 1100              		.loc 1 252 11 is_stmt 0 view .LVU318
+ 1101 0012 93F803A0 		ldrb	r10, [r3, #3]	@ zero_extendqisi2
+ 1102              	.LVL146:
+ 253:BSP/u8g2/u8x8_8x8.c ****   th += x;
+ 1103              		.loc 1 253 3 is_stmt 1 view .LVU319
+ 254:BSP/u8g2/u8x8_8x8.c ****   tv *= 2;
+ 1104              		.loc 1 254 3 view .LVU320
+ 254:BSP/u8g2/u8x8_8x8.c ****   tv *= 2;
+ 1105              		.loc 1 254 6 is_stmt 0 view .LVU321
+ 1106 0016 0F44     		add	r7, r7, r1
+ 1107 0018 FFB2     		uxtb	r7, r7
+ 1108              	.LVL147:
+ 255:BSP/u8g2/u8x8_8x8.c ****   tv += y;
+ 1109              		.loc 1 255 3 is_stmt 1 view .LVU322
+ARM GAS  /tmp/ccC5rntL.s 			page 30
+
+
+ 255:BSP/u8g2/u8x8_8x8.c ****   tv += y;
+ 1110              		.loc 1 255 6 is_stmt 0 view .LVU323
+ 1111 001a 4FEA4A0A 		lsl	r10, r10, #1
+ 1112 001e 5FFA8AFA 		uxtb	r10, r10
+ 1113              	.LVL148:
+ 256:BSP/u8g2/u8x8_8x8.c ****   tile = 0;
+ 1114              		.loc 1 256 3 is_stmt 1 view .LVU324
+ 256:BSP/u8g2/u8x8_8x8.c ****   tile = 0;
+ 1115              		.loc 1 256 6 is_stmt 0 view .LVU325
+ 1116 0022 9244     		add	r10, r10, r2
+ 1117              	.LVL149:
+ 256:BSP/u8g2/u8x8_8x8.c ****   tile = 0;
+ 1118              		.loc 1 256 6 view .LVU326
+ 1119 0024 5FFA8AFA 		uxtb	r10, r10
+ 1120              	.LVL150:
+ 257:BSP/u8g2/u8x8_8x8.c ****   do
+ 1121              		.loc 1 257 3 is_stmt 1 view .LVU327
+ 257:BSP/u8g2/u8x8_8x8.c ****   do
+ 1122              		.loc 1 257 8 is_stmt 0 view .LVU328
+ 1123 0028 0025     		movs	r5, #0
+ 1124              	.LVL151:
+ 1125              	.L59:
+ 258:BSP/u8g2/u8x8_8x8.c ****   {
+ 1126              		.loc 1 258 3 is_stmt 1 view .LVU329
+ 260:BSP/u8g2/u8x8_8x8.c ****     do
+ 1127              		.loc 1 260 5 view .LVU330
+ 260:BSP/u8g2/u8x8_8x8.c ****     do
+ 1128              		.loc 1 260 8 is_stmt 0 view .LVU331
+ 1129 002a 5C46     		mov	r4, fp
+ 1130              	.LVL152:
+ 1131              	.L58:
+ 261:BSP/u8g2/u8x8_8x8.c ****     {
+ 1132              		.loc 1 261 5 is_stmt 1 view .LVU332
+ 263:BSP/u8g2/u8x8_8x8.c ****       tile++;
+ 1133              		.loc 1 263 7 view .LVU333
+ 1134 002c 0095     		str	r5, [sp]
+ 1135 002e 4B46     		mov	r3, r9
+ 1136 0030 3246     		mov	r2, r6
+ 1137 0032 2146     		mov	r1, r4
+ 1138 0034 4046     		mov	r0, r8
+ 1139 0036 FFF7FEFF 		bl	u8x8_draw_1x2_subglyph
+ 1140              	.LVL153:
+ 264:BSP/u8g2/u8x8_8x8.c ****       xx++;
+ 1141              		.loc 1 264 7 view .LVU334
+ 264:BSP/u8g2/u8x8_8x8.c ****       xx++;
+ 1142              		.loc 1 264 11 is_stmt 0 view .LVU335
+ 1143 003a 0135     		adds	r5, r5, #1
+ 1144              	.LVL154:
+ 264:BSP/u8g2/u8x8_8x8.c ****       xx++;
+ 1145              		.loc 1 264 11 view .LVU336
+ 1146 003c EDB2     		uxtb	r5, r5
+ 1147              	.LVL155:
+ 265:BSP/u8g2/u8x8_8x8.c ****     } while( xx < th );
+ 1148              		.loc 1 265 7 is_stmt 1 view .LVU337
+ 265:BSP/u8g2/u8x8_8x8.c ****     } while( xx < th );
+ 1149              		.loc 1 265 9 is_stmt 0 view .LVU338
+ 1150 003e 0134     		adds	r4, r4, #1
+ARM GAS  /tmp/ccC5rntL.s 			page 31
+
+
+ 1151              	.LVL156:
+ 265:BSP/u8g2/u8x8_8x8.c ****     } while( xx < th );
+ 1152              		.loc 1 265 9 view .LVU339
+ 1153 0040 E4B2     		uxtb	r4, r4
+ 1154              	.LVL157:
+ 266:BSP/u8g2/u8x8_8x8.c ****     y+=2;
+ 1155              		.loc 1 266 17 is_stmt 1 discriminator 1 view .LVU340
+ 1156 0042 A742     		cmp	r7, r4
+ 1157 0044 F2D8     		bhi	.L58
+ 267:BSP/u8g2/u8x8_8x8.c ****   } while( y < tv );  
+ 1158              		.loc 1 267 5 view .LVU341
+ 267:BSP/u8g2/u8x8_8x8.c ****   } while( y < tv );  
+ 1159              		.loc 1 267 6 is_stmt 0 view .LVU342
+ 1160 0046 0236     		adds	r6, r6, #2
+ 1161              	.LVL158:
+ 267:BSP/u8g2/u8x8_8x8.c ****   } while( y < tv );  
+ 1162              		.loc 1 267 6 view .LVU343
+ 1163 0048 F6B2     		uxtb	r6, r6
+ 1164              	.LVL159:
+ 268:BSP/u8g2/u8x8_8x8.c **** }
+ 1165              		.loc 1 268 14 is_stmt 1 view .LVU344
+ 1166 004a B245     		cmp	r10, r6
+ 1167 004c EDD8     		bhi	.L59
+ 269:BSP/u8g2/u8x8_8x8.c **** 
+ 1168              		.loc 1 269 1 is_stmt 0 view .LVU345
+ 1169 004e 03B0     		add	sp, sp, #12
+ 1170              	.LCFI15:
+ 1171              		.cfi_def_cfa_offset 36
+ 1172              		@ sp needed
+ 1173 0050 BDE8F08F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 269:BSP/u8g2/u8x8_8x8.c **** 
+ 1174              		.loc 1 269 1 view .LVU346
+ 1175              		.cfi_endproc
+ 1176              	.LFE8:
+ 1178              		.section	.text.u8x8_utf8_init,"ax",%progbits
+ 1179              		.align	1
+ 1180              		.global	u8x8_utf8_init
+ 1181              		.syntax unified
+ 1182              		.thumb
+ 1183              		.thumb_func
+ 1185              	u8x8_utf8_init:
+ 1186              	.LVL160:
+ 1187              	.LFB9:
+ 286:BSP/u8g2/u8x8_8x8.c ****   u8x8->utf8_state = 0;	/* also reset during u8x8_SetupDefaults() */
+ 1188              		.loc 1 286 1 is_stmt 1 view -0
+ 1189              		.cfi_startproc
+ 1190              		@ args = 0, pretend = 0, frame = 0
+ 1191              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1192              		@ link register save eliminated.
+ 287:BSP/u8g2/u8x8_8x8.c **** }
+ 1193              		.loc 1 287 3 view .LVU348
+ 287:BSP/u8g2/u8x8_8x8.c **** }
+ 1194              		.loc 1 287 20 is_stmt 0 view .LVU349
+ 1195 0000 0023     		movs	r3, #0
+ 1196 0002 80F82730 		strb	r3, [r0, #39]
+ 288:BSP/u8g2/u8x8_8x8.c **** 
+ 1197              		.loc 1 288 1 view .LVU350
+ARM GAS  /tmp/ccC5rntL.s 			page 32
+
+
+ 1198 0006 7047     		bx	lr
+ 1199              		.cfi_endproc
+ 1200              	.LFE9:
+ 1202              		.section	.text.u8x8_draw_string,"ax",%progbits
+ 1203              		.align	1
+ 1204              		.syntax unified
+ 1205              		.thumb
+ 1206              		.thumb_func
+ 1208              	u8x8_draw_string:
+ 1209              	.LVL161:
+ 1210              	.LFB12:
+ 355:BSP/u8g2/u8x8_8x8.c **** 
+ 356:BSP/u8g2/u8x8_8x8.c **** 
+ 357:BSP/u8g2/u8x8_8x8.c **** 
+ 358:BSP/u8g2/u8x8_8x8.c **** static uint8_t u8x8_draw_string(u8x8_t *u8x8, uint8_t x, uint8_t y, const char *s) U8X8_NOINLINE;
+ 359:BSP/u8g2/u8x8_8x8.c **** static uint8_t u8x8_draw_string(u8x8_t *u8x8, uint8_t x, uint8_t y, const char *s)
+ 360:BSP/u8g2/u8x8_8x8.c **** {
+ 1211              		.loc 1 360 1 is_stmt 1 view -0
+ 1212              		.cfi_startproc
+ 1213              		@ args = 0, pretend = 0, frame = 0
+ 1214              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1215              		.loc 1 360 1 is_stmt 0 view .LVU352
+ 1216 0000 2DE9F843 		push	{r3, r4, r5, r6, r7, r8, r9, lr}
+ 1217              	.LCFI16:
+ 1218              		.cfi_def_cfa_offset 32
+ 1219              		.cfi_offset 3, -32
+ 1220              		.cfi_offset 4, -28
+ 1221              		.cfi_offset 5, -24
+ 1222              		.cfi_offset 6, -20
+ 1223              		.cfi_offset 7, -16
+ 1224              		.cfi_offset 8, -12
+ 1225              		.cfi_offset 9, -8
+ 1226              		.cfi_offset 14, -4
+ 1227 0004 0546     		mov	r5, r0
+ 1228 0006 0E46     		mov	r6, r1
+ 1229 0008 9046     		mov	r8, r2
+ 1230 000a 1C46     		mov	r4, r3
+ 361:BSP/u8g2/u8x8_8x8.c ****   uint16_t e;
+ 1231              		.loc 1 361 3 is_stmt 1 view .LVU353
+ 362:BSP/u8g2/u8x8_8x8.c ****   uint8_t cnt = 0;
+ 1232              		.loc 1 362 3 view .LVU354
+ 1233              	.LVL162:
+ 363:BSP/u8g2/u8x8_8x8.c ****   uint8_t th = u8x8_pgm_read(u8x8->font+2);		/* new 2019 format */
+ 1234              		.loc 1 363 3 view .LVU355
+ 1235              		.loc 1 363 16 is_stmt 0 view .LVU356
+ 1236 000c C369     		ldr	r3, [r0, #28]
+ 1237              	.LVL163:
+ 1238              		.loc 1 363 11 view .LVU357
+ 1239 000e 93F80290 		ldrb	r9, [r3, #2]	@ zero_extendqisi2
+ 1240              	.LVL164:
+ 364:BSP/u8g2/u8x8_8x8.c **** 
+ 365:BSP/u8g2/u8x8_8x8.c ****   u8x8_utf8_init(u8x8);
+ 1241              		.loc 1 365 3 is_stmt 1 view .LVU358
+ 1242 0012 FFF7FEFF 		bl	u8x8_utf8_init
+ 1243              	.LVL165:
+ 362:BSP/u8g2/u8x8_8x8.c ****   uint8_t th = u8x8_pgm_read(u8x8->font+2);		/* new 2019 format */
+ 1244              		.loc 1 362 11 is_stmt 0 view .LVU359
+ARM GAS  /tmp/ccC5rntL.s 			page 33
+
+
+ 1245 0016 0027     		movs	r7, #0
+ 1246              	.LVL166:
+ 1247              	.L63:
+ 366:BSP/u8g2/u8x8_8x8.c ****   for(;;)
+ 1248              		.loc 1 366 3 is_stmt 1 view .LVU360
+ 367:BSP/u8g2/u8x8_8x8.c ****   {
+ 368:BSP/u8g2/u8x8_8x8.c ****     e = u8x8->next_cb(u8x8, (uint8_t)*s);
+ 1249              		.loc 1 368 5 view .LVU361
+ 1250              		.loc 1 368 13 is_stmt 0 view .LVU362
+ 1251 0018 6B68     		ldr	r3, [r5, #4]
+ 1252              		.loc 1 368 9 view .LVU363
+ 1253 001a 2178     		ldrb	r1, [r4]	@ zero_extendqisi2
+ 1254 001c 2846     		mov	r0, r5
+ 1255 001e 9847     		blx	r3
+ 1256              	.LVL167:
+ 369:BSP/u8g2/u8x8_8x8.c ****     if ( e == 0x0ffff )
+ 1257              		.loc 1 369 5 is_stmt 1 view .LVU364
+ 1258              		.loc 1 369 8 is_stmt 0 view .LVU365
+ 1259 0020 4FF6FF73 		movw	r3, #65535
+ 1260 0024 9842     		cmp	r0, r3
+ 1261 0026 0FD0     		beq	.L64
+ 370:BSP/u8g2/u8x8_8x8.c ****       break;
+ 371:BSP/u8g2/u8x8_8x8.c ****     s++;
+ 1262              		.loc 1 371 5 is_stmt 1 view .LVU366
+ 1263              		.loc 1 371 6 is_stmt 0 view .LVU367
+ 1264 0028 0134     		adds	r4, r4, #1
+ 1265              	.LVL168:
+ 372:BSP/u8g2/u8x8_8x8.c ****     if ( e != 0x0fffe )
+ 1266              		.loc 1 372 5 is_stmt 1 view .LVU368
+ 1267              		.loc 1 372 8 is_stmt 0 view .LVU369
+ 1268 002a 4FF6FE73 		movw	r3, #65534
+ 1269 002e 9842     		cmp	r0, r3
+ 1270 0030 F2D0     		beq	.L63
+ 373:BSP/u8g2/u8x8_8x8.c ****     {
+ 374:BSP/u8g2/u8x8_8x8.c ****       u8x8_DrawGlyph(u8x8, x, y, e);
+ 1271              		.loc 1 374 7 is_stmt 1 view .LVU370
+ 1272 0032 C3B2     		uxtb	r3, r0
+ 1273 0034 4246     		mov	r2, r8
+ 1274 0036 3146     		mov	r1, r6
+ 1275 0038 2846     		mov	r0, r5
+ 1276              	.LVL169:
+ 1277              		.loc 1 374 7 is_stmt 0 view .LVU371
+ 1278 003a FFF7FEFF 		bl	u8x8_DrawGlyph
+ 1279              	.LVL170:
+ 375:BSP/u8g2/u8x8_8x8.c ****       x+=th;
+ 1280              		.loc 1 375 7 is_stmt 1 view .LVU372
+ 1281              		.loc 1 375 8 is_stmt 0 view .LVU373
+ 1282 003e 4E44     		add	r6, r6, r9
+ 1283              	.LVL171:
+ 1284              		.loc 1 375 8 view .LVU374
+ 1285 0040 F6B2     		uxtb	r6, r6
+ 1286              	.LVL172:
+ 376:BSP/u8g2/u8x8_8x8.c ****       cnt++;
+ 1287              		.loc 1 376 7 is_stmt 1 view .LVU375
+ 1288              		.loc 1 376 10 is_stmt 0 view .LVU376
+ 1289 0042 0137     		adds	r7, r7, #1
+ 1290              	.LVL173:
+ARM GAS  /tmp/ccC5rntL.s 			page 34
+
+
+ 1291              		.loc 1 376 10 view .LVU377
+ 1292 0044 FFB2     		uxtb	r7, r7
+ 1293              	.LVL174:
+ 1294              		.loc 1 376 10 view .LVU378
+ 1295 0046 E7E7     		b	.L63
+ 1296              	.LVL175:
+ 1297              	.L64:
+ 377:BSP/u8g2/u8x8_8x8.c ****     }
+ 378:BSP/u8g2/u8x8_8x8.c ****   }
+ 379:BSP/u8g2/u8x8_8x8.c ****   return cnt;
+ 1298              		.loc 1 379 3 is_stmt 1 view .LVU379
+ 380:BSP/u8g2/u8x8_8x8.c **** }
+ 1299              		.loc 1 380 1 is_stmt 0 view .LVU380
+ 1300 0048 3846     		mov	r0, r7
+ 1301              	.LVL176:
+ 1302              		.loc 1 380 1 view .LVU381
+ 1303 004a BDE8F883 		pop	{r3, r4, r5, r6, r7, r8, r9, pc}
+ 1304              		.loc 1 380 1 view .LVU382
+ 1305              		.cfi_endproc
+ 1306              	.LFE12:
+ 1308              		.section	.text.u8x8_draw_2x2_string,"ax",%progbits
+ 1309              		.align	1
+ 1310              		.syntax unified
+ 1311              		.thumb
+ 1312              		.thumb_func
+ 1314              	u8x8_draw_2x2_string:
+ 1315              	.LVL177:
+ 1316              	.LFB15:
+ 381:BSP/u8g2/u8x8_8x8.c **** 
+ 382:BSP/u8g2/u8x8_8x8.c **** 
+ 383:BSP/u8g2/u8x8_8x8.c **** uint8_t u8x8_DrawString(u8x8_t *u8x8, uint8_t x, uint8_t y, const char *s)
+ 384:BSP/u8g2/u8x8_8x8.c **** {
+ 385:BSP/u8g2/u8x8_8x8.c ****   u8x8->next_cb = u8x8_ascii_next;
+ 386:BSP/u8g2/u8x8_8x8.c ****   return u8x8_draw_string(u8x8, x, y, s);
+ 387:BSP/u8g2/u8x8_8x8.c **** }
+ 388:BSP/u8g2/u8x8_8x8.c **** 
+ 389:BSP/u8g2/u8x8_8x8.c **** uint8_t u8x8_DrawUTF8(u8x8_t *u8x8, uint8_t x, uint8_t y, const char *s)
+ 390:BSP/u8g2/u8x8_8x8.c **** {
+ 391:BSP/u8g2/u8x8_8x8.c ****   u8x8->next_cb = u8x8_utf8_next;
+ 392:BSP/u8g2/u8x8_8x8.c ****   return u8x8_draw_string(u8x8, x, y, s);
+ 393:BSP/u8g2/u8x8_8x8.c **** }
+ 394:BSP/u8g2/u8x8_8x8.c **** 
+ 395:BSP/u8g2/u8x8_8x8.c **** 
+ 396:BSP/u8g2/u8x8_8x8.c **** 
+ 397:BSP/u8g2/u8x8_8x8.c **** static uint8_t u8x8_draw_2x2_string(u8x8_t *u8x8, uint8_t x, uint8_t y, const char *s) U8X8_NOINLIN
+ 398:BSP/u8g2/u8x8_8x8.c **** static uint8_t u8x8_draw_2x2_string(u8x8_t *u8x8, uint8_t x, uint8_t y, const char *s)
+ 399:BSP/u8g2/u8x8_8x8.c **** {
+ 1317              		.loc 1 399 1 is_stmt 1 view -0
+ 1318              		.cfi_startproc
+ 1319              		@ args = 0, pretend = 0, frame = 0
+ 1320              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1321              		.loc 1 399 1 is_stmt 0 view .LVU384
+ 1322 0000 2DE9F041 		push	{r4, r5, r6, r7, r8, lr}
+ 1323              	.LCFI17:
+ 1324              		.cfi_def_cfa_offset 24
+ 1325              		.cfi_offset 4, -24
+ 1326              		.cfi_offset 5, -20
+ARM GAS  /tmp/ccC5rntL.s 			page 35
+
+
+ 1327              		.cfi_offset 6, -16
+ 1328              		.cfi_offset 7, -12
+ 1329              		.cfi_offset 8, -8
+ 1330              		.cfi_offset 14, -4
+ 1331 0004 0546     		mov	r5, r0
+ 1332 0006 0E46     		mov	r6, r1
+ 1333 0008 9046     		mov	r8, r2
+ 1334 000a 1C46     		mov	r4, r3
+ 400:BSP/u8g2/u8x8_8x8.c ****   uint16_t e;
+ 1335              		.loc 1 400 3 is_stmt 1 view .LVU385
+ 401:BSP/u8g2/u8x8_8x8.c ****   uint8_t cnt = 0;
+ 1336              		.loc 1 401 3 view .LVU386
+ 1337              	.LVL178:
+ 402:BSP/u8g2/u8x8_8x8.c ****   u8x8_utf8_init(u8x8);
+ 1338              		.loc 1 402 3 view .LVU387
+ 1339 000c FFF7FEFF 		bl	u8x8_utf8_init
+ 1340              	.LVL179:
+ 401:BSP/u8g2/u8x8_8x8.c ****   uint8_t cnt = 0;
+ 1341              		.loc 1 401 11 is_stmt 0 view .LVU388
+ 1342 0010 0027     		movs	r7, #0
+ 1343              	.LVL180:
+ 1344              	.L68:
+ 403:BSP/u8g2/u8x8_8x8.c ****   for(;;)
+ 1345              		.loc 1 403 3 is_stmt 1 view .LVU389
+ 404:BSP/u8g2/u8x8_8x8.c ****   {
+ 405:BSP/u8g2/u8x8_8x8.c ****     e = u8x8->next_cb(u8x8, (uint8_t)*s);
+ 1346              		.loc 1 405 5 view .LVU390
+ 1347              		.loc 1 405 13 is_stmt 0 view .LVU391
+ 1348 0012 6B68     		ldr	r3, [r5, #4]
+ 1349              		.loc 1 405 9 view .LVU392
+ 1350 0014 2178     		ldrb	r1, [r4]	@ zero_extendqisi2
+ 1351 0016 2846     		mov	r0, r5
+ 1352 0018 9847     		blx	r3
+ 1353              	.LVL181:
+ 406:BSP/u8g2/u8x8_8x8.c ****     if ( e == 0x0ffff )
+ 1354              		.loc 1 406 5 is_stmt 1 view .LVU393
+ 1355              		.loc 1 406 8 is_stmt 0 view .LVU394
+ 1356 001a 4FF6FF73 		movw	r3, #65535
+ 1357 001e 9842     		cmp	r0, r3
+ 1358 0020 0FD0     		beq	.L69
+ 407:BSP/u8g2/u8x8_8x8.c ****       break;
+ 408:BSP/u8g2/u8x8_8x8.c ****     s++;
+ 1359              		.loc 1 408 5 is_stmt 1 view .LVU395
+ 1360              		.loc 1 408 6 is_stmt 0 view .LVU396
+ 1361 0022 0134     		adds	r4, r4, #1
+ 1362              	.LVL182:
+ 409:BSP/u8g2/u8x8_8x8.c ****     if ( e != 0x0fffe )
+ 1363              		.loc 1 409 5 is_stmt 1 view .LVU397
+ 1364              		.loc 1 409 8 is_stmt 0 view .LVU398
+ 1365 0024 4FF6FE73 		movw	r3, #65534
+ 1366 0028 9842     		cmp	r0, r3
+ 1367 002a F2D0     		beq	.L68
+ 410:BSP/u8g2/u8x8_8x8.c ****     {
+ 411:BSP/u8g2/u8x8_8x8.c ****       u8x8_Draw2x2Glyph(u8x8, x, y, e);
+ 1368              		.loc 1 411 7 is_stmt 1 view .LVU399
+ 1369 002c C3B2     		uxtb	r3, r0
+ 1370 002e 4246     		mov	r2, r8
+ARM GAS  /tmp/ccC5rntL.s 			page 36
+
+
+ 1371 0030 3146     		mov	r1, r6
+ 1372 0032 2846     		mov	r0, r5
+ 1373              	.LVL183:
+ 1374              		.loc 1 411 7 is_stmt 0 view .LVU400
+ 1375 0034 FFF7FEFF 		bl	u8x8_Draw2x2Glyph
+ 1376              	.LVL184:
+ 412:BSP/u8g2/u8x8_8x8.c ****       x+=2;
+ 1377              		.loc 1 412 7 is_stmt 1 view .LVU401
+ 1378              		.loc 1 412 8 is_stmt 0 view .LVU402
+ 1379 0038 0236     		adds	r6, r6, #2
+ 1380              	.LVL185:
+ 1381              		.loc 1 412 8 view .LVU403
+ 1382 003a F6B2     		uxtb	r6, r6
+ 1383              	.LVL186:
+ 413:BSP/u8g2/u8x8_8x8.c ****       cnt++;
+ 1384              		.loc 1 413 7 is_stmt 1 view .LVU404
+ 1385              		.loc 1 413 10 is_stmt 0 view .LVU405
+ 1386 003c 0137     		adds	r7, r7, #1
+ 1387              	.LVL187:
+ 1388              		.loc 1 413 10 view .LVU406
+ 1389 003e FFB2     		uxtb	r7, r7
+ 1390              	.LVL188:
+ 1391              		.loc 1 413 10 view .LVU407
+ 1392 0040 E7E7     		b	.L68
+ 1393              	.LVL189:
+ 1394              	.L69:
+ 414:BSP/u8g2/u8x8_8x8.c ****     }
+ 415:BSP/u8g2/u8x8_8x8.c ****   }
+ 416:BSP/u8g2/u8x8_8x8.c ****   return cnt;
+ 1395              		.loc 1 416 3 is_stmt 1 view .LVU408
+ 417:BSP/u8g2/u8x8_8x8.c **** }
+ 1396              		.loc 1 417 1 is_stmt 0 view .LVU409
+ 1397 0042 3846     		mov	r0, r7
+ 1398              	.LVL190:
+ 1399              		.loc 1 417 1 view .LVU410
+ 1400 0044 BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
+ 1401              		.loc 1 417 1 view .LVU411
+ 1402              		.cfi_endproc
+ 1403              	.LFE15:
+ 1405              		.section	.text.u8x8_draw_1x2_string,"ax",%progbits
+ 1406              		.align	1
+ 1407              		.syntax unified
+ 1408              		.thumb
+ 1409              		.thumb_func
+ 1411              	u8x8_draw_1x2_string:
+ 1412              	.LVL191:
+ 1413              	.LFB18:
+ 418:BSP/u8g2/u8x8_8x8.c **** 
+ 419:BSP/u8g2/u8x8_8x8.c **** 
+ 420:BSP/u8g2/u8x8_8x8.c **** uint8_t u8x8_Draw2x2String(u8x8_t *u8x8, uint8_t x, uint8_t y, const char *s)
+ 421:BSP/u8g2/u8x8_8x8.c **** {
+ 422:BSP/u8g2/u8x8_8x8.c ****   u8x8->next_cb = u8x8_ascii_next;
+ 423:BSP/u8g2/u8x8_8x8.c ****   return u8x8_draw_2x2_string(u8x8, x, y, s);
+ 424:BSP/u8g2/u8x8_8x8.c **** }
+ 425:BSP/u8g2/u8x8_8x8.c **** 
+ 426:BSP/u8g2/u8x8_8x8.c **** uint8_t u8x8_Draw2x2UTF8(u8x8_t *u8x8, uint8_t x, uint8_t y, const char *s)
+ 427:BSP/u8g2/u8x8_8x8.c **** {
+ARM GAS  /tmp/ccC5rntL.s 			page 37
+
+
+ 428:BSP/u8g2/u8x8_8x8.c ****   u8x8->next_cb = u8x8_utf8_next;
+ 429:BSP/u8g2/u8x8_8x8.c ****   return u8x8_draw_2x2_string(u8x8, x, y, s);
+ 430:BSP/u8g2/u8x8_8x8.c **** }
+ 431:BSP/u8g2/u8x8_8x8.c **** 
+ 432:BSP/u8g2/u8x8_8x8.c **** 
+ 433:BSP/u8g2/u8x8_8x8.c **** 
+ 434:BSP/u8g2/u8x8_8x8.c **** static uint8_t u8x8_draw_1x2_string(u8x8_t *u8x8, uint8_t x, uint8_t y, const char *s) U8X8_NOINLIN
+ 435:BSP/u8g2/u8x8_8x8.c **** static uint8_t u8x8_draw_1x2_string(u8x8_t *u8x8, uint8_t x, uint8_t y, const char *s)
+ 436:BSP/u8g2/u8x8_8x8.c **** {
+ 1414              		.loc 1 436 1 is_stmt 1 view -0
+ 1415              		.cfi_startproc
+ 1416              		@ args = 0, pretend = 0, frame = 0
+ 1417              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1418              		.loc 1 436 1 is_stmt 0 view .LVU413
+ 1419 0000 2DE9F041 		push	{r4, r5, r6, r7, r8, lr}
+ 1420              	.LCFI18:
+ 1421              		.cfi_def_cfa_offset 24
+ 1422              		.cfi_offset 4, -24
+ 1423              		.cfi_offset 5, -20
+ 1424              		.cfi_offset 6, -16
+ 1425              		.cfi_offset 7, -12
+ 1426              		.cfi_offset 8, -8
+ 1427              		.cfi_offset 14, -4
+ 1428 0004 0546     		mov	r5, r0
+ 1429 0006 0E46     		mov	r6, r1
+ 1430 0008 9046     		mov	r8, r2
+ 1431 000a 1C46     		mov	r4, r3
+ 437:BSP/u8g2/u8x8_8x8.c ****   uint16_t e;
+ 1432              		.loc 1 437 3 is_stmt 1 view .LVU414
+ 438:BSP/u8g2/u8x8_8x8.c ****   uint8_t cnt = 0;
+ 1433              		.loc 1 438 3 view .LVU415
+ 1434              	.LVL192:
+ 439:BSP/u8g2/u8x8_8x8.c ****   u8x8_utf8_init(u8x8);
+ 1435              		.loc 1 439 3 view .LVU416
+ 1436 000c FFF7FEFF 		bl	u8x8_utf8_init
+ 1437              	.LVL193:
+ 438:BSP/u8g2/u8x8_8x8.c ****   uint8_t cnt = 0;
+ 1438              		.loc 1 438 11 is_stmt 0 view .LVU417
+ 1439 0010 0027     		movs	r7, #0
+ 1440              	.LVL194:
+ 1441              	.L73:
+ 440:BSP/u8g2/u8x8_8x8.c ****   for(;;)
+ 1442              		.loc 1 440 3 is_stmt 1 view .LVU418
+ 441:BSP/u8g2/u8x8_8x8.c ****   {
+ 442:BSP/u8g2/u8x8_8x8.c ****     e = u8x8->next_cb(u8x8, (uint8_t)*s);
+ 1443              		.loc 1 442 5 view .LVU419
+ 1444              		.loc 1 442 13 is_stmt 0 view .LVU420
+ 1445 0012 6B68     		ldr	r3, [r5, #4]
+ 1446              		.loc 1 442 9 view .LVU421
+ 1447 0014 2178     		ldrb	r1, [r4]	@ zero_extendqisi2
+ 1448 0016 2846     		mov	r0, r5
+ 1449 0018 9847     		blx	r3
+ 1450              	.LVL195:
+ 443:BSP/u8g2/u8x8_8x8.c ****     if ( e == 0x0ffff )
+ 1451              		.loc 1 443 5 is_stmt 1 view .LVU422
+ 1452              		.loc 1 443 8 is_stmt 0 view .LVU423
+ 1453 001a 4FF6FF73 		movw	r3, #65535
+ARM GAS  /tmp/ccC5rntL.s 			page 38
+
+
+ 1454 001e 9842     		cmp	r0, r3
+ 1455 0020 0FD0     		beq	.L74
+ 444:BSP/u8g2/u8x8_8x8.c ****       break;
+ 445:BSP/u8g2/u8x8_8x8.c ****     s++;
+ 1456              		.loc 1 445 5 is_stmt 1 view .LVU424
+ 1457              		.loc 1 445 6 is_stmt 0 view .LVU425
+ 1458 0022 0134     		adds	r4, r4, #1
+ 1459              	.LVL196:
+ 446:BSP/u8g2/u8x8_8x8.c ****     if ( e != 0x0fffe )
+ 1460              		.loc 1 446 5 is_stmt 1 view .LVU426
+ 1461              		.loc 1 446 8 is_stmt 0 view .LVU427
+ 1462 0024 4FF6FE73 		movw	r3, #65534
+ 1463 0028 9842     		cmp	r0, r3
+ 1464 002a F2D0     		beq	.L73
+ 447:BSP/u8g2/u8x8_8x8.c ****     {
+ 448:BSP/u8g2/u8x8_8x8.c ****       u8x8_Draw1x2Glyph(u8x8, x, y, e);
+ 1465              		.loc 1 448 7 is_stmt 1 view .LVU428
+ 1466 002c C3B2     		uxtb	r3, r0
+ 1467 002e 4246     		mov	r2, r8
+ 1468 0030 3146     		mov	r1, r6
+ 1469 0032 2846     		mov	r0, r5
+ 1470              	.LVL197:
+ 1471              		.loc 1 448 7 is_stmt 0 view .LVU429
+ 1472 0034 FFF7FEFF 		bl	u8x8_Draw1x2Glyph
+ 1473              	.LVL198:
+ 449:BSP/u8g2/u8x8_8x8.c ****       x++;
+ 1474              		.loc 1 449 7 is_stmt 1 view .LVU430
+ 1475              		.loc 1 449 8 is_stmt 0 view .LVU431
+ 1476 0038 0136     		adds	r6, r6, #1
+ 1477              	.LVL199:
+ 1478              		.loc 1 449 8 view .LVU432
+ 1479 003a F6B2     		uxtb	r6, r6
+ 1480              	.LVL200:
+ 450:BSP/u8g2/u8x8_8x8.c ****       cnt++;
+ 1481              		.loc 1 450 7 is_stmt 1 view .LVU433
+ 1482              		.loc 1 450 10 is_stmt 0 view .LVU434
+ 1483 003c 0137     		adds	r7, r7, #1
+ 1484              	.LVL201:
+ 1485              		.loc 1 450 10 view .LVU435
+ 1486 003e FFB2     		uxtb	r7, r7
+ 1487              	.LVL202:
+ 1488              		.loc 1 450 10 view .LVU436
+ 1489 0040 E7E7     		b	.L73
+ 1490              	.LVL203:
+ 1491              	.L74:
+ 451:BSP/u8g2/u8x8_8x8.c ****     }
+ 452:BSP/u8g2/u8x8_8x8.c ****   }
+ 453:BSP/u8g2/u8x8_8x8.c ****   return cnt;
+ 1492              		.loc 1 453 3 is_stmt 1 view .LVU437
+ 454:BSP/u8g2/u8x8_8x8.c **** }
+ 1493              		.loc 1 454 1 is_stmt 0 view .LVU438
+ 1494 0042 3846     		mov	r0, r7
+ 1495              	.LVL204:
+ 1496              		.loc 1 454 1 view .LVU439
+ 1497 0044 BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
+ 1498              		.loc 1 454 1 view .LVU440
+ 1499              		.cfi_endproc
+ARM GAS  /tmp/ccC5rntL.s 			page 39
+
+
+ 1500              	.LFE18:
+ 1502              		.section	.text.u8x8_DrawString,"ax",%progbits
+ 1503              		.align	1
+ 1504              		.global	u8x8_DrawString
+ 1505              		.syntax unified
+ 1506              		.thumb
+ 1507              		.thumb_func
+ 1509              	u8x8_DrawString:
+ 1510              	.LVL205:
+ 1511              	.LFB13:
+ 384:BSP/u8g2/u8x8_8x8.c ****   u8x8->next_cb = u8x8_ascii_next;
+ 1512              		.loc 1 384 1 is_stmt 1 view -0
+ 1513              		.cfi_startproc
+ 1514              		@ args = 0, pretend = 0, frame = 0
+ 1515              		@ frame_needed = 0, uses_anonymous_args = 0
+ 384:BSP/u8g2/u8x8_8x8.c ****   u8x8->next_cb = u8x8_ascii_next;
+ 1516              		.loc 1 384 1 is_stmt 0 view .LVU442
+ 1517 0000 10B5     		push	{r4, lr}
+ 1518              	.LCFI19:
+ 1519              		.cfi_def_cfa_offset 8
+ 1520              		.cfi_offset 4, -8
+ 1521              		.cfi_offset 14, -4
+ 385:BSP/u8g2/u8x8_8x8.c ****   return u8x8_draw_string(u8x8, x, y, s);
+ 1522              		.loc 1 385 3 is_stmt 1 view .LVU443
+ 385:BSP/u8g2/u8x8_8x8.c ****   return u8x8_draw_string(u8x8, x, y, s);
+ 1523              		.loc 1 385 17 is_stmt 0 view .LVU444
+ 1524 0002 024C     		ldr	r4, .L79
+ 1525 0004 4460     		str	r4, [r0, #4]
+ 386:BSP/u8g2/u8x8_8x8.c **** }
+ 1526              		.loc 1 386 3 is_stmt 1 view .LVU445
+ 386:BSP/u8g2/u8x8_8x8.c **** }
+ 1527              		.loc 1 386 10 is_stmt 0 view .LVU446
+ 1528 0006 FFF7FEFF 		bl	u8x8_draw_string
+ 1529              	.LVL206:
+ 387:BSP/u8g2/u8x8_8x8.c **** 
+ 1530              		.loc 1 387 1 view .LVU447
+ 1531 000a 10BD     		pop	{r4, pc}
+ 1532              	.L80:
+ 1533              		.align	2
+ 1534              	.L79:
+ 1535 000c 00000000 		.word	u8x8_ascii_next
+ 1536              		.cfi_endproc
+ 1537              	.LFE13:
+ 1539              		.section	.text.u8x8_DrawUTF8,"ax",%progbits
+ 1540              		.align	1
+ 1541              		.global	u8x8_DrawUTF8
+ 1542              		.syntax unified
+ 1543              		.thumb
+ 1544              		.thumb_func
+ 1546              	u8x8_DrawUTF8:
+ 1547              	.LVL207:
+ 1548              	.LFB14:
+ 390:BSP/u8g2/u8x8_8x8.c ****   u8x8->next_cb = u8x8_utf8_next;
+ 1549              		.loc 1 390 1 is_stmt 1 view -0
+ 1550              		.cfi_startproc
+ 1551              		@ args = 0, pretend = 0, frame = 0
+ 1552              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  /tmp/ccC5rntL.s 			page 40
+
+
+ 390:BSP/u8g2/u8x8_8x8.c ****   u8x8->next_cb = u8x8_utf8_next;
+ 1553              		.loc 1 390 1 is_stmt 0 view .LVU449
+ 1554 0000 10B5     		push	{r4, lr}
+ 1555              	.LCFI20:
+ 1556              		.cfi_def_cfa_offset 8
+ 1557              		.cfi_offset 4, -8
+ 1558              		.cfi_offset 14, -4
+ 391:BSP/u8g2/u8x8_8x8.c ****   return u8x8_draw_string(u8x8, x, y, s);
+ 1559              		.loc 1 391 3 is_stmt 1 view .LVU450
+ 391:BSP/u8g2/u8x8_8x8.c ****   return u8x8_draw_string(u8x8, x, y, s);
+ 1560              		.loc 1 391 17 is_stmt 0 view .LVU451
+ 1561 0002 024C     		ldr	r4, .L83
+ 1562 0004 4460     		str	r4, [r0, #4]
+ 392:BSP/u8g2/u8x8_8x8.c **** }
+ 1563              		.loc 1 392 3 is_stmt 1 view .LVU452
+ 392:BSP/u8g2/u8x8_8x8.c **** }
+ 1564              		.loc 1 392 10 is_stmt 0 view .LVU453
+ 1565 0006 FFF7FEFF 		bl	u8x8_draw_string
+ 1566              	.LVL208:
+ 393:BSP/u8g2/u8x8_8x8.c **** 
+ 1567              		.loc 1 393 1 view .LVU454
+ 1568 000a 10BD     		pop	{r4, pc}
+ 1569              	.L84:
+ 1570              		.align	2
+ 1571              	.L83:
+ 1572 000c 00000000 		.word	u8x8_utf8_next
+ 1573              		.cfi_endproc
+ 1574              	.LFE14:
+ 1576              		.section	.text.u8x8_Draw2x2String,"ax",%progbits
+ 1577              		.align	1
+ 1578              		.global	u8x8_Draw2x2String
+ 1579              		.syntax unified
+ 1580              		.thumb
+ 1581              		.thumb_func
+ 1583              	u8x8_Draw2x2String:
+ 1584              	.LVL209:
+ 1585              	.LFB16:
+ 421:BSP/u8g2/u8x8_8x8.c ****   u8x8->next_cb = u8x8_ascii_next;
+ 1586              		.loc 1 421 1 is_stmt 1 view -0
+ 1587              		.cfi_startproc
+ 1588              		@ args = 0, pretend = 0, frame = 0
+ 1589              		@ frame_needed = 0, uses_anonymous_args = 0
+ 421:BSP/u8g2/u8x8_8x8.c ****   u8x8->next_cb = u8x8_ascii_next;
+ 1590              		.loc 1 421 1 is_stmt 0 view .LVU456
+ 1591 0000 10B5     		push	{r4, lr}
+ 1592              	.LCFI21:
+ 1593              		.cfi_def_cfa_offset 8
+ 1594              		.cfi_offset 4, -8
+ 1595              		.cfi_offset 14, -4
+ 422:BSP/u8g2/u8x8_8x8.c ****   return u8x8_draw_2x2_string(u8x8, x, y, s);
+ 1596              		.loc 1 422 3 is_stmt 1 view .LVU457
+ 422:BSP/u8g2/u8x8_8x8.c ****   return u8x8_draw_2x2_string(u8x8, x, y, s);
+ 1597              		.loc 1 422 17 is_stmt 0 view .LVU458
+ 1598 0002 024C     		ldr	r4, .L87
+ 1599 0004 4460     		str	r4, [r0, #4]
+ 423:BSP/u8g2/u8x8_8x8.c **** }
+ 1600              		.loc 1 423 3 is_stmt 1 view .LVU459
+ARM GAS  /tmp/ccC5rntL.s 			page 41
+
+
+ 423:BSP/u8g2/u8x8_8x8.c **** }
+ 1601              		.loc 1 423 10 is_stmt 0 view .LVU460
+ 1602 0006 FFF7FEFF 		bl	u8x8_draw_2x2_string
+ 1603              	.LVL210:
+ 424:BSP/u8g2/u8x8_8x8.c **** 
+ 1604              		.loc 1 424 1 view .LVU461
+ 1605 000a 10BD     		pop	{r4, pc}
+ 1606              	.L88:
+ 1607              		.align	2
+ 1608              	.L87:
+ 1609 000c 00000000 		.word	u8x8_ascii_next
+ 1610              		.cfi_endproc
+ 1611              	.LFE16:
+ 1613              		.section	.text.u8x8_Draw2x2UTF8,"ax",%progbits
+ 1614              		.align	1
+ 1615              		.global	u8x8_Draw2x2UTF8
+ 1616              		.syntax unified
+ 1617              		.thumb
+ 1618              		.thumb_func
+ 1620              	u8x8_Draw2x2UTF8:
+ 1621              	.LVL211:
+ 1622              	.LFB17:
+ 427:BSP/u8g2/u8x8_8x8.c ****   u8x8->next_cb = u8x8_utf8_next;
+ 1623              		.loc 1 427 1 is_stmt 1 view -0
+ 1624              		.cfi_startproc
+ 1625              		@ args = 0, pretend = 0, frame = 0
+ 1626              		@ frame_needed = 0, uses_anonymous_args = 0
+ 427:BSP/u8g2/u8x8_8x8.c ****   u8x8->next_cb = u8x8_utf8_next;
+ 1627              		.loc 1 427 1 is_stmt 0 view .LVU463
+ 1628 0000 10B5     		push	{r4, lr}
+ 1629              	.LCFI22:
+ 1630              		.cfi_def_cfa_offset 8
+ 1631              		.cfi_offset 4, -8
+ 1632              		.cfi_offset 14, -4
+ 428:BSP/u8g2/u8x8_8x8.c ****   return u8x8_draw_2x2_string(u8x8, x, y, s);
+ 1633              		.loc 1 428 3 is_stmt 1 view .LVU464
+ 428:BSP/u8g2/u8x8_8x8.c ****   return u8x8_draw_2x2_string(u8x8, x, y, s);
+ 1634              		.loc 1 428 17 is_stmt 0 view .LVU465
+ 1635 0002 024C     		ldr	r4, .L91
+ 1636 0004 4460     		str	r4, [r0, #4]
+ 429:BSP/u8g2/u8x8_8x8.c **** }
+ 1637              		.loc 1 429 3 is_stmt 1 view .LVU466
+ 429:BSP/u8g2/u8x8_8x8.c **** }
+ 1638              		.loc 1 429 10 is_stmt 0 view .LVU467
+ 1639 0006 FFF7FEFF 		bl	u8x8_draw_2x2_string
+ 1640              	.LVL212:
+ 430:BSP/u8g2/u8x8_8x8.c **** 
+ 1641              		.loc 1 430 1 view .LVU468
+ 1642 000a 10BD     		pop	{r4, pc}
+ 1643              	.L92:
+ 1644              		.align	2
+ 1645              	.L91:
+ 1646 000c 00000000 		.word	u8x8_utf8_next
+ 1647              		.cfi_endproc
+ 1648              	.LFE17:
+ 1650              		.section	.text.u8x8_Draw1x2String,"ax",%progbits
+ 1651              		.align	1
+ARM GAS  /tmp/ccC5rntL.s 			page 42
+
+
+ 1652              		.global	u8x8_Draw1x2String
+ 1653              		.syntax unified
+ 1654              		.thumb
+ 1655              		.thumb_func
+ 1657              	u8x8_Draw1x2String:
+ 1658              	.LVL213:
+ 1659              	.LFB19:
+ 455:BSP/u8g2/u8x8_8x8.c **** 
+ 456:BSP/u8g2/u8x8_8x8.c **** 
+ 457:BSP/u8g2/u8x8_8x8.c **** uint8_t u8x8_Draw1x2String(u8x8_t *u8x8, uint8_t x, uint8_t y, const char *s)
+ 458:BSP/u8g2/u8x8_8x8.c **** {
+ 1660              		.loc 1 458 1 is_stmt 1 view -0
+ 1661              		.cfi_startproc
+ 1662              		@ args = 0, pretend = 0, frame = 0
+ 1663              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1664              		.loc 1 458 1 is_stmt 0 view .LVU470
+ 1665 0000 10B5     		push	{r4, lr}
+ 1666              	.LCFI23:
+ 1667              		.cfi_def_cfa_offset 8
+ 1668              		.cfi_offset 4, -8
+ 1669              		.cfi_offset 14, -4
+ 459:BSP/u8g2/u8x8_8x8.c ****   u8x8->next_cb = u8x8_ascii_next;
+ 1670              		.loc 1 459 3 is_stmt 1 view .LVU471
+ 1671              		.loc 1 459 17 is_stmt 0 view .LVU472
+ 1672 0002 024C     		ldr	r4, .L95
+ 1673 0004 4460     		str	r4, [r0, #4]
+ 460:BSP/u8g2/u8x8_8x8.c ****   return u8x8_draw_1x2_string(u8x8, x, y, s);
+ 1674              		.loc 1 460 3 is_stmt 1 view .LVU473
+ 1675              		.loc 1 460 10 is_stmt 0 view .LVU474
+ 1676 0006 FFF7FEFF 		bl	u8x8_draw_1x2_string
+ 1677              	.LVL214:
+ 461:BSP/u8g2/u8x8_8x8.c **** }
+ 1678              		.loc 1 461 1 view .LVU475
+ 1679 000a 10BD     		pop	{r4, pc}
+ 1680              	.L96:
+ 1681              		.align	2
+ 1682              	.L95:
+ 1683 000c 00000000 		.word	u8x8_ascii_next
+ 1684              		.cfi_endproc
+ 1685              	.LFE19:
+ 1687              		.section	.text.u8x8_Draw1x2UTF8,"ax",%progbits
+ 1688              		.align	1
+ 1689              		.global	u8x8_Draw1x2UTF8
+ 1690              		.syntax unified
+ 1691              		.thumb
+ 1692              		.thumb_func
+ 1694              	u8x8_Draw1x2UTF8:
+ 1695              	.LVL215:
+ 1696              	.LFB20:
+ 462:BSP/u8g2/u8x8_8x8.c **** 
+ 463:BSP/u8g2/u8x8_8x8.c **** uint8_t u8x8_Draw1x2UTF8(u8x8_t *u8x8, uint8_t x, uint8_t y, const char *s)
+ 464:BSP/u8g2/u8x8_8x8.c **** {
+ 1697              		.loc 1 464 1 is_stmt 1 view -0
+ 1698              		.cfi_startproc
+ 1699              		@ args = 0, pretend = 0, frame = 0
+ 1700              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1701              		.loc 1 464 1 is_stmt 0 view .LVU477
+ARM GAS  /tmp/ccC5rntL.s 			page 43
+
+
+ 1702 0000 10B5     		push	{r4, lr}
+ 1703              	.LCFI24:
+ 1704              		.cfi_def_cfa_offset 8
+ 1705              		.cfi_offset 4, -8
+ 1706              		.cfi_offset 14, -4
+ 465:BSP/u8g2/u8x8_8x8.c ****   u8x8->next_cb = u8x8_utf8_next;
+ 1707              		.loc 1 465 3 is_stmt 1 view .LVU478
+ 1708              		.loc 1 465 17 is_stmt 0 view .LVU479
+ 1709 0002 024C     		ldr	r4, .L99
+ 1710 0004 4460     		str	r4, [r0, #4]
+ 466:BSP/u8g2/u8x8_8x8.c ****   return u8x8_draw_1x2_string(u8x8, x, y, s);
+ 1711              		.loc 1 466 3 is_stmt 1 view .LVU480
+ 1712              		.loc 1 466 10 is_stmt 0 view .LVU481
+ 1713 0006 FFF7FEFF 		bl	u8x8_draw_1x2_string
+ 1714              	.LVL216:
+ 467:BSP/u8g2/u8x8_8x8.c **** }
+ 1715              		.loc 1 467 1 view .LVU482
+ 1716 000a 10BD     		pop	{r4, pc}
+ 1717              	.L100:
+ 1718              		.align	2
+ 1719              	.L99:
+ 1720 000c 00000000 		.word	u8x8_utf8_next
+ 1721              		.cfi_endproc
+ 1722              	.LFE20:
+ 1724              		.section	.text.u8x8_GetUTF8Len,"ax",%progbits
+ 1725              		.align	1
+ 1726              		.global	u8x8_GetUTF8Len
+ 1727              		.syntax unified
+ 1728              		.thumb
+ 1729              		.thumb_func
+ 1731              	u8x8_GetUTF8Len:
+ 1732              	.LVL217:
+ 1733              	.LFB21:
+ 468:BSP/u8g2/u8x8_8x8.c **** 
+ 469:BSP/u8g2/u8x8_8x8.c **** 
+ 470:BSP/u8g2/u8x8_8x8.c **** 
+ 471:BSP/u8g2/u8x8_8x8.c **** uint8_t u8x8_GetUTF8Len(u8x8_t *u8x8, const char *s)
+ 472:BSP/u8g2/u8x8_8x8.c **** {
+ 1734              		.loc 1 472 1 is_stmt 1 view -0
+ 1735              		.cfi_startproc
+ 1736              		@ args = 0, pretend = 0, frame = 0
+ 1737              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1738              		.loc 1 472 1 is_stmt 0 view .LVU484
+ 1739 0000 70B5     		push	{r4, r5, r6, lr}
+ 1740              	.LCFI25:
+ 1741              		.cfi_def_cfa_offset 16
+ 1742              		.cfi_offset 4, -16
+ 1743              		.cfi_offset 5, -12
+ 1744              		.cfi_offset 6, -8
+ 1745              		.cfi_offset 14, -4
+ 1746 0002 0646     		mov	r6, r0
+ 1747 0004 0C46     		mov	r4, r1
+ 473:BSP/u8g2/u8x8_8x8.c ****   uint16_t e;
+ 1748              		.loc 1 473 3 is_stmt 1 view .LVU485
+ 474:BSP/u8g2/u8x8_8x8.c ****   uint8_t cnt = 0;
+ 1749              		.loc 1 474 3 view .LVU486
+ 1750              	.LVL218:
+ARM GAS  /tmp/ccC5rntL.s 			page 44
+
+
+ 475:BSP/u8g2/u8x8_8x8.c ****   u8x8_utf8_init(u8x8);
+ 1751              		.loc 1 475 3 view .LVU487
+ 1752 0006 FFF7FEFF 		bl	u8x8_utf8_init
+ 1753              	.LVL219:
+ 474:BSP/u8g2/u8x8_8x8.c ****   uint8_t cnt = 0;
+ 1754              		.loc 1 474 11 is_stmt 0 view .LVU488
+ 1755 000a 0025     		movs	r5, #0
+ 1756              	.LVL220:
+ 1757              	.L102:
+ 476:BSP/u8g2/u8x8_8x8.c ****   for(;;)
+ 1758              		.loc 1 476 3 is_stmt 1 view .LVU489
+ 477:BSP/u8g2/u8x8_8x8.c ****   {
+ 478:BSP/u8g2/u8x8_8x8.c ****     e = u8x8_utf8_next(u8x8, *s);
+ 1759              		.loc 1 478 5 view .LVU490
+ 1760              		.loc 1 478 9 is_stmt 0 view .LVU491
+ 1761 000c 2178     		ldrb	r1, [r4]	@ zero_extendqisi2
+ 1762 000e 3046     		mov	r0, r6
+ 1763 0010 FFF7FEFF 		bl	u8x8_utf8_next
+ 1764              	.LVL221:
+ 479:BSP/u8g2/u8x8_8x8.c ****     if ( e == 0x0ffff )
+ 1765              		.loc 1 479 5 is_stmt 1 view .LVU492
+ 1766              		.loc 1 479 8 is_stmt 0 view .LVU493
+ 1767 0014 4FF6FF73 		movw	r3, #65535
+ 1768 0018 9842     		cmp	r0, r3
+ 1769 001a 07D0     		beq	.L103
+ 480:BSP/u8g2/u8x8_8x8.c ****       break;
+ 481:BSP/u8g2/u8x8_8x8.c ****     s++;
+ 1770              		.loc 1 481 5 is_stmt 1 view .LVU494
+ 1771              		.loc 1 481 6 is_stmt 0 view .LVU495
+ 1772 001c 0134     		adds	r4, r4, #1
+ 1773              	.LVL222:
+ 482:BSP/u8g2/u8x8_8x8.c ****     if ( e != 0x0fffe )
+ 1774              		.loc 1 482 5 is_stmt 1 view .LVU496
+ 1775              		.loc 1 482 8 is_stmt 0 view .LVU497
+ 1776 001e 4FF6FE73 		movw	r3, #65534
+ 1777 0022 9842     		cmp	r0, r3
+ 1778 0024 F2D0     		beq	.L102
+ 483:BSP/u8g2/u8x8_8x8.c ****       cnt++;
+ 1779              		.loc 1 483 7 is_stmt 1 view .LVU498
+ 1780              		.loc 1 483 10 is_stmt 0 view .LVU499
+ 1781 0026 0135     		adds	r5, r5, #1
+ 1782              	.LVL223:
+ 1783              		.loc 1 483 10 view .LVU500
+ 1784 0028 EDB2     		uxtb	r5, r5
+ 1785              	.LVL224:
+ 1786              		.loc 1 483 10 view .LVU501
+ 1787 002a EFE7     		b	.L102
+ 1788              	.L103:
+ 484:BSP/u8g2/u8x8_8x8.c ****   }
+ 485:BSP/u8g2/u8x8_8x8.c ****   return cnt;
+ 1789              		.loc 1 485 3 is_stmt 1 view .LVU502
+ 486:BSP/u8g2/u8x8_8x8.c **** }
+ 1790              		.loc 1 486 1 is_stmt 0 view .LVU503
+ 1791 002c 2846     		mov	r0, r5
+ 1792              	.LVL225:
+ 1793              		.loc 1 486 1 view .LVU504
+ 1794 002e 70BD     		pop	{r4, r5, r6, pc}
+ARM GAS  /tmp/ccC5rntL.s 			page 45
+
+
+ 1795              		.loc 1 486 1 view .LVU505
+ 1796              		.cfi_endproc
+ 1797              	.LFE21:
+ 1799              		.text
+ 1800              	.Letext0:
+ 1801              		.file 2 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ 1802              		.file 3 "BSP/u8g2/u8x8.h"
+ARM GAS  /tmp/ccC5rntL.s 			page 46
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 u8x8_8x8.c
+     /tmp/ccC5rntL.s:19     .text.u8x8_get_glyph_data:00000000 $t
+     /tmp/ccC5rntL.s:24     .text.u8x8_get_glyph_data:00000000 u8x8_get_glyph_data
+     /tmp/ccC5rntL.s:206    .text.u8x8_upscale_buf:00000000 $t
+     /tmp/ccC5rntL.s:211    .text.u8x8_upscale_buf:00000000 u8x8_upscale_buf
+     /tmp/ccC5rntL.s:252    .text.u8x8_ascii_next:00000000 $t
+     /tmp/ccC5rntL.s:258    .text.u8x8_ascii_next:00000000 u8x8_ascii_next
+     /tmp/ccC5rntL.s:290    .text.u8x8_utf8_next:00000000 $t
+     /tmp/ccC5rntL.s:296    .text.u8x8_utf8_next:00000000 u8x8_utf8_next
+     /tmp/ccC5rntL.s:466    .text.u8x8_SetFont:00000000 $t
+     /tmp/ccC5rntL.s:472    .text.u8x8_SetFont:00000000 u8x8_SetFont
+     /tmp/ccC5rntL.s:489    .text.u8x8_DrawGlyph:00000000 $t
+     /tmp/ccC5rntL.s:495    .text.u8x8_DrawGlyph:00000000 u8x8_DrawGlyph
+     /tmp/ccC5rntL.s:617    .text.u8x8_upscale_byte:00000000 $t
+     /tmp/ccC5rntL.s:623    .text.u8x8_upscale_byte:00000000 u8x8_upscale_byte
+     /tmp/ccC5rntL.s:678    .text.u8x8_draw_2x2_subglyph:00000000 $t
+     /tmp/ccC5rntL.s:683    .text.u8x8_draw_2x2_subglyph:00000000 u8x8_draw_2x2_subglyph
+     /tmp/ccC5rntL.s:827    .text.u8x8_draw_1x2_subglyph:00000000 $t
+     /tmp/ccC5rntL.s:832    .text.u8x8_draw_1x2_subglyph:00000000 u8x8_draw_1x2_subglyph
+     /tmp/ccC5rntL.s:932    .text.u8x8_Draw2x2Glyph:00000000 $t
+     /tmp/ccC5rntL.s:938    .text.u8x8_Draw2x2Glyph:00000000 u8x8_Draw2x2Glyph
+     /tmp/ccC5rntL.s:1059   .text.u8x8_Draw1x2Glyph:00000000 $t
+     /tmp/ccC5rntL.s:1065   .text.u8x8_Draw1x2Glyph:00000000 u8x8_Draw1x2Glyph
+     /tmp/ccC5rntL.s:1179   .text.u8x8_utf8_init:00000000 $t
+     /tmp/ccC5rntL.s:1185   .text.u8x8_utf8_init:00000000 u8x8_utf8_init
+     /tmp/ccC5rntL.s:1203   .text.u8x8_draw_string:00000000 $t
+     /tmp/ccC5rntL.s:1208   .text.u8x8_draw_string:00000000 u8x8_draw_string
+     /tmp/ccC5rntL.s:1309   .text.u8x8_draw_2x2_string:00000000 $t
+     /tmp/ccC5rntL.s:1314   .text.u8x8_draw_2x2_string:00000000 u8x8_draw_2x2_string
+     /tmp/ccC5rntL.s:1406   .text.u8x8_draw_1x2_string:00000000 $t
+     /tmp/ccC5rntL.s:1411   .text.u8x8_draw_1x2_string:00000000 u8x8_draw_1x2_string
+     /tmp/ccC5rntL.s:1503   .text.u8x8_DrawString:00000000 $t
+     /tmp/ccC5rntL.s:1509   .text.u8x8_DrawString:00000000 u8x8_DrawString
+     /tmp/ccC5rntL.s:1535   .text.u8x8_DrawString:0000000c $d
+     /tmp/ccC5rntL.s:1540   .text.u8x8_DrawUTF8:00000000 $t
+     /tmp/ccC5rntL.s:1546   .text.u8x8_DrawUTF8:00000000 u8x8_DrawUTF8
+     /tmp/ccC5rntL.s:1572   .text.u8x8_DrawUTF8:0000000c $d
+     /tmp/ccC5rntL.s:1577   .text.u8x8_Draw2x2String:00000000 $t
+     /tmp/ccC5rntL.s:1583   .text.u8x8_Draw2x2String:00000000 u8x8_Draw2x2String
+     /tmp/ccC5rntL.s:1609   .text.u8x8_Draw2x2String:0000000c $d
+     /tmp/ccC5rntL.s:1614   .text.u8x8_Draw2x2UTF8:00000000 $t
+     /tmp/ccC5rntL.s:1620   .text.u8x8_Draw2x2UTF8:00000000 u8x8_Draw2x2UTF8
+     /tmp/ccC5rntL.s:1646   .text.u8x8_Draw2x2UTF8:0000000c $d
+     /tmp/ccC5rntL.s:1651   .text.u8x8_Draw1x2String:00000000 $t
+     /tmp/ccC5rntL.s:1657   .text.u8x8_Draw1x2String:00000000 u8x8_Draw1x2String
+     /tmp/ccC5rntL.s:1683   .text.u8x8_Draw1x2String:0000000c $d
+     /tmp/ccC5rntL.s:1688   .text.u8x8_Draw1x2UTF8:00000000 $t
+     /tmp/ccC5rntL.s:1694   .text.u8x8_Draw1x2UTF8:00000000 u8x8_Draw1x2UTF8
+     /tmp/ccC5rntL.s:1720   .text.u8x8_Draw1x2UTF8:0000000c $d
+     /tmp/ccC5rntL.s:1725   .text.u8x8_GetUTF8Len:00000000 $t
+     /tmp/ccC5rntL.s:1731   .text.u8x8_GetUTF8Len:00000000 u8x8_GetUTF8Len
+
+UNDEFINED SYMBOLS
+u8x8_DrawTile

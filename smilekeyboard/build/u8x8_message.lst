@@ -1,0 +1,750 @@
+ARM GAS  /tmp/ccx0mWWH.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.arch armv7-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"u8x8_message.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.file 1 "BSP/u8g2/u8x8_message.c"
+  18              		.section	.rodata.u8x8_draw_button_line.str1.4,"aMS",%progbits,1
+  19              		.align	2
+  20              	.LC0:
+  21 0000 2000     		.ascii	" \000"
+  22              		.section	.text.u8x8_draw_button_line,"ax",%progbits
+  23              		.align	1
+  24              		.global	u8x8_draw_button_line
+  25              		.syntax unified
+  26              		.thumb
+  27              		.thumb_func
+  29              	u8x8_draw_button_line:
+  30              	.LVL0:
+  31              	.LFB0:
+   1:BSP/u8g2/u8x8_message.c **** /*
+   2:BSP/u8g2/u8x8_message.c **** 
+   3:BSP/u8g2/u8x8_message.c ****   u8x8_message.c
+   4:BSP/u8g2/u8x8_message.c ****   
+   5:BSP/u8g2/u8x8_message.c ****   Universal 8bit Graphics Library (https://github.com/olikraus/u8g2/)
+   6:BSP/u8g2/u8x8_message.c **** 
+   7:BSP/u8g2/u8x8_message.c ****   Copyright (c) 2016, olikraus@gmail.com
+   8:BSP/u8g2/u8x8_message.c ****   All rights reserved.
+   9:BSP/u8g2/u8x8_message.c **** 
+  10:BSP/u8g2/u8x8_message.c ****   Redistribution and use in source and binary forms, with or without modification, 
+  11:BSP/u8g2/u8x8_message.c ****   are permitted provided that the following conditions are met:
+  12:BSP/u8g2/u8x8_message.c **** 
+  13:BSP/u8g2/u8x8_message.c ****   * Redistributions of source code must retain the above copyright notice, this list 
+  14:BSP/u8g2/u8x8_message.c ****     of conditions and the following disclaimer.
+  15:BSP/u8g2/u8x8_message.c ****     
+  16:BSP/u8g2/u8x8_message.c ****   * Redistributions in binary form must reproduce the above copyright notice, this 
+  17:BSP/u8g2/u8x8_message.c ****     list of conditions and the following disclaimer in the documentation and/or other 
+  18:BSP/u8g2/u8x8_message.c ****     materials provided with the distribution.
+  19:BSP/u8g2/u8x8_message.c **** 
+  20:BSP/u8g2/u8x8_message.c ****   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND 
+  21:BSP/u8g2/u8x8_message.c ****   CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, 
+  22:BSP/u8g2/u8x8_message.c ****   INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF 
+  23:BSP/u8g2/u8x8_message.c ****   MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
+  24:BSP/u8g2/u8x8_message.c ****   DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR 
+  25:BSP/u8g2/u8x8_message.c ****   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+  26:BSP/u8g2/u8x8_message.c ****   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+  27:BSP/u8g2/u8x8_message.c ****   NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
+ARM GAS  /tmp/ccx0mWWH.s 			page 2
+
+
+  28:BSP/u8g2/u8x8_message.c ****   LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
+  29:BSP/u8g2/u8x8_message.c ****   CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, 
+  30:BSP/u8g2/u8x8_message.c ****   STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+  31:BSP/u8g2/u8x8_message.c ****   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
+  32:BSP/u8g2/u8x8_message.c ****   ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
+  33:BSP/u8g2/u8x8_message.c ****   
+  34:BSP/u8g2/u8x8_message.c **** */
+  35:BSP/u8g2/u8x8_message.c **** 
+  36:BSP/u8g2/u8x8_message.c **** #include "u8x8.h"
+  37:BSP/u8g2/u8x8_message.c **** 
+  38:BSP/u8g2/u8x8_message.c **** uint8_t u8x8_draw_button_line(u8x8_t *u8x8, uint8_t y, uint8_t w, uint8_t cursor, const char *s)
+  39:BSP/u8g2/u8x8_message.c **** {
+  32              		.loc 1 39 1 view -0
+  33              		.cfi_startproc
+  34              		@ args = 4, pretend = 0, frame = 0
+  35              		@ frame_needed = 0, uses_anonymous_args = 0
+  36              		.loc 1 39 1 is_stmt 0 view .LVU1
+  37 0000 2DE9F84F 		push	{r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
+  38              	.LCFI0:
+  39              		.cfi_def_cfa_offset 40
+  40              		.cfi_offset 3, -40
+  41              		.cfi_offset 4, -36
+  42              		.cfi_offset 5, -32
+  43              		.cfi_offset 6, -28
+  44              		.cfi_offset 7, -24
+  45              		.cfi_offset 8, -20
+  46              		.cfi_offset 9, -16
+  47              		.cfi_offset 10, -12
+  48              		.cfi_offset 11, -8
+  49              		.cfi_offset 14, -4
+  50 0004 0646     		mov	r6, r0
+  51 0006 8846     		mov	r8, r1
+  52 0008 1546     		mov	r5, r2
+  53 000a 9A46     		mov	r10, r3
+  54 000c DDF82890 		ldr	r9, [sp, #40]
+  40:BSP/u8g2/u8x8_message.c ****   uint8_t i;
+  55              		.loc 1 40 3 is_stmt 1 view .LVU2
+  41:BSP/u8g2/u8x8_message.c ****   uint8_t cnt;
+  56              		.loc 1 41 3 view .LVU3
+  42:BSP/u8g2/u8x8_message.c ****   uint8_t total;
+  57              		.loc 1 42 3 view .LVU4
+  43:BSP/u8g2/u8x8_message.c ****   uint8_t d;
+  58              		.loc 1 43 3 view .LVU5
+  44:BSP/u8g2/u8x8_message.c ****   uint8_t x;
+  59              		.loc 1 44 3 view .LVU6
+  45:BSP/u8g2/u8x8_message.c ****   cnt = u8x8_GetStringLineCnt(s);
+  60              		.loc 1 45 3 view .LVU7
+  61              		.loc 1 45 9 is_stmt 0 view .LVU8
+  62 0010 4846     		mov	r0, r9
+  63              	.LVL1:
+  64              		.loc 1 45 9 view .LVU9
+  65 0012 FFF7FEFF 		bl	u8x8_GetStringLineCnt
+  66              	.LVL2:
+  67              		.loc 1 45 9 view .LVU10
+  68 0016 0746     		mov	r7, r0
+  69              	.LVL3:
+  46:BSP/u8g2/u8x8_message.c ****   
+ARM GAS  /tmp/ccx0mWWH.s 			page 3
+
+
+  47:BSP/u8g2/u8x8_message.c ****   /* calculate the width of the button */
+  48:BSP/u8g2/u8x8_message.c ****   total = 0;
+  70              		.loc 1 48 3 is_stmt 1 view .LVU11
+  49:BSP/u8g2/u8x8_message.c ****   for( i = 0; i < cnt; i++ )
+  71              		.loc 1 49 3 view .LVU12
+  48:BSP/u8g2/u8x8_message.c ****   for( i = 0; i < cnt; i++ )
+  72              		.loc 1 48 9 is_stmt 0 view .LVU13
+  73 0018 4FF0000B 		mov	fp, #0
+  74              		.loc 1 49 10 view .LVU14
+  75 001c 5C46     		mov	r4, fp
+  76              		.loc 1 49 3 view .LVU15
+  77 001e 0CE0     		b	.L2
+  78              	.LVL4:
+  79              	.L3:
+  50:BSP/u8g2/u8x8_message.c ****   {
+  51:BSP/u8g2/u8x8_message.c ****     total += u8x8_GetUTF8Len(u8x8, u8x8_GetStringLineStart(i, s));
+  80              		.loc 1 51 5 is_stmt 1 view .LVU16
+  81              		.loc 1 51 14 is_stmt 0 view .LVU17
+  82 0020 4946     		mov	r1, r9
+  83 0022 2046     		mov	r0, r4
+  84 0024 FFF7FEFF 		bl	u8x8_GetStringLineStart
+  85              	.LVL5:
+  86 0028 0146     		mov	r1, r0
+  87              		.loc 1 51 14 discriminator 1 view .LVU18
+  88 002a 3046     		mov	r0, r6
+  89 002c FFF7FEFF 		bl	u8x8_GetUTF8Len
+  90              	.LVL6:
+  91              		.loc 1 51 11 discriminator 2 view .LVU19
+  92 0030 5844     		add	r0, r0, fp
+  93 0032 5FFA80FB 		uxtb	fp, r0
+  94              	.LVL7:
+  49:BSP/u8g2/u8x8_message.c ****   {
+  95              		.loc 1 49 25 is_stmt 1 discriminator 3 view .LVU20
+  96 0036 0134     		adds	r4, r4, #1
+  97              	.LVL8:
+  49:BSP/u8g2/u8x8_message.c ****   {
+  98              		.loc 1 49 25 is_stmt 0 discriminator 3 view .LVU21
+  99 0038 E4B2     		uxtb	r4, r4
+ 100              	.LVL9:
+ 101              	.L2:
+  49:BSP/u8g2/u8x8_message.c ****   {
+ 102              		.loc 1 49 17 is_stmt 1 discriminator 1 view .LVU22
+ 103 003a BC42     		cmp	r4, r7
+ 104 003c F0D3     		bcc	.L3
+  52:BSP/u8g2/u8x8_message.c ****   }
+  53:BSP/u8g2/u8x8_message.c ****   total += (cnt-1);	/* had one space between the buttons */
+ 105              		.loc 1 53 3 view .LVU23
+ 106              		.loc 1 53 9 is_stmt 0 view .LVU24
+ 107 003e 0BEB0703 		add	r3, fp, r7
+ 108 0042 DBB2     		uxtb	r3, r3
+ 109 0044 013B     		subs	r3, r3, #1
+ 110 0046 DBB2     		uxtb	r3, r3
+ 111              	.LVL10:
+  54:BSP/u8g2/u8x8_message.c ****   
+  55:BSP/u8g2/u8x8_message.c ****   /* calculate the left offset */
+  56:BSP/u8g2/u8x8_message.c ****   d = 0;
+ 112              		.loc 1 56 3 is_stmt 1 view .LVU25
+ARM GAS  /tmp/ccx0mWWH.s 			page 4
+
+
+  57:BSP/u8g2/u8x8_message.c ****   if ( total < w )
+ 113              		.loc 1 57 3 view .LVU26
+ 114              		.loc 1 57 6 is_stmt 0 view .LVU27
+ 115 0048 AB42     		cmp	r3, r5
+ 116 004a 06D2     		bcs	.L8
+  58:BSP/u8g2/u8x8_message.c ****   {
+  59:BSP/u8g2/u8x8_message.c ****     d = w;
+ 117              		.loc 1 59 5 is_stmt 1 view .LVU28
+ 118              	.LVL11:
+  60:BSP/u8g2/u8x8_message.c ****     d -= total;
+ 119              		.loc 1 60 5 view .LVU29
+ 120              		.loc 1 60 7 is_stmt 0 view .LVU30
+ 121 004c ED1A     		subs	r5, r5, r3
+ 122              	.LVL12:
+  61:BSP/u8g2/u8x8_message.c ****     d /= 2;
+ 123              		.loc 1 61 5 is_stmt 1 view .LVU31
+ 124              		.loc 1 61 7 is_stmt 0 view .LVU32
+ 125 004e C5F34604 		ubfx	r4, r5, #1, #7
+ 126              	.LVL13:
+ 127              	.L4:
+  62:BSP/u8g2/u8x8_message.c ****   }
+  63:BSP/u8g2/u8x8_message.c ****   
+  64:BSP/u8g2/u8x8_message.c ****   /* draw the buttons */
+  65:BSP/u8g2/u8x8_message.c ****   x = d;
+ 128              		.loc 1 65 3 is_stmt 1 view .LVU33
+  66:BSP/u8g2/u8x8_message.c ****   u8x8_SetInverseFont(u8x8, 0);
+ 129              		.loc 1 66 3 view .LVU34
+ 130 0052 0025     		movs	r5, #0
+ 131 0054 86F82350 		strb	r5, [r6, #35]
+  67:BSP/u8g2/u8x8_message.c ****   for( i = 0; i < cnt; i++ )
+ 132              		.loc 1 67 3 view .LVU35
+ 133              	.LVL14:
+ 134              		.loc 1 67 3 is_stmt 0 view .LVU36
+ 135 0058 1AE0     		b	.L5
+ 136              	.LVL15:
+ 137              	.L8:
+  56:BSP/u8g2/u8x8_message.c ****   if ( total < w )
+ 138              		.loc 1 56 5 view .LVU37
+ 139 005a 0024     		movs	r4, #0
+ 140              	.LVL16:
+  56:BSP/u8g2/u8x8_message.c ****   if ( total < w )
+ 141              		.loc 1 56 5 view .LVU38
+ 142 005c F9E7     		b	.L4
+ 143              	.LVL17:
+ 144              	.L6:
+  68:BSP/u8g2/u8x8_message.c ****   {
+  69:BSP/u8g2/u8x8_message.c ****     if ( i == cursor )
+  70:BSP/u8g2/u8x8_message.c ****       u8x8_SetInverseFont(u8x8, 1);
+  71:BSP/u8g2/u8x8_message.c ****       
+  72:BSP/u8g2/u8x8_message.c ****     x+=u8x8_DrawUTF8(u8x8, x, y, u8x8_GetStringLineStart(i, s));
+ 145              		.loc 1 72 5 is_stmt 1 view .LVU39
+ 146              		.loc 1 72 8 is_stmt 0 view .LVU40
+ 147 005e 4946     		mov	r1, r9
+ 148 0060 2846     		mov	r0, r5
+ 149 0062 FFF7FEFF 		bl	u8x8_GetStringLineStart
+ 150              	.LVL18:
+ 151 0066 0346     		mov	r3, r0
+ARM GAS  /tmp/ccx0mWWH.s 			page 5
+
+
+ 152              		.loc 1 72 8 discriminator 1 view .LVU41
+ 153 0068 4246     		mov	r2, r8
+ 154 006a 2146     		mov	r1, r4
+ 155 006c 3046     		mov	r0, r6
+ 156 006e FFF7FEFF 		bl	u8x8_DrawUTF8
+ 157              	.LVL19:
+ 158              		.loc 1 72 6 discriminator 2 view .LVU42
+ 159 0072 0444     		add	r4, r4, r0
+ 160              	.LVL20:
+ 161              		.loc 1 72 6 discriminator 2 view .LVU43
+ 162 0074 E4B2     		uxtb	r4, r4
+ 163              	.LVL21:
+  73:BSP/u8g2/u8x8_message.c ****     u8x8_SetInverseFont(u8x8, 0);
+ 164              		.loc 1 73 5 is_stmt 1 view .LVU44
+ 165 0076 0023     		movs	r3, #0
+ 166 0078 86F82330 		strb	r3, [r6, #35]
+  74:BSP/u8g2/u8x8_message.c ****     x+=u8x8_DrawUTF8(u8x8, x, y, " ");
+ 167              		.loc 1 74 5 view .LVU45
+ 168              		.loc 1 74 8 is_stmt 0 view .LVU46
+ 169 007c 0A4B     		ldr	r3, .L11
+ 170 007e 4246     		mov	r2, r8
+ 171 0080 2146     		mov	r1, r4
+ 172 0082 3046     		mov	r0, r6
+ 173 0084 FFF7FEFF 		bl	u8x8_DrawUTF8
+ 174              	.LVL22:
+ 175              		.loc 1 74 6 discriminator 1 view .LVU47
+ 176 0088 0444     		add	r4, r4, r0
+ 177              	.LVL23:
+ 178              		.loc 1 74 6 discriminator 1 view .LVU48
+ 179 008a E4B2     		uxtb	r4, r4
+ 180              	.LVL24:
+  67:BSP/u8g2/u8x8_message.c ****   {
+ 181              		.loc 1 67 25 is_stmt 1 discriminator 2 view .LVU49
+ 182 008c 0135     		adds	r5, r5, #1
+ 183              	.LVL25:
+  67:BSP/u8g2/u8x8_message.c ****   {
+ 184              		.loc 1 67 25 is_stmt 0 discriminator 2 view .LVU50
+ 185 008e EDB2     		uxtb	r5, r5
+ 186              	.LVL26:
+ 187              	.L5:
+  67:BSP/u8g2/u8x8_message.c ****   {
+ 188              		.loc 1 67 17 is_stmt 1 discriminator 1 view .LVU51
+ 189 0090 BD42     		cmp	r5, r7
+ 190 0092 05D2     		bcs	.L10
+  69:BSP/u8g2/u8x8_message.c ****       u8x8_SetInverseFont(u8x8, 1);
+ 191              		.loc 1 69 5 view .LVU52
+  69:BSP/u8g2/u8x8_message.c ****       u8x8_SetInverseFont(u8x8, 1);
+ 192              		.loc 1 69 8 is_stmt 0 view .LVU53
+ 193 0094 5545     		cmp	r5, r10
+ 194 0096 E2D1     		bne	.L6
+  70:BSP/u8g2/u8x8_message.c ****       
+ 195              		.loc 1 70 7 is_stmt 1 view .LVU54
+ 196 0098 0123     		movs	r3, #1
+ 197 009a 86F82330 		strb	r3, [r6, #35]
+ 198 009e DEE7     		b	.L6
+ 199              	.L10:
+  75:BSP/u8g2/u8x8_message.c ****   }
+ARM GAS  /tmp/ccx0mWWH.s 			page 6
+
+
+  76:BSP/u8g2/u8x8_message.c ****   
+  77:BSP/u8g2/u8x8_message.c ****   /* return the number of buttons */
+  78:BSP/u8g2/u8x8_message.c ****   return cnt;
+ 200              		.loc 1 78 3 view .LVU55
+  79:BSP/u8g2/u8x8_message.c **** }
+ 201              		.loc 1 79 1 is_stmt 0 view .LVU56
+ 202 00a0 3846     		mov	r0, r7
+ 203 00a2 BDE8F88F 		pop	{r3, r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 204              	.LVL27:
+ 205              	.L12:
+ 206              		.loc 1 79 1 view .LVU57
+ 207 00a6 00BF     		.align	2
+ 208              	.L11:
+ 209 00a8 00000000 		.word	.LC0
+ 210              		.cfi_endproc
+ 211              	.LFE0:
+ 213              		.section	.text.u8x8_UserInterfaceMessage,"ax",%progbits
+ 214              		.align	1
+ 215              		.global	u8x8_UserInterfaceMessage
+ 216              		.syntax unified
+ 217              		.thumb
+ 218              		.thumb_func
+ 220              	u8x8_UserInterfaceMessage:
+ 221              	.LVL28:
+ 222              	.LFB1:
+  80:BSP/u8g2/u8x8_message.c **** 
+  81:BSP/u8g2/u8x8_message.c **** /*
+  82:BSP/u8g2/u8x8_message.c ****   title1:	Multiple lines,separated by '\n'
+  83:BSP/u8g2/u8x8_message.c ****   title2:	A single line/string which is terminated by '\0' or '\n' . "title2" accepts the return va
+  84:BSP/u8g2/u8x8_message.c ****   title3:	Multiple lines,separated by '\n'
+  85:BSP/u8g2/u8x8_message.c ****   buttons:	one more more buttons separated by '\n' and terminated with '\0'
+  86:BSP/u8g2/u8x8_message.c **** */
+  87:BSP/u8g2/u8x8_message.c **** 
+  88:BSP/u8g2/u8x8_message.c **** uint8_t u8x8_UserInterfaceMessage(u8x8_t *u8x8, const char *title1, const char *title2, const char 
+  89:BSP/u8g2/u8x8_message.c **** {
+ 223              		.loc 1 89 1 is_stmt 1 view -0
+ 224              		.cfi_startproc
+ 225              		@ args = 4, pretend = 0, frame = 0
+ 226              		@ frame_needed = 0, uses_anonymous_args = 0
+ 227              		.loc 1 89 1 is_stmt 0 view .LVU59
+ 228 0000 2DE9F043 		push	{r4, r5, r6, r7, r8, r9, lr}
+ 229              	.LCFI1:
+ 230              		.cfi_def_cfa_offset 28
+ 231              		.cfi_offset 4, -28
+ 232              		.cfi_offset 5, -24
+ 233              		.cfi_offset 6, -20
+ 234              		.cfi_offset 7, -16
+ 235              		.cfi_offset 8, -12
+ 236              		.cfi_offset 9, -8
+ 237              		.cfi_offset 14, -4
+ 238 0004 83B0     		sub	sp, sp, #12
+ 239              	.LCFI2:
+ 240              		.cfi_def_cfa_offset 40
+ 241 0006 0546     		mov	r5, r0
+ 242 0008 8946     		mov	r9, r1
+ 243 000a 1646     		mov	r6, r2
+ 244 000c 9846     		mov	r8, r3
+ARM GAS  /tmp/ccx0mWWH.s 			page 7
+
+
+ 245 000e 0A9F     		ldr	r7, [sp, #40]
+  90:BSP/u8g2/u8x8_message.c ****   uint8_t height;
+ 246              		.loc 1 90 3 is_stmt 1 view .LVU60
+  91:BSP/u8g2/u8x8_message.c ****   uint8_t y;
+ 247              		.loc 1 91 3 view .LVU61
+  92:BSP/u8g2/u8x8_message.c ****   uint8_t cursor = 0;
+ 248              		.loc 1 92 3 view .LVU62
+ 249              	.LVL29:
+  93:BSP/u8g2/u8x8_message.c ****   uint8_t button_cnt;
+ 250              		.loc 1 93 3 view .LVU63
+  94:BSP/u8g2/u8x8_message.c ****   uint8_t event;
+ 251              		.loc 1 94 3 view .LVU64
+  95:BSP/u8g2/u8x8_message.c **** 
+  96:BSP/u8g2/u8x8_message.c ****   u8x8_SetInverseFont(u8x8, 0);
+ 252              		.loc 1 96 3 view .LVU65
+ 253 0010 0023     		movs	r3, #0
+ 254              	.LVL30:
+ 255              		.loc 1 96 3 is_stmt 0 view .LVU66
+ 256 0012 80F82330 		strb	r3, [r0, #35]
+  97:BSP/u8g2/u8x8_message.c ****   
+  98:BSP/u8g2/u8x8_message.c ****   /* calculate overall height of the message box */
+  99:BSP/u8g2/u8x8_message.c ****   height = 1;	/* button line */
+ 257              		.loc 1 99 3 is_stmt 1 view .LVU67
+ 258              	.LVL31:
+ 100:BSP/u8g2/u8x8_message.c ****   height += u8x8_GetStringLineCnt(title1);
+ 259              		.loc 1 100 3 view .LVU68
+ 260              		.loc 1 100 13 is_stmt 0 view .LVU69
+ 261 0016 0846     		mov	r0, r1
+ 262              	.LVL32:
+ 263              		.loc 1 100 13 view .LVU70
+ 264 0018 FFF7FEFF 		bl	u8x8_GetStringLineCnt
+ 265              	.LVL33:
+ 266              		.loc 1 100 10 discriminator 1 view .LVU71
+ 267 001c 441C     		adds	r4, r0, #1
+ 268 001e E4B2     		uxtb	r4, r4
+ 269              	.LVL34:
+ 101:BSP/u8g2/u8x8_message.c ****   if ( title2 != NULL )
+ 270              		.loc 1 101 3 is_stmt 1 view .LVU72
+ 271              		.loc 1 101 6 is_stmt 0 view .LVU73
+ 272 0020 0EB1     		cbz	r6, .L14
+ 102:BSP/u8g2/u8x8_message.c ****     height ++;
+ 273              		.loc 1 102 5 is_stmt 1 view .LVU74
+ 274              		.loc 1 102 12 is_stmt 0 view .LVU75
+ 275 0022 0230     		adds	r0, r0, #2
+ 276 0024 C4B2     		uxtb	r4, r0
+ 277              	.LVL35:
+ 278              	.L14:
+ 103:BSP/u8g2/u8x8_message.c ****   height += u8x8_GetStringLineCnt(title3);
+ 279              		.loc 1 103 3 is_stmt 1 view .LVU76
+ 280              		.loc 1 103 13 is_stmt 0 view .LVU77
+ 281 0026 4046     		mov	r0, r8
+ 282 0028 FFF7FEFF 		bl	u8x8_GetStringLineCnt
+ 283              	.LVL36:
+ 284              		.loc 1 103 10 discriminator 1 view .LVU78
+ 285 002c 0444     		add	r4, r4, r0
+ 286              	.LVL37:
+ 287              		.loc 1 103 10 discriminator 1 view .LVU79
+ARM GAS  /tmp/ccx0mWWH.s 			page 8
+
+
+ 288 002e E4B2     		uxtb	r4, r4
+ 289              	.LVL38:
+ 104:BSP/u8g2/u8x8_message.c ****   
+ 105:BSP/u8g2/u8x8_message.c ****   /* calculate offset from top */
+ 106:BSP/u8g2/u8x8_message.c ****   y = 0;
+ 290              		.loc 1 106 3 is_stmt 1 view .LVU80
+ 107:BSP/u8g2/u8x8_message.c ****   if ( height < u8x8_GetRows(u8x8)  )
+ 291              		.loc 1 107 3 view .LVU81
+ 292              		.loc 1 107 17 is_stmt 0 view .LVU82
+ 293 0030 2B68     		ldr	r3, [r5]
+ 294 0032 5B7C     		ldrb	r3, [r3, #17]	@ zero_extendqisi2
+ 295              		.loc 1 107 6 view .LVU83
+ 296 0034 A342     		cmp	r3, r4
+ 297 0036 3CD9     		bls	.L27
+ 108:BSP/u8g2/u8x8_message.c ****   {
+ 109:BSP/u8g2/u8x8_message.c ****     y = u8x8_GetRows(u8x8);
+ 298              		.loc 1 109 5 is_stmt 1 view .LVU84
+ 299              	.LVL39:
+ 110:BSP/u8g2/u8x8_message.c ****     y -= height;
+ 300              		.loc 1 110 5 view .LVU85
+ 301              		.loc 1 110 7 is_stmt 0 view .LVU86
+ 302 0038 1C1B     		subs	r4, r3, r4
+ 303              	.LVL40:
+ 111:BSP/u8g2/u8x8_message.c ****     y /= 2;
+ 304              		.loc 1 111 5 is_stmt 1 view .LVU87
+ 305              		.loc 1 111 7 is_stmt 0 view .LVU88
+ 306 003a C4F34604 		ubfx	r4, r4, #1, #7
+ 307              	.LVL41:
+ 308              	.L15:
+ 112:BSP/u8g2/u8x8_message.c ****   }
+ 113:BSP/u8g2/u8x8_message.c **** 
+ 114:BSP/u8g2/u8x8_message.c ****   /* draw message box */
+ 115:BSP/u8g2/u8x8_message.c ****   
+ 116:BSP/u8g2/u8x8_message.c ****   u8x8_ClearDisplay(u8x8);   /* required, because not everything is filled */
+ 309              		.loc 1 116 3 is_stmt 1 view .LVU89
+ 310 003e 2846     		mov	r0, r5
+ 311 0040 FFF7FEFF 		bl	u8x8_ClearDisplay
+ 312              	.LVL42:
+ 117:BSP/u8g2/u8x8_message.c ****   
+ 118:BSP/u8g2/u8x8_message.c ****   y += u8x8_DrawUTF8Lines(u8x8, 0, y, u8x8_GetCols(u8x8), title1);
+ 313              		.loc 1 118 3 view .LVU90
+ 314              		.loc 1 118 39 is_stmt 0 view .LVU91
+ 315 0044 2B68     		ldr	r3, [r5]
+ 316 0046 1B7C     		ldrb	r3, [r3, #16]	@ zero_extendqisi2
+ 317              		.loc 1 118 8 view .LVU92
+ 318 0048 CDF80090 		str	r9, [sp]
+ 319 004c 2246     		mov	r2, r4
+ 320 004e 0021     		movs	r1, #0
+ 321 0050 2846     		mov	r0, r5
+ 322 0052 FFF7FEFF 		bl	u8x8_DrawUTF8Lines
+ 323              	.LVL43:
+ 324              		.loc 1 118 5 discriminator 1 view .LVU93
+ 325 0056 0444     		add	r4, r4, r0
+ 326              	.LVL44:
+ 327              		.loc 1 118 5 discriminator 1 view .LVU94
+ 328 0058 E4B2     		uxtb	r4, r4
+ 329              	.LVL45:
+ARM GAS  /tmp/ccx0mWWH.s 			page 9
+
+
+ 119:BSP/u8g2/u8x8_message.c ****   if ( title2 != NULL )
+ 330              		.loc 1 119 3 is_stmt 1 view .LVU95
+ 331              		.loc 1 119 6 is_stmt 0 view .LVU96
+ 332 005a 4EB1     		cbz	r6, .L16
+ 120:BSP/u8g2/u8x8_message.c ****   {
+ 121:BSP/u8g2/u8x8_message.c ****     u8x8_DrawUTF8Line(u8x8, 0, y, u8x8_GetCols(u8x8), title2);
+ 333              		.loc 1 121 5 is_stmt 1 view .LVU97
+ 334              		.loc 1 121 35 is_stmt 0 view .LVU98
+ 335 005c 2B68     		ldr	r3, [r5]
+ 336 005e 1B7C     		ldrb	r3, [r3, #16]	@ zero_extendqisi2
+ 337              		.loc 1 121 5 view .LVU99
+ 338 0060 0096     		str	r6, [sp]
+ 339 0062 2246     		mov	r2, r4
+ 340 0064 0021     		movs	r1, #0
+ 341 0066 2846     		mov	r0, r5
+ 342 0068 FFF7FEFF 		bl	u8x8_DrawUTF8Line
+ 343              	.LVL46:
+ 122:BSP/u8g2/u8x8_message.c ****     y++;
+ 344              		.loc 1 122 5 is_stmt 1 view .LVU100
+ 345              		.loc 1 122 6 is_stmt 0 view .LVU101
+ 346 006c 0134     		adds	r4, r4, #1
+ 347              	.LVL47:
+ 348              		.loc 1 122 6 view .LVU102
+ 349 006e E4B2     		uxtb	r4, r4
+ 350              	.LVL48:
+ 351              	.L16:
+ 123:BSP/u8g2/u8x8_message.c ****   }
+ 124:BSP/u8g2/u8x8_message.c ****   y += u8x8_DrawUTF8Lines(u8x8, 0, y, u8x8_GetCols(u8x8), title3);
+ 352              		.loc 1 124 3 is_stmt 1 view .LVU103
+ 353              		.loc 1 124 39 is_stmt 0 view .LVU104
+ 354 0070 2B68     		ldr	r3, [r5]
+ 355 0072 1B7C     		ldrb	r3, [r3, #16]	@ zero_extendqisi2
+ 356              		.loc 1 124 8 view .LVU105
+ 357 0074 CDF80080 		str	r8, [sp]
+ 358 0078 2246     		mov	r2, r4
+ 359 007a 0021     		movs	r1, #0
+ 360 007c 2846     		mov	r0, r5
+ 361 007e FFF7FEFF 		bl	u8x8_DrawUTF8Lines
+ 362              	.LVL49:
+ 363              		.loc 1 124 5 discriminator 1 view .LVU106
+ 364 0082 0444     		add	r4, r4, r0
+ 365              	.LVL50:
+ 366              		.loc 1 124 5 discriminator 1 view .LVU107
+ 367 0084 E4B2     		uxtb	r4, r4
+ 368              	.LVL51:
+ 125:BSP/u8g2/u8x8_message.c **** 
+ 126:BSP/u8g2/u8x8_message.c ****   button_cnt = u8x8_draw_button_line(u8x8, y, u8x8_GetCols(u8x8), cursor, buttons);
+ 369              		.loc 1 126 3 is_stmt 1 view .LVU108
+ 370              		.loc 1 126 47 is_stmt 0 view .LVU109
+ 371 0086 2B68     		ldr	r3, [r5]
+ 372 0088 1A7C     		ldrb	r2, [r3, #16]	@ zero_extendqisi2
+ 373              		.loc 1 126 16 view .LVU110
+ 374 008a 0097     		str	r7, [sp]
+ 375 008c 0023     		movs	r3, #0
+ 376 008e 2146     		mov	r1, r4
+ 377 0090 2846     		mov	r0, r5
+ 378 0092 FFF7FEFF 		bl	u8x8_draw_button_line
+ARM GAS  /tmp/ccx0mWWH.s 			page 10
+
+
+ 379              	.LVL52:
+ 380 0096 8046     		mov	r8, r0
+ 381              	.LVL53:
+  92:BSP/u8g2/u8x8_message.c ****   uint8_t button_cnt;
+ 382              		.loc 1 92 11 view .LVU111
+ 383 0098 0026     		movs	r6, #0
+ 384              	.LVL54:
+ 385              	.L18:
+ 127:BSP/u8g2/u8x8_message.c ****   
+ 128:BSP/u8g2/u8x8_message.c ****   for(;;)
+ 386              		.loc 1 128 3 is_stmt 1 view .LVU112
+ 129:BSP/u8g2/u8x8_message.c ****   {
+ 130:BSP/u8g2/u8x8_message.c ****     event = u8x8_GetMenuEvent(u8x8);
+ 387              		.loc 1 130 5 view .LVU113
+ 388              		.loc 1 130 13 is_stmt 0 view .LVU114
+ 389 009a 2846     		mov	r0, r5
+ 390 009c FFF7FEFF 		bl	u8x8_GetMenuEvent
+ 391              	.LVL55:
+ 131:BSP/u8g2/u8x8_message.c ****     if ( event == U8X8_MSG_GPIO_MENU_SELECT )
+ 392              		.loc 1 131 5 is_stmt 1 view .LVU115
+ 393 00a0 A0F15002 		sub	r2, r0, #80
+ 394 00a4 052A     		cmp	r2, #5
+ 395 00a6 F8D8     		bhi	.L18
+ 396 00a8 DFE802F0 		tbb	[pc, r2]
+ 397              	.L20:
+ 398 00ac 05       		.byte	(.L23-.L20)/2
+ 399 00ad 0A       		.byte	(.L21-.L20)/2
+ 400 00ae 18       		.byte	(.L19-.L20)/2
+ 401 00af 25       		.byte	(.L28-.L20)/2
+ 402 00b0 0A       		.byte	(.L21-.L20)/2
+ 403 00b1 18       		.byte	(.L19-.L20)/2
+ 404              	.LVL56:
+ 405              		.p2align 1
+ 406              	.L27:
+ 106:BSP/u8g2/u8x8_message.c ****   if ( height < u8x8_GetRows(u8x8)  )
+ 407              		.loc 1 106 5 is_stmt 0 view .LVU116
+ 408 00b2 0024     		movs	r4, #0
+ 409              	.LVL57:
+ 106:BSP/u8g2/u8x8_message.c ****   if ( height < u8x8_GetRows(u8x8)  )
+ 410              		.loc 1 106 5 view .LVU117
+ 411 00b4 C3E7     		b	.L15
+ 412              	.LVL58:
+ 413              	.L23:
+ 132:BSP/u8g2/u8x8_message.c ****       return cursor+1;
+ 414              		.loc 1 132 7 is_stmt 1 view .LVU118
+ 415              		.loc 1 132 20 is_stmt 0 view .LVU119
+ 416 00b6 701C     		adds	r0, r6, #1
+ 417              	.LVL59:
+ 418              		.loc 1 132 20 view .LVU120
+ 419 00b8 C0B2     		uxtb	r0, r0
+ 420              	.L22:
+ 133:BSP/u8g2/u8x8_message.c ****     else if ( event == U8X8_MSG_GPIO_MENU_HOME )
+ 134:BSP/u8g2/u8x8_message.c ****       break;
+ 135:BSP/u8g2/u8x8_message.c ****     else if ( event == U8X8_MSG_GPIO_MENU_NEXT || event == U8X8_MSG_GPIO_MENU_UP )
+ 136:BSP/u8g2/u8x8_message.c ****     {
+ 137:BSP/u8g2/u8x8_message.c ****       cursor++;
+ 138:BSP/u8g2/u8x8_message.c ****       if ( cursor >= button_cnt )
+ARM GAS  /tmp/ccx0mWWH.s 			page 11
+
+
+ 139:BSP/u8g2/u8x8_message.c **** 	cursor = 0;
+ 140:BSP/u8g2/u8x8_message.c ****       u8x8_draw_button_line(u8x8, y, u8x8_GetCols(u8x8), cursor, buttons);
+ 141:BSP/u8g2/u8x8_message.c ****     }
+ 142:BSP/u8g2/u8x8_message.c ****     else if ( event == U8X8_MSG_GPIO_MENU_PREV || event == U8X8_MSG_GPIO_MENU_DOWN  )
+ 143:BSP/u8g2/u8x8_message.c ****     {
+ 144:BSP/u8g2/u8x8_message.c ****       if ( cursor == 0 )
+ 145:BSP/u8g2/u8x8_message.c **** 	cursor = button_cnt;
+ 146:BSP/u8g2/u8x8_message.c ****       cursor--;
+ 147:BSP/u8g2/u8x8_message.c ****       u8x8_draw_button_line(u8x8, y, u8x8_GetCols(u8x8), cursor, buttons);
+ 148:BSP/u8g2/u8x8_message.c ****     }    
+ 149:BSP/u8g2/u8x8_message.c ****   }  
+ 150:BSP/u8g2/u8x8_message.c ****   return 0;
+ 151:BSP/u8g2/u8x8_message.c **** }
+ 421              		.loc 1 151 1 view .LVU121
+ 422 00ba 03B0     		add	sp, sp, #12
+ 423              	.LCFI3:
+ 424              		.cfi_remember_state
+ 425              		.cfi_def_cfa_offset 28
+ 426              		@ sp needed
+ 427 00bc BDE8F083 		pop	{r4, r5, r6, r7, r8, r9, pc}
+ 428              	.LVL60:
+ 429              	.L21:
+ 430              	.LCFI4:
+ 431              		.cfi_restore_state
+ 137:BSP/u8g2/u8x8_message.c ****       if ( cursor >= button_cnt )
+ 432              		.loc 1 137 7 is_stmt 1 view .LVU122
+ 137:BSP/u8g2/u8x8_message.c ****       if ( cursor >= button_cnt )
+ 433              		.loc 1 137 13 is_stmt 0 view .LVU123
+ 434 00c0 0136     		adds	r6, r6, #1
+ 435              	.LVL61:
+ 137:BSP/u8g2/u8x8_message.c ****       if ( cursor >= button_cnt )
+ 436              		.loc 1 137 13 view .LVU124
+ 437 00c2 F6B2     		uxtb	r6, r6
+ 438              	.LVL62:
+ 138:BSP/u8g2/u8x8_message.c **** 	cursor = 0;
+ 439              		.loc 1 138 7 is_stmt 1 view .LVU125
+ 138:BSP/u8g2/u8x8_message.c **** 	cursor = 0;
+ 440              		.loc 1 138 10 is_stmt 0 view .LVU126
+ 441 00c4 B045     		cmp	r8, r6
+ 442 00c6 00D8     		bhi	.L24
+ 139:BSP/u8g2/u8x8_message.c ****       u8x8_draw_button_line(u8x8, y, u8x8_GetCols(u8x8), cursor, buttons);
+ 443              		.loc 1 139 9 view .LVU127
+ 444 00c8 0026     		movs	r6, #0
+ 445              	.LVL63:
+ 446              	.L24:
+ 140:BSP/u8g2/u8x8_message.c ****     }
+ 447              		.loc 1 140 7 is_stmt 1 view .LVU128
+ 140:BSP/u8g2/u8x8_message.c ****     }
+ 448              		.loc 1 140 38 is_stmt 0 view .LVU129
+ 449 00ca 2B68     		ldr	r3, [r5]
+ 450 00cc 1A7C     		ldrb	r2, [r3, #16]	@ zero_extendqisi2
+ 140:BSP/u8g2/u8x8_message.c ****     }
+ 451              		.loc 1 140 7 view .LVU130
+ 452 00ce 0097     		str	r7, [sp]
+ 453 00d0 3346     		mov	r3, r6
+ 454 00d2 2146     		mov	r1, r4
+ 455 00d4 2846     		mov	r0, r5
+ARM GAS  /tmp/ccx0mWWH.s 			page 12
+
+
+ 456              	.LVL64:
+ 140:BSP/u8g2/u8x8_message.c ****     }
+ 457              		.loc 1 140 7 view .LVU131
+ 458 00d6 FFF7FEFF 		bl	u8x8_draw_button_line
+ 459              	.LVL65:
+ 460 00da DEE7     		b	.L18
+ 461              	.LVL66:
+ 462              	.L19:
+ 144:BSP/u8g2/u8x8_message.c **** 	cursor = button_cnt;
+ 463              		.loc 1 144 7 is_stmt 1 view .LVU132
+ 144:BSP/u8g2/u8x8_message.c **** 	cursor = button_cnt;
+ 464              		.loc 1 144 10 is_stmt 0 view .LVU133
+ 465 00dc 06B9     		cbnz	r6, .L26
+ 145:BSP/u8g2/u8x8_message.c ****       cursor--;
+ 466              		.loc 1 145 9 view .LVU134
+ 467 00de 4646     		mov	r6, r8
+ 468              	.LVL67:
+ 469              	.L26:
+ 146:BSP/u8g2/u8x8_message.c ****       u8x8_draw_button_line(u8x8, y, u8x8_GetCols(u8x8), cursor, buttons);
+ 470              		.loc 1 146 7 is_stmt 1 view .LVU135
+ 146:BSP/u8g2/u8x8_message.c ****       u8x8_draw_button_line(u8x8, y, u8x8_GetCols(u8x8), cursor, buttons);
+ 471              		.loc 1 146 13 is_stmt 0 view .LVU136
+ 472 00e0 013E     		subs	r6, r6, #1
+ 473              	.LVL68:
+ 146:BSP/u8g2/u8x8_message.c ****       u8x8_draw_button_line(u8x8, y, u8x8_GetCols(u8x8), cursor, buttons);
+ 474              		.loc 1 146 13 view .LVU137
+ 475 00e2 F6B2     		uxtb	r6, r6
+ 476              	.LVL69:
+ 147:BSP/u8g2/u8x8_message.c ****     }    
+ 477              		.loc 1 147 7 is_stmt 1 view .LVU138
+ 147:BSP/u8g2/u8x8_message.c ****     }    
+ 478              		.loc 1 147 38 is_stmt 0 view .LVU139
+ 479 00e4 2B68     		ldr	r3, [r5]
+ 480 00e6 1A7C     		ldrb	r2, [r3, #16]	@ zero_extendqisi2
+ 147:BSP/u8g2/u8x8_message.c ****     }    
+ 481              		.loc 1 147 7 view .LVU140
+ 482 00e8 0097     		str	r7, [sp]
+ 483 00ea 3346     		mov	r3, r6
+ 484 00ec 2146     		mov	r1, r4
+ 485 00ee 2846     		mov	r0, r5
+ 486              	.LVL70:
+ 147:BSP/u8g2/u8x8_message.c ****     }    
+ 487              		.loc 1 147 7 view .LVU141
+ 488 00f0 FFF7FEFF 		bl	u8x8_draw_button_line
+ 489              	.LVL71:
+ 490 00f4 D1E7     		b	.L18
+ 491              	.LVL72:
+ 492              	.L28:
+ 130:BSP/u8g2/u8x8_message.c ****     if ( event == U8X8_MSG_GPIO_MENU_SELECT )
+ 493              		.loc 1 130 13 view .LVU142
+ 494 00f6 0020     		movs	r0, #0
+ 495              	.LVL73:
+ 130:BSP/u8g2/u8x8_message.c ****     if ( event == U8X8_MSG_GPIO_MENU_SELECT )
+ 496              		.loc 1 130 13 view .LVU143
+ 497 00f8 DFE7     		b	.L22
+ 498              		.cfi_endproc
+ 499              	.LFE1:
+ARM GAS  /tmp/ccx0mWWH.s 			page 13
+
+
+ 501              		.text
+ 502              	.Letext0:
+ 503              		.file 2 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ 504              		.file 3 "BSP/u8g2/u8x8.h"
+ARM GAS  /tmp/ccx0mWWH.s 			page 14
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 u8x8_message.c
+     /tmp/ccx0mWWH.s:19     .rodata.u8x8_draw_button_line.str1.4:00000000 $d
+     /tmp/ccx0mWWH.s:23     .text.u8x8_draw_button_line:00000000 $t
+     /tmp/ccx0mWWH.s:29     .text.u8x8_draw_button_line:00000000 u8x8_draw_button_line
+     /tmp/ccx0mWWH.s:209    .text.u8x8_draw_button_line:000000a8 $d
+     /tmp/ccx0mWWH.s:214    .text.u8x8_UserInterfaceMessage:00000000 $t
+     /tmp/ccx0mWWH.s:220    .text.u8x8_UserInterfaceMessage:00000000 u8x8_UserInterfaceMessage
+     /tmp/ccx0mWWH.s:398    .text.u8x8_UserInterfaceMessage:000000ac $d
+     /tmp/ccx0mWWH.s:405    .text.u8x8_UserInterfaceMessage:000000b2 $t
+
+UNDEFINED SYMBOLS
+u8x8_GetStringLineCnt
+u8x8_GetStringLineStart
+u8x8_GetUTF8Len
+u8x8_DrawUTF8
+u8x8_ClearDisplay
+u8x8_DrawUTF8Lines
+u8x8_DrawUTF8Line
+u8x8_GetMenuEvent

@@ -1,0 +1,806 @@
+ARM GAS  /tmp/ccYdpvT1.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.arch armv7-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"u8g2_ll_hvline.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.file 1 "BSP/u8g2/u8g2_ll_hvline.c"
+  18              		.section	.text.u8g2_ll_hvline_vertical_top_lsb,"ax",%progbits
+  19              		.align	1
+  20              		.global	u8g2_ll_hvline_vertical_top_lsb
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  25              	u8g2_ll_hvline_vertical_top_lsb:
+  26              	.LVL0:
+  27              	.LFB0:
+   1:BSP/u8g2/u8g2_ll_hvline.c **** /*
+   2:BSP/u8g2/u8g2_ll_hvline.c **** 
+   3:BSP/u8g2/u8g2_ll_hvline.c ****   u8g2_ll_hvline.c
+   4:BSP/u8g2/u8g2_ll_hvline.c ****   
+   5:BSP/u8g2/u8g2_ll_hvline.c ****   low level hvline
+   6:BSP/u8g2/u8g2_ll_hvline.c **** 
+   7:BSP/u8g2/u8g2_ll_hvline.c ****   Universal 8bit Graphics Library (https://github.com/olikraus/u8g2/)
+   8:BSP/u8g2/u8g2_ll_hvline.c **** 
+   9:BSP/u8g2/u8g2_ll_hvline.c ****   Copyright (c) 2016, olikraus@gmail.com
+  10:BSP/u8g2/u8g2_ll_hvline.c ****   All rights reserved.
+  11:BSP/u8g2/u8g2_ll_hvline.c **** 
+  12:BSP/u8g2/u8g2_ll_hvline.c ****   Redistribution and use in source and binary forms, with or without modification, 
+  13:BSP/u8g2/u8g2_ll_hvline.c ****   are permitted provided that the following conditions are met:
+  14:BSP/u8g2/u8g2_ll_hvline.c **** 
+  15:BSP/u8g2/u8g2_ll_hvline.c ****   * Redistributions of source code must retain the above copyright notice, this list 
+  16:BSP/u8g2/u8g2_ll_hvline.c ****     of conditions and the following disclaimer.
+  17:BSP/u8g2/u8g2_ll_hvline.c ****     
+  18:BSP/u8g2/u8g2_ll_hvline.c ****   * Redistributions in binary form must reproduce the above copyright notice, this 
+  19:BSP/u8g2/u8g2_ll_hvline.c ****     list of conditions and the following disclaimer in the documentation and/or other 
+  20:BSP/u8g2/u8g2_ll_hvline.c ****     materials provided with the distribution.
+  21:BSP/u8g2/u8g2_ll_hvline.c **** 
+  22:BSP/u8g2/u8g2_ll_hvline.c ****   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND 
+  23:BSP/u8g2/u8g2_ll_hvline.c ****   CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, 
+  24:BSP/u8g2/u8g2_ll_hvline.c ****   INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF 
+  25:BSP/u8g2/u8g2_ll_hvline.c ****   MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
+  26:BSP/u8g2/u8g2_ll_hvline.c ****   DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR 
+  27:BSP/u8g2/u8g2_ll_hvline.c ****   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+  28:BSP/u8g2/u8g2_ll_hvline.c ****   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+  29:BSP/u8g2/u8g2_ll_hvline.c ****   NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
+  30:BSP/u8g2/u8g2_ll_hvline.c ****   LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
+  31:BSP/u8g2/u8g2_ll_hvline.c ****   CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, 
+ARM GAS  /tmp/ccYdpvT1.s 			page 2
+
+
+  32:BSP/u8g2/u8g2_ll_hvline.c ****   STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+  33:BSP/u8g2/u8g2_ll_hvline.c ****   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
+  34:BSP/u8g2/u8g2_ll_hvline.c ****   ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
+  35:BSP/u8g2/u8g2_ll_hvline.c **** 
+  36:BSP/u8g2/u8g2_ll_hvline.c **** 
+  37:BSP/u8g2/u8g2_ll_hvline.c ****   *ptr |= or_mask
+  38:BSP/u8g2/u8g2_ll_hvline.c ****   *ptr ^= xor_mask
+  39:BSP/u8g2/u8g2_ll_hvline.c ****   
+  40:BSP/u8g2/u8g2_ll_hvline.c ****   color = 0:   or_mask = 1, xor_mask = 1
+  41:BSP/u8g2/u8g2_ll_hvline.c ****   color = 1:   or_mask = 1, xor_mask = 0
+  42:BSP/u8g2/u8g2_ll_hvline.c ****   color = 2:   or_mask = 0, xor_mask = 1
+  43:BSP/u8g2/u8g2_ll_hvline.c **** 
+  44:BSP/u8g2/u8g2_ll_hvline.c ****   if ( color <= 1 )
+  45:BSP/u8g2/u8g2_ll_hvline.c ****     or_mask  = mask;
+  46:BSP/u8g2/u8g2_ll_hvline.c ****   if ( color != 1 )
+  47:BSP/u8g2/u8g2_ll_hvline.c ****     xor_mask = mask;
+  48:BSP/u8g2/u8g2_ll_hvline.c ****     
+  49:BSP/u8g2/u8g2_ll_hvline.c **** */
+  50:BSP/u8g2/u8g2_ll_hvline.c **** 
+  51:BSP/u8g2/u8g2_ll_hvline.c **** #include "u8g2.h"
+  52:BSP/u8g2/u8g2_ll_hvline.c **** #include <assert.h>
+  53:BSP/u8g2/u8g2_ll_hvline.c **** 
+  54:BSP/u8g2/u8g2_ll_hvline.c **** /*=================================================*/
+  55:BSP/u8g2/u8g2_ll_hvline.c **** /*
+  56:BSP/u8g2/u8g2_ll_hvline.c ****   u8g2_ll_hvline_vertical_top_lsb
+  57:BSP/u8g2/u8g2_ll_hvline.c ****     SSD13xx
+  58:BSP/u8g2/u8g2_ll_hvline.c ****     UC1701    
+  59:BSP/u8g2/u8g2_ll_hvline.c **** */
+  60:BSP/u8g2/u8g2_ll_hvline.c **** 
+  61:BSP/u8g2/u8g2_ll_hvline.c **** 
+  62:BSP/u8g2/u8g2_ll_hvline.c **** #ifdef U8G2_WITH_HVLINE_SPEED_OPTIMIZATION
+  63:BSP/u8g2/u8g2_ll_hvline.c **** 
+  64:BSP/u8g2/u8g2_ll_hvline.c **** /*
+  65:BSP/u8g2/u8g2_ll_hvline.c ****   x,y		Upper left position of the line within the local buffer (not the display!)
+  66:BSP/u8g2/u8g2_ll_hvline.c ****   len		length of the line in pixel, len must not be 0
+  67:BSP/u8g2/u8g2_ll_hvline.c ****   dir		0: horizontal line (left to right)
+  68:BSP/u8g2/u8g2_ll_hvline.c **** 		1: vertical line (top to bottom)
+  69:BSP/u8g2/u8g2_ll_hvline.c ****   asumption: 
+  70:BSP/u8g2/u8g2_ll_hvline.c ****     all clipping done
+  71:BSP/u8g2/u8g2_ll_hvline.c **** */
+  72:BSP/u8g2/u8g2_ll_hvline.c **** void u8g2_ll_hvline_vertical_top_lsb(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t len, u
+  73:BSP/u8g2/u8g2_ll_hvline.c **** {
+  28              		.loc 1 73 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 4, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		.loc 1 73 1 is_stmt 0 view .LVU1
+  33 0000 70B5     		push	{r4, r5, r6, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 16
+  36              		.cfi_offset 4, -16
+  37              		.cfi_offset 5, -12
+  38              		.cfi_offset 6, -8
+  39              		.cfi_offset 14, -4
+  40 0002 9DF81050 		ldrb	r5, [sp, #16]	@ zero_extendqisi2
+  74:BSP/u8g2/u8g2_ll_hvline.c ****   uint16_t offset;
+  41              		.loc 1 74 3 is_stmt 1 view .LVU2
+ARM GAS  /tmp/ccYdpvT1.s 			page 3
+
+
+  75:BSP/u8g2/u8g2_ll_hvline.c ****   uint8_t *ptr;
+  42              		.loc 1 75 3 view .LVU3
+  76:BSP/u8g2/u8g2_ll_hvline.c ****   uint8_t bit_pos, mask;
+  43              		.loc 1 76 3 view .LVU4
+  77:BSP/u8g2/u8g2_ll_hvline.c ****   uint8_t or_mask, xor_mask;
+  44              		.loc 1 77 3 view .LVU5
+  78:BSP/u8g2/u8g2_ll_hvline.c **** #ifdef __unix
+  79:BSP/u8g2/u8g2_ll_hvline.c ****   uint8_t *max_ptr = u8g2->tile_buf_ptr + u8g2_GetU8x8(u8g2)->display_info->tile_width*u8g2->tile_b
+  80:BSP/u8g2/u8g2_ll_hvline.c **** #endif
+  81:BSP/u8g2/u8g2_ll_hvline.c **** 
+  82:BSP/u8g2/u8g2_ll_hvline.c ****   //assert(x >= u8g2->buf_x0);
+  83:BSP/u8g2/u8g2_ll_hvline.c ****   //assert(x < u8g2_GetU8x8(u8g2)->display_info->tile_width*8);
+  84:BSP/u8g2/u8g2_ll_hvline.c ****   //assert(y >= u8g2->buf_y0);
+  85:BSP/u8g2/u8g2_ll_hvline.c ****   //assert(y < u8g2_GetU8x8(u8g2)->display_info->tile_height*8);
+  86:BSP/u8g2/u8g2_ll_hvline.c ****   
+  87:BSP/u8g2/u8g2_ll_hvline.c ****   /* bytes are vertical, lsb on top (y=0), msb at bottom (y=7) */
+  88:BSP/u8g2/u8g2_ll_hvline.c ****   bit_pos = y;		/* overflow truncate is ok here... */
+  45              		.loc 1 88 3 view .LVU6
+  46              	.LVL1:
+  89:BSP/u8g2/u8g2_ll_hvline.c ****   bit_pos &= 7; 	/* ... because only the lowest 3 bits are needed */
+  47              		.loc 1 89 3 view .LVU7
+  48              		.loc 1 89 11 is_stmt 0 view .LVU8
+  49 0006 02F0070E 		and	lr, r2, #7
+  50              	.LVL2:
+  90:BSP/u8g2/u8g2_ll_hvline.c ****   mask = 1;
+  51              		.loc 1 90 3 is_stmt 1 view .LVU9
+  91:BSP/u8g2/u8g2_ll_hvline.c ****   mask <<= bit_pos;
+  52              		.loc 1 91 3 view .LVU10
+  53              		.loc 1 91 8 is_stmt 0 view .LVU11
+  54 000a 4FF0010C 		mov	ip, #1
+  55 000e 0CFA0EFC 		lsl	ip, ip, lr
+  56 0012 5FFA8CFC 		uxtb	ip, ip
+  57              	.LVL3:
+  92:BSP/u8g2/u8g2_ll_hvline.c **** 
+  93:BSP/u8g2/u8g2_ll_hvline.c ****   or_mask = 0;
+  58              		.loc 1 93 3 is_stmt 1 view .LVU12
+  94:BSP/u8g2/u8g2_ll_hvline.c ****   xor_mask = 0;
+  59              		.loc 1 94 3 view .LVU13
+  95:BSP/u8g2/u8g2_ll_hvline.c ****   if ( u8g2->draw_color <= 1 )
+  60              		.loc 1 95 3 view .LVU14
+  61              		.loc 1 95 12 is_stmt 0 view .LVU15
+  62 0016 90F88660 		ldrb	r6, [r0, #134]	@ zero_extendqisi2
+  63              		.loc 1 95 6 view .LVU16
+  64 001a 012E     		cmp	r6, #1
+  65 001c 18D9     		bls	.L10
+  93:BSP/u8g2/u8g2_ll_hvline.c ****   xor_mask = 0;
+  66              		.loc 1 93 11 view .LVU17
+  67 001e 0024     		movs	r4, #0
+  68              	.L2:
+  69              	.LVL4:
+  96:BSP/u8g2/u8g2_ll_hvline.c ****     or_mask  = mask;
+  97:BSP/u8g2/u8g2_ll_hvline.c ****   if ( u8g2->draw_color != 1 )
+  70              		.loc 1 97 3 is_stmt 1 view .LVU18
+  71              		.loc 1 97 6 is_stmt 0 view .LVU19
+  72 0020 012E     		cmp	r6, #1
+  73 0022 17D0     		beq	.L14
+  74              	.LVL5:
+ARM GAS  /tmp/ccYdpvT1.s 			page 4
+
+
+  75              	.L3:
+  98:BSP/u8g2/u8g2_ll_hvline.c ****     xor_mask = mask;
+  99:BSP/u8g2/u8g2_ll_hvline.c **** 
+ 100:BSP/u8g2/u8g2_ll_hvline.c **** 
+ 101:BSP/u8g2/u8g2_ll_hvline.c ****   offset = y;		/* y might be 8 or 16 bit, but we need 16 bit, so use a 16 bit variable */
+  76              		.loc 1 101 3 is_stmt 1 view .LVU20
+ 102:BSP/u8g2/u8g2_ll_hvline.c ****   offset &= ~7;
+  77              		.loc 1 102 3 view .LVU21
+  78              		.loc 1 102 10 is_stmt 0 view .LVU22
+  79 0024 02F0F802 		and	r2, r2, #248
+  80              	.LVL6:
+ 103:BSP/u8g2/u8g2_ll_hvline.c ****   offset *= u8g2_GetU8x8(u8g2)->display_info->tile_width;
+  81              		.loc 1 103 3 is_stmt 1 view .LVU23
+  82              		.loc 1 103 45 is_stmt 0 view .LVU24
+  83 0028 0668     		ldr	r6, [r0]
+  84 002a 367C     		ldrb	r6, [r6, #16]	@ zero_extendqisi2
+  85              	.LVL7:
+ 104:BSP/u8g2/u8g2_ll_hvline.c ****   ptr = u8g2->tile_buf_ptr;
+  86              		.loc 1 104 3 is_stmt 1 view .LVU25
+ 105:BSP/u8g2/u8g2_ll_hvline.c ****   ptr += offset;
+  87              		.loc 1 105 3 view .LVU26
+ 106:BSP/u8g2/u8g2_ll_hvline.c ****   ptr += x;
+  88              		.loc 1 106 3 view .LVU27
+  89              		.loc 1 106 7 is_stmt 0 view .LVU28
+  90 002c 02FB0611 		mla	r1, r2, r6, r1
+  91              	.LVL8:
+  92              		.loc 1 106 7 view .LVU29
+  93 0030 826B     		ldr	r2, [r0, #56]
+  94              	.LVL9:
+  95              		.loc 1 106 7 view .LVU30
+  96 0032 1144     		add	r1, r1, r2
+  97              	.LVL10:
+ 107:BSP/u8g2/u8g2_ll_hvline.c ****   
+ 108:BSP/u8g2/u8g2_ll_hvline.c ****   if ( dir == 0 )
+  98              		.loc 1 108 3 is_stmt 1 view .LVU31
+  99              		.loc 1 108 6 is_stmt 0 view .LVU32
+ 100 0034 DDB9     		cbnz	r5, .L4
+ 101              	.LVL11:
+ 102              	.L5:
+ 109:BSP/u8g2/u8g2_ll_hvline.c ****   {
+ 110:BSP/u8g2/u8g2_ll_hvline.c ****       do
+ 103              		.loc 1 110 7 is_stmt 1 view .LVU33
+ 111:BSP/u8g2/u8g2_ll_hvline.c ****       {
+ 112:BSP/u8g2/u8g2_ll_hvline.c **** #ifdef __unix
+ 113:BSP/u8g2/u8g2_ll_hvline.c **** 	assert(ptr < max_ptr);
+ 114:BSP/u8g2/u8g2_ll_hvline.c **** #endif
+ 115:BSP/u8g2/u8g2_ll_hvline.c **** 	*ptr |= or_mask;
+ 104              		.loc 1 115 2 view .LVU34
+ 105 0036 0A78     		ldrb	r2, [r1]	@ zero_extendqisi2
+ 106              		.loc 1 115 7 is_stmt 0 view .LVU35
+ 107 0038 2243     		orrs	r2, r2, r4
+ 108 003a D2B2     		uxtb	r2, r2
+ 109 003c 0A70     		strb	r2, [r1]
+ 116:BSP/u8g2/u8g2_ll_hvline.c **** 	*ptr ^= xor_mask;
+ 110              		.loc 1 116 2 is_stmt 1 view .LVU36
+ 111              		.loc 1 116 7 is_stmt 0 view .LVU37
+ 112 003e 82EA0C02 		eor	r2, r2, ip
+ARM GAS  /tmp/ccYdpvT1.s 			page 5
+
+
+ 113 0042 01F8012B 		strb	r2, [r1], #1
+ 114              	.LVL12:
+ 117:BSP/u8g2/u8g2_ll_hvline.c **** 	ptr++;
+ 115              		.loc 1 117 2 is_stmt 1 view .LVU38
+ 118:BSP/u8g2/u8g2_ll_hvline.c **** 	len--;
+ 116              		.loc 1 118 2 view .LVU39
+ 117              		.loc 1 118 5 is_stmt 0 view .LVU40
+ 118 0046 013B     		subs	r3, r3, #1
+ 119              	.LVL13:
+ 119:BSP/u8g2/u8g2_ll_hvline.c ****       } while( len != 0 );
+ 120              		.loc 1 119 20 is_stmt 1 discriminator 1 view .LVU41
+ 121 0048 13F0FF03 		ands	r3, r3, #255
+ 122              	.LVL14:
+ 123              		.loc 1 119 20 is_stmt 0 discriminator 1 view .LVU42
+ 124 004c F3D1     		bne	.L5
+ 125              	.LVL15:
+ 126              	.L1:
+ 120:BSP/u8g2/u8g2_ll_hvline.c ****   }
+ 121:BSP/u8g2/u8g2_ll_hvline.c ****   else
+ 122:BSP/u8g2/u8g2_ll_hvline.c ****   {    
+ 123:BSP/u8g2/u8g2_ll_hvline.c ****     do
+ 124:BSP/u8g2/u8g2_ll_hvline.c ****     {
+ 125:BSP/u8g2/u8g2_ll_hvline.c **** #ifdef __unix
+ 126:BSP/u8g2/u8g2_ll_hvline.c ****       assert(ptr < max_ptr);
+ 127:BSP/u8g2/u8g2_ll_hvline.c **** #endif
+ 128:BSP/u8g2/u8g2_ll_hvline.c ****       *ptr |= or_mask;
+ 129:BSP/u8g2/u8g2_ll_hvline.c ****       *ptr ^= xor_mask;
+ 130:BSP/u8g2/u8g2_ll_hvline.c ****       
+ 131:BSP/u8g2/u8g2_ll_hvline.c ****       bit_pos++;
+ 132:BSP/u8g2/u8g2_ll_hvline.c ****       bit_pos &= 7;
+ 133:BSP/u8g2/u8g2_ll_hvline.c **** 
+ 134:BSP/u8g2/u8g2_ll_hvline.c ****       len--;
+ 135:BSP/u8g2/u8g2_ll_hvline.c **** 
+ 136:BSP/u8g2/u8g2_ll_hvline.c ****       if ( bit_pos == 0 )
+ 137:BSP/u8g2/u8g2_ll_hvline.c ****       {
+ 138:BSP/u8g2/u8g2_ll_hvline.c **** 	ptr+=u8g2->pixel_buf_width;	/* 6 Jan 17: Changed u8g2->width to u8g2->pixel_buf_width, issue #148 
+ 139:BSP/u8g2/u8g2_ll_hvline.c **** 		
+ 140:BSP/u8g2/u8g2_ll_hvline.c **** 	if ( u8g2->draw_color <= 1 )
+ 141:BSP/u8g2/u8g2_ll_hvline.c **** 	  or_mask  = 1;
+ 142:BSP/u8g2/u8g2_ll_hvline.c **** 	if ( u8g2->draw_color != 1 )
+ 143:BSP/u8g2/u8g2_ll_hvline.c **** 	  xor_mask = 1;
+ 144:BSP/u8g2/u8g2_ll_hvline.c ****       }
+ 145:BSP/u8g2/u8g2_ll_hvline.c ****       else
+ 146:BSP/u8g2/u8g2_ll_hvline.c ****       {
+ 147:BSP/u8g2/u8g2_ll_hvline.c **** 	or_mask <<= 1;
+ 148:BSP/u8g2/u8g2_ll_hvline.c **** 	xor_mask <<= 1;
+ 149:BSP/u8g2/u8g2_ll_hvline.c ****       }
+ 150:BSP/u8g2/u8g2_ll_hvline.c ****     } while( len != 0 );
+ 151:BSP/u8g2/u8g2_ll_hvline.c ****   }
+ 152:BSP/u8g2/u8g2_ll_hvline.c **** }
+ 127              		.loc 1 152 1 view .LVU43
+ 128 004e 70BD     		pop	{r4, r5, r6, pc}
+ 129              	.LVL16:
+ 130              	.L10:
+  96:BSP/u8g2/u8g2_ll_hvline.c ****   if ( u8g2->draw_color != 1 )
+ 131              		.loc 1 96 14 view .LVU44
+ 132 0050 6446     		mov	r4, ip
+ARM GAS  /tmp/ccYdpvT1.s 			page 6
+
+
+ 133 0052 E5E7     		b	.L2
+ 134              	.LVL17:
+ 135              	.L14:
+  94:BSP/u8g2/u8g2_ll_hvline.c ****   if ( u8g2->draw_color <= 1 )
+ 136              		.loc 1 94 12 view .LVU45
+ 137 0054 4FF0000C 		mov	ip, #0
+ 138              	.LVL18:
+  94:BSP/u8g2/u8g2_ll_hvline.c ****   if ( u8g2->draw_color <= 1 )
+ 139              		.loc 1 94 12 view .LVU46
+ 140 0058 E4E7     		b	.L3
+ 141              	.LVL19:
+ 142              	.L15:
+ 141:BSP/u8g2/u8g2_ll_hvline.c **** 	if ( u8g2->draw_color != 1 )
+ 143              		.loc 1 141 13 view .LVU47
+ 144 005a 0124     		movs	r4, #1
+ 145              	.LVL20:
+ 141:BSP/u8g2/u8g2_ll_hvline.c **** 	if ( u8g2->draw_color != 1 )
+ 146              		.loc 1 141 13 view .LVU48
+ 147 005c 1CE0     		b	.L8
+ 148              	.LVL21:
+ 149              	.L7:
+ 147:BSP/u8g2/u8g2_ll_hvline.c **** 	xor_mask <<= 1;
+ 150              		.loc 1 147 2 is_stmt 1 view .LVU49
+ 147:BSP/u8g2/u8g2_ll_hvline.c **** 	xor_mask <<= 1;
+ 151              		.loc 1 147 10 is_stmt 0 view .LVU50
+ 152 005e 6400     		lsls	r4, r4, #1
+ 153              	.LVL22:
+ 147:BSP/u8g2/u8g2_ll_hvline.c **** 	xor_mask <<= 1;
+ 154              		.loc 1 147 10 view .LVU51
+ 155 0060 E4B2     		uxtb	r4, r4
+ 156              	.LVL23:
+ 148:BSP/u8g2/u8g2_ll_hvline.c ****       }
+ 157              		.loc 1 148 2 is_stmt 1 view .LVU52
+ 148:BSP/u8g2/u8g2_ll_hvline.c ****       }
+ 158              		.loc 1 148 11 is_stmt 0 view .LVU53
+ 159 0062 4FEA4C0C 		lsl	ip, ip, #1
+ 160              	.LVL24:
+ 148:BSP/u8g2/u8g2_ll_hvline.c ****       }
+ 161              		.loc 1 148 11 view .LVU54
+ 162 0066 5FFA8CFC 		uxtb	ip, ip
+ 163              	.LVL25:
+ 164              	.L9:
+ 150:BSP/u8g2/u8g2_ll_hvline.c ****   }
+ 165              		.loc 1 150 18 is_stmt 1 view .LVU55
+ 166 006a 002B     		cmp	r3, #0
+ 167 006c EFD0     		beq	.L1
+ 168              	.LVL26:
+ 169              	.L4:
+ 123:BSP/u8g2/u8g2_ll_hvline.c ****     {
+ 170              		.loc 1 123 5 view .LVU56
+ 128:BSP/u8g2/u8g2_ll_hvline.c ****       *ptr ^= xor_mask;
+ 171              		.loc 1 128 7 view .LVU57
+ 172 006e 0A78     		ldrb	r2, [r1]	@ zero_extendqisi2
+ 128:BSP/u8g2/u8g2_ll_hvline.c ****       *ptr ^= xor_mask;
+ 173              		.loc 1 128 12 is_stmt 0 view .LVU58
+ 174 0070 2243     		orrs	r2, r2, r4
+ 175 0072 D2B2     		uxtb	r2, r2
+ARM GAS  /tmp/ccYdpvT1.s 			page 7
+
+
+ 176 0074 0A70     		strb	r2, [r1]
+ 129:BSP/u8g2/u8g2_ll_hvline.c ****       
+ 177              		.loc 1 129 7 is_stmt 1 view .LVU59
+ 129:BSP/u8g2/u8g2_ll_hvline.c ****       
+ 178              		.loc 1 129 12 is_stmt 0 view .LVU60
+ 179 0076 82EA0C02 		eor	r2, r2, ip
+ 180 007a 0A70     		strb	r2, [r1]
+ 131:BSP/u8g2/u8g2_ll_hvline.c ****       bit_pos &= 7;
+ 181              		.loc 1 131 7 is_stmt 1 view .LVU61
+ 131:BSP/u8g2/u8g2_ll_hvline.c ****       bit_pos &= 7;
+ 182              		.loc 1 131 14 is_stmt 0 view .LVU62
+ 183 007c 0EF10102 		add	r2, lr, #1
+ 184              	.LVL27:
+ 132:BSP/u8g2/u8g2_ll_hvline.c **** 
+ 185              		.loc 1 132 7 is_stmt 1 view .LVU63
+ 134:BSP/u8g2/u8g2_ll_hvline.c **** 
+ 186              		.loc 1 134 7 view .LVU64
+ 134:BSP/u8g2/u8g2_ll_hvline.c **** 
+ 187              		.loc 1 134 10 is_stmt 0 view .LVU65
+ 188 0080 013B     		subs	r3, r3, #1
+ 189              	.LVL28:
+ 134:BSP/u8g2/u8g2_ll_hvline.c **** 
+ 190              		.loc 1 134 10 view .LVU66
+ 191 0082 DBB2     		uxtb	r3, r3
+ 192              	.LVL29:
+ 136:BSP/u8g2/u8g2_ll_hvline.c ****       {
+ 193              		.loc 1 136 7 is_stmt 1 view .LVU67
+ 136:BSP/u8g2/u8g2_ll_hvline.c ****       {
+ 194              		.loc 1 136 10 is_stmt 0 view .LVU68
+ 195 0084 12F0070E 		ands	lr, r2, #7
+ 196 0088 E9D1     		bne	.L7
+ 138:BSP/u8g2/u8g2_ll_hvline.c **** 		
+ 197              		.loc 1 138 2 is_stmt 1 view .LVU69
+ 138:BSP/u8g2/u8g2_ll_hvline.c **** 		
+ 198              		.loc 1 138 11 is_stmt 0 view .LVU70
+ 199 008a 90F83E20 		ldrb	r2, [r0, #62]	@ zero_extendqisi2
+ 200              	.LVL30:
+ 138:BSP/u8g2/u8g2_ll_hvline.c **** 		
+ 201              		.loc 1 138 5 view .LVU71
+ 202 008e 1144     		add	r1, r1, r2
+ 203              	.LVL31:
+ 140:BSP/u8g2/u8g2_ll_hvline.c **** 	  or_mask  = 1;
+ 204              		.loc 1 140 2 is_stmt 1 view .LVU72
+ 140:BSP/u8g2/u8g2_ll_hvline.c **** 	  or_mask  = 1;
+ 205              		.loc 1 140 11 is_stmt 0 view .LVU73
+ 206 0090 90F88620 		ldrb	r2, [r0, #134]	@ zero_extendqisi2
+ 140:BSP/u8g2/u8g2_ll_hvline.c **** 	  or_mask  = 1;
+ 207              		.loc 1 140 5 view .LVU74
+ 208 0094 012A     		cmp	r2, #1
+ 209 0096 E0D9     		bls	.L15
+ 210              	.LVL32:
+ 211              	.L8:
+ 142:BSP/u8g2/u8g2_ll_hvline.c **** 	  xor_mask = 1;
+ 212              		.loc 1 142 2 is_stmt 1 view .LVU75
+ 142:BSP/u8g2/u8g2_ll_hvline.c **** 	  xor_mask = 1;
+ 213              		.loc 1 142 5 is_stmt 0 view .LVU76
+ 214 0098 012A     		cmp	r2, #1
+ARM GAS  /tmp/ccYdpvT1.s 			page 8
+
+
+ 215 009a E6D0     		beq	.L9
+ 143:BSP/u8g2/u8g2_ll_hvline.c ****       }
+ 216              		.loc 1 143 13 view .LVU77
+ 217 009c 4FF0010C 		mov	ip, #1
+ 218              	.LVL33:
+ 143:BSP/u8g2/u8g2_ll_hvline.c ****       }
+ 219              		.loc 1 143 13 view .LVU78
+ 220 00a0 E3E7     		b	.L9
+ 221              		.cfi_endproc
+ 222              	.LFE0:
+ 224              		.section	.text.u8g2_ll_hvline_horizontal_right_lsb,"ax",%progbits
+ 225              		.align	1
+ 226              		.global	u8g2_ll_hvline_horizontal_right_lsb
+ 227              		.syntax unified
+ 228              		.thumb
+ 229              		.thumb_func
+ 231              	u8g2_ll_hvline_horizontal_right_lsb:
+ 232              	.LVL34:
+ 233              	.LFB1:
+ 153:BSP/u8g2/u8g2_ll_hvline.c **** 
+ 154:BSP/u8g2/u8g2_ll_hvline.c **** 
+ 155:BSP/u8g2/u8g2_ll_hvline.c **** 
+ 156:BSP/u8g2/u8g2_ll_hvline.c **** #else /* U8G2_WITH_HVLINE_SPEED_OPTIMIZATION */
+ 157:BSP/u8g2/u8g2_ll_hvline.c **** 
+ 158:BSP/u8g2/u8g2_ll_hvline.c **** /*
+ 159:BSP/u8g2/u8g2_ll_hvline.c ****   x,y position within the buffer
+ 160:BSP/u8g2/u8g2_ll_hvline.c **** */
+ 161:BSP/u8g2/u8g2_ll_hvline.c **** static void u8g2_draw_pixel_vertical_top_lsb(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y)
+ 162:BSP/u8g2/u8g2_ll_hvline.c **** {
+ 163:BSP/u8g2/u8g2_ll_hvline.c ****   uint16_t offset;
+ 164:BSP/u8g2/u8g2_ll_hvline.c ****   uint8_t *ptr;
+ 165:BSP/u8g2/u8g2_ll_hvline.c ****   uint8_t bit_pos, mask;
+ 166:BSP/u8g2/u8g2_ll_hvline.c ****   
+ 167:BSP/u8g2/u8g2_ll_hvline.c ****   //assert(x >= u8g2->buf_x0);
+ 168:BSP/u8g2/u8g2_ll_hvline.c ****   //assert(x < u8g2_GetU8x8(u8g2)->display_info->tile_width*8);
+ 169:BSP/u8g2/u8g2_ll_hvline.c ****   //assert(y >= u8g2->buf_y0);
+ 170:BSP/u8g2/u8g2_ll_hvline.c ****   //assert(y < u8g2_GetU8x8(u8g2)->display_info->tile_height*8);
+ 171:BSP/u8g2/u8g2_ll_hvline.c ****   
+ 172:BSP/u8g2/u8g2_ll_hvline.c ****   /* bytes are vertical, lsb on top (y=0), msb at bottom (y=7) */
+ 173:BSP/u8g2/u8g2_ll_hvline.c ****   bit_pos = y;		/* overflow truncate is ok here... */
+ 174:BSP/u8g2/u8g2_ll_hvline.c ****   bit_pos &= 7; 	/* ... because only the lowest 3 bits are needed */
+ 175:BSP/u8g2/u8g2_ll_hvline.c ****   mask = 1;
+ 176:BSP/u8g2/u8g2_ll_hvline.c ****   mask <<= bit_pos;
+ 177:BSP/u8g2/u8g2_ll_hvline.c **** 
+ 178:BSP/u8g2/u8g2_ll_hvline.c ****   offset = y;		/* y might be 8 or 16 bit, but we need 16 bit, so use a 16 bit variable */
+ 179:BSP/u8g2/u8g2_ll_hvline.c ****   offset &= ~7;
+ 180:BSP/u8g2/u8g2_ll_hvline.c ****   offset *= u8g2_GetU8x8(u8g2)->display_info->tile_width;
+ 181:BSP/u8g2/u8g2_ll_hvline.c ****   ptr = u8g2->tile_buf_ptr;
+ 182:BSP/u8g2/u8g2_ll_hvline.c ****   ptr += offset;
+ 183:BSP/u8g2/u8g2_ll_hvline.c ****   ptr += x;
+ 184:BSP/u8g2/u8g2_ll_hvline.c **** 
+ 185:BSP/u8g2/u8g2_ll_hvline.c **** 
+ 186:BSP/u8g2/u8g2_ll_hvline.c ****   if ( u8g2->draw_color <= 1 )
+ 187:BSP/u8g2/u8g2_ll_hvline.c ****     *ptr |= mask;
+ 188:BSP/u8g2/u8g2_ll_hvline.c ****   if ( u8g2->draw_color != 1 )
+ 189:BSP/u8g2/u8g2_ll_hvline.c ****     *ptr ^= mask;
+ 190:BSP/u8g2/u8g2_ll_hvline.c **** 
+ARM GAS  /tmp/ccYdpvT1.s 			page 9
+
+
+ 191:BSP/u8g2/u8g2_ll_hvline.c **** }
+ 192:BSP/u8g2/u8g2_ll_hvline.c **** 
+ 193:BSP/u8g2/u8g2_ll_hvline.c **** /*
+ 194:BSP/u8g2/u8g2_ll_hvline.c ****   x,y		Upper left position of the line within the local buffer (not the display!)
+ 195:BSP/u8g2/u8g2_ll_hvline.c ****   len		length of the line in pixel, len must not be 0
+ 196:BSP/u8g2/u8g2_ll_hvline.c ****   dir		0: horizontal line (left to right)
+ 197:BSP/u8g2/u8g2_ll_hvline.c **** 		1: vertical line (top to bottom)
+ 198:BSP/u8g2/u8g2_ll_hvline.c ****   asumption: 
+ 199:BSP/u8g2/u8g2_ll_hvline.c ****     all clipping done
+ 200:BSP/u8g2/u8g2_ll_hvline.c **** */
+ 201:BSP/u8g2/u8g2_ll_hvline.c **** void u8g2_ll_hvline_vertical_top_lsb(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t len, u
+ 202:BSP/u8g2/u8g2_ll_hvline.c **** {
+ 203:BSP/u8g2/u8g2_ll_hvline.c ****   if ( dir == 0 )
+ 204:BSP/u8g2/u8g2_ll_hvline.c ****   {
+ 205:BSP/u8g2/u8g2_ll_hvline.c ****     do
+ 206:BSP/u8g2/u8g2_ll_hvline.c ****     {
+ 207:BSP/u8g2/u8g2_ll_hvline.c ****       u8g2_draw_pixel_vertical_top_lsb(u8g2, x, y);
+ 208:BSP/u8g2/u8g2_ll_hvline.c ****       x++;
+ 209:BSP/u8g2/u8g2_ll_hvline.c ****       len--;
+ 210:BSP/u8g2/u8g2_ll_hvline.c ****     } while( len != 0 );
+ 211:BSP/u8g2/u8g2_ll_hvline.c ****   }
+ 212:BSP/u8g2/u8g2_ll_hvline.c ****   else
+ 213:BSP/u8g2/u8g2_ll_hvline.c ****   {
+ 214:BSP/u8g2/u8g2_ll_hvline.c ****     do
+ 215:BSP/u8g2/u8g2_ll_hvline.c ****     {
+ 216:BSP/u8g2/u8g2_ll_hvline.c ****       u8g2_draw_pixel_vertical_top_lsb(u8g2, x, y);
+ 217:BSP/u8g2/u8g2_ll_hvline.c ****       y++;
+ 218:BSP/u8g2/u8g2_ll_hvline.c ****       len--;
+ 219:BSP/u8g2/u8g2_ll_hvline.c ****     } while( len != 0 );
+ 220:BSP/u8g2/u8g2_ll_hvline.c ****   }
+ 221:BSP/u8g2/u8g2_ll_hvline.c **** }
+ 222:BSP/u8g2/u8g2_ll_hvline.c **** 
+ 223:BSP/u8g2/u8g2_ll_hvline.c **** 
+ 224:BSP/u8g2/u8g2_ll_hvline.c **** #endif /* U8G2_WITH_HVLINE_SPEED_OPTIMIZATION */
+ 225:BSP/u8g2/u8g2_ll_hvline.c **** 
+ 226:BSP/u8g2/u8g2_ll_hvline.c **** /*=================================================*/
+ 227:BSP/u8g2/u8g2_ll_hvline.c **** /*
+ 228:BSP/u8g2/u8g2_ll_hvline.c ****   u8g2_ll_hvline_horizontal_right_lsb
+ 229:BSP/u8g2/u8g2_ll_hvline.c ****     ST7920
+ 230:BSP/u8g2/u8g2_ll_hvline.c **** */
+ 231:BSP/u8g2/u8g2_ll_hvline.c **** 
+ 232:BSP/u8g2/u8g2_ll_hvline.c **** #ifdef U8G2_WITH_HVLINE_SPEED_OPTIMIZATION
+ 233:BSP/u8g2/u8g2_ll_hvline.c **** 
+ 234:BSP/u8g2/u8g2_ll_hvline.c **** /*
+ 235:BSP/u8g2/u8g2_ll_hvline.c ****   x,y		Upper left position of the line within the local buffer (not the display!)
+ 236:BSP/u8g2/u8g2_ll_hvline.c ****   len		length of the line in pixel, len must not be 0
+ 237:BSP/u8g2/u8g2_ll_hvline.c ****   dir		0: horizontal line (left to right)
+ 238:BSP/u8g2/u8g2_ll_hvline.c **** 		1: vertical line (top to bottom)
+ 239:BSP/u8g2/u8g2_ll_hvline.c ****   asumption: 
+ 240:BSP/u8g2/u8g2_ll_hvline.c ****     all clipping done
+ 241:BSP/u8g2/u8g2_ll_hvline.c **** */
+ 242:BSP/u8g2/u8g2_ll_hvline.c **** 
+ 243:BSP/u8g2/u8g2_ll_hvline.c **** void u8g2_ll_hvline_horizontal_right_lsb(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, u8g2_uint_t le
+ 244:BSP/u8g2/u8g2_ll_hvline.c **** {
+ 234              		.loc 1 244 1 is_stmt 1 view -0
+ 235              		.cfi_startproc
+ 236              		@ args = 4, pretend = 0, frame = 0
+ARM GAS  /tmp/ccYdpvT1.s 			page 10
+
+
+ 237              		@ frame_needed = 0, uses_anonymous_args = 0
+ 238              		.loc 1 244 1 is_stmt 0 view .LVU80
+ 239 0000 30B5     		push	{r4, r5, lr}
+ 240              	.LCFI1:
+ 241              		.cfi_def_cfa_offset 12
+ 242              		.cfi_offset 4, -12
+ 243              		.cfi_offset 5, -8
+ 244              		.cfi_offset 14, -4
+ 245 0002 9DF80C40 		ldrb	r4, [sp, #12]	@ zero_extendqisi2
+ 245:BSP/u8g2/u8g2_ll_hvline.c ****   uint16_t offset;
+ 246              		.loc 1 245 3 is_stmt 1 view .LVU81
+ 246:BSP/u8g2/u8g2_ll_hvline.c ****   uint8_t *ptr;
+ 247              		.loc 1 246 3 view .LVU82
+ 247:BSP/u8g2/u8g2_ll_hvline.c ****   uint8_t bit_pos;
+ 248              		.loc 1 247 3 view .LVU83
+ 248:BSP/u8g2/u8g2_ll_hvline.c ****   uint8_t mask;
+ 249              		.loc 1 248 3 view .LVU84
+ 249:BSP/u8g2/u8g2_ll_hvline.c ****   uint8_t tile_width = u8g2_GetU8x8(u8g2)->display_info->tile_width;
+ 250              		.loc 1 249 3 view .LVU85
+ 251              		.loc 1 249 42 is_stmt 0 view .LVU86
+ 252 0006 0568     		ldr	r5, [r0]
+ 253              		.loc 1 249 11 view .LVU87
+ 254 0008 95F810E0 		ldrb	lr, [r5, #16]	@ zero_extendqisi2
+ 255              	.LVL35:
+ 250:BSP/u8g2/u8g2_ll_hvline.c **** 
+ 251:BSP/u8g2/u8g2_ll_hvline.c ****   bit_pos = x;		/* overflow truncate is ok here... */
+ 256              		.loc 1 251 3 is_stmt 1 view .LVU88
+ 252:BSP/u8g2/u8g2_ll_hvline.c ****   bit_pos &= 7; 	/* ... because only the lowest 3 bits are needed */
+ 257              		.loc 1 252 3 view .LVU89
+ 258              		.loc 1 252 11 is_stmt 0 view .LVU90
+ 259 000c 01F00705 		and	r5, r1, #7
+ 260              	.LVL36:
+ 253:BSP/u8g2/u8g2_ll_hvline.c ****   mask = 128;
+ 261              		.loc 1 253 3 is_stmt 1 view .LVU91
+ 254:BSP/u8g2/u8g2_ll_hvline.c ****   mask >>= bit_pos;
+ 262              		.loc 1 254 3 view .LVU92
+ 263              		.loc 1 254 8 is_stmt 0 view .LVU93
+ 264 0010 4FF0800C 		mov	ip, #128
+ 265 0014 4CFA05FC 		asr	ip, ip, r5
+ 266 0018 5FFA8CFC 		uxtb	ip, ip
+ 267              	.LVL37:
+ 255:BSP/u8g2/u8g2_ll_hvline.c **** 
+ 256:BSP/u8g2/u8g2_ll_hvline.c ****   offset = y;		/* y might be 8 or 16 bit, but we need 16 bit, so use a 16 bit variable */
+ 268              		.loc 1 256 3 is_stmt 1 view .LVU94
+ 257:BSP/u8g2/u8g2_ll_hvline.c ****   offset *= tile_width;
+ 269              		.loc 1 257 3 view .LVU95
+ 258:BSP/u8g2/u8g2_ll_hvline.c ****   offset += x>>3;
+ 270              		.loc 1 258 3 view .LVU96
+ 271              		.loc 1 258 10 is_stmt 0 view .LVU97
+ 272 001c C908     		lsrs	r1, r1, #3
+ 273              	.LVL38:
+ 274              		.loc 1 258 10 view .LVU98
+ 275 001e 02FB0E11 		mla	r1, r2, lr, r1
+ 276 0022 89B2     		uxth	r1, r1
+ 277              	.LVL39:
+ 259:BSP/u8g2/u8g2_ll_hvline.c ****   ptr = u8g2->tile_buf_ptr;
+ 278              		.loc 1 259 3 is_stmt 1 view .LVU99
+ARM GAS  /tmp/ccYdpvT1.s 			page 11
+
+
+ 279              		.loc 1 259 7 is_stmt 0 view .LVU100
+ 280 0024 826B     		ldr	r2, [r0, #56]
+ 281              	.LVL40:
+ 260:BSP/u8g2/u8g2_ll_hvline.c ****   ptr += offset;
+ 282              		.loc 1 260 3 is_stmt 1 view .LVU101
+ 283              		.loc 1 260 7 is_stmt 0 view .LVU102
+ 284 0026 0A44     		add	r2, r2, r1
+ 285              	.LVL41:
+ 261:BSP/u8g2/u8g2_ll_hvline.c ****   
+ 262:BSP/u8g2/u8g2_ll_hvline.c ****   if ( dir == 0 )
+ 286              		.loc 1 262 3 is_stmt 1 view .LVU103
+ 287              		.loc 1 262 6 is_stmt 0 view .LVU104
+ 288 0028 4CBB     		cbnz	r4, .L17
+ 289 002a 0BE0     		b	.L21
+ 290              	.LVL42:
+ 291              	.L26:
+ 263:BSP/u8g2/u8g2_ll_hvline.c ****   {
+ 264:BSP/u8g2/u8g2_ll_hvline.c ****       
+ 265:BSP/u8g2/u8g2_ll_hvline.c ****     do
+ 266:BSP/u8g2/u8g2_ll_hvline.c ****     {
+ 267:BSP/u8g2/u8g2_ll_hvline.c **** 
+ 268:BSP/u8g2/u8g2_ll_hvline.c ****       if ( u8g2->draw_color <= 1 )
+ 269:BSP/u8g2/u8g2_ll_hvline.c **** 	*ptr |= mask;
+ 292              		.loc 1 269 2 is_stmt 1 view .LVU105
+ 293 002c 1178     		ldrb	r1, [r2]	@ zero_extendqisi2
+ 294              		.loc 1 269 7 is_stmt 0 view .LVU106
+ 295 002e 41EA0C01 		orr	r1, r1, ip
+ 296 0032 1170     		strb	r1, [r2]
+ 297 0034 0AE0     		b	.L18
+ 298              	.LVL43:
+ 299              	.L27:
+ 270:BSP/u8g2/u8g2_ll_hvline.c ****       if ( u8g2->draw_color != 1 )
+ 271:BSP/u8g2/u8g2_ll_hvline.c **** 	*ptr ^= mask;
+ 272:BSP/u8g2/u8g2_ll_hvline.c ****       
+ 273:BSP/u8g2/u8g2_ll_hvline.c ****       mask >>= 1;
+ 274:BSP/u8g2/u8g2_ll_hvline.c ****       if ( mask == 0 )
+ 275:BSP/u8g2/u8g2_ll_hvline.c ****       {
+ 276:BSP/u8g2/u8g2_ll_hvline.c **** 	mask = 128;
+ 300              		.loc 1 276 2 is_stmt 1 view .LVU107
+ 277:BSP/u8g2/u8g2_ll_hvline.c ****         ptr++;
+ 301              		.loc 1 277 9 view .LVU108
+ 302              		.loc 1 277 12 is_stmt 0 view .LVU109
+ 303 0036 0132     		adds	r2, r2, #1
+ 304              	.LVL44:
+ 276:BSP/u8g2/u8g2_ll_hvline.c ****         ptr++;
+ 305              		.loc 1 276 7 view .LVU110
+ 306 0038 4FF0800C 		mov	ip, #128
+ 307              	.LVL45:
+ 308              	.L20:
+ 278:BSP/u8g2/u8g2_ll_hvline.c ****       }
+ 279:BSP/u8g2/u8g2_ll_hvline.c ****       
+ 280:BSP/u8g2/u8g2_ll_hvline.c ****       //x++;
+ 281:BSP/u8g2/u8g2_ll_hvline.c ****       len--;
+ 309              		.loc 1 281 7 is_stmt 1 view .LVU111
+ 310              		.loc 1 281 10 is_stmt 0 view .LVU112
+ 311 003c 013B     		subs	r3, r3, #1
+ 312              	.LVL46:
+ARM GAS  /tmp/ccYdpvT1.s 			page 12
+
+
+ 282:BSP/u8g2/u8g2_ll_hvline.c ****     } while( len != 0 );
+ 313              		.loc 1 282 18 is_stmt 1 view .LVU113
+ 314 003e 13F0FF03 		ands	r3, r3, #255
+ 315              	.LVL47:
+ 316              		.loc 1 282 18 is_stmt 0 view .LVU114
+ 317 0042 25D0     		beq	.L16
+ 318              	.LVL48:
+ 319              	.L21:
+ 265:BSP/u8g2/u8g2_ll_hvline.c ****     {
+ 320              		.loc 1 265 5 is_stmt 1 view .LVU115
+ 268:BSP/u8g2/u8g2_ll_hvline.c **** 	*ptr |= mask;
+ 321              		.loc 1 268 7 view .LVU116
+ 268:BSP/u8g2/u8g2_ll_hvline.c **** 	*ptr |= mask;
+ 322              		.loc 1 268 16 is_stmt 0 view .LVU117
+ 323 0044 90F88610 		ldrb	r1, [r0, #134]	@ zero_extendqisi2
+ 268:BSP/u8g2/u8g2_ll_hvline.c **** 	*ptr |= mask;
+ 324              		.loc 1 268 10 view .LVU118
+ 325 0048 0129     		cmp	r1, #1
+ 326 004a EFD9     		bls	.L26
+ 327              	.L18:
+ 270:BSP/u8g2/u8g2_ll_hvline.c **** 	*ptr ^= mask;
+ 328              		.loc 1 270 7 is_stmt 1 view .LVU119
+ 270:BSP/u8g2/u8g2_ll_hvline.c **** 	*ptr ^= mask;
+ 329              		.loc 1 270 16 is_stmt 0 view .LVU120
+ 330 004c 90F88610 		ldrb	r1, [r0, #134]	@ zero_extendqisi2
+ 270:BSP/u8g2/u8g2_ll_hvline.c **** 	*ptr ^= mask;
+ 331              		.loc 1 270 10 view .LVU121
+ 332 0050 0129     		cmp	r1, #1
+ 333 0052 03D0     		beq	.L19
+ 271:BSP/u8g2/u8g2_ll_hvline.c ****       
+ 334              		.loc 1 271 2 is_stmt 1 view .LVU122
+ 335 0054 1178     		ldrb	r1, [r2]	@ zero_extendqisi2
+ 271:BSP/u8g2/u8g2_ll_hvline.c ****       
+ 336              		.loc 1 271 7 is_stmt 0 view .LVU123
+ 337 0056 81EA0C01 		eor	r1, r1, ip
+ 338 005a 1170     		strb	r1, [r2]
+ 339              	.L19:
+ 273:BSP/u8g2/u8g2_ll_hvline.c ****       if ( mask == 0 )
+ 340              		.loc 1 273 7 is_stmt 1 view .LVU124
+ 341              	.LVL49:
+ 274:BSP/u8g2/u8g2_ll_hvline.c ****       {
+ 342              		.loc 1 274 7 view .LVU125
+ 274:BSP/u8g2/u8g2_ll_hvline.c ****       {
+ 343              		.loc 1 274 10 is_stmt 0 view .LVU126
+ 344 005c 5FEA5C0C 		lsrs	ip, ip, #1
+ 345              	.LVL50:
+ 274:BSP/u8g2/u8g2_ll_hvline.c ****       {
+ 346              		.loc 1 274 10 view .LVU127
+ 347 0060 ECD1     		bne	.L20
+ 348 0062 E8E7     		b	.L27
+ 349              	.LVL51:
+ 350              	.L23:
+ 283:BSP/u8g2/u8g2_ll_hvline.c ****   }
+ 284:BSP/u8g2/u8g2_ll_hvline.c ****   else
+ 285:BSP/u8g2/u8g2_ll_hvline.c ****   {
+ 286:BSP/u8g2/u8g2_ll_hvline.c ****     do
+ 287:BSP/u8g2/u8g2_ll_hvline.c ****     {
+ARM GAS  /tmp/ccYdpvT1.s 			page 13
+
+
+ 288:BSP/u8g2/u8g2_ll_hvline.c ****       if ( u8g2->draw_color <= 1 )
+ 289:BSP/u8g2/u8g2_ll_hvline.c **** 	*ptr |= mask;
+ 290:BSP/u8g2/u8g2_ll_hvline.c ****       if ( u8g2->draw_color != 1 )
+ 351              		.loc 1 290 7 is_stmt 1 view .LVU128
+ 352              		.loc 1 290 16 is_stmt 0 view .LVU129
+ 353 0064 90F88610 		ldrb	r1, [r0, #134]	@ zero_extendqisi2
+ 354              		.loc 1 290 10 view .LVU130
+ 355 0068 0129     		cmp	r1, #1
+ 356 006a 03D0     		beq	.L24
+ 291:BSP/u8g2/u8g2_ll_hvline.c **** 	*ptr ^= mask;
+ 357              		.loc 1 291 2 is_stmt 1 view .LVU131
+ 358 006c 1178     		ldrb	r1, [r2]	@ zero_extendqisi2
+ 359              		.loc 1 291 7 is_stmt 0 view .LVU132
+ 360 006e 81EA0C01 		eor	r1, r1, ip
+ 361 0072 1170     		strb	r1, [r2]
+ 362              	.L24:
+ 292:BSP/u8g2/u8g2_ll_hvline.c ****       
+ 293:BSP/u8g2/u8g2_ll_hvline.c ****       ptr += tile_width;
+ 363              		.loc 1 293 7 is_stmt 1 view .LVU133
+ 364              		.loc 1 293 11 is_stmt 0 view .LVU134
+ 365 0074 7244     		add	r2, r2, lr
+ 366              	.LVL52:
+ 294:BSP/u8g2/u8g2_ll_hvline.c ****       //y++;
+ 295:BSP/u8g2/u8g2_ll_hvline.c ****       len--;
+ 367              		.loc 1 295 7 is_stmt 1 view .LVU135
+ 368              		.loc 1 295 10 is_stmt 0 view .LVU136
+ 369 0076 013B     		subs	r3, r3, #1
+ 370              	.LVL53:
+ 296:BSP/u8g2/u8g2_ll_hvline.c ****     } while( len != 0 );
+ 371              		.loc 1 296 18 is_stmt 1 view .LVU137
+ 372 0078 13F0FF03 		ands	r3, r3, #255
+ 373              	.LVL54:
+ 374              		.loc 1 296 18 is_stmt 0 view .LVU138
+ 375 007c 08D0     		beq	.L16
+ 376              	.LVL55:
+ 377              	.L17:
+ 286:BSP/u8g2/u8g2_ll_hvline.c ****     {
+ 378              		.loc 1 286 5 is_stmt 1 view .LVU139
+ 288:BSP/u8g2/u8g2_ll_hvline.c **** 	*ptr |= mask;
+ 379              		.loc 1 288 7 view .LVU140
+ 288:BSP/u8g2/u8g2_ll_hvline.c **** 	*ptr |= mask;
+ 380              		.loc 1 288 16 is_stmt 0 view .LVU141
+ 381 007e 90F88610 		ldrb	r1, [r0, #134]	@ zero_extendqisi2
+ 288:BSP/u8g2/u8g2_ll_hvline.c **** 	*ptr |= mask;
+ 382              		.loc 1 288 10 view .LVU142
+ 383 0082 0129     		cmp	r1, #1
+ 384 0084 EED8     		bhi	.L23
+ 289:BSP/u8g2/u8g2_ll_hvline.c ****       if ( u8g2->draw_color != 1 )
+ 385              		.loc 1 289 2 is_stmt 1 view .LVU143
+ 386 0086 1178     		ldrb	r1, [r2]	@ zero_extendqisi2
+ 289:BSP/u8g2/u8g2_ll_hvline.c ****       if ( u8g2->draw_color != 1 )
+ 387              		.loc 1 289 7 is_stmt 0 view .LVU144
+ 388 0088 41EA0C01 		orr	r1, r1, ip
+ 389 008c 1170     		strb	r1, [r2]
+ 390 008e E9E7     		b	.L23
+ 391              	.LVL56:
+ 392              	.L16:
+ARM GAS  /tmp/ccYdpvT1.s 			page 14
+
+
+ 297:BSP/u8g2/u8g2_ll_hvline.c ****   }
+ 298:BSP/u8g2/u8g2_ll_hvline.c **** }
+ 393              		.loc 1 298 1 view .LVU145
+ 394 0090 30BD     		pop	{r4, r5, pc}
+ 395              		.loc 1 298 1 view .LVU146
+ 396              		.cfi_endproc
+ 397              	.LFE1:
+ 399              		.text
+ 400              	.Letext0:
+ 401              		.file 2 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ 402              		.file 3 "BSP/u8g2/u8x8.h"
+ 403              		.file 4 "BSP/u8g2/u8g2.h"
+ARM GAS  /tmp/ccYdpvT1.s 			page 15
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 u8g2_ll_hvline.c
+     /tmp/ccYdpvT1.s:19     .text.u8g2_ll_hvline_vertical_top_lsb:00000000 $t
+     /tmp/ccYdpvT1.s:25     .text.u8g2_ll_hvline_vertical_top_lsb:00000000 u8g2_ll_hvline_vertical_top_lsb
+     /tmp/ccYdpvT1.s:225    .text.u8g2_ll_hvline_horizontal_right_lsb:00000000 $t
+     /tmp/ccYdpvT1.s:231    .text.u8g2_ll_hvline_horizontal_right_lsb:00000000 u8g2_ll_hvline_horizontal_right_lsb
+
+NO UNDEFINED SYMBOLS
